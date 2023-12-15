@@ -1,0 +1,212 @@
+In this section, we describe polynomial protocol to verify that a sequence of RAM operations
+correctly updates the state of the RAM. We start by giving precise mathematical representations
+to the key objects such as RAM, operations on RAM, execution transcripts etc., which will later
+be used to describe relations on them.
+
+\subsection{Model for RAM}\label{subsec:model-for-ram}
+We have earlier used a vector $\vecT\in \F^n$ to model a RAM of size $n$, where the $i^{th}$ entry $\vecT[\,i\,]$
+implicitly corresponds to index (address) $i$. Here, we will consider a generalisation that will be useful later.
+We will allow a RAM to explicitly associate a value $v\in \F$ to an index $a$ from an {\em index space}
+$\cal{I}\subseteq \F$ in an unambiguous manner.
+\begin{definition}[RAM]\label{defn:RAM}
+    Given $n\in \N$, finite field $\F$ and a set $\cal{I}\subseteq \F$, a RAM of size $n$ over indices $\cal{I}$
+    is a tuple $T=(\vec{a},\vec{v})\in \mathcal{I}^n\times \F^n$ such that $\forall\, i,j\in [n]$  $v_i=v_j$ whenever $a_i=a_j$.
+    We can think of $T$ as a table with vectors $\vec{a}$ and $\vec{v}$ as its column vectors. Let
+    $\RAM{I}{n}$ denote the set of all such $T$. For $T\in \RAM{I}{n}$, with $T=(\vec{a},\vec{v})$, define:
+    \begin{align*}
+        T[\,a\,] = \begin{cases}
+                       v \text{ if } \, \exists i\in [n] \text{ s.t. } (a,v) = (a_i,v_i), \\
+                       \bot \text{ otherwise }
+                    \end{cases}
+    \end{align*}
+\end{definition}
+For a table $T=(\vec{a},\vec{v})\in \RAM{I}{n}$, we refer to tuples $(a_i,v_i)$, $i\in [n]$ as records of the table $T$.
+Note that our definition allows records to be repeated. When we refer to a vector $\vecT\in \F^n$ as a RAM, we implicitly
+assume $T=(\setind_n,\vecT)$ where $\setind_n=(1,2,\ldots,n)$.
+
+A {\em RAM operation} for a RAM $T\in \RAM{I}{n}$ is a three tuple $(\op,a,v)$ with $\op\in \{0,1\}$,
+$a\in \setind$ and $v\in \F$. The operation is a {\em load} operation for $\op=0$, which loads a value $v$
+from the RAM associated with index $a$. Similarly, the operation is a {\em store} operation for $\op=1$,
+which stores value $v$ in the RAM at index $a$. We use
+$\RAMOp{I}$ to denote the set of all RAM operations with index set $\setind$. We say than an operation
+$(\op,a,v)\in \{0,1\}\times \setind\times \F$ is {\em admissible} with respect to RAM $T\in \RAM{I}{n}$ if
+$T[\,a\,]=v$ whenever $\op=0$ (i.e, the operation loads a value which agrees with the value in the RAM at the specified index).
+
+\subsubsection{RAM Update}\label{subsec:ram-update}
+The versatility of the RAM primitive stems from its updatability. While a load operation leaves the RAM unchanged, the store operation
+updates the value associated with the referenced index. Formally, the function $\Rupd{I}$ takes RAM $T\in \RAM{I}{n}$, operation
+$o=(\op,a,v)\in \RAMOp{I}$ as inputs and returns an updated RAM $T'\in \RAM{I}{n}$. The updated state $T'=\Rupd{I}(T,o)$ satisfies
+$T'=T$ if $\op=0$ while for $\op=1$ it satisfies $T'[\,a\,]=v$  and $T'[\,x\,]=T[\,x\,]$ for $x\neq a$.
+
+\subsubsection{Consistent Operations}\label{subsec:consistent-operations}
+We extend the notion of admissibility of an operation with respect to RAM, to arbitrary sequence of load and store operations.
+We wish to capture the fact that all load operations return the value which is consistent with updates to the RAM as a result of preceding
+store operations. We also incorporate the updated RAM state. More precisely, we define:
+\begin{definition}[Consistent Operations]\label{defn:consistent-operations}
+    Let $n\in \N$ and $T,T'\in \RAM{I}{n}$ for some index set $\setind$. We say that a sequence of operations
+    $\vec{o}=(o_1,\ldots,o_k)$ with $o_i\in \RAMOp{I}$, $i\in [k]$ is {\em consistent} with RAM states
+    $T,T'$ if for all $i\in [k]$, $T_{i}=\Rupd{I}(T_{i-1},o_i)$ and operation $o_i$ is admissible with respect to $T_{i-1}$, with
+    $T_0=T$ and $T'=T_k$.
+\end{definition}
+
+Let $\LRAM{I}{n}{m}$ for $m,n\in \N$ denote the language consisting of tuples $(T,\vec{o},T')$ with $T,T'\in \RAM{I}{n}$ and $\vec{o}\in (\RAMOp{I})^m$
+such that $\vec{o}$ is consistent with $(T,T')$. In the remainder of this section, we formally define an $\nopl$ relation to efficiently
+check membership in $\LRAM{I}{n}{m}$.
+
+\subsubsection{Consistency Check via Transcripts}\label{subsec:transcripts}
+A {\em transcript} captures time-stamped sequence of RAM operations executed on a RAM. More formally, given a RAM $T_0=(\vec{a}^{(0)},\vec{v}^{(0)})\in \RAM{I}{n}$,
+operation sequence $\vec{o}=(o_1,\ldots,o_m)$ with $o_i=(\op_i,a_i,v_i)\in \RAMOp{I}$ for $i\in [m]$ and RAM $T_1=(\vec{a}^{(1)}, \vec{v}^{(1)})\in \RAM{I}{n}$,
+the {\em time ordered transcript} for the tuple $(T_0,\vec{o},T_1)$ is given by the tuple $\tr = (\vec{t},\vec{\op},\vec{A},\vec{V})\in \F^k\times \{0,1\}^k\times
+\setind^k\times \F^k$ for $k=2n+m$ defined as follows: (i) $\vec{t}=\setind_{k}$, (ii) $\vec{\op}=0^n||(\op_1,\ldots,\op_m)||0^n$,
+(iii) $\vec{A}=\vec{a}^{(0)}||(a_1,\ldots,a_m)||\vec{a}^{(1)}$ and (iv) $\vec{V}=\vec{v}^{(0)}||(v_1,\ldots,v_m)||\vec{v}^{(1)}$. Equivalently, we can
+view $\tr$ as a table with $k$ rows, with $(t_i,\op_i,A_i,V_i)$ being its $i^{th}$ record. As discussed in the introduction, the first $n$ records
+copy the contents of $T_0$ into the transcript, the next $m$ records copy the operations in $\vec{\op}$ with increasing time-stamps and final $n$
+records copy the contents of $T_1$ into the transcript. Notationally, we write $\tr=\TOT(T_0,\vec{\op},T_1)$.
+Finally, we call a transcript $\tr=(\vec{t},\vec{\op},\vec{A},\vec{V})$ to be {\em address ordered transcript} if $A_i\leq A_{i+1}$ for $i\in [k-1]$ and
+$t_i < t_{i+1}$ whenever $A_i=A_{i+1}$. For a transcript $\tr=(\vec{t},\vec{\op},\vec{A},\vec{V})$ with $k$ records and a
+permutation $\sigma:[k]\rightarrow [k]$, we use $\sigma(\tr)$ to denote the transcript $(\sigma(\vec{t}),\sigma(\vec{\op}),\sigma(\vec{A}),\sigma(\vec{V}))$
+obtained by permuting the records of $\tr$ according to the permutation $\sigma$. An
+address ordered transcript for tuple $(T_0,\vec{o},T_1)$ is defined as $\tr^\ast=\sigma(\tr)$ where $\tr=\TOT(T_0,\vec{o},T_1)$ and $\sigma$ is
+a permutation such that $\tr^\ast$ is an address ordered transcript. We denote it by $\tr^\ast=\AOT(T_0,\vec{o},T_1)$.
+We say that an address ordered transcript $\tr=(\vec{t},\vec{\op},\vec{A},\vec{V})$ satisfies {\em load-store correctness}
+if for all pairs of consecutive records $(t_i,\op_i,A_i,V_i)$ and $(t_{i+1},\op_{i+1},A_{i+1},V_{i+1})$ we have $V_{i+1}=V_i$ whenever $\op_{i+1}=0$ and
+$A_i=A_{i+1}$, i.e, a load operation preserves the value at an index.
+
+\begin{lemma}\label{lem:consistency-check}
+Let $\F$ be a finite field, $m,n\in \N$ be positive integers and $\setind\subseteq \F$. Then $(T,\vec{o},T')\in \LRAM{I}{n}{m}$ if and only if
+    the transcript $\tr^\ast=\AOT(T,\vec{o},T')$ satisfies load-store correctness.
+\end{lemma}
+
+\subsection{Polynomial Encoding}\label{subsec:poly-encoding}
+The aim of this section is to encode the objects in the previous section such as the RAM state, operations and transcripts as polynomials,
+and reduce the problem of checking membership in the language $\LRAM{I}{n}{m}$ to checking identities on associated polynomials. For
+simplicity, we consider the case $m=n$, and accordingly check the membership in the language $\LRAM{I}{m}{m}$. Let $k=3m$ and let $\omega$ be
+the $k^{th}$ root of unity in $\F$. Let $\mu=\omega^3$, and this $\mu$ is an $m^{th}$ root of unity in $\F$ (We assume, these roots exist in $\F$).
+We define sets $\setH$ and $\setV$ as below:
+\begin{gather}\label{eq:interpolation-sets}
+    \setH = \{\omega,\ldots,\omega^k\} \\
+    \setV = \{\nu,\ldots,\nu^m\}
+\end{gather}
+We encode a vector $\vec{f}\in \F^k$ as the polynomial $f(X)\in \F_{<k}[X]$ such that $f(\omega^i)=f_i$ for $i\in [k]$. Similarly, we encode a vector
+$\vec{g}\in \F^m$ as the polynomial $g(X)\in F_{<m}[X]$ such that $g(\nu^i)=g_i$ for $i\in [m]$. In the other direction, for a polynomial $f(X)\in \F[X]$,
+we use $\vec{f}_{|_\setH}$ and $\vec{f}_{|_\setV}$ to denote the vectors $(f(\omega^1),\ldots,f(\omega^k))$ and $(f(\nu^1),\ldots,f(\nu^m))$ respectively.
+The encoding of vectors as polynomials can be succinctly described using lagrange basis polynomials. Let $\{\lambda_i(X)\}_{i=1}^k$ be lagrange polynomials
+for the set $\setH$ and $\{\tau_i(X)\}_{i=1}^m$ be the lagrange polynomials for the set $\setV$. Then we have the following encoding:
+\begin{align*}
+    \vec{f}=(f_1,\ldots,f_k) &\xrightarrow{\mathsf{Enc}} \sum_{i=1}^k f_i\lambda_i(X) \in \F_{<k}[X] \\
+    \vec{g}=(g_1,\ldots,g_m) &\xrightarrow{\mathsf{Enc}} \sum_{i=1}^m g_i\tau_i(X) \in \F_{<m}[X]
+\end{align*}
+
+We naturally extend the polynomial encoding of vectors to encode RAMs. For a RAM $T=(\vec{a},\vec{v})\in \RAM{I}{m}$, we define its encoding
+$\wt{T}=(a(X),v(X))$ where $a(X),v(X)\in \F_{<m}[X]$ encode vectors $\vec{a}, \vec{v}$ respectively. Given an operation sequence
+$\vec{o}=(o_1,\ldots,o_m)$ with $o_i=(\op_i,a_i,v_i)$ we encode $\vec{o}$ as $\wt{O}=(\op(X),a(X),v(X))$ where $\op(X)$ encodes the
+vector $\vec{\op}=(\op_1,\ldots,\op_m)$, $a(X)$ encodes the vector $(a_1,\ldots,a_m)$ and $v(X)$ encodes the vector $(v_1,\ldots,v_m)$.
+Finally, a transcript $\tr=(\vec{t},\vec{\op},\vec{A},\vec{V})$ for tuples $(T,\vec{o},T')$ where $T,T'$ are RAMs of size $m$, and $\vec{o}$ is an
+operation sequence of size $m$ is encoded as $$\wt{\tr}=(t(X),\op(X),A(X),V(X))$$ where the polynomials encode the respective vectors in $\F^k$.
+
+\subsubsection{Encoded Relations}\label{subsec:encoded-relations}
+We now describe relations over polynomials which imply relations over the objects they encode. Throughout this section, let $\F$ be a finite
+field, $\setind\subseteq \F$ is a fixed set and $m\in \N$ is a fixed integer denoting the size of the RAMs. We start by defining the language
+$\LTr$ consisting of tuples $(T,\vec{o},T',\tr)$ satisfying $T,T'\in \RAM{I}{m}$, $\vec{o}\in \RAMOp{I}^m$ and $\tr=\TOT(T,\vec{o},T')$.
+To check membership in $\LTr$ using polynomial encodings, we first claim the following:
+\begin{lemma}\label{lem:vec-concatenation}
+    Let $\vec{a},\vec{b},\vec{c}\in \F^m$  and $v\in \F^k$ be vectors encoded by polynomials
+    $a(X),b(X),c(X)$ and $v(X)$ respectively. Then for $Z(X)=\prod_{i=1}^m (X-\omega^i)$ and $\rho=\omega^m$, we have
+    \begin{align}
+        a(X^3) - v(X) &= 0  \text{ mod $Z(X)$ } \tag{A1}\label{eq:A1}\\
+        b(X^3) - v(\rho X) &= 0 \text{ mod $Z(X)$ } \tag{A2}\label{eq:A2}\\
+        c(X^3) - v(\rho^2 X) &= 0 \text{ mod $Z(X)$ } \tag{A3}\label{eq:A3}
+    \end{align}
+    if and only if $\vec{v}=\vec{a}||\vec{b}||\vec{c}$.
+\end{lemma}
+\begin{proof}
+    Assume that the polynomial identities hold. Substituting $X=\omega^i$ for $i\in [m]$ in above equations implies
+    for $i\in [m]$: $a_i=v_i$ (Eq \eqref{eq:A1}), $b_i=v_{m+i}$ (Eq \eqref{eq:A2}) and $c_i=v_{2m+i}$ (Eq \eqref{eq:A3}),
+    which together imply $\vec{v}=\vec{a}||\vec{b}||\vec{c}$. Converse follows by observing that $\vec{v}=\vec{a}||\vec{b}||\vec{c}$
+    implies that $v(X) = a(X^3)$, $v(\rho X)=b(X^3)$ and $v(\rho^2 X)=c(X^3)$ holds for all $X=\omega^i, i\in [m]$.
+    Thus, the equalities hold modulo the polynomial $Z(X)$ as defined above.
+\end{proof}
+
+Let $\LLconcat$ denote the language consisting of polynomial tuples $(a(X)$, $b(X)$, $c(X)$, $v(X))$ satisfying the identities
+in Lemma ~\ref{lem:vec-concatenation}. To check membership of $(T,\vec{o},T',\tr)$ in the language $\LTr$, let $\wt{T}=(a(X),v(X))$, $\wt{T'}=(a'(X),v'(X))$,
+$\wt{O}=(\bar{\op}(X),\bar{a}(X),\bar{v}(X))$ and $\wt{\tr}=(t(X),o(X),A(X),V(X))$ be the polynomial
+encodings of $T,T',\vec{o}$ and $\tr$ respectively.
+From the construction of time ordered transcript $\tr$ outlined
+in Section \ref{subsec:transcripts}, we see that the equivalent constraints on the encodings are given by:
+\begin{align*}\label{eq:tot-poly-constraints}
+t(X) &= \sum_{i=1}^k i\lambda_i(X) \quad (= \mathsf{Enc}(\setind_k)) \\
+(0, \bar{\op}(X), 0, o(X)) &\in \LLconcat \\
+(a(X), \bar{a}(X), a'(X), A(X)) &\in \LLconcat \\
+(v(X), \bar{v}(X), v'(X), V(X)) &\in \LLconcat
+\end{align*}
+
+We can probabilistically combine the different polynomial identities into one and obtain the following:
+\begin{lemma}
+    Let the polynomial $Z(X)=\prod_{i\in [m]}(X-\omega^i)$ and $\rho=\omega^m$ be as before.
+    Then, we have $(T,\vec{o},T',\tr)\in \LTr$ if and only if the encoding polynomials as defined above satisfy
+    the identity $G_\gamma(X) = 0  \text{ mod } Z(X)$ and $\evalH{t}=(1,\ldots,k)$ with overwhelming
+    probability over the choice of $\gamma\gets \F$. Here the polynomial $G_\gamma(X)$ is defined as:
+    \begin{multline*}
+        G_\gamma(X) = o(X) + \gamma(\bar{\op}(X^3) - o(\rho X)) + \gamma^2 o(\rho^2 X) \\
+        + \gamma^3(a(X^3) - A(X)) + \gamma^4(\bar{a}(X^3) - A(\rho X)) + \gamma^5(a'(X^3) - A(\rho^2 X)) \\
+        + \gamma^6(v(X^3) - V(X)) + \gamma^7(\bar{v}(X^3) - V(\rho X)) + \gamma^8(v'(X^3) - V(\rho^2 X))
+    \end{multline*}
+\end{lemma}
+
+Next, we consider the language $\Lperm$ consisting of pairs $(\tr, \tr^\ast)$ of $k$-length transcripts such
+that $\tr^\ast=\sigma(\tr)$ for some permutation $\sigma:[k]\rightarrow [k]$. We now describe constraints
+to check the same using polynomial encodings of the transcripts. Let encodings $\wt{\tr},\wt{\tr}^\ast$ be
+given by polynomials as below:
+\begin{align*}\label{eq:tr-encodings}
+    \wt{\tr} &= (t(X),\op(X),A(X),V(X)) \\
+    \wt{\tr}^\ast &= (t^\ast(X), \op^\ast(X), A^\ast(X), V^\ast(X))
+\end{align*}
+We need to show that for some $\sigma:[k]\rightarrow [k]$, $\evalH{p^\ast}=\sigma(\evalH{p})$ for $p\in \{t,\op,A,V\}$.
+Again, for $\gamma\gets \F$, with overwhelming probability it is equivalent to establishing that polynomial
+$f^\ast(X)=t^\ast(X)+\gamma \op^\ast(X) + \gamma^2 A^\ast(X) + \gamma^3 V^\ast(X)$ encodes a permutation of
+vector encoded by $f(X)=t(X)+\gamma \op(X) + \gamma^2 A(X) + \gamma^3 V(X)$. We recall the following variation
+of the grand product argument to show that two polynomials encode vectors which are permutations of each other.
+
+\begin{lemma}[Permutation Check \cite{EPRINT:GabWilCio19}]\label{lem:perm-argument}
+    Let $f(X), g(X)$ be polynomials in $\F[\,X\,]$. Then, the vectors $\vec{f}, \vec{g}\in \F^k$ encoded by the polynomials
+    are permutations of each other if and only if with overwhelming probability over the choice of $\alpha\gets \F$,
+    there exists a polynomial $z(X)$ satisfying the polynomial constraints:
+    \begin{align}\label{eq:perm-constraints}
+        z(\omega) &= 1 \tag{B1} \label{eq:B1} \\
+    (\alpha - g(X))z(\omega X) &= (\alpha - f(X))z(X) \text{ mod } \mathbb{Z}_\setH(X) \tag{B2} \label{eq:B2}
+    \end{align}
+\end{lemma}
+
+
+\noindent{\bf Checking Address Ordered Transcript}: We now consider checking that a transcript $\tr$ is address ordered in terms of its polynomial encoding
+$\wt{\tr}=(t(X),\op(X),A(X),V(X))$. Recall that we need to check two conditions on $\tr$, viz (i) {\em monotonicty}:
+the transcript is sorted by address and timestamp respectively, i.e, $A_i\leq A_{i+1}$ for all $i < k$ and
+$t_i < t_{i+1}$ when $A_i=A_{i+1}$, (ii) {\em load-store consistency}: whenever $\op_{i+1}=0$ and $A_i=A_{i+1}$,
+we have $V_i=V_{i+1}$. To do so, we exhibit disjoint sets $I_1,I_2$ and $I_3$ with $I_1\uplus I_2\uplus I_3=[k]$ such that:
+\begin{alignat*}{3}
+&\forall \ i\in I_1 : A_i < A_{i+1}, && \quad && \forall \ i\not\in I_1 : (A_i = A_{i+1})\wedge (t_i < t_{i+1}) \\
+&\forall \ i\in I_2 : \op_i = 1, && \quad && \forall \ i\in I_3 : V_i = V_{i+1}
+\end{alignat*}
+We note that the conditions on the set $I_1$ ensures monotonicity. Moreover it can be seen that
+load-store consistency requirements are satisfied for all $i\in I_1$ (as $A_i\neq A_{i+1}$). Similarly,
+load-store consistency also holds for all $i\in I_2$ and $i\in I_3$ provided the claimed invariants for the sets hold.
+It remains to exhibit the sets and show that they satisfy the above invariants using polynomials, as in the following
+lemma:
+\begin{lemma}\label{lem:addr-ordered-transcript}
+Let $\wt{\tr}$ be a polynomial encoding of transcript $\tr$ of size $k$, given by polynomials $t(X),\op(X),A(X)$ and $V(X)$.
+Then $\tr$ is address ordered if and only if there exist polynomials $Z_1,Z_2,Z_3,\delta_T,\delta_A$ satisfying the
+following identities:
+\begin{align}\label{eq:load-store-consitency-constraints}
+& A(\omega X) - A(X) = \delta_A(X) \text{ mod } Z_1(X) \tag{C1} \label{eq:C1} \\
+& Z_1(X)\cdot (A(\omega X) - A(X)) = 0 \text{ mod } \mathbb{Z}_{\setH}(X) \tag{C2} \label{eq:C2} \\
+& Z_1(X)\cdot (t(\omega X) - t(X) -\delta_T(X)) = 0 \text{ mod } \mathbb{Z}_{\setH}(X) \tag{C3} \label{eq:C3} \\
+& \op(\omega X) = 1  \text{ mod } Z_2(X) \tag{C4} \label{eq:C4} \\
+& V(\omega X) - V(X) = 0 \text{ mod } Z_3(X) \tag{C5} \label{eq:C5} \\
+& Z_1(X)\cdot Z_2(X)\cdot Z_3(X) = \mathbb{Z}_\setH(X) \tag{C6} \label{eq:C6} \\
+& 1\leq \delta_A(\omega^i)<N,\ 1\leq \delta_T(\omega^i)<N \text{ for } i\in [k] \tag{C7} \label{eq:C7}
+\end{align}
+\end{lemma}
+
+
+
+
