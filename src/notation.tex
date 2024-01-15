@@ -2,7 +2,7 @@
 %! Date = 03/11/23
 
 \newcommand{\npol}{\mathsf{NP}}
-
+\newcommand{\enc}[2]{\mathsf{Enc}_{{}_{#2}}(\vec{#1})}
 \newcommand{\vecA}{\vec{a}}
 \newcommand{\vecB}{\vec{b}}
 \newcommand{\vecC}{\vec{c}}
@@ -36,8 +36,10 @@
 \newcommand{\Qcachepolytwo}[1]{Q''_{2,\mathsf{ch}}({#1})}
 \newcommand{\Zinv}[1]{(\mathbb{Z}_#1)^{\times}}
 \newcommand{\Zn}{\mathbb{Z}_N}
-\newcommand{\setH}{\mathbb{H}}
+\newcommand{\setH}{\mathbb{K}}
 \newcommand{\setV}{\mathbb{V}}
+\newcommand{\setN}{\mathbb{H}}
+\newcommand{\vpolyN}{Z_\mathbb{H}}
 \newcommand{\mroots}{\mathbb{V}}
 \newcommand{\nroots}{\mathbb{H}}
 \newcommand{\iroots}{\mathbb{H}_I}
@@ -48,6 +50,7 @@
 \newcommand{\Zq}{{\mathbb{Z}_q}}
 \newcommand{\G}{\mathbb{G}}
 \newcommand{\N}{\mathbb{N}}
+\newcommand{\V}{\mathsf{V}}
 
 \newcommand{\Gone}{\mathbb{G}_1}
 \newcommand{\Gtwo}{\mathbb{G}_2}
@@ -62,10 +65,10 @@
 \newcommand{\txno}{\ensuremath{\mathsf{txno}}}
 \newcommand{\load}{\ensuremath{\mathsf{LD}}}
 \newcommand{\store}{\ensuremath{\mathsf{STR}}}
-\newcommand{\RAM}[2]{\ensuremath{\mathsf{RAM}}(\F, \mathcal{#1}, {#2})}
-\newcommand{\RAMOp}[1]{\ensuremath{\mathsf{ROP}}(\F, \mathcal{#1})}
+\newcommand{\RAM}[2]{\ensuremath{\mathsf{RAM}}_{\mathcal{#1}, {#2}}}
+\newcommand{\RAMOp}[1]{\ensuremath{\mathcal{O}_{{}_\mathcal{#1}}}}
 \newcommand{\Rupd}[1]{\ensuremath{\mathsf{Upd}_{\mathcal{#1}}}}
-\newcommand{\LRAM}[3]{\ensuremath{\mathcal{L}_{\mathsf{RAM}}(\F,\mathcal{#1},#2,#3)}}
+\newcommand{\LRAM}[3]{\ensuremath{\mathsf{LRAM}_{\mathcal{#1},#2,#3}}}
 \newcommand{\LTr}{\ensuremath{\mathcal{L}_{\mathsf{Tr}}}}
 \newcommand{\tr}{\ensuremath{\mathsf{tr}}}
 \newcommand{\TOT}{\ensuremath{\mathsf{TimeTr}}}
@@ -74,8 +77,22 @@
 \newcommand{\evalV}[1]{\ensuremath{\vec{#1}_{|_\setV}}}
 \newcommand{\LLconcat}{\ensuremath{\tilde{\mathcal{L}}_{\mathsf{concat}}}}
 \newcommand{\Lperm}{\ensuremath{\mathcal{L}_{\mathsf{perm}}}}
-
+\newcommand{\RRAM}[1]{\ensuremath{R}_{\mathsf{ram},#1}}
+\newcommand{\RLOOK}{\ensuremath{\mathcal{R}^{\mathsf{lookup}}_{\srs,N,m}}}
+\newcommand{\CRAM}{\ensuremath{\mathcal{R}^{\mathsf{ram}}_{\srs,N,m}}}
+\newcommand{\CLRAM}{\ensuremath{\mathcal{R}^{\mathsf{LRAM}}_{\srs,m}}}
+\newcommand{\val}[2]{\ensuremath{\mathsf{V}_{{#2},{#1}}}}
+\newcommand{\uniq}[1]{\ensuremath{\mathsf{uniq}(\vec{{#1}})}}
 % group encodings
-\newcommand{\gone}[1]{\ensuremath{[#1]_1}}
-\newcommand{\gtwo}[1]{\ensuremath{[#1]_2}}
+\newcommand{\gone}[1]{\ensuremath{\left[{#1}\right]_1}}
+\newcommand{\gtwo}[1]{\ensuremath{\left[{#1}\right]_2}}
+
+% provers, verifiers, adversaries
+\newcommand{\prover}{\ensuremath{\mathcal{P}}}
+\newcommand{\verifier}{\ensuremath{\mathcal{V}}}
+\newcommand{\Adv}{\ensuremath{\mathcal{A}}}
+\newcommand{\kzg}{\ensuremath{\mathsf{KZG}}}
+\newcommand{\kzgprove}{\ensuremath{\mathsf{KZG.Prove}}}
+\newcommand{\kzgverify}{\ensuremath{\mathsf{KZG.Verify}}}
+\newcommand{\kzgcommit}{\ensuremath{\mathsf{KZG.Commit}}}
 

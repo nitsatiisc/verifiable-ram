@@ -7,9 +7,15 @@
 % Packages
 \usepackage{llncsconf}
 \usepackage{times}
-\usepackage{amsmath,amsthm,amsfonts,enumitem,tikz, subcaption}
+\usepackage{amsmath,amsthm,amsfonts,enumitem,tikz, subcaption, mdframed}
 \usepackage{amssymb}
+\usepackage{tcolorbox}
+\usepackage{comment}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
 \usetikzlibrary{arrows,arrows.meta,shapes.arrows, calc, positioning,matrix}
+
 
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lemma}{Lemma}[section]
@@ -161,7 +167,7 @@
     $\ins_{n+m+i}=(n+m+i,\load,i,\vecT_1[\,i\,])$. The consistency of the transcript $\mathsf{tr}$ is checked via address ordering permutation as
     described before. Intuitively, the first $n$ instructions in $\mathsf{tr}$ copy the initial contents of the RAM, the next $m$ instructions essentially
     capture the sequence of RAM operations executed on the initial RAM, while the final $n$ instructions read out the entire contents of the RAM which
-    is expected to match the contents of $\vecT_1[\,i\,]$. One of the contributions of this work is a polynomial protocol that proves that RAM state
+    is expected to match the contents of $\vecT_1[\,i\,]$. We illustrate this approach in Figure \ref{fig:permutated-transcripts}. One of the contributions of this work is a polynomial protocol that proves that RAM state
     $\vecT_1\in \F^n$ is obtained from RAM state $\vecT_0\in \F^n$ as a result of sequence of operations $\vec{\op}=\{(\op_i,\ind_i,v_i)\}_{i=1}^m$, where each
     of the vectors $\vecT_0,\vecT_1$ and $\vec{\op}$ are represented via polynomials. Informally, we show:
     \begin{theorem}[informal]\label{thm:pp-for-ram-informal}
@@ -179,13 +185,15 @@
     transforms $\vec{t}_0$ to $\vec{t}_1$ and (ii) the RAMs $\vecT_0$ and $\vecT_1$ are identical at indices not
     involved in $\vec{\op}$, i.e $\vecT_0[\,i\,]=\vecT_1[\,i\,]$ for $i\not\in \{\ind_i: i\in [m]\}$. In later
     sections, we show that the latter check can be accomplished with $\tilde{O}(m)$ prover complexity. The former
-    check involves an adaptation of address ordered transcript approach to incorporate additional subtleties such
+    check involves an adaptation of folklore approach using address ordered transcript (we consider additional subtleties such
     as the possibility of multiple rows of $\vec{t}_0$ and $\vec{t}_1$ referring to the same index of their parent RAMs $\vecT_0$ and
-    $\vecT_1$ respectively.
+    $\vecT_1$ respectively).
     In later sections, we show that this is efficiently handled by using the inherited indices in constructing the transcript showing
     consistency of $\vec{t}_0$ and $\vec{t}_1$. Since the lookup protocol is $O(m^2)$ and the memory consistency check involves transcript
-    of size $O(m)$, the overall complexity of this step is $O(m^2)$. Figures ~\ref{fig:subtable-lookup} and ~\ref{fig:subtable-consistency}
-    illustrate the overall idea for the first check with a concrete example.
+    of size $O(m)$, the overall complexity of this step is $O(m^2)$. Figure ~\ref{fig:subtable-lookup} illustrates the above idea on
+    a concrete example.
+    %and ~\ref{fig:subtable-consistency}
+    %illustrate the overall idea for the first check with a concrete example.
 
     \noindent{\bf Incrementally Verifiable RAM with Deferred Pre-processing}: The approach in the previous paragraph yields an argument for RAM with
     table-independent prover-complexity ($O(m^2)$), {\em provided} the prover has access to the table-dependent pre-processing
@@ -203,16 +211,32 @@
     with amortized prover complexity of $O(m^2 + \sqrt{mN})$.
     \end{theorem}
 
-    \input{figure-subtable-consistency}
+    \begin{figure}[t]
+    \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=0.8\textwidth]{example-lookup}
+    \caption{Isolating subtables using lookup argument}
+    \label{fig:subtable-consistency}
+    \end{subfigure}
+    \begin{subfigure}{\textwidth}
+    \centering
+        \includegraphics[height=0.3\textheight]{Address-ordered}
+        \caption{Checking memory consistency using address ordering}
+        \label{fig:permuted-transcripts}
+    \end{subfigure}
+    \end{figure}
+
+    %\input{figure-subtable-consistency}
 
     \noindent{\bf Our Contributions}: (Summarise later)
 
     \section{Related Work}\label{sec:rel-work}
 
-    \section{Polynomial Protocol for RAM}\label{sec:poly-proto-ram}
+    \section{Model for RAM}\label{sec:model-for-ram}
     \input{poly-proto-ram}
 
-
+    \section{Improved Batching Efficient RAM}\label{sec:batch-efficient-ram}
+    \input{batching-efficient-ram}
 
 
     \bibliographystyle{plain}
