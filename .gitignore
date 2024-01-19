@@ -1,0 +1,12 @@
+
+*.pdf
+*.gz
+cryptobib/crypto_crossref.bib
+cryptobib/crypto.bib
+cryptobib/abbrev3.bib
+cryptobib/abbrev2.bib
+cryptobib/abbrev1.bib
+cryptobib/abbrev0.bib
+*.out
+*.log
+*.aux
