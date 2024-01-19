@@ -1,0 +1,11 @@
+\begin{lemma}\label{lem:approx-setup}
+Let $N,\xi$ be as defined previously. Suppose we are given
+$\kzg$ proofs $\mathcal{W}=\{W_i\}_{i=1}^N$ with $W_i=\gtwo{(T(X) - T(\xi^i)/(X-\xi^i))}$ where
+$T(X)=\enc{T}{\setN}$ encodes a vector $\vecT\in \F^N$. Then,
+there exists an algorithm to compute proofs
+$W_i'=\gtwo{(T'(X) - T'(\xi^i))/(X-\xi^i)}$ for encoding$T'(X)=\enc{T'}{\setN}$ of vector $\vecT'\in \F^N$
+for $i\in I\subseteq [N]$ using $O((\delta + |I|) \log^2 (\delta + |I|))$ $\F$-operations and $O(\delta + |I|)$ $\Gtwo$-operations.
+Here, $\delta$ denotes the hamming distance
+between vectors $\vecT$ and $\vecT'$.
+
+\end{lemma}
