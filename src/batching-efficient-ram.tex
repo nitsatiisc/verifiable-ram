@@ -65,19 +65,19 @@ $h(\nu^i)=\xi^{a(\nu^i)}$. To show that polynomial $h$ correctly ``exponentiates
 polynomial $\ell(X)=\sum_{i=1}^N i\mu_i(X)$ which behaves like ``log'' over $\setN$ by evaluating to $i$ on $\xi^i$. Now, we see
 that all constraints are encoded as polynomial identities below:
 \begin{alignat}{3}
-\ell(h(X)) &= a(X) &\quad \text{mod } Z_{\setV}(X) &&\quad\text{ encodes } &&\quad \forall i\in [m]:& h(\nu^i) = \xi^{a(\nu^i)}  \\
-T(h(X)) &= v(X) &\quad \text{mod } Z_\setV(X) &&\quad\text{ encodes } &&\quad \forall i\in [m]:& v_i = \vec{t}[a_i] \\
-Z_{\setN}(h(X)) &= 0 &\quad \text{mod } Z_\setV(X) &&\quad\text{ encodes } &&\quad \forall i \in [m]:& h(\nu^i)\in \setN
+\ell(h(X)) &= a(X) \quad \text{mod } Z_{\setV}(X) & \quad\text{ encodes } & \quad \forall i\in [m]:& h(\nu^i) = \xi^{a(\nu^i)}  \\
+T(h(X)) &= v(X) \quad \text{mod } Z_\setV(X) & \quad\text{ encodes } & \quad \forall i\in [m]:& v_i = \vec{t}[a_i] \\
+Z_{\setN}(h(X)) &= 0 \quad \text{mod } Z_\setV(X)  &\quad\text{ encodes } & \quad \forall i \in [m]:& h(\nu^i)\in \setN
 \end{alignat}
 The above formulation involves composition with polynomials $\ell,T$ and $\vpolyN$ of degree $O(N)$, which is inefficient. We use the trick from
 \cite{EPRINT:PosKat22}, where we work with low-degree restrictions of polynomials such as $T, \ell$ over the set
 $\setN_I=\{{h(\nu^i)}: i\in I\}=\{\xi^{a_i}:i\in I\}\subseteq \setN$, where $I=\{a_i: i\in [m]\}$. To this end, the prover
 commits to the polynomial $Z_I(X)=\prod_{i\in I}(X-\xi^i)$, and low degree ($<m$) restrictions $T_I, \ell_I$ of $T$ and $\ell$
 on $\setN_I$ respectively. The polynomial protocol then checks the following:
-\begin{alignat}{2}\label{eq:poly-comm-index}
-T(X) - T_I(X) &= 0 &\quad \text{ mod } Z_I(X) &&,\quad T_I(h(X)) &= v(X) &\quad \text{ mod } Z_{\setV}(X) \\
-\ell(X) - \ell_I(X) &= 0 &\quad \text{ mod } Z_I(X) &&,\quad \ell_I(h(X)) &= a(X) &\quad \text{ mod } Z_{\setV}(X) \\
-Z_{\setN}(X) &= 0 &\quad \text{ mod } Z_I(X) &&,\quad Z_I(h(X)) &= 0 &\quad \text{ mod } Z_{\setV}(X)
+\begin{alignat}{3}\label{eq:poly-comm-index}
+T(X) - T_I(X) &= 0 \quad \text{ mod } Z_I(X) &&,\quad T_I(h(X)) &= v(X) \quad \text{ mod } Z_{\setV}(X) \\
+\ell(X) - \ell_I(X) &= 0 \quad \text{ mod } Z_I(X) &&,\quad \ell_I(h(X)) &= a(X) \quad \text{ mod } Z_{\setV}(X) \\
+Z_{\setN}(X) &= 0 \quad \text{ mod } Z_I(X) &&,\quad Z_I(h(X)) &= 0 \quad \text{ mod } Z_{\setV}(X)
 \end{alignat}
 While the identities on the left still involve a degree $N$ polynomial, we can use the $\srs$ to check the polynomial
 identity at the point $\tau$ encoded in the $\srs$. For example, we can evaluate the encoded quotient $\gtwo{Q(X)} =$
@@ -113,7 +113,7 @@ Q(X) &= \frac{(T(X)-T'(X))\cdot Z_I(X)}{Z_\setN(X)} \nonumber \\
 &=\sum_{i\in I}\frac{\Delta_i}{Z_\setN'(\xi^i)}\left(\frac{Z_I(X)}{X-\xi^i}\right) = \sum_{i\in I}\frac{\Delta_i Z_I'(\xi^i)}{Z_\setN'(\xi^i)}\kappa_i(X)
 \end{align}
 In the above, the summation only runs over indices in $I$, as $t_i=t_i'$ for $i\not\in I$. In the final equality, we use
-$\kappi_i(X) = Z_I(X)/(Z_I'(\xi^i)(X-\xi^i))$ for $i\in I$ which we recognize as the lagrange basis polynomials for the set
+$\kappa_i(X) = Z_I(X)/(Z_I'(\xi^i)(X-\xi^i))$ for $i\in I$ which we recognize as the lagrange basis polynomials for the set
 $\{\xi^i: i\in I\}$. Thus, Equation \eqref{eq:poly-q} implies that $Q$ is a degree $|I|-1$ polynomial, with
 $Q(\xi^i)=\Delta_i Z_I'(\xi^i)/\vpolyN'(\xi^i)$ for $i\in I$. The prover can therefore interpolate $Q(X)$ (in power basis)
 in $O(|I|\log^2 |I|)$ $\F$-operations and compute $\gtwo{Q(X)}$ in $O(|I|)$ $\Gtwo$-operations.

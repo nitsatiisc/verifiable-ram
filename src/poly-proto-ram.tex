@@ -133,11 +133,11 @@ that vector $\vec{v}\in \F^k$ is concatenation of vectors $\vec{a},\vec{b},\vec{
 Let $\vec{a},\vec{b},\vec{c}\in \F^m$  and $v\in \F^k$ be vectors encoded by polynomials
 $a(X),b(X),c(X)$ and $v(X)$ respectively. Then,
 {\small
-\begin{alignat}{3}
-    &a(X^3) - v(X) && = 0  &&  &\quad \text{ mod $Z(X)$ } \tag{A1}\label{eq:A1}\\
-    &b(X^3) - v(\omega^m X) && = 0 &&  &\quad \text{ mod $Z(X)$ } \tag{A2}\label{eq:A2}\\
-    &c(X^3) - v(\omega^{2m} X) && = 0 && &\quad \text{ mod $Z(X)$ } \tag{A3}\label{eq:A3}
-\end{alignat}
+\begin{align}
+    a(X^3) - v(X)  &= 0  \quad \text{ mod $Z(X)$ } \tag{A1}\label{eq:A1}\\
+    b(X^3) - v(\omega^m X)  &= 0   \quad \text{ mod $Z(X)$ } \tag{A2}\label{eq:A2}\\
+    c(X^3) - v(\omega^{2m} X) &= 0 \quad \text{ mod $Z(X)$ } \tag{A3}\label{eq:A3}
+\end{align}
 }
 for $Z(X)=\prod_{i=1}^m (X-\omega^i)$ if and only if $\vec{v}=\vec{a}||\vec{b}||\vec{c}$.
 \end{lemma}
@@ -167,15 +167,15 @@ Then for $kN<|\F|$, $\tr$ is address ordered and satisfies load-store consistenc
  $Z_1,Z_2,\delta_T,\delta_A$
 such that the following hold:
 {\small
-\begin{alignat}{2}\label{eq:load-store-consitency-constraints}
-&& & Z_2(X)(A(\omega X) - A(X) - \delta_A(X)) = 0 && & \text{ mod } \mathbb{Z}_\setH(X) \tag{C1} \label{eq:C1} \\
-&& & A(\omega X) - A(X) = 0 && & \text{ mod } Z_2(X) \tag{C2} \label{eq:C2} \\
-&& & t(\omega X) - t(X) - \delta_T(X) = 0 && & \text{ mod } Z_2(X) \tag{C3} \label{eq:C3} \\
-&& & (\op(X) - 1)(V(\omega X) - V(X)) = 0 && & \text{ mod } Z_2(X) \tag{C4} \label{eq:C4} \\
-&& & Z_1(X)\cdot Z_2(X) = \mathbb{Z}_\setH(X) && &\quad  \tag{C5} \label{eq:C5} \\
-&& & 1\leq A(\omega) < N && &\quad \tag{C6} \label{eq:C6} \\
-&& & 1\leq t(\omega^i) < N, 1\leq \delta_A(\omega^i)<N,\ 1\leq \delta_T(\omega^i)<N && &\text{ for } i\in [k] \tag{C7} \label{eq:C7}
-\end{alignat}
+\begin{align}%\label{eq:loadstore-consitency-constraints}
+& Z_2(X)(A(\omega X) - A(X) - \delta_A(X)) = 0 \text{ mod } \mathbb{Z}_\setH(X) \tag{C1} \label{eq:C1} \\
+& A(\omega X) - A(X) = 0  \text{ mod } Z_2(X) \tag{C2} \label{eq:C2} \\
+& t(\omega X) - t(X) - \delta_T(X) = 0  \text{ mod } Z_2(X) \tag{C3} \label{eq:C3} \\
+& (\op(X) - 1)(V(\omega X) - V(X)) = 0  \text{ mod } Z_2(X) \tag{C4} \label{eq:C4} \\
+& Z_1(X)\cdot Z_2(X) = \mathbb{Z}_\setH(X) \quad  \tag{C5} \label{eq:C5} \\
+& 1\leq A(\omega) < N  \quad \tag{C6} \label{eq:C6} \\
+& 1\leq t(\omega^i) < N, 1\leq \delta_A(\omega^i)<N,\ 1\leq \delta_T(\omega^i)<N \text{ for } i\in [k] \tag{C7} \label{eq:C7}
+\end{align}
 }
 \end{lemma}
 
@@ -274,7 +274,7 @@ Let $f(X), g(X)$ be polynomials in $\F[\,X\,]$. Then, the vectors $\vec{f}, \vec
 are permutations of each other if and only if with overwhelming probability over the choice of $\alpha\gets \F$,
 there exists a polynomial $z(X)$ satisfying the polynomial constraints:
 {\small
-\begin{align}\label{eq:perm-constraints}
+\begin{align}
 \lambda_1(X)(z(X) -1) &= 0 \text{ mod } Z_\setH(X) \tag{B1} \label{eq:B1} \\
 (\alpha - g(X))z(\omega X) &= (\alpha - f(X))z(X) \text{ mod } Z_\setH(X) \tag{B2} \label{eq:B2}
 \end{align}
@@ -287,7 +287,7 @@ the random linear combination of the columns of the respective transcripts.
 \centering
 \begin{mdframed}
     {\footnotesize
-    \noident{\bf Common Input}: Commitments $c_\tr=(c_t,c_\op,c_A, c_V)$ and $c_\tr^\ast=(c_t^\ast,c_\op^\ast, c_A^\ast, c_V^\ast)$
+    \noindent{\bf Common Input}: Commitments $c_\tr=(c_t,c_\op,c_A, c_V)$ and $c_\tr^\ast=(c_t^\ast,c_\op^\ast, c_A^\ast, c_V^\ast)$
     of transcripts $\tr$ and $\tr^\ast$ respectively.
     \begin{enumerate}[leftmargin=2em]
         \item $\verifier\rightarrow\prover$: Sends $\alpha,\beta, \chi\gets \F$
