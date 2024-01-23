@@ -1,0 +1,428 @@
+\appendix
+\section{Proof of Lemma 6.2}
+Recall the statement of lemma \ref{lem:sum computation}. We want to compute $e_i$ for all $i \in \setind$ and $b_j$ for all $j \in K$ in $O(|K|\log^2|K|)$ $\mathbb{F}$ operations.\\\\
+
+Before starting the proof, we list some preliminaries and some lemmas/facts which will be useful in the proof.\\
+
+\subsection{Computational Algebra Preliminaries}
+Let $\F$ be a finite field of prime order $p$ and $\G$ be a cyclic additive group of order $p$ with generator $g$. For $s \in \F$, we use
+the notation $\elt{s}$ to denote the group element $s\cdot g$. Assume that $\F$ contains $n^{th}$ root of unity $\xi$
+satisfying $\xi^n=1$ for large $n$ (All polynomial degrees are assumed less than $n$).
+
+\begin{fact}[\textsf{Fast Evaluation}]\label{fc:fft}
+Let $f\in \F[X]$ be a polynomial of degree $<d$ and $(\xi_1,\ldots,\xi_r)\in \F^r$ be distinct points in $\F$.
+Then the vector $(f(\xi_1),\ldots,f(\xi_r))$ can be computed in $O((d+r)\log (d+r))$ $\F$ operations if $\xi_1,\ldots,\xi_r$ form roots
+of unity, and in $O((d+r)\log^2(d+r))$ $\F$ operations otherwise.
+\end{fact}
+
+\begin{fact}[\textsf{Fast Interpolation}]\label{fc:ifft}
+Let $\xi_1,\ldots,\xi_d$ be distinct points in $\F$ and $(v_1,\ldots,v_d)\in \F^d$. Then $(f_0,\ldots,f_{d-1})\in \F^d$
+can be computed in $O(d\log^2 d)$ operations in $\F$ such that $f(\xi_i)=v_i$ for all $i\in [d]$ where
+$f(X)=\sum_{i=0}^{d-1}f_iX^i$.
+\end{fact}
+
+\begin{fact}[\textsf{Fast Multiplication}]\label{fc:mult}
+Let $\xi_1,\ldots,\xi_r$ be distinct points in $\F$. Then coefficients of $f(X)=\prod_{i=1}^r (X-\xi_i)$
+can be computed in $O(r\log^2 r)$ operations in $\F$.
+\end{fact}
+
+\begin{fact}[\textsf{Multi KZG proofs}]\label{fc:multkzg}
+Let $\{\elt{x^i}\}_{i=1}^d$ be given for some $x\in \F$. Then for set of $r$ distinct points $\xi_1,\ldots,\xi_r$,
+and a polynomial $f(X)\in \F[X]$ of degree $<d$,the vector $(\elt{h_1(x)},\ldots,\elt{h_r(x)})$,
+where $h_i(X) = (f(X) - f(\xi_i))/(X - \xi_i)$ can be computed in
+$O((r+d)\log(r+d))$ group and field operations when $\xi_1,\ldots,\xi_r$ are roots of unity, and in
+$O(rlog^2 r + d\log d)$ group and field operations otherwise.
+\end{fact}
+
+\begin{fact}[\textsf{Lagrange Polynomials}]\label{fc:lagrange}
+Let $\mathbb{S}=\{\xi_1,\ldots,\xi_r\}$ be a set of $r$ distinct points and let $\tau_1(X),\ldots,\tau_r(X)$ be
+the corresponding lagrange polynomials of degree $r-1$ each. Let $Z_{\mathbb{S}}(X)=\prod_{i=1}^r (X-\xi_r)$ denote the vanishing polynomial
+for $\mathbb{S}$. Then we have:
+\begin{gather*}
+    \sum_{i=1}^r \tau_i(X) = 1 \\
+    \tau_i(X) = \frac{Z_{\mathbb{S}}(X)}{Z_{\mathbb{S}}'(\xi_i)(X-\xi_i)} \text{ for all } i\in [r]
+\end{gather*}
+\end{fact}
+
+\subsection{Notion of derivative in finite field setting}
+
+\textbf{Formal Derivative}- For a polynomial $p(X) \in \F[X]$, we define the formal derivative of $p(X)$ as the polynomial $u(X,X)$ where $u(X,Y)=\frac{p(X)-p(Y)}{X-Y}$\\
+Let us denote the formal derivative of $p(X)$ as $p^f(X)$.\\
+Then, $p^f(X)= u(X,X)$ where $u(X,Y)=\frac{p(X)-p(Y)}{X-Y}$\\\\
+It is well known that the formal derivative of a polynomial satisfies all the properties that we want the derivative of a polynomial to satisfy, like linearity, product rule, quotient rule etc.\\\\
+As a result, the formal derivative $p^f(X)$ defined as above can be computed from $p(X)$ in the \textit{usual} way, that is $\frac{d}{dx}X^k=k X^{k-1}$ and extend using linearity of derivative.\\
+Henceforth, we will represent the formal derivative of $p(X)$ as $p'(X)$ and because of the above statements, we will compute it in the usual way and freely use all the properties of derivatives on it.\\
+
+\subsection{Some useful lemmas:}
+
+We need the following lemma:\\
+\begin{lemma}\label{lem:sumtoder}
+For $K\subset [N]$, define $H_K$ to be $\{\xi^i:i \in K\}$. Let $p(X)$ be the vanishing polynomial of $H_{K}$. Let $p'(X)$ and $p''(X)$ denote the formal first derivative and second derivative of $p(X)$ respectively.\\
+Then, $p''(\xi^i)/p'(\xi^i)=2 \cdot \sum_{j\in K\setminus \{i\}} 1/(\xi^i-\xi^j)$ for all $i \in K$
+\end{lemma}
+
+\begin{proof}
+
+    We have for any $r \in K$:\\
+    $p'(\xi^r)=\prod_{j \in K \setminus \{r\}}(\xi^r-\xi^j)$\\
+    To compute $p''(\xi^r)$, note that $p''(X)$ is a (double) sum of many products. When one substitutes $\xi^r$ in a product, the product is non zero if and only if $r=i\, \text{or}\, r=j$\\\\
+
+    Putting $\xi^r$ gives:
+    $$ p''(\xi^r)=\sum_{j\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,j\}} (\xi^r-\xi^k)+$$
+    $$ \sum_{i\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,i\}} (\xi^r-\xi^k) $$
+    But this is just,
+    $$2\cdot \sum_{j\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,j\}} (\xi^r-\xi^k) $$
+
+    Now, we are left to show that $\frac{\frac{p''(\xi^r)}{2}}{p'(\xi^r})=\sum_{j\in K\setminus \{r\}} 1/(\xi^r-\xi^j)$, or
+    $$\sum_{j\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,j\}} (\xi^r-\xi^k)=\prod_{j \in K \setminus \{r\}}(\xi^r-\xi^j) \sum_{j\in K\setminus \{r\}} 1/(\xi^r-\xi^j)$$
+
+    But we observe that:
+    $$\sum_{j\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,j\}} (\xi^r-\xi^k)=\sum_{j\in K\setminus \{r\}}\frac{\prod_{k\in K\setminus \{r\}} (\xi^r-\xi^k)}{(\xi^r-\xi^j)}$$
+
+    But $\prod_{k\in K\setminus \{r\}} (\xi^r-\xi^k)$ is independent of $j$, so it can be pulled outside the sum:
+    $$\sum_{j\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,j\}} (\xi^r-\xi^k)=\prod_{k\in K\setminus \{r\}} (\xi^r-\xi^k) \sum_{j\in K\setminus \{r\}} 1/(\xi^r-\xi^j) $$
+    But $k$ is just a dummy variable. We can replace $k$ by $j$ on the RHS:
+    $$\sum_{j\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,j\}} (\xi^r-\xi^k)=\prod_{j\in K\setminus \{r\}} (\xi^r-\xi^j) \sum_{j\in K\setminus \{r\}} 1/(\xi^r-\xi^j) $$
+    This completes the proof.
+\end{proof}
+
+\textbf{An alternative proof of \ref{lem:sumtoder}}:\\
+
+\begin{lemma}[Sumcheck]\label{lem:sumcheck}
+Let $u(X,Y)$ be a bi-variate polynomial over a finite field $\F$ and $\nroots$ be defined as the group of $N^{\text{th}}$ roots of unity $(N<<|\F|)$ with generator $\xi \in \F$ \\
+Then $\sum_{i\in [N]}u(X,\xi^i)= Nu(X,0)$
+\end{lemma}
+
+\begin{proof}
+    First of all, by a basic result in algebra, $\F[X,Y]=\F[X][Y]$\\
+    $u(X,Y) \in \F[X,Y]$ thus $u(X,Y) \in \F[X][Y]$\\
+    Let it have degree $d<N$ ($u(X,Y)$ itself had degree less than $N$)
+    Thus, $u(X,Y)=a_0+a_1 Y+ a_2 Y^2+\cdots+ a_d Y^d$\\
+    Here each $a_i$ is a polynomial function in $X$\\
+    Now,  $\sum_{i\in [N]}u(X,\xi^i)$
+    $$N a_0+a_1(\xi^+\xi^2+\cdots+\xi^N)+a_2(\xi^2+\xi^4+\cdots+\xi^{2N})+ \cdots + a_d(\xi^d+\xi^{2d}+\cdots +\xi^{Nd})$$
+    But for any $\alpha=\xi^k$ for $k<N$, $\alpha+\alpha^2+\cdots \alpha^N=0$ (basic property of complex numbers)\\
+    Thus, all terms vanish except the first term\\
+    So, $\sum_{i\in [N]}u(X,\xi^i)=N a_0$\\
+    But $a_0=u(X, 0)$\\
+    Thus, $\sum_{i\in [N]}u(X,\xi^i)=N u(X, 0)$
+\end{proof}
+
+\begin{lemma}\label{lem:zk-hat}
+Let polynomials $Z_\nroots(X)$ be the vanishing polynomial for $\nroots$, let $\widehat{Z}_K(X)$ and $Z_K(X)$ be the vanishing polynomials for $H_{[N]\setminus K}$ and $H_K$ respectively. Let $\mu_1(X),\ldots,\mu_N(X)$
+be Lagrange polynomials for the set $\nroots=\{\xi,\ldots,\xi^N\}$. Then:
+\begin{gather}
+    \widehat{Z}_K(X) = \sum_{j\in K}\frac{Z_\nroots'(\xi^j)}{Z_K'(\xi^j)}\mu_j(X), \\
+    \widehat{Z}_K'(X)= \sum_{j\in K}\frac{Z_\nroots'(\xi^j)}{Z_K'(\xi^j)}\mu_j'(X)
+\end{gather}
+\end{lemma}
+The following fact will be useful in proving the lemma.
+\begin{fact}[\textsf{Standard result from Algebra}]
+    If $2$ polynomials $f,g$ of degree $<N$ agree on $N$ points, then they are equal as polynomials, that is, $f(X)=g(X)$
+\end{fact}
+
+\begin{proof}
+    The second equation follows from the first by simple differentiation (linearity of derivative)\\
+    It suffices to prove the first equation\\
+    Both LHS and RHS are of degree $<N$. We will show that LHS and RHS agree on $N$ points. That will finish proof of (11) by the fact\\
+    Consider evaluating LHS and RHS at $\xi^i$ for $i \in [N]\setminus K$ \\
+    LHS is 0 by definition of $\hat{Z}_K(X)$. RHS is also 0 by properties of Lagrange polynomials.\\
+    Consider evaluating LHS and RHS at $\xi^i$ for $i \in K$\\
+    RHS is $\frac{Z_\nroots'(\xi^i)}{Z_K'(\xi^i)}$ by properties of Lagrange polynomials.\\
+    LHS is $\prod_{j \in [N]\setminus K} (\xi^i-\xi^j)$\\
+    Multiplying dividing by $\prod_{ j \in K \setminus \{i\}}(\xi^i-\xi^j)$ gives:
+    $$\frac{\prod_{j \in [N] \setminus \{i\}} (\xi^i-\xi^j)}{\prod_{j \in K \setminus \{i\}}(\xi^i-\xi^j)}$$
+    Which is $\frac{Z_\nroots'(\xi^i)}{Z_K'(\xi^i)}$ =RHS\\
+    Thus, LHS and RHS of (11) agree on $\nroots$. Thus, they agree on $N$ points
+\end{proof}
+
+\begin{lemma}\label{lem:lamda-deriv}
+Let $\mu_1,\ldots,\mu_N$ be the lagrange polynomials for the set $\nroots=\{\xi^i:i\in [N]\}$
+of the $N^{th}$ roots of unity. Then we have:
+\begin{equation*}
+    \mu_i'(\xi^j) = \begin{cases}
+                        \frac{(N-1)}{2\xi^{i}}  \text{ if } j=i\\
+                        \frac{\xi^i}{\xi^j(\xi^j-\xi^i)} \text{ otherwise }
+    \end{cases}
+\end{equation*}
+\end{lemma}
+
+\begin{proof}
+    Suppose first that $i \neq j$:\\
+    We know that $\mu_i(X)= \frac{Z_H(X)}{Z_H'(\xi^i)(X-\xi^i)}$\\
+    Thus, by applying quotient rule(we can apply quotient rule because $\mu_i$ is defined at $\xi^j$ as $j\neq i$):
+    $$\mu_i'(X) \cdot Z_H'(\xi^i)= \frac{(X-\xi^i)(N\cdot X^{N-1})-(X^N-1)}{(X-\xi^i)^2}$$
+    Substituting $X$ by $\xi^j$, we get:
+    $$\mu_i'(\xi^j) \cdot \frac{N}{\xi^i}= \frac{N(\xi^j-\xi^i)}{\xi^j (\xi^j-\xi^i)^2}$$
+    Thus, we get:
+    $$\mu_i'(\xi^j)=\frac{\xi^i}{\xi^j(\xi^j-\xi^i)}$$\\
+    Now consider $i=j$:\\
+    Then, $\mu_i(X)=\frac{\prod_{j \in [N] \setminus \{i\}}(X-\xi^j)}{Z_H'(\xi^i)}$\\
+    Thus,  $\mu_i(X)\cdot Z_H'(\xi^i)=\prod_{j \in [N] \setminus \{i\}}(X-\xi^j)$\\
+    Thus, $\mu_i'(X) \cdot \frac{N}{\xi^i}=\sum_{j \in [N] \setminus \{i\}}\prod_{k \in [N]\setminus\{i,j\}}(X-\xi^k)$\\
+    Now, substituting $X$ by $\xi^i$ gives:
+    $$\mu_i'(\xi^i) \cdot \frac{N}{\xi^i}=\sum_{j \in [N] \setminus \{i\}}\prod_{k \in [N]\setminus\{i,j\}}(\xi^i-\xi^k)$$
+    or
+    $$\mu_i'(\xi^i) \cdot \frac{N}{\xi^i}=\sum_{j \in [N] \setminus \{i\}}\frac{\prod_{k \in [N]\setminus\{i\}}(\xi^i-\xi^k)}{\xi^i-\xi^j}$$
+    or$$\mu_i'(\xi^i) \cdot \frac{N}{\xi^i}= \prod_{k \in [N]\setminus\{i\}}(\xi^i-\xi^k)\sum_{j\in [N]\setminus \{i\}}\frac{1}{\xi^i-\xi^j}$$
+    or $$\mu_i'(\xi^i) \cdot \frac{N}{\xi^i}=Z_H'(\xi^i)\sum_{j\in [N]\setminus \{i\}}\frac{1}{\xi^i-\xi^j}$$
+    or $$\mu_i'(\xi^i)=\sum_{j\in [N]\setminus \{i\}}\frac{1}{\xi^i-\xi^j}$$
+    or $$\mu_i'(\xi^i)=\frac{Z_H''(\xi^i)}{2 Z_H'(\xi^i)} \text{ From the lemma \ref{lem:sumtoder}}$$
+    or $$ \mu_i'(\xi^i)=\frac{N-1}{2\xi^i}$$
+
+\end{proof}
+
+\begin{lemma}\label{lem:tau}
+Let $K\subseteq \F$ be a set of cardinality $k$ and $\mathcal{X}=\{x_j:j\in K\}$ be a set
+where $x_j$ for $j\in K$ are distinct elements of $\F$. Let $Z_\mathcal{X}(X)=z_k X^k+\cdots+z_0$ denote the vanishing polynomial of $\mathcal{X}$
+and $\{\eta_j(X)\}_{j\in K}$ denote the lagrange polynomials such that $\eta_i(x_j)=\delta_{ij}$ for $i,j\in K$. Then for all $j\in K$,
+we have $\eta_j'(x_j)=F_K(x_j)/Z_\mathcal{X}'(x_j)$ where the polynomial
+$F_K(X)$ is defined as
+\[F_K(X)=\binom{k}{2}z_k X^{k-2}+\cdots+\binom{2}{2}z_2=\sum_{j=2}^k z_j\binom{j}{2}X^{j-2} \]
+\end{lemma}
+\begin{proof}
+    For $j\in K$ we have $\tau_j(X)=\frac{Z_\mathcal{X}(X)}{(X-x_j)Z_\mathcal{X}'(x_j)}= \frac{1}{Z_\mathcal{X}'(x_j)}\frac{Z_\mathcal{X}(X)}{X-x_j}$ by definition of Lagrange polynomials.\\
+    By doing long division of $Z_\mathcal{X}(X)$
+    by $X-x_j$ we have:
+    \begin{align*}
+        \tau_j(X) &= \frac{1}{Z_\mathcal{X}'(x_j)}\big(z_k X^{k-1} + (x_jz_k + z_{k-1})X^{k-2} + \cdots +
+        (x_j^{k-1}z_k + \cdots + z_1)\big) \\
+        &= \frac{1}{Z_\mathcal{X}'(x_j)}\sum_{p=0}^{k-1} \left(\sum_{q=p+1}^k z_q x_j^{q-p-1}\right)X^p
+    \end{align*}
+
+    Now, we use linearity property of derivative to differentiate:
+
+    $$   \tau_j'(X) = \frac{1}{Z_\mathcal{X}'(x_j)}\sum_{p=0}^{k-1} \left(\sum_{q=p+1}^{k}z_q x_j^{q-p-1}\right)p X^{p-1} $$
+    In this step we just differentiated $X^p$ to get $p X^{p-1}$
+    $$ \tau_j'(X) = \frac{1}{Z_\mathcal{X}'(x_j)}\sum_{p=1}^{k-1} p  \sum_{q=p+1}^{k}z_q x_j^{q-p-1} X^{p-1} $$
+    In this step, we just applied distributive property to the rightmost bracket and brought $p$ outside the sum over $q$\\
+    Now we put $X=x_j$:
+
+    $$\tau_j'(x_j) = \frac{1}{Z_\mathcal{X}'(x_j)} \sum_{p=1}^{k-1} p \sum_{q=p+1}^k z_q x_j^{q-2} $$
+    $$= \frac{1}{Z_\mathcal{X}'(x_j)}\sum_{q=2}^k z_q x_j^{q-2} \sum_{p=1}^{q-1} p $$
+    Here, we reversed the order of the sum. $p$ going from 1 to $k-1$ and $q$ going from $p+1$ to $k$ is same as $q$ going from $2$ to $k$ and $p$ going from 1 to $q-1$
+    $$\tau_j'(x_j)= \frac{1}{Z_\mathcal{X}'(x_j)}\sum_{q=2}^k z_q \binom{q}{2} x_j^{q-2} $$
+    Here we used that $\sum_{p=1}^{q-1}p=\frac{q(q-1)}{2}=\binom{q}{2}$
+
+    But $q$ is just a dummy variable. We might as well replace $q$ by $j$
+
+    Thus, $$\tau_j'(x_j)= \frac{1}{Z_\mathcal{X}'(x_j)}\sum_{j=2}^k z_j \binom{j}{2} x_j^{j-2} $$
+    If we compare this to the definition of $F_K(X)$ given in the lemma statement, we get:
+    $$\tau_j'(x_j)= \frac{F_K(x_j)}{Z_\mathcal{X}'(x_j)}$$
+
+
+\end{proof}
+
+\subsection{Brief Proof Sketch of lemma 6.2}
+
+\subsection{Proof of lemma 6.2}
+
+\begin{proof}
+
+    We give the proof for $e_i$ for all $i \in \setind$ in full detail and briefly mention the modifications needed for $b_j$ for all $j \in K$. \\
+
+    \begin{equation}\label{eq:ei}
+    e_i = \sum_{j\in K\setminus \{i\}} \frac{\Delta t_j}{\xi^i - \xi^j}
+    \end{equation}
+    We need this for all $i \in \setind$. Recall that $\setind \subset K$ in this case.\\
+    To compute $e_i$, we will first define a polynomial $p(X)$ of degree at most $N-1$ such that
+    $p(\xi^j)=\Delta t_j$ for $j\in K$ and $p(\xi^j)=0$ for $j \in [N]\setminus K$.\\
+    Now, because $p(\xi^j)=0$ for $j \in [N]\setminus K$, it is clear that the vanishing polynomial of $H_{[N]\setminus K}$ divides $p(X)$.\\\\
+
+    Thus, there exists a polynomial $q(X)$ of degree at most $|K|-1$ such that:
+    \begin{equation}\label{eq:px}
+    p(X) = \hat{Z}_K(X)\cdot q(X)
+    \end{equation}
+    where $\hat{Z}_K(X)=\prod_{i\in [N]\setminus K}(X-\xi^i)$ is the vanishing polynomial of $H_{[N]\setminus K}$\\
+
+    Now introduce the rational functions:
+    \begin{gather}\label{eq:fgr}
+    f_i(X) = \sum_{j\in [N]\setminus \{i\}}\frac{p(\xi^j)}{X-\xi^j}, i\in \setind \\
+    g_i(X) = \sum_{j\in [N]\setminus \{i\}}\frac{p(X)}{X-\xi^j}, i\in \setind \\
+    r_i(X) = \sum_{j\in [N]\setminus \{i\}}\frac{p(X) - p(\xi^j)}{X-\xi^j}, i\in \setind
+    \end{gather}
+    Note that $f_i(\xi^i)=\sum_{j\in [N]\setminus \{i\}}\frac{p(\xi^j)}{\xi^i-\xi^j}$\\\\
+    But, by the way $p(X)$ is defined, we have that $f_i(\xi^i)=\sum_{j\in K\setminus \{i\}}\frac{\Delta t_j}{\xi^i-\xi^j}=e_i$\\
+    \textbf{Thus, we need $f_i(\xi^i)$ for all $i \in I$.}
+
+    Note that $f_i(X) = g_i(X) - r_i(X)$ for $i\in I$\\
+    Thus, $e_i=g_i(\xi^i)-r_i(\xi^i)$\\
+    Thus, we need to compute $g_i(\xi^i)$ and $r_i(\xi^i)$ for all $i \in I \subset K$
+    \begin{align*}
+        g_i(\xi^i) &= p(\xi^i)\sum_{j\in [N]\setminus \{i\}} \frac{1}{\xi^i-\xi^j} \\
+        &= \frac{p(\xi^i)Z_{\nroots}''(\xi^i)}{2 Z_{\nroots}'(\xi^i)} \text{From lemma \ref{lem:sumtoder}} \\
+        &= \frac{(N-1)\Delta t_i}{2\xi^i}
+    \end{align*}
+
+    We used the fact that $Z_H(X)=X^N-1$ and that $p(\xi^i)=\Delta t_i$.\\
+    Thus, in $O(|\setind|)$ operations, we get $g_i(\xi^i)$ for all $i$\\
+    If we get $r_i(\xi^i)$ for all $i \in \setind$, then getting $f_i(\xi^i)$ will take only $O(|\setind|)$ operations\\\\
+    \textbf{So, it suffices to compute $r_i(\xi^i)$ for all $i \in I$}\\
+
+    First of all, we write $r_i(X)$ as:
+    \begin{align}\label{eq:rx}
+    r_i(X) &= \sum_{j\in [N]}\frac{p(X)-p(\xi^j)}{X-\xi^j} - \frac{p(X)-p(\xi^i)}{X-\xi^i} \nonumber \\
+    \intertext{Now, defining the bivariate polynomial $u(X,Y)=(p(X) - p(Y))/(X-Y)$ gives:}
+    &r_i(X)= \sum_{j\in [N]}u(X,\xi^j) - u(X,\xi^i) \nonumber
+    \end{align}
+    Now, define $r(X)=\sum_{j\in [N]}u(X,\xi^j)$\\
+    Thus, we get:\\
+    $$r_i(X)=r(X)-u(X, \xi^i)$$
+    or
+    $$r_i(\xi^i)=r(\xi^i) - u(\xi^i,\xi^i)$$
+    But, by definition and properties of formal derivative, we have the following polynomial identity
+    $$u(X, X)= p'(X)$$
+    where $p'(X)$ denotes the derivative of the polynomial $p(X)$ computed in the usual way. Thus, $u(\xi^i, \xi^i)=p'(\xi^i)$\\
+
+    Thus, we have that:
+    $$r_i(\xi^i)=r(\xi^i) - p'(\xi^i) $$
+
+    \textbf{Thus, $r_i(\xi^i)$ for all $i \in \setind$ can be computed by evaluating polynomials $r(X)$ and $p'(X)$ at the set $H_{\setind}$}
+
+
+    Now, from Lemma \ref{lem:sumcheck}, we have that $r(X)=N u(X,0)=N \frac{(p(X) - p(0))}{X}$ and thus $r(\xi^i)$ for $i\in \setind$ is given by:
+    $$r(\xi^i)=N \frac{(\Delta t_i - p(0))}{\xi^i}$$
+    If we get $p(0)$, then we can get $r(\xi^i)$ for all $i$ in $O(m)$ operations.\\\\
+    \textbf{Thus, it suffices to compute $p(0)$ and $p'(X)$ at the set $\{\xi^i:i \in I\}$}\\\\
+
+    Let $p(X)=\widehat{Z}_K(X)\cdot q(X)$
+    as in Equation \eqref{eq:px} and let $Z_K(X)$ be the vanishing polynomial for $H_K$\\
+    Note that $Z_K(X) \cdot \hat{Z}_K(X)=X^N-1$(by definition)\\
+
+    Notice that $Z_\nroots'(\xi^j)= \frac{N}{\xi^j} $\\
+    Moreover, $Z_K(X)$ can be computed by fast multiplication in $O(|K|\log^2 |K|)$ operations and then it can be differentiated monomial by monomial to get $Z_K'(X)$. \\
+    Then, we can do fast evaluation to get $Z_K'(X)$ at $\{\xi^j:j\in K\}$ in $O(|K|\log^2 |K|)$ operations\\
+    Recall the lemma \ref{lem:zk-hat} which tells us that $\hat{Z}_K(\xi^j)=\frac{Z_{\nroots}'(\xi^j)}{Z_K'(\xi^j)}$.\\
+    Thus, we can compute $\hat{Z}_K(\xi^j)=\frac{\frac{N}{\xi^j}}{Z_K'(\xi^j)}$ for all $j \in K$\\\\
+    Now, recall from \eqref{eq:px} that $q(\xi^j)=\frac{p(\xi^j)}{\hat{Z}_K(\xi^j)}=\frac{\Delta t_j}{\widehat{Z}_K(\xi^j)}$\\
+    So, we can compute $q(\xi^j)$ for all $j \in K$. \\
+    As degree of $q(X)$ is strictly less than $|K|$ we can interpolate to get $q(X)$ in $O(|K|\log^2 |K|)$ field operations. \\
+    Again by differentiating monomial by monomial, we get $q'(X)$ and by fast evaluation we can get evaluations of $q'(X)$ at $\xi^i$ for all $i \in I$, again in $O(|K|\log^2 |K|)$ field operations.\\\\
+
+    Now we can compute $p(0)$\\
+    Consider $p(0)=q(0)\cdot \hat{Z}_K(0)$\\
+    But $\hat{Z}_K(0)=\frac{Z_H(0)}{Z_K(0)}=\frac{-1}{Z_K(0)}$\\
+    But this can be computed as we know $Z_K(X)$ and $Z_K(0)$ is just its constant term.\\
+    Similarly, we know $q(X)$ so can compute $q(0)$ as it is just the constant term. \\
+    Thus, we get $p(0)$\\
+    \textbf{Now it remains to compute $p'(X)$ at $\{\xi^i:i \in I\}=H_I$\\\\}
+    For this, by product rule of derivatives, $p'(X)=q(X) \hat{Z}_K'(X)+q'(X) \hat{Z}_K(X)$\\
+
+    Thus, to get $p'(X)$ at $H_I$, we need $q, q', \hat{Z}_K$ and $\hat{Z}_K'$ at $H_I$. If we get these, then in $O(|I|)$ operations we would get $p'(X)$ at $H_I$.\\
+    Whatever we have done so far has given us $q, q', \hat{Z}_K$ at $H_I$\\\\
+    \textbf{So, it suffices to compute $\hat{Z}_K'(X)$ at $H_I$\\}
+
+    For this, we recall the second equation of lemma \ref{lem:zk-hat} and replace $X$ by $\xi^i$ to get:\\
+    $$  \widehat{Z}_K'(\xi^i) = \sum_{j\in K\setminus \{i\}} \frac{Z_\nroots'(\xi^j)}{Z_K'(\xi^j)}\mu_j'(\xi^i) + \frac{Z_\nroots'(\xi^i)}{Z_K'(\xi^i)}\mu_i'(\xi^i)$$
+    This we got by splitting the sum $j \in K$ into 2 sums, one with $j \in K \setminus \{i\}$ and another with $j=i$
+
+    Using lemma \ref{lem:lamda-deriv}, this becomes:
+    $$ \widehat{Z}_K'(\xi^i)= N\xi^{-i}\sum_{j\in K\setminus \{i\}}\frac{1}{Z_K'(\xi^j)(\xi^i-\xi^j)} + \frac{N(N-1)}{2\xi^{2i}Z_K'(\xi^i)}$$
+
+
+    So, if we can compute $\sum_{j\in K\setminus \{i\}}\frac{1}{Z_K'(\xi^j)(\xi^i-\xi^j)}$ for all $i \in I$, then in $O(|I|)$ operations, we will get $\hat{Z}_K'(\xi^i)$ for all $i \in I$ which is what we want.\\
+
+    Let $$\varphi_i=\sum_{j\in K\setminus \{i\}}\frac{1}{Z_K'(\xi^j)(\xi^i-\xi^j)}$$\\\\
+    Thus,\textbf{ it suffices to compute $\varphi_i$ for all $i \in I$}\\\\
+
+    Define:
+    $$ \Phi_i(X) = \sum_{j\in K\setminus \{i\}} \frac{1}{Z_K'(\xi^j)(X-\xi^j)} $$
+    at $X=\xi^i$. Then it is clear that $\varphi_i=\Phi_i(\xi^i)$.\\\\
+    Let $\{\eta_i(X)\}_{i\in K}$ be the Lagrange polynomials for the set $\{\xi^i:i\in K\}= H_K$. \\\\
+    Then, $\eta_j(X)=\frac{Z_K(X)}{Z_K'(\xi^j)(X-\xi^j)}$.\\
+    Thus, $\frac{\eta_j(X)}{Z_K(X)}=\frac{1}{Z_K'(\xi^j)(X-\xi^j)}$\\
+    Thus, $\Phi_i(X)$ can be rewritten as:
+    $$\Phi_i(X)=\sum_{j\in K\setminus \{i\}} \frac{\eta_j(X)}{Z_K(X)}$$
+
+
+    or  $$\Phi_i(X)
+    = \sum_{j\in K\setminus \{i\}} \frac{\eta_j(X)/(X-\xi^i)}{Z_K(X)/(X-\xi^i)}$$
+
+    We need to compute $\varphi_i=\Phi_i(\xi^i)$ for all $i \in I$
+
+
+    Thus, putting $X=\xi^i$ in the above, we have:
+
+    $$\varphi_i = \Phi_i(\xi^i) = \left(\sum_{j\in K\setminus \{i\}}\frac{\eta_j(X)/(X-\xi^i)}{Z_K(X)/(X-\xi^i)}\right)(\xi^i)$$
+    This can be simplified as:
+    $$\varphi_i = \Phi_i(\xi^i) = \left(\sum_{j\in K\setminus \{i\}}\frac{\eta_j(X)/(X-\xi^i)}{\prod_{j \in K \setminus \{i\}}(X-\xi^j)}\right)(\xi^i)$$
+    or $$\varphi_i = \Phi_i(\xi^i) = \sum_{j\in K\setminus \{i\}}\left(\frac{\eta_j(X)/(X-\xi^i)}{\prod_{j \in K \setminus \{i\}}(X-\xi^j)}\right)(\xi^i)$$
+    or $$\varphi_i = \Phi_i(\xi^i) = \sum_{j\in K\setminus \{i\}}\frac{\left(\eta_j(X)/(X-\xi^i)\right)(\xi^i)}{\left(\prod_{j \in K \setminus \{i\}}(X-\xi^j)\right)(\xi^i)}$$
+    or $$\varphi_i =\Phi_i(\xi^i) =  \frac{1}{Z_K'(\xi^i)}\sum_{j\in K\setminus \{i\}}\left(\eta_j(X)/(X-\xi^i)\right)(\xi^i)$$
+
+    Now, $$ \left(\eta_j(X)/(X-\xi^i)\right)(\xi^i)=\left(\frac{Z_K(X)}{(X-\xi^j)(X-\xi^i)Z_K'(\xi^j)}\right)(\xi^i)$$
+    or $$\left(\eta_j(X)/(X-\xi^i)\right)(\xi^i)= \frac{Z_K'(\xi^i)}{(\xi^i-\xi^j)Z_K'(\xi^j)}$$
+
+    But if we compute, $\eta_j'(\xi^i)$ by quotient rule, we get:
+    $$\eta_j'(\xi^i)=\frac{Z_K'(\xi^i)}{(\xi^i-\xi^j)Z_K'(\xi^j)}$$
+    Thus,
+    $$\left(\eta_j(X)/(X-\xi^i)\right)(\xi^i)=\eta_j'(\xi^i) $$
+    As both are separately equal to $\frac{Z_K'(\xi^i)}{(\xi^i-\xi^j)Z_K'(\xi^j)}$.\\
+    Thus, we get:
+
+
+    $$\varphi_i =\Phi_i(\xi^i) =  \frac{1}{Z_K'(\xi^i)}\sum_{j\in K\setminus \{i\}}\eta_j'(\xi^i)$$
+    But, $$\sum_{j\in K\setminus \{i\}}\eta_j'(\xi^i)= \sum_{j\in K}\eta_j'(\xi^i)-\eta_i'(\xi^i)=-\eta_i'(\xi^i)$$
+    using that the sum of Lagrange polynomials is $1$ and thus the sum of the derivatives of the Lagrange polynomials is $0$(section A.1)
+
+    Thus,
+    $$\varphi_i =\Phi_i(\xi^i) = \frac{-\eta_i'(\xi^i)}{Z_K'(\xi^i)}$$
+
+    If we get $\eta_i'(\xi^i)$ for all $i\in \setind$, then as we already have $Z_K'(\xi^i)$ for all $i \in I$, we get $\varphi_i$ for all $i \in I$ in $O(|I|)$ computations which is what we need.
+
+
+    \textbf{Thus, it suffices to efficiently compute $\eta_i'(\xi^i)$ for $i\in \setind$}
+
+    For this recall Lemma \ref{lem:tau} and observe that in our setting $\mathcal{X}$ is just $H_K$, $x_j$ are $\xi^j$ and $Z_\mathcal{X}(X)$ which is the vanishing polynomial of $H_K$ is just $Z_K(X)$. The $\eta_i$ in the lemma are the Lagrange polynomials corresponding to $\mathcal{X}=H_K$ so they are same as the $\eta_i$ in our setting\\\\
+    Thus, we get:\\
+    $$\eta_i'(\xi^i)=\frac{F_K(\xi^i)}{Z_K'(\xi^i)}$$
+
+    $Z_K'(\xi^i)$ we already have for all $i \in I$\\
+    If we get $F_K(\xi^i)$ for all $i \in I$, we will be able to get $\eta_i'(\xi^i)$ for all $i \in I$ in $O(|I|)$ operations which is what we want\\\\
+
+    \textbf{Thus, it suffices to compute $F_K(\xi^i)$ for all $i \in I$}\\\\
+
+    But now recall the definition $F_K$. To compute this, we need information about $z_0, z_1, z_2, \cdots, z_k$.\\
+    But, we know the polynomial $Z_K$(fast multiplication) hence we know $z_0, z_1, \cdots, z_{k}$\\
+    Thus, we get the coefficients of the polynomial $F_K(X)$, hence the polynomial $F_K(X)$\\\\
+    Now, by fast evaluation, we can get $F_K(\xi^i)$ for all $i \in I$. This will take $O(|K| \log^2|K|)$ field operations. \\
+    \textbf{Thus, we have computed $F_K(\xi^i)$ for all $i \in I$}\\
+
+    This completes the proof for $e_i$ (Note that in the proof we throughout used that $|\setind| \leq |K|$ so that the various $O(|\setind|)$ operations do not contribute to the final complexity) \\\\
+
+    For the case of $b_j$, notice first that it is very similar to the case of $e_i$ except that the roles of $\setind$ and $K$ are reversed and $i$ and $j$ are reversed.
+
+    First of all define $c_i$ for $i$ outside $\setind$ to be 0. For $i \in \setind$, we already know what $c_i$ is(can be computed by fast evaluation).
+    Next, define polynomial $p$ of degree atmost $N-1$ such that $p(\xi^i)=c_i$ for all $i \in [N]$.\\
+
+    From here on, we proceed exactly as we did for the $e_i$ case, replacing every $\setind$ with $K$, every $K$ with $\setind$, every $i$ with $j$ and every $j$ with $i$\\
+
+    All the required lemmas are also modified in this way.
+
+    We reach till
+    $$\Phi_j(X)=\sum_{i\in I\setminus \{j\}} \frac{\eta_i(X)}{Z_I(X)}$$
+    and we need to compute $\varphi_j=\Phi_j(\xi^j)$ for all $j \in K$.\\
+
+    Here, we deviate: For $j \in K\setminus I$, we can very easily compute $\varphi_j=\Phi_j(\xi^j)$ as
+    $$\Phi_j(\xi^j)=\sum_{i\in I\setminus \{j\}} \frac{\eta_i(\xi^j)}{Z_I(\xi^j)}$$
+    or
+    $$\Phi_j(\xi^j)=\frac{1}{Z_I(\xi^j)} \sum_{i\in I}\eta_i(\xi^j)$$
+    or
+    $$\Phi_j(\xi^j)=\frac{1}{Z_I(\xi^j)}$$
+
+    Using that the sum of all Lagrange polynomials is $1$
+
+    \textbf{So, it suffices to compute $\varphi_j$ for all $j \in \setind$}
+
+    Now, again continue exactly as in the $e_i$ case until we reach:
+    $$\varphi_j =\Phi_j(\xi^j) = \frac{-\eta_j'(\xi^j)}{Z_I'(\xi^j)}$$
+    for all $j \in \setind$\\
+
+    But $Z_I'(\xi^j)$ we would have already computed for all $j \in \setind$ (fast multiplication and fast evaluation). \\
+
+    \textbf{So, it suffices to compute $-\eta_j'(\xi^j)$ for all $j \in \setind$\\}
+    But we computed $\eta_i'(\xi^i)$ for $i\in \setind$ during the computation of $e_i$. Just reuse whatever we got!\\
+
+    This completes the computation for $b_j$ for all $j \in K$.
+    Thus, this finishes the proof of lemma \ref{lem:sum computation}
+\end{proof}
