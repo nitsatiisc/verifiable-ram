@@ -3,43 +3,55 @@
 \subsection{KZG Commitment Scheme}
 \label{sec:KZG}
 
-Here, we first define the KZG polynomial commitment scheme \cite{KZG}, denoted by the tuple \\
-$(\KZGsetup,\KZGcommit,\KZGopen, \KZGverify)$, to be used for our construction. We then establish the isomorphism of the KZG polynomial commitment scheme as a vector commitment scheme.
+Here, we first define the KZG polynomial commitment scheme \cite{AC:KatZavGol10}, denoted by the tuple $(\KZGsetup,\KZGcommit,\KZGopen, \KZGverify)$, to be used for our construction. We then establish the isomorphism of the KZG polynomial commitment scheme as a vector commitment scheme.
 
 \begin{definition}[KZG Polynomial Commitment Scheme]
 	Let $(p,\Gone,\Gtwo,\GT, e, \eltone{1},\elttwo{1})$ be a bilinear group. The KZG polynomial commitment scheme is defined as follows: 
 	\begin{itemize}
 		\item $\KZGsetup$ on input $(1^\lambda,d)$, where $\lambda$ is the security parameter and $d$ is the degree bound, outputs $\srs = \{ \eltone{\tau},\ldots,\eltone{\tau^d},\elttwo{\tau},\ldots,\elttwo{\tau^d}\}$
 		\item $\KZGcommit$ on input $(\srs,p(X))$, where $p(X) \in \F_{\leq d}[X]$, outputs $C=\eltone{p(\tau)}$
-		\item $\KZGopen$ on input $(\srs,p(X),\alpha)$, where $p(X) \in \F_{\leq d}[X]$ and $\alpha\in \F$, outputs $(\val, \pi)$ such that $\val=p(\alpha)$ and $\pi=\eltone{q(\tau)}$, for
+		\item $\KZGopen$ on input $(\srs,p(X),\alpha)$, where $p(X) \in \F_{\leq d}[X]$ and $\alpha\in \F$, outputs $(v, \pi)$ such that $v=p(\alpha)$ and $\pi=\eltone{q(\tau)}$, for
 		\[ q(X)=\frac{p(X)-p(\alpha)}{X-\alpha} \]
-		\item $\KZGverify$ on input $(\srs,C,\alpha,\val,\pi)$, outputs $1$ if the following equation holds, and $0$ otherwise.
-		\[ e(C-\val, \elttwo{\tau}) = e(\pi, \elttwo{\tau-\alpha}) \]
+		\item $\KZGverify$ on input $(\srs,C,\alpha,v,\pi)$, outputs $1$ if the following equation holds, and $0$ otherwise.
+		\[ e(C-v, \elttwo{\tau}) = e(\pi, \elttwo{\tau-\alpha}) \]
 	\end{itemize}
 \end{definition}
 
+Note that we often use $\KZGopen(\srs,p,\alpha)$ to denote $\KZGopen(\srs,p(X),\alpha)$ and $\eltone{p(X)}$ when the polynomial is defined and clear from context. Similarly, we use $\eltone{p(X)}$ to denote $\KZGcommit(\srs,p(X))$ to helps us distinguish commitment to a polynomial with a shortened notation. 
 
-\begin{definition}[KZG Polynomial Commitment Scheme \textcolor{red}{degree check included}]
-    Let $(p,\Gone,\Gtwo,\GT, e, \eltone{1},\elttwo{1})$ be a bilinear group. The KZG polynomial commitment scheme is defined as follows: 
-    \begin{itemize}
-	        \item $\KZGsetup$ on input $(1^\lambda,d)$, where $\lambda$ is the security parameter and $d$ is the degree bound, outputs $\srs = \{ \eltone{\tau},\ldots,\eltone{\tau^d},\elttwo{\tau},\ldots,\elttwo{\tau^d}\}$
-	        \item $\KZGcommit$ on input $(\srs,p(X))$, where $p(X) \in \F_{\leq d}[X]$, outputs $C=\eltone{p(X)}:=\eltone{p(\tau)}$
-	        \item $\KZGopen$ on input $(\srs,p(X),\alpha)$, where $p(X) \in \F_{\leq d}[X]$ and $\alpha\in \F$, outputs $(\val, \pi)$ such that $\val=p(\alpha)$ and $\pi=\Comtwo{q(X)}:=\elttwo{q(\tau)}$, for
-	        \[ q(X)=\frac{p(X)-p(\alpha)}{X-\alpha} \]
-	        \item $\KZGverify$ on input $(\srs,C,\deg,\alpha,\val,\pi)$, outputs $1$ if the following equation holds, and $0$ otherwise.
-	        \[ e(C-\val, \elttwo{\tau}) = e(\pi, \elttwo{\tau-\alpha}) \]
-	        { \color{teal} \moumita{var 3.}
-		        Degree check has not been added. With degree check, $\pi$ is modified with
-		        \[ q(X)=X^{d-\deg(p(X))+2}\frac{p(X)-p(\alpha)}{X-\alpha} \]
-		        and the verification equation if modified as 
-		        \[ e(C-\val, \elttwo{\tau}^{d-\deg+2}) = e(\pi, \elttwo{\tau-\alpha}) \]
-		        } %stays unchanged from var 1
-	    \end{itemize}
-\end{definition}
+We often use batched KZG opening proofs, i.e. $\KZGopen(\srs,p(X),(\alpha_1,\alpha_2,\ldots,\alpha_n)$ to provide evaluation and opening proof of the polynomial $p(X)$ at multiple evaluation points as follows:
+\begin{itemize}
+	\item $\KZGopen$ on input $(\srs,p(X),(\alpha_1,\alpha_2,\ldots,\alpha_n))$, where $p(X) \in \F_{\leq d}[X]$ and $\alpha_1,\alpha_2,\ldots,\alpha_n\in \F$, outputs $((v_1,\ldots,v_n), \pi)$ such that $v=p(\alpha)$ and $\pi=\eltone{q(\tau)}$, for
+	\[ q(X)=\frac{p(X)-r(X)}{a(X)} \]
+	where $a(X)=(X-\alpha_1)\cdots(X-\alpha_n)$ and $q(X)$ and $r(X)$ are the quotient and remainder polynomials when $p(X)$ is divided by $a(X)$, i.e. $0\leq \deg(r(X)) \leq n$. Note that the polynomials $a(X)$ and $r(X)$ can be computed by the verifier since $\{\alpha_i,v_i\}_{i\in [n]}$ are known and $a(X)=(X-\alpha_1)\cdots(X-\alpha_n)$ and $r(\alpha_i)=v_i$ for all $i\in [n]$ such that $0\leq \deg(r(X)) \leq n$.
+	\item $\KZGverify$ on input $(\srs,C,\alpha,v,\pi)$, outputs $1$ if the following equations holds, and $0$ otherwise.
+	\begin{align*}
+		p(\alpha_i) &= r(\alpha_i), ~i\in [n]  \\
+		e(C-\eltone{r(\tau)}, \elttwo{\tau}) &= e(\pi, \elttwo{a(\tau)})
+	\end{align*}
+\end{itemize}
+
+%\begin{definition}[KZG Polynomial Commitment Scheme \textcolor{red}{degree check included}]
+%    Let $(p,\Gone,\Gtwo,\GT, e, \eltone{1},\elttwo{1})$ be a bilinear group. The KZG polynomial commitment scheme is defined as follows: 
+%    \begin{itemize}
+%	        \item $\KZGsetup$ on input $(1^\lambda,d)$, where $\lambda$ is the security parameter and $d$ is the degree bound, outputs $\srs = \{ \eltone{\tau},\ldots,\eltone{\tau^d},\elttwo{\tau},\ldots,\elttwo{\tau^d}\}$
+%	        \item $\KZGcommit$ on input $(\srs,p(X))$, where $p(X) \in \F_{\leq d}[X]$, outputs $C=\eltone{p(X)}:=\eltone{p(\tau)}$
+%	        \item $\KZGopen$ on input $(\srs,p(X),\alpha)$, where $p(X) \in \F_{\leq d}[X]$ and $\alpha\in \F$, outputs $(v, \pi)$ such that $v=p(\alpha)$ and $\pi=\Comtwo{q(X)}:=\elttwo{q(\tau)}$, for
+%	        \[ q(X)=\frac{p(X)-p(\alpha)}{X-\alpha} \]
+%	        \item $\KZGverify$ on input $(\srs,C,\deg,\alpha,v,\pi)$, outputs $1$ if the following equation holds, and $0$ otherwise.
+%	        \[ e(C-v, \elttwo{\tau}) = e(\pi, \elttwo{\tau-\alpha}) \]
+%	        { \color{teal} \moumita{var 3.}
+%		        Degree check has not been added. With degree check, $\pi$ is modified with
+%		        \[ q(X)=X^{d-\deg(p(X))+2}\frac{p(X)-p(\alpha)}{X-\alpha} \]
+%		        and the verification equation if modified as 
+%		        \[ e(C-v, \elttwo{\tau}^{d-\deg+2}) = e(\pi, \elttwo{\tau-\alpha}) \]
+%		        } %stays unchanged from var 1
+%	    \end{itemize}
+%\end{definition}
 
 \paragraph{Vector Commitment Scheme.} We note that there is a natural isomorphism between the set of vectors of length $n$ and polynomials of degree $n-1$, where any vector $\abf=(a_1,\ldots,a_n) \in \F^n$ has a natural equivalent representation as a polynomial $a(X)=a_1\lambda_1(X)+\ldots,a_n\lambda_n(X)$, where $\{\lambda_i(X)\}_{i\in [n]}$ is basis of $\F_{\leq n-1}[X]$. Hence, when we use the KZG polynomial commitment scheme for a vector $\abf=(a_1,\ldots,a_n) \in \F^n$, we can output the commitment as $\KZGcommit(\srs,a(X))$, where $a(X)=a_1\lambda_1(X)+\ldots,a_n\lambda_n(X)$.
 
 
 Now, for vectors of length $n$, we consider the basis $\{\lambda_i(X)\}$ to be the langrange basis with respect to the set consisting of $n^{th}$ roots of unity $\doubleH=\{\omega,\ldots,\omega^n\}$. The lagrange basis helps us use the property that, for some $i\in [n]$ and a value $\alpha$, $a(\omega^i)=a_i=\alpha$ if and only if there exists a polynomial $W(X)$ such that $W(X)=\frac{a(X)-\alpha}{X-\omega^i}$. 
 
-Throughout the draft, for $\abf\in \F^n$, we use $\Comone{.}$ to denote $\KZGcommit(\srs,\abf)$ for vectors of length $n$, using the langrange polynomial basis $\{\lambda_i(X)\}$, with respect to the $n^{th}$ root of unity $\omega$, and for $\bbf \in \F^m$, we use $\Comtwo{.}$ to denote $\KZGcommit(\srs,\bbf)$ for vectors of length $m$, using the langrange polynomial basis $\{\mu_i(X)\}$, with respect to the $m^{th}$ root of unity $\nu$.
+%Throughout the draft, for $\abf\in \F^n$, we use $\Comone{.}$ to denote $\KZGcommit(\srs,\abf)$ for vectors of length $n$, using the langrange polynomial basis $\{\lambda_i(X)\}$, with respect to the $n^{th}$ root of unity $\omega$, and for $\bbf \in \F^m$, we use $\Comtwo{.}$ to denote $\KZGcommit(\srs,\bbf)$ for vectors of length $m$, using the langrange polynomial basis $\{\mu_i(X)\}$, with respect to the $m^{th}$ root of unity $\nu$.

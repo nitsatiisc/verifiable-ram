@@ -1,7 +1,4 @@
-\newcommand{\eltone}[1]{[#1]_1}
-\newcommand{\elttwo}[1]{[#1]_2}
-\newcommand{\elt}[1]{[\,{#1}\,]}
-\newtheorem{fact}{Fact}[section]
+
 
 Recall that our lookup protocol in section 5.1 involves certain precomputations by the prover namely $W_1^i, W_2^i, W_3^i$. $W_2^i$ and $W_3^i$ do not depend on the table. However, $W_1^i$ depends on the lookup table and their values will change even if the table changes by a small amount. It is expensive to recompute all the $W_1^i$ for every small change in the table and this will affect the efficiency of our lookup protocol in the long run.\\\\
 In this section, we show how to achieve efficient lookups even when the table is changing frequently, as long as the cumulative change in the table is small. \\
