@@ -1,0 +1,181 @@
+\newcommand{\eltone}[1]{[#1]_1}
+\newcommand{\elttwo}[1]{[#1]_2}
+\newcommand{\elt}[1]{[\,{#1}\,]}
+\newtheorem{fact}{Fact}[section]
+
+Recall that our lookup protocol in section 5.1 involves certain precomputations by the prover namely $W_1^i, W_2^i, W_3^i$. $W_2^i$ and $W_3^i$ do not depend on the table. However, $W_1^i$ depends on the lookup table and their values will change even if the table changes by a small amount. It is expensive to recompute all the $W_1^i$ for every small change in the table and this will affect the efficiency of our lookup protocol in the long run.\\\\
+In this section, we show how to achieve efficient lookups even when the table is changing frequently, as long as the cumulative change in the table is small. \\
+In particular, we show how the prover can compute $[Q(X)]_2=\gtwo{\frac{T(X)-T_I(X)}{Z_I(X)}}$ without computing all the $W_1^i$(thus minimizing the overhead).\\
+The overhead(as long as the table doesn't change too much) will be much lower than the time needed for the lookup and so is very practical.
+
+\subsection{The idea: Base + Cache approach}
+
+The idea is that we do not compute $W_1^i$ after each change of the table. Instead, this expensive computation will be done periodically for all $i \in [N]$ after say $s \in \mathbb{Z}$ batches.
+Let current table $\vecT$ can be represented as $\vecTbase + \vecTcache$ where the vector
+$\vecTbase$ denotes the base table (with respect to which $W_1^i$ was last computed for all $i \in [N]$) and the vector $\vecTcache$ corresponds to the changes
+that have happened to the base table since the last rebasing (rebasing denotes computation of all $W_1^i$)\\\\
+Thus, there is an \textbf{online} phase which happens after every batch (which includes computation of $[Q(X)]_2$ among other things) and an \textbf{offline} phase which consists of the rebasing(this is all prover computations) \\\\
+
+
+
+
+\noindent{\bf Offline Phase}: This computation is executed once after every $s$ rounds. Here, the prover updates the base vector $\vecTbase$ with the changes in the cache vector
+$\vecTcache$ by setting $\vecTbase := \vecTbase + \vecTcache$ and simultaneously clears the cache vector by setting
+$\vecTcache = 0$.\\
+It computes the commitment of $T_b$ as well\\
+It also re-computes the $\mathsf{KZG}$ opening proofs $[W_1^i(x)]_2$ for $i\in [N]$ where
+$W_1^i(X) = (\Tbasepoly{X} - t_i)/(X-\xi^i)$. Here, $t_i=\Tbasepoly{\xi^i}$ are the coordinates
+of the updated base vector $\vecTbase$.\\
+As mentioned in section 5.1 this can be done in $O(N\log N)$ group and field operations.\\\\
+\noindent{\bf Online Phase}:
+The online phase happens for every batch because the purpose of this phase is to ensure that all the things needed for the current execution of the lookup protocol are available. We show how the prover computes the next table $T'$ from the current table $T$ and the new Cache vector from the old cache vector (by an inductive argument this suffices)
+\begin{enumerate}[leftmargin=1em]
+    \item Prover has the $T$ for the current round and the commitment $[T(x)]_1$ as well(because these are just the $T'$, $[T'(x)]_1$ of the last round)
+    \item The $\vecTcache$ and $\vecTcache(X)$ is also updated to the start of the current round (contains information till previous round:$\vecT=\vecTbase+\vecTcache$)
+    \item The prover updates the cache using the current batch: $\vec{T'}_{\mathsf{ch}}[i] = \vec{T}_{\mathsf{ch}}[i] + \Delta_i$ for $i\in I$ in $O(m)$ $\F$ operations
+    \item Here $\Delta_i$ for all $i \in I$ is the change that will happen to $\vecT$ \textbf{during the current round}
+    \item Prover computes the commitment to the new cache polynomial:
+    $$[\vec{T'}_{\mathsf{ch}}(x)]_1=[\vec{T}_{\mathsf{ch}}(x)]_1+\sum_{i\in I}\Delta_i[\mu_i(x)]_1$$ in
+    $O(m)$ $\Gone$ operations.
+    \item Prover also gets ${T}'$ as ${T'}[i]=T_b[i]+ \vec{T'_{\text{ch}}}[i]$ using the $T_b$ and the latest cache
+    \item Prover computes the commitment to the new table $\vecT'$: $[T'(x)]_1=[\Tbasepoly{x}]_1+[\vec{T'}_{\mathsf{ch}}(x)]_2$
+
+    \item In addition, the other things (apart from $[Q(x)]_2$) needed for the current round of the lookup protocol are also computed by the prover as described in the lookup protocol in section 5.1 as it is just naive computation
+
+
+
+\end{enumerate}
+
+\subsection{Computation of $[Q(X)]_2$}
+Clearly, it suffices to efficiently compute $[Q(x)]_2$ where $[Q(x)]_2=\gtwo{\frac{T(x)-T_I(x)}{Z_I(x)}}$. We have the information of $[\Tbasepoly{x}-\Tbasepoly{\xi^i}/(x-\xi^i)]_2$. For this, we have the following lemma:
+
+
+\begin{lemma}\label{lem:approx-setup}
+Let $N,\xi$ be as defined previously. Suppose we are given
+$\kzg$ proofs $\{W_i\}_{i=1}^N$ with $W_i=\gtwo{\Tbasepoly{X} - \Tbasepoly{\xi^i}/(X-\xi^i)}$ and where
+$\Tbasepoly{X}=\enc{\vecTbase}{\setN}$ encodes a vector $\vecTbase\in \F^N$.
+Let $I \subset [N]$.
+Then,
+there exists an algorithm to compute $\kzg$ multi-opening proof
+$[Q(X)]_2=\gtwo{(T(x) - T_I(x)/Z_I(x)}$ for encoding $T(X)=\enc{T}{\setN}$ of vector $\vecT\in \F^N$ using $O((\delta + |I|) \log^2 (\delta + |I|))$ $\F$-operations and $O(\delta + |I|)$ $\Gtwo$-operations.
+Here, $\delta$ denotes the hamming distance
+between vectors $\vecTbase$ and $\vecT$.
+\end{lemma}
+
+\begin{proof}
+    We know that $\vecT=\vecTbase+\vecTcache$ and that $T(X)=\Tbasepoly{X}+\Tcachepoly{X}$\\
+
+    Let $K \subset [N]$ be a set which contains $I$ and all those indices $j$ for which $\vecTcache[j] \neq 0$. For these $j$, let $\vecTcache[j]=\Delta t_j$. Then $\Tcachepoly{X}=\sum_{j\in K}\Delta t_j\mu_j(X)$.\\\\
+    By definition of $K$, $|K|\leq \delta +|I|$. So, we need to bound $\Gtwo$ operations by $O(|K|)$ and field operations by $O(|K| \log^2|K|)$\\
+    First of all note that:
+    \begin{align}\label{eq:Q2-upd}
+    Q_2(X) &= \sum_{i\in \setind}\frac{1}{z_I'(\xi^i)}\left(\frac{\Tbasepoly{X} - \Tbasepoly{\xi^i}}{X-\xi^i}\right)
+    + \sum_{i\in \setind}\frac{1}{z_I'(\xi^i)}\left(\frac{\Tcachepoly{X} - \Tcachepoly{\xi^i}}{X-\xi^i}\right)
+    \end{align}
+
+    From the above we can write $\elttwo{Q_2(x)}=\gtwo{\Qbasepoly{x}}+\gtwo{\Qcachepoly{x}}$ where
+    \begin{gather*}
+        \Qbasepoly{X}=\sum_{i\in \setind}(z_I'(\xi^i))^{-1} (\Tbasepoly{X}-\Tbasepoly{\xi^i})/(X-\xi^i) \\
+        \Qcachepoly{X}=\sum_{i\in \setind}(z_I'(\xi^i))^{-1} (\Tcachepoly{X}-\Tcachepoly{\xi^i})/(X-\xi^i)
+    \end{gather*}
+    We can compute
+    $\elttwo{\Qbasepoly{x}}$ from the pre-computed KZG openings of $\Tbasepoly(X)$ at points $\xi^i,i\in I$ using $O(|I|)$ group operations and
+    $O(|I|\log^2 |I|)$ field operations(as is done in Caulk/Caulk+).\\\\
+
+    \textbf{Thus, it suffices to describe the computation for $\elttwo{\Qcachepoly{x}}$. }\\
+    Using
+    $\Tcachepoly{X}=\sum_{j\in K}\Delta t_j\mu_j(X)$ and defining constants $c_i=(1/z_I'(\xi^i))$ for $i\in I$,
+    we write $\Qcachepoly{X}$ as:
+    \begin{align*}
+        \Qcachepoly{X} &= \sum_{i\in \setind} c_i\sum_{j\in K} \Delta t_j\frac{\mu_j(X)-\mu_j(\xi^i)}{X-\xi^i} \\
+        &= \sum_{i\in \setind} c_i\Delta t_i\frac{\mu_i(X) - 1}{X-\xi^i} + \sum_{i\in \setind}\sum_{j\in K\setminus\{i\}}c_i\Delta t_j\frac{\mu_j(X)}{X-\xi^i}
+    \end{align*}
+    Now, we can write $\elttwo{\Qcachepoly{x}}=\elttwo{\Qcachepolyone{x}} + \elttwo{\Qcachepolytwo{x}}$ where:
+    \begin{gather*}
+        \Qcachepolyone{X}=\sum_{i\in \setind}c_i\Delta t_i\frac{\mu_i(X)-1}{X-\xi^i} \\
+        \Qcachepolytwo{X}=\sum_{i\in \setind}\sum_{j\in K\setminus \{i\}} c_i\Delta t_j\frac{\mu_j(X)}{X-\xi^i}
+    \end{gather*}
+
+    The term $\elttwo{\Qcachepolyone{x}}$ can be computed using $O(I)$ group operations by pre-computing the
+    \textsf{KZG} openings of polynomials $\mu_i(X)$ at $\xi^i$ for $i\in [N]$. That is by precomputing $[\frac{\mu_i(X)-1}{X-\xi^i}]_2$. This requires just $N$ more precomputations and can be done along with the other precomputations which are done in the lookup protocol\\
+
+    \textbf{Thus, it suffices to describe the computation for $\Qcachepolytwo{X}$}:
+    \begin{align}\label{eq:Qcachepoly2}
+    \Qcachepolytwo{X} &= \sum_{i\in \setind}c_i\sum_{j\in K\setminus \{i\}} \Delta t_j\mu_j(X)/(X-\xi^i) \nonumber \\
+    &= \sum_{i\in\setind}c_i\sum_{j\in K\setminus \{i\}}\frac{\Delta t_j}{Z_{\nroots}'(\xi^j)} \frac{Z_{\nroots}(X)}{(X-\xi^i)(X-\xi^j)} \nonumber \\
+    \intertext{This used definition of $\mu_j(X)$}
+    \intertext{ Now, using $Z_\nroots'(\xi^j)=N\xi^{-j}$ and partial fraction decomposition}
+    &\Qcachepolytwo{X}= N^{-1}\sum_{i\in\setind}c_i\sum_{j\in K\setminus \{i\}}\frac{\xi^j\Delta t_j}{\xi^i-\xi^j}
+    \left(\frac{Z_\nroots(X)}{X-\xi^i} - \frac{Z_\nroots(X)}{X-\xi^j}\right) \nonumber \\
+    &\Qcachepolytwo{X}= N^{-1}\sum_{i\in\setind}\left(c_i\cdot \sum_{j\in K\setminus \{i\}} \frac{\xi^j\Delta t_j}{\xi^i-\xi^j}\right)\frac{Z_\nroots(X)}{X-\xi^i} \nonumber \\
+    &\qquad + \sum_{j\in K}\left(\xi^j\Delta t_j\cdot \sum_{i\in \setind\setminus \{j\}}\frac{c_i}{\xi^j-\xi^i}\right)\frac{Z_{\nroots}(X)}{X-\xi^j}
+    \end{align}
+    In this last equality, the first term is just the first term of the distributive property in finite fields.\\
+    The second term is just the second term of the distributive property in finite fields except that the order of the sums is reversed. This follows from the following fact \\
+
+    \begin{fact}
+        $\sum_{i \in I} \sum_{j \in K \setminus \{i\}} f(i,j)=\sum_{j \in K} \sum_{i \in I \setminus \{j\}} f(i,j) $
+    \end{fact}
+
+    In the above equation \eqref{eq:Qcachepoly2}, let us define:
+    \begin{gather*}
+        a_i = \sum_{j\in K\setminus \{i\}}\frac{\xi^j\Delta t_j}{\xi^i-\xi^j}, \text{ for } i\in \setind \\
+        b_j=  \sum_{i\in \setind\setminus \{j\}}\frac{c_i}{\xi^j - \xi^i}, \text{ for } j\in K \\
+        W_3^i(X) = \frac{Z_\nroots(X)}{X-\xi^i}, \text{ for } i\in [N]
+    \end{gather*}
+
+
+    Then, we have:
+    \begin{equation}\label{eq:Qcachepoly2commit}
+    \elttwo{\Qcachepolytwo{x}} = N^{-1}\left(\sum_{i\in\setind}c_ia_i\elttwo{W_3^i(x)} + \sum_{j\in K}\xi^j \Delta t_j b_j \elttwo{W_3^j(x)}\right)
+    \end{equation}
+
+    $c_i$ for all $i \in \setind$ are determined easily by evaluating $Z_{\setind}'(X)$ on $H_{\setind}$ and $[W_3^i(X)]_2$ for all $i \in [N]$ have been computed in the lookup protocol
+
+    So, given $\{a_i\}_{i\in I}, \{b_j\}_{j\in K}$, $\elttwo{\Qcachepolytwo{x}}$ can be computed in $O(|\setind|+|K|)\, \Gtwo$ operations.\\
+    But $|\setind|+|K|<2|K|$. So, $\Gtwo$ operations are $O(|K|)$ as required.\\\\
+
+    It remains to bound the number of field operations needed to compute the scalar multipliers $a_i, i \in \setind$ and $b_j, j \in K$. \\
+
+    Let us consider $a_i$ first:\\
+    Note that:
+
+    $$ a_i = -\sum_{j\in K\setminus \{i\}}\Delta t_j + \xi^i\sum_{j\in K\setminus \{i\}}\frac{\Delta t_j}{\xi^i-\xi^j} $$
+    This is because:
+    $$a_i+\sum_{j\in K\setminus \{i\}}\Delta t_j= \sum_{j \in K \setminus \{i\}}\frac{\xi^j\Delta t_j}{\xi^i-\xi^j}+\Delta t_j$$
+    $$=\sum_{j \in K \setminus \{i\}}\frac{\xi^i\Delta t_j}{\xi^i-\xi^j} = \xi^i\sum_{j\in K\setminus \{i\}}\frac{\Delta t_j}{\xi^i-\xi^j}$$
+    Now, define $\Delta T=\sum_{j\in K}\Delta t_j$\\
+
+    Here computing $\Delta T$ is a one time computation (per batch). It can be computed from the knowledge of $T_{\text{ch}}$ in the online phase.
+    We have:
+    $$ a_i = -\Delta T + \Delta t_i + \xi^i\sum_{j\in K\setminus\{i\}}\frac{\Delta t_j}{\xi^i-\xi^j} $$
+    Suppose we get $\sum_{j\in K\setminus\{i\}}\frac{\Delta t_j}{\xi^i-\xi_j}$ for all $i \in I$ efficiently. Then $a_i$ for all $i \in I$ can be obtained in $O(|I|)$ field operations. \\
+    \textbf{Thus, to get $a_i$ for all $i \in I$ it suffices to describe the computation of $e_i=\sum_{j\in K\setminus\{i\}}\frac{\Delta t_j}{\xi^i-\xi^j}$ for all $i \in I$}\\\\
+    Our requirement is now to bound the number of field operations for $e_i$ and for $b_j$. For this, we invoke the following lemma with the proof in the appendix.
+
+    \begin{lemma}\label{lem:sum computation}
+    Let $e_i$ for all $i \in \setind$ and $b_j$ for all $j \in K$ be as described above.
+    Then, $e_i$ for all $i \in I$ and $b_j$ for all $j \in K$ can be computed in $O(|K|\log^2|K|)\, \mathbb{F}$ operations
+    \end{lemma}
+
+    From the lemma \ref{lem:sum computation}, we have shown that the field operations needed to get $e_i$ and $b_j$ and thus $\elttwo{\Qcachepolytwo{x}}$ is $O(|K|\log^2|K|)$. \\
+
+    This completes the proof of Lemma \ref{lem:approx-setup}.
+\end{proof}
+
+\subsection{Amortized Analysis of the update protocol}
+Recall that we were able to get $[Q(X)]_2$ in $O(|K|)$ group operations and $O(|K|\log^2|K|)$ field operations. \\
+For concrete analysis, let $s$ be the period after which the rebasing takes place. Also, the lookup happens at maximum of $m$ indices during a single batch. Thus, $|I|\leq m$.\\
+This gives an upper bound on $\delta$, that is $ms$ and an upper bound on $K$, that is $ms+m=m(s+1)$.\\
+
+Clearly $O(K)=O(ms)$ and $O(|K|\log^2|K|)=O(ms \log^2(ms))$ so group operations are $O(ms)$ and field operations are $O(ms\log^2(ms))$ \\
+
+Moreover, after every $s$ batches, the rebasing(offline phase) is done which we know takes $O(N\log N)$ group and field operations.\\
+
+So, the amortized number of operations for the offline and online phase in total is:
+$O(ms \log^2(ms)+\frac{N\log N}{s})$ $\mathbb{F}$ operations and $O(ms +\frac{N\log N}{s})$ $\Gtwo$ operations\\
+
+The value of $s$ which minimizes the group operations is $\sqrt{\frac{N}{m}}$. For this value of $s$:\\
+\textbf{The amortized group operations needed are $\tilde{O}(\sqrt{mN})$}\\
+\textbf{The amortized field operations needed are also $\tilde{O}(\sqrt{mN})$}\\
+Here $\tilde{O}$ denotes that the polylog factors have been neglected\\\\
