@@ -87,7 +87,46 @@ Then, $p''(\xi^i)/p'(\xi^i)=2 \cdot \sum_{j\in K\setminus \{i\}} 1/(\xi^i-\xi^j)
 \end{proof}
 
 \textbf{An alternative proof of \ref{lem:sumtoder}}:\\
+A much shorter proof is possible by inducting on the cardinality of $K\subset N$.\\
+The base case where $K$ has one element, say $i$ is trivial. This is because in that case $p$ is a linear polynomial $X-\xi^i$ and LHS=$\frac{p''}{p'}=\frac{0}{1}=0$ and on RHS we are summing over the empty set so the sum is $0$.\\\\
+Now let $|K|=k$ and the elements of $K$ be $a_1, a_2, \cdots, a_k$.
+Consequently $p(X)=\prod_{i \in K}(X-\xi^i)$\\
+We assume that the result holds for this case. Thus,
+$$p''(\xi^i)/p'(\xi^i)=2 \cdot \sum_{j\in K\setminus \{i\}} 1/(\xi^i-\xi^j)$$ for all $i \in K$.\\
+Suppose we introduce another element in the set $K$, call it $\alpha$
+The vanishing polynomial for the new $K$(call it $K')$ is $q(X)=p(X)(X-\xi^{\alpha})$\\
+Then by the product rule for derivatives, we have:
+$$q'(X)=p'(X)(X-\xi^{\alpha})+p(X)$$ and
+$$q''(X)=2p'(X)+p''(X)(X-\xi^{\alpha})$$
 
+It suffices to show that $$\frac{q''(\xi^i)}{q'(\xi^i)}=2\sum_{j\in K'\setminus \{i\}}\frac{1}{\xi^i-\xi^j}$$
+for all $i \in K'$\\
+For this we make 2 cases:\\
+\textbf{Case 1-}$i \in K$
+Then
+$$q'(\xi^i)=p'(\xi^i)(\xi^i-\xi^{\alpha})$$ and
+$$q''(\xi^i)=2p'(\xi^i)+p''(\xi^i)(\xi^i-\xi^{\alpha})$$
+This used that $p(\xi^i)=0$\\
+Thus, $$\frac{q''(\xi^i)}{q'(\xi^i)}=\frac{2p'(\xi^i)+p''(\xi^i)(\xi^i-\xi^{\alpha})}{p'(\xi^i)(\xi^i-\xi^{\alpha})}$$
+Dividing numerator and denominator by $p'(\xi^i)(\xi^i-\xi^{\alpha})$ gives:
+$$\frac{q''(\xi^i)}{q'(\xi^i)}=\frac{2}{\xi^i-\xi^\alpha}+\frac{p''(\xi^i)}{p'(\xi^i)}$$
+By induction hypothesis this becomes:
+$$\frac{q''(\xi^i)}{q'(\xi^i)}=\frac{2}{\xi^i-\xi^\alpha}+2 \cdot \sum_{j\in K\setminus \{i\}} 1/(\xi^i-\xi^j)$$
+Note that $$\frac{1}{\xi^i-\xi^\alpha}+ \sum_{j\in K\setminus \{i\}} 1/(\xi^i-\xi^j)=\sum_{j\in K'\setminus \{i\}}\frac{1}{\xi^i-\xi^j}$$
+Using that $K'=K \cup \{\alpha\}$\\
+Thus, $$\frac{q''(\xi^i)}{q'(\xi^i)}=2\sum_{j\in K'\setminus \{i\}}\frac{1}{\xi^i-\xi^j}$$ which completes case 1. \\\\
+\textbf{Case 2-}$i=\alpha$. Then
+$$q'(\xi^{\alpha})=p(\xi^{\alpha})$$ and
+$$q''(\xi^{\alpha})=2p'(\xi^{\alpha})$$
+These we get by replacing $X$ by $\xi^{\alpha}$ in the expressions of $q', q''$
+So, it is sufficient to prove that:
+$$\frac{2p'(\xi^{\alpha})}{p(\xi^{\alpha})}=2\sum_{j\in K'\setminus \{\alpha\}}\frac{1}{\xi^{\alpha}-\xi^j}$$
+
+But $$p(\xi^{\alpha})=\prod_{i \in K}(\xi^{\alpha}-\xi^i)=\prod_{i \in K'\setminus \{\alpha\}}(\xi^{\alpha}-\xi^i)$$ and $$p'(\xi^{\alpha})=\sum_{j \in K} \prod_{i \in K \setminus \{j\}}(\xi^{\alpha}-\xi^i)=\sum_{j \in K'\setminus \{\alpha\}} \prod_{i \in K' \setminus \{j, \alpha\}}(\xi^{\alpha}-\xi^i)$$
+But now, note that $$\sum_{j \in K'\setminus \{\alpha\}} \prod_{i \in K' \setminus \{j, \alpha\}}(\xi^{\alpha}-\xi^i)=\prod_{i \in K' \setminus \{ \alpha\}}(\xi^{\alpha}-\xi^i)\sum_{j \in K'\setminus \{\alpha\}}\frac{1}{\xi^{\alpha}-\xi^j}$$
+So, $$\frac{2p'(\xi^{\alpha})}{p(\xi^{\alpha})}=2\cdot \prod_{i \in K' \setminus \{ \alpha\}}(\xi^{\alpha}-\xi^i)\sum_{j \in K'\setminus \{\alpha\}}\frac{1}{\xi^{\alpha}-\xi^j}/\prod_{i \in K'\setminus \{\alpha\}}(\xi^{\alpha}-\xi^i)=2\cdot\sum_{j \in K'\setminus \{\alpha\}}\frac{1}{\xi^{\alpha}-\xi^j}$$
+
+This completes the proof of case 2 and thus the proof of the lemma.
 \begin{lemma}[Sumcheck]\label{lem:sumcheck}
 Let $u(X,Y)$ be a bi-variate polynomial over a finite field $\F$ and $\nroots$ be defined as the group of $N^{\text{th}}$ roots of unity $(N<<|\F|)$ with generator $\xi \in \F$ \\
 Then $\sum_{i\in [N]}u(X,\xi^i)= Nu(X,0)$
@@ -213,7 +252,26 @@ $F_K(X)$ is defined as
 
 \end{proof}
 
-\subsection{Brief Proof Sketch of lemma 6.2}
+\subsection{Brief Proof Summary of lemma 6.2}
+What we want to compute is a sum over the set $K$ for all $i \in I$ or a sum over the set $I$ for all $j \in K$. Let us give a sketch for the first case.
+
+We interpolate a polynomial $p$ in such a way that its evaluations at $\nroots$ correspond to the numerators of the required sum. We take the full $\nroots$ and not subsets of it so that we can apply sumcheck easily later. \\
+Next we introduce some rational functions. These will be very useful to reduce the sum we need to compute to an evaluation of the rational functions at some points\\
+
+
+These evaluations can be reduced to evaluations of polynomials using the simple form of $Z_{\nroots}$. \\
+
+By introducing some more polynomials and using formulas for sumcheck, finally, the entire task can be reduced to calculating $p(0)$ and $p'(X)$ at certain points. \\
+
+The polynomial $p$ turns out to be a product of polynomials: $p(X)=\widehat{Z}_K(X)\cdot q(X)$ and so the next step is to get the evaluations of $\widehat{Z}_K(X)$ and $q(X)$ at those points.
+For this, some further lemmas are used to get evaluations of $q(X)$ at degree $q$ many points and thus $q(X)$ is obtained by interpolation. \\
+Next $q(0)$ can be computed and thus $p(0)$ is also computed.\\
+$Z_K(X)$ and $q'(X)$ can also be computed easily(details in the proof)\\
+This leaves computation of $\widehat{Z}_K(X)$ at those points as the main task. For this another lemma is needed related to derivatives of Lagrange polynomials. \\
+Eventually the task reduces to needing to compute something which can be computed efficiently using another lemma.\\
+Moreover, every single step involves a reduction which can be done in the number of operations allowed in the statement of the lemma. So, we get what we want.\\
+For the second case, the proof is very similar, except for some interchanging of $I$ and $K$, and interchanging of $i$ and $j$. \\
+This completes a brief summary of the proof.
 
 \subsection{Proof of lemma 6.2}
 
@@ -425,4 +483,89 @@ $F_K(X)$ is defined as
 
     This completes the computation for $b_j$ for all $j \in K$.
     Thus, this finishes the proof of lemma \ref{lem:sum computation}
+\end{proof}
+
+\section{Reducing indexed lookups to subvector lookups}
+Let us say we have a subvector lookup argument $L$ which takes as input two vectors say $a, b$ and determines whether $b$ is a subvector of $a$.\\
+\textbf{Assumption-} We assume that $a$ and $b$ are vectors with no repeated elements.\\
+If $a$ and $b$ have repetitions, then we remove the repeated elements from each until we get $a'$, $b'$, which have the same elements as $a$, $b$ respectively, except that there are no repetitions.\\
+Then we define $L(a,b)$ as $L(a', b')$
+
+
+Indexed lookup argument takes in 3 vectors $a, b, c$ where $c$ is a vector of indices with $|b|=|c|$ and checks that $b$ is a subvector of $a$ and that $a[c_i]=b_i$ for all $i$. That is it does $L(a, b)$ first and further checks that $a$ restricted to the indices in $c$ gives $b$. Again, we assume that none of the vectors have repetitions.\\\\
+So, we want to do $L'(T, v, a)$ using $L(\cdot, \cdot)$.
+Let $|T|=N$ and it has no repetitions. Let $|v|=m=|a|$ with no repetitions.
+Procedure to calculate $L'(T, v, a)$ is as follows:
+\begin{itemize}
+    \item First do $L([N], a)$. This checks that $a$ is indeed a vector of indices.
+    \item Next do $L(T, v)$. This checks that $v$ is indeed a subvector of $T$.
+    \item Choose a $\gamma$ uniformly at random from $\F^*$
+    \item Do $L(T+\gamma[N], v+\gamma a)$
+    \item If all the 3 callings of $L$ output 'true' then output 'true' for $L'(T, v, a)$
+    \item If any of the 3 outputs 'false' then output 'false' for $L'(T, v, a)$
+\end{itemize}
+
+\begin{lemma}
+    Let the procedure for getting $L'(\cdot, \cdot, \cdot)$ be as above. Then, if $L(\cdot, \cdot)$ is a valid subvector lookup argument then the procedure yields a valid indexed lookup argument $L'(\cdot, \cdot, \cdot)$ with error probability upper bounded by the inverse of the size of the field $\F$
+\end{lemma}
+
+\begin{proof}
+    To show that the procedure yields a valid indexed lookup argument $L'(T, v, a)$, we need to show the following:
+    \begin{enumerate}
+
+        \item If $v$ is indeed a subvector of $T$ with $T$ restricted to $a$ giving $v$, then all the checks mentioned in the procedure hold with high probability
+        \item If either $v$ is not a subvector of $T$ or if $v$ is a subvector of $T$ but restriction of $T$ to $a$ is not $v$, then at least one of the checks is false with high probability
+    \end{enumerate}
+
+    For 1., suppose $v$ is a subvector of $T$ with $T$ restricted to $a$ giving $v$. Then $L(T, v)$ is true. \\
+    Moreover, $a$ is a subvector of $[N]$(else restricting $T$ to $a$ won't even make sense). \\
+    So, $L([N], a)$ is true. \\
+    Lastly, since $v_i=T[a_i]$ for all $i \in m$, we have that for any $\gamma$,
+    $$T[a_i]+\gamma a_i=v_i+\gamma a_i$$ for all $i$ \\
+    But $T[a_i]+\gamma a_i$ is of course an element $T+\gamma [N] $ for all $i \in [m]$. So, $\{T[a_i]+\gamma a_i:i \in [m]\}$ is a subvector of $T+\gamma [N] $.\\
+    Thus, $\{v_i+\gamma a_i:i \in [m]\}$ is a subvector of $T+\gamma [N] $.\\
+    So, $v+\gamma a$ is a subvector of $T+\gamma [N] $.\\
+    Thus, $L(T+\gamma[N], v+\gamma a)$ is also true.
+
+    This completes proof of 1.(In this case the high probability is actually 1) \\\\
+    For proof of 2., if $v$ is not a subvector of $T$ then $L(T, v)$ is false with probability 1 and we are done \\
+    So let us assume that $v$ is a subvector of $T$ and restriction of $T$ to $a$ is not $v$.\\
+    If $a$ is not a vector of indices then $L([N], a)$ is false with probability 1 and we are done. So, let us assume that $a$ is a vector of indices( of course by definition of $L'$, we have that $|a|=|v|=m$).\\
+
+    \textbf{It suffices to show that $L(T+\gamma[N], v+\gamma a)$ is false with high probability.}
+
+    Since $v$ is a subvector of $T$ there is a restriction of $T$ which gives $v$. Say the restriction is $b$. Then $|b|=|v|=m$ and $T[b_i]=v_i$ for all $i \in [m]$. \\
+    Moreover, by our assumption that restriction of $T$ to $a$ is not $v$, we have that $a \neq b$. \\
+    But $a\neq b$ implies there exists a $k \in [m]$ such that $a_k\neq b_k$.\\
+    Let $I=\{k \in [m]:a_k\neq b_k\}$\\
+    $a \neq b$ implies $I\neq \phi$. Moreover $I \subset \mathbb{N}$
+    By well ordering principle, $I$ has a minimum element, say $i$. \\
+    Then $a_i \neq b_i$ and $v_i=T[b_i]$. \\
+    Let $\gamma$ be picked uniformly at random from $\F^*$\\
+    Consider the vector $T+\gamma[N]$. Once $\gamma$ has been chosen, this is a fixed vector. \\
+    Also, consider the vector $v+\gamma a$. One of the elements in this vector is $v_i +\gamma a_i$.\\
+    We will upper bound the probability that this element is an element of the vector $T+\gamma[N]$. \\\\
+    $$\Pr[v_i +\gamma a_i \in T+\gamma[N]]=\Pr[\exists j \in [N] \ni v_i +\gamma a_i=T[j]+\gamma j]$$
+    But by union bound:
+    $$\Pr[\exists j \in [N] \ni v_i +\gamma a_i=T[j]+\gamma j] \leq \sum_{j=1}^N \Pr[v_i +\gamma a_i=T[j]+\gamma j]$$
+    Thus,
+    $$\Pr[v_i +\gamma a_i \in T+\gamma[N]] \leq \sum_{j=1}^N \Pr\left[\gamma = \frac{T[j]-v_i}{a_i-j}\right] $$
+    But for every $j \in [N]\setminus{a_i, b_i}$, $\frac{T[j]-v_i}{a_i-j}$ is just an element of $\F^{*}$. \\
+    Since $\gamma$ is chosen uniformly at random from $\F^{*}$,
+    $$\Pr\left[\gamma = \frac{T[j]-v_i}{a_i-j}\right]=\frac{1}{|\F|-1}$$
+    And for $j=a_i$ or $j=b_i$, $\frac{T[j]-v_i}{a_i-j}$ is either not defined or is $0$. So probability that $\gamma$ equals to it is just $0$.\\
+    Thus, we get that:
+    $$\Pr[v_i +\gamma a_i \in T+\gamma[N]] \leq \sum_{j \in [N]\setminus \{a_i, b_i\}} \frac{1}{|\F|-1} =\frac{N-2}{|\F|-1}$$
+
+    All this was done for the smallest element $i$ of the set $I$.\\
+    For $v+\gamma a$ to be a subvector of $T+\gamma [N]$, we need that:
+    $$v_i +\gamma a_i \in T+\gamma[N]$$ for all $i \in I$\\
+    But observe that,
+    $$\Pr[v_i +\gamma a_i \in T+\gamma[N] \, \text{for all} \, i \in I] \leq \Pr[v_i +\gamma a_i \in T+\gamma[N]] $$
+    So, we have that $$\Pr[v_i +\gamma a_i \in T+\gamma[N] \, \text{for all} \,i \in I] \leq \frac{N-2}{|\F|-1}$$
+    So, the probability that $v+\gamma a$ is a subvector of $T+\gamma [N]$ is upper bounded by $\frac{N-2}{|\F|-1}$. \\
+    But $N <<|\F|$. So, $\frac{N-2}{|\F|-1}$ is very small. \\
+    So, with a large probability of atleast $(1-\frac{N-2}{|\F|-1})$, $v+\gamma a$ is not a subvector of $T+\gamma [N]$. \\
+    So, $L(T+\gamma[N], v+\gamma a)$ is false with high probability. \\
+    This completes the proof.
 \end{proof}
