@@ -13,3 +13,5 @@ cryptobib/abbrev0.bib
 src/main.bbl
 src/main.blg
 .DS_Store
+CCS'24/src/crypto_crossref.bib
+src/crypto_crossref.bib
