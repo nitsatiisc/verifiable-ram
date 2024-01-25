@@ -87,7 +87,7 @@ Then, $p''(\xi^i)/p'(\xi^i)=2 \cdot \sum_{j\in K\setminus \{i\}} 1/(\xi^i-\xi^j)
 \end{proof}
 
 \textbf{An alternative proof of \ref{lem:sumtoder}}:\\
-A much shorter proof is possible by inducting on the cardinality of $K\subset N$.\\
+An alternative proof is possible by inducting on the cardinality of $K\subset N$.\\
 The base case where $K$ has one element, say $i$ is trivial. This is because in that case $p$ is a linear polynomial $X-\xi^i$ and LHS=$\frac{p''}{p'}=\frac{0}{1}=0$ and on RHS we are summing over the empty set so the sum is $0$.\\\\
 Now let $|K|=k$ and the elements of $K$ be $a_1, a_2, \cdots, a_k$.
 Consequently $p(X)=\prod_{i \in K}(X-\xi^i)$\\
@@ -126,6 +126,7 @@ But $$p(\xi^{\alpha})=\prod_{i \in K}(\xi^{\alpha}-\xi^i)=\prod_{i \in K'\setmin
 But now, note that $$\sum_{j \in K'\setminus \{\alpha\}} \prod_{i \in K' \setminus \{j, \alpha\}}(\xi^{\alpha}-\xi^i)=\prod_{i \in K' \setminus \{ \alpha\}}(\xi^{\alpha}-\xi^i)\sum_{j \in K'\setminus \{\alpha\}}\frac{1}{\xi^{\alpha}-\xi^j}$$
 So, $$\frac{2p'(\xi^{\alpha})}{p(\xi^{\alpha})}=\frac{2\cdot \prod_{i \in K' \setminus \{ \alpha\}}(\xi^{\alpha}-\xi^i)\sum_{j \in K'\setminus \{\alpha\}}\frac{1}{\xi^{\alpha}-\xi^j}}{\prod_{i \in K'\setminus \{\alpha\}}(\xi^{\alpha}-\xi^i)}=$$\\
 $$=2\cdot\sum_{j \in K'\setminus \{\alpha\}}\frac{1}{\xi^{\alpha}-\xi^j}$$
+
 This completes the proof of case 2 and thus the proof of the lemma.
 
 \begin{lemma}[Sumcheck]\label{lem:sumcheck}
@@ -486,56 +487,56 @@ This completes a brief summary of the proof.
 \end{proof}
 
 \section{Reducing indexed lookups to subvector lookups}
-Let us say we have a subvector lookup argument $L$ which takes as input two vectors say $a, b$ and determines whether $b$ is a subvector of $a$.\\
-$b$ is said to be a subvector of $a$ if every element of $b$ is in $a$\\
-$b$ and $a$ both can have repetitions. All we need for subvector is that every element in $b$ should appear at least once in $a$.\\\\
+Let us say we have a subvector lookup argument $L$ which takes as input two vectors say $a, b$ and determines whether $b$ is a subvector of $a$. It outputs $1$ if $b$ is a subvector of $a$ and $0$ if $b$ is not a subvector of $a$. \\
+Recall that $b$ is said to be a subvector of $a$ if every element of $b$ is in $a$\\\\
 
 
+Indexed lookup argument $L'$ takes in 3 vectors $a, b, c$ where $c$ is a vector of indices with $|b|=|c|$ and checks that $b$ is a subvector of $a$ and that $a[c_i]=b_i$ for all $i$. That is, it does $L(a, b)$ first and further checks that $a$ restricted to the indices in $c$(in a particular order) gives $b$(in that particular order).\\
+If $b$ is a subvector of $a$ and $a[c_i]=b_i$ for all $i$ then it outputs $1$ else it outputs $0$.\\
 
-Indexed lookup argument $L'$ takes in 3 vectors $a, b, c$ where $c$ is a vector of indices with $|b|=|c|$ and checks that $b$ is a subvector of $a$ and that $a[c_i]=b_i$ for all $i$. That is it does $L(a, b)$ first and further checks that $a$ restricted to the indices in $c$(in a particular order) gives $b$(in that particular order). The vector $c$ can also have repetitions \\
-Given $a,b$ with $b$ subvector of $a$, there will always exist a $c$ with $|c|=|b|$ such that $a[c_i]=b_i$ for all $i$. The $c$ may not be unique though. \\\\
-So, we are given $T, v, a$ with $|a|=|v|$ and we want to do $L'(T, v, a)$ using $L(\cdot, \cdot)$. \\
+\textbf{Note:} Given $a,b$ with $b$ subvector of $a$, there will always exist a $c$ with $|c|=|b|$ such that $a[c_i]=b_i$ for all $i$. The $c$ may not be unique though. \\\\
+So, we are given $T, v, a$ with $|a|=|v|$ and we want to compute $L'(T, v, a)$ using $L(\cdot, \cdot)$. \\
 Let $|T|=N$. Let $|v|=m=|a|$.
-Procedure to calculate $L'(T, v, a)$ is as follows:
+Procedure to compute $L'(T, v, a)$ is as follows:
 \begin{itemize}
-    \item First do $L([N], a)$. This checks that $a$ is indeed a vector of indices (It can have repetitions but all the elements of $a \in [N]$)
-    \item Next do $L(T, v)$. This checks that $v$ is indeed a subvector of $T$.
+    \item First compute $L([N], a)$. This checks that $a$ is indeed a vector of indices. Call the output of this as $b_1$
+    \item Next compute $L(T, v)$. This checks that $v$ is indeed a subvector of $T$. Call the output of this as $b_2$
     \item Choose a $\gamma$ uniformly at random from $\F^*$
-    \item Do $L(T+\gamma[N], v+\gamma a)$ which checks that $v+\gamma a$ is a subvector of $T+\gamma [N]$
-    \item If all the 3 callings of $L$ output 'true' then output 'true' for $L'(T, v, a)$
-    \item If any of the 3 outputs 'false' then output 'false' for $L'(T, v, a)$
+    \item Compute $L(T+\gamma[N], v+\gamma a)$ which checks that $v+\gamma a$ is a subvector of $T+\gamma [N]$. Call the output $b_3$.
+    \item $L'(T, v, a)$ is then computed as $b_1 \wedge b_2 \wedge b_3$
 \end{itemize}
 This procedure works for any $T,v,a$ with $|v|=|a|$. So, this gives a procedure for calculating $L'(\cdot, \cdot, \cdot)$.
 
 \begin{lemma}\label{lem:reduction}
-Let the procedure for getting $L'(\cdot, \cdot, \cdot)$ be as above. Then, if $L(\cdot, \cdot)$ is a valid subvector lookup argument then the procedure yields a valid indexed lookup argument $L'(\cdot, \cdot, \cdot)$ with a small error probability (upper bounded by the inverse of the size of the field $\F$)
+Let the procedure for getting $L'(\cdot, \cdot, \cdot)$ be as above. Then, if $L(\cdot, \cdot)$ is a valid subvector lookup argument then the procedure yields a valid indexed lookup argument $L'(\cdot, \cdot, \cdot)$ with an error probability upper bounded by $\frac{O(1)}{|\F|}$.
 \end{lemma}
 
 \begin{proof}
     To show that the procedure yields a valid indexed lookup argument $L'(T, v, a)$, we need to show the following:
     \begin{enumerate}
 
-        \item If $v$ is indeed a subvector of $T$ with $T$ restricted to $a$ giving $v$, then all the checks mentioned in the procedure hold with high probability
-        \item If either $v$ is not a subvector of $T$ or if $v$ is a subvector of $T$ but restriction of $T$ to $a$ is not $v$, then at least one of the checks is false with high probability
+        \item If $v$ is indeed a subvector of $T$ with $T$ restricted to $a$ giving $v$, then $b_1=b_2=b_3=1$ with probability lower bounded by $1-\frac{O(1)}{|\F|}$
+        \item If either $v$ is not a subvector of $T$ or if $v$ is a subvector of $T$ but restriction of $T$ to $a$ is not $v$, then at least one of $b_1, b_2, b_3$ is $0$ with probability lower bounded by $1-\frac{O(1)}{|\F|}$
     \end{enumerate}
 
-    For 1., suppose $v$ is a subvector of $T$ with $T$ restricted to $a$ giving $v$. Then $L(T, v)$ is true. \\
+    For 1., suppose $v$ is a subvector of $T$ with $T$ restricted to $a$ giving $v$. Then $L(T, v)=b_2=1$. \\
     Moreover, $a$ is a subvector of $[N]$(else restricting $T$ to $a$ won't even make sense). \\
-    So, $L([N], a)$ is true. \\
+    So, $L([N], a)=b_1=1$ \\
     Lastly, since $v_i=T[a_i]$ for all $i \in m$, we have that for any $\gamma \in \F^{*}$,
     $$T[a_i]+\gamma a_i=v_i+\gamma a_i$$ for all $i$ \\
     But $T[a_i]+\gamma a_i$ is of course an element of $T+\gamma [N] $ for all $i \in [m]$.(Every $a_i \in [N]$)\\
     So, $\{T[a_i]+\gamma a_i:i \in [m]\}$ is a subvector of $T+\gamma [N] $.\\
     Thus, $\{v_i+\gamma a_i:i \in [m]\}$ is a subvector of $T+\gamma [N] $.\\
     So, $v+\gamma a$ is a subvector of $T+\gamma [N] $.\\
-    Thus, $L(T+\gamma[N], v+\gamma a)$ is also true.
+    Thus, $L(T+\gamma[N], v+\gamma a)=b_3=1$
 
-    This completes proof of 1.(In this case the high probability is actually 1) \\\\
-    For proof of 2., if $v$ is not a subvector of $T$ then $L(T, v)$ is false with probability 1 and we are done \\
+    This completes proof of 1.(In this case the probability is actually 1) \\\\
+    For proof of 2., if $v$ is not a subvector of $T$ then $L(T, v)=b_2=0$ with probability 1 and we are done \\
     So let us assume that $v$ is a subvector of $T$ and restriction of $T$ to $a$ is not $v$.\\
-    If $a$ is not a vector of indices (that is, some $a_i \notin [N]$) then $L([N], a)$ is false with probability 1 and we are done. So, let us assume that $a$ is a vector of indices (of course by definition of $L'$, we have that $|a|=|v|=m$).\\
+    If $a$ is not a vector of indices (that is, some $a_i \notin [N]$) then $L([N], a)=b_1=0$ with probability 1 and we are done. \\
+    So, let us assume that $a$ is a vector of indices (of course by definition of $L'$, we have that $|a|=|v|=m$).\\
 
-    \textbf{It suffices to show that $L(T+\gamma[N], v+\gamma a)$ is false with high probability.}
+    \textbf{It suffices to show that $L(T+\gamma[N], v+\gamma a)=b_3$ is 0 with probability lower bounded by $1-\frac{O(1)}{|\F|}$.}
 
     Since $v$ is a subvector of $T$ there is a restriction of $T$ which gives $v$. Say the restriction is $b$. Then $|b|=|v|=m$ and $T[b_i]=v_i$ for all $i \in [m]$. \\
     Moreover, by our assumption that restriction of $T$ to $a$ is not $v$, we have that $a \neq b$. \\
@@ -578,8 +579,8 @@ Let the procedure for getting $L'(\cdot, \cdot, \cdot)$ be as above. Then, if $L
     $$\Pr[v_i +\gamma a_i \in T+\gamma[N] \, \text{for all} \, i \in I] \leq \Pr[v_i +\gamma a_i \in T+\gamma[N]] \leq \frac{N-2}{|\F|-1}$$
     So, we have that $$\Pr[v_i +\gamma a_i \in T+\gamma[N] \, \text{for all} \,i \in I] \leq \frac{N-2}{|\F|-1}$$
     So, the probability that $v+\gamma a$ is a subvector of $T+\gamma [N]$ is upper bounded by $\frac{N-2}{|\F|-1}$. \\
-    But $N <<|\F|$. So, $\frac{N-2}{|\F|-1}$ is very small. \\
-    So, with a large probability of atleast $(1-\frac{N-2}{|\F|-1})$, $v+\gamma a$ is not a subvector of $T+\gamma [N]$. \\
-    So, $L(T+\gamma[N], v+\gamma a)$ is false with high probability. \\
+    But $N <<|\F|$. So, $\frac{N-2}{|\F|-1}$ is $\frac{O(1)}{|\F|}$. \textbf{Thus, the error probability is upper bounded by $\frac{O(1)}{|\F|}$} \\
+    So, with a probability of atleast $(1-\frac{N-2}{|\F|-1})$, $v+\gamma a$ is not a subvector of $T+\gamma [N]$. \\
+    So, $L(T+\gamma[N], v+\gamma a)=b_3$ is 0 with probability lower bounded by $1-\frac{O(1)}{|\F|}$ \\
     This completes the proof of lemma \ref{lem:reduction}
 \end{proof}
