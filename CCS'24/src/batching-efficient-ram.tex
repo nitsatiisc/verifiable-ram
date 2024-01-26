@@ -1,38 +1,47 @@
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.5\textwidth]{RAM-Lookup}
+    \includegraphics[width=0.4\textwidth]{RAM-Lookup}
     \caption{Illustrating different steps of sub-linear lookup protocol between large RAMs $\vecT$ and $\vecT'$.}
     \label{fig:blueprint}
 \end{figure}
 
 The construction in the previous section results in prover complexity which is quasi-linear in both the
 size of the RAM and the number of operations.
-Our goal in this section is to achieve prover complexity which is {\em sublinear} in the size of the table. In
-what follows, let $N$ denote the size of the RAM (upper-case to signify it's large) and $m$ denote the number
+Our goal in this section is to achieve prover complexity which is {\em sublinear} in the size of the RAM.
+In what follows, let $N$ denote the size of the RAM (upper-case to signify it's large) and $m$ denote the number
 of operations in a batch. We will use a vectors in $\F^N$ to denote the ``large'' RAMs, where index column is implicitly
 assumed to be $(1,\ldots,N)$.
 Let $\vec{T},\vec{T'}\in \F^N$ denote the initial and final RAM states, and let $\vec{o}$ be
 a sequence of $m$ operations which updates $\vec{T}$ to $\vec{T}'$. Let $\vec{a}\in \F^m$ denote the vector
-of RAM indices referenced by the operations in $\vec{o}$, i.e $a_i$ is the index referenced by $i^{th}$ operation.
+of RAM indices referenced by the operations in $\vec{o}$, i.e, $a_i$ is the index referenced by $i^{th}$ operation.
 To prove the transformation of $\vec{T}$ to $\vec{T}'$ via operation sequence $\vec{o}$, we proceed as follows:
-(i) We isolate sub-vectors $\vec{v}=(\vec{T}[a_1],\ldots,\vec{T}[a_m])$ and
-$\vec{v}'=(\vec{T}'[a_1],\ldots,\vec{T}'[a_m])$ and use the committed index lookup protocol, described in
-Section \ref{subsec:committed-index-lookup} to prove that vectors $\vec{v},\vec{v}'$ are correctly constructed,
-(ii) We set $S=(\vec{a},\vec{v})$, $S'=(\vec{a},\vec{v}')$ and use the protocol of Section \ref{subsec:succ-args} to show
-that $S'$ is the result of applying operations $\vec{o}$ on $S$, i.e. we show that the indices of the RAMs involved in the operation
-are correctly updated, (iii) finally, we show that vectors $\vec{T}$ and $\vec{T}'$ are identical outside indices in $\vec{a}$.
-We present polynomial protocol for the same in Section \ref{subsec:proximity-ram}. The aforementioned blueprint is illustrated
-in Figure \ref{fig:blueprint}.
+\begin{itemize}[leftmargin=2em, label=-]
+\item We isolate sub-tables $S=(\vec{a},\vec{v})$ and $S'=(\vec{a},\vec{a'})$ of $T$ and $T'$ consisting of
+rows corresponding to indices in $\vec{a}$. This requires proving $\vec{v}=\vecT[\vec{a}]$ and $\vec{v'}=
+\vecT'[\vec{a}]$, which we show using {\em committed index lookup} discussed in Section ~\ref{subsec:committed-index-lookup}.
 
-The efficiency of the above approach relies crucially on the efficiency of ``lookup argument'' in reducing the size of the RAMs for
-linear time memory checking methods. Using recently developed lookup arguments directly is difficult, as thier efficiency relies on
-table specific expensive pre-computation, which does not help when the table itself keeps changing. To circumvent this, we design a
-lookup protocol, which efficiently proves lookup with access to ``approximate'' pre-computation. In particular, we call pre-computed
-parameters for table $\vecT$ to be $\delta$-approximate with respect to table $\vecT'$ if the tables $\vecT$ and $\vecT'$ differ in
-at most $\delta$ indices. Our protocol described in Section \ref{sec:update-protocol} allows proving lookup of $m$ indices with access
-to a $\delta$-approximate setup in time $O(m^2+\delta\log^2 \delta)$. By optimally deferring $O(N\log N)$ pre-computation till we
-accumulate $\delta \approx \sqrt{mN}$ updates, we achieve an amortized prover complexity of $O(m^2+\sqrt{mN})$.
+\item On the isolated sub-table $S$ and $S'$ of size $m$, we use the standard memory checking arguments (c.f. argument
+presented in Section \ref{sec:poly-proto-ram-app}) to prove that sequence $\vec{o}$ correctly updates $S$ to $S'$ with
+prover complexity of $\wt{O}(m)$.
 
+\item Finally, we show that the RAMs $T$ and $T'$ are identical outside indices in $\vec{a}$. We call them $\vec{a}$-identical
+and describe the protocol for proving the same in Section ~\ref{subsec:proximity-ram}.
+\end{itemize}
+The above blueprint is illustrated in Figure ~\ref{fig:blueprint}.
+
+The efficiency of the above approach relies crucially on the efficiency of committed index lookup used to
+reduce the size of the RAMs for quasi-linear memory checking methods.
+Using recently developed lookup arguments directly is difficult, as their efficiency relies on
+table specific expensive pre-computation, which does not help when the table itself is being updated.
+To circumvent this, we design a lookup argument, which efficiently proves lookup with access to pre-computed
+parameters for a ``nearby'' table. In particular, we show that lookup protocols in
+~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:EagFioGab22} can be used to show $m$ lookups from a table $\vecT'$, given pre-computed parameters
+for a table $\vecT$ with additional overhead of $O((m+\delta)\log^2 (m+\delta))$, where $\delta$ denotes the number of positions where
+$\vecT$ and $\vecT'$ differ (hamming distance). By optimally deferring the $O(N\log N)$ re-computation till we
+accumulate $\delta \approx \sqrt{mN}$ updates, we achieve an amortized prover overhead $O(\sqrt{mN})$ over the read-only protocol.
+This modification, which applies to all the aforementioned lookup protocols is described in Section ~\ref{sec:update-protocol}.
+
+\noindent{\bf Additional Notation}:
 Before proceeding, we introduce the subgroup $\setN=\{\xi,\ldots,\xi^N\}$ consisting of $N^{th}$ roots of unity,
 over which we encode vectors in $\F^N$ as polynomials of degree less than $N$. Let $\{\mu_i(X)\}_{i=1}^N$ be the associated
 lagrange basis polynomials over the set $\setN$. We also recall the set $\setV$ consisting of $m^{th}$ roots of unity

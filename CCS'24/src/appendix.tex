@@ -1,4 +1,241 @@
 \appendix
+
+\section{Argument for RAM From Polynomial Protocols}\label{sec:poly-proto-ram-app}
+In this section, we give a self-contained argument of knowledge for membership in the language
+$\LRAM{I}{m}{m}$ introduced in Section \ref{sec:model-for-ram}. We first consider the polynomial encoding
+of different RAM artefacts.
+\subsection{Polynomial Encoding}\label{subsec:poly-encoding}
+%The aim of this section is to encode artefacts such as RAM state, operations and transcripts as polynomials, and
+%translate checking memory consistency (equivalently, checking membership in $\LRAM{I}{n}{m}$) to checking polynomial identities
+%over the encoded polynomials. For
+%simplicity and its usefulness later, we consider the case $m=n$, and accordingly check the membership in the language $\LRAM{I}{m}{m}$.
+Let $k=3m$ and let $\omega$ be the $k^{th}$ root of unity in $\F$.
+Let $\nu=\omega^3$, and thus $\nu$ is an $m^{th}$ root of unity in $\F$ (We assume, these roots exist in $\F$).
+We define sets $\setH$ and $\setV$ below consisting of $k^{th}$ and $m^{th}$ roots of unity respectively.
+\begin{gather}\label{eq:interpolation-sets}
+\setH = \{\omega,\ldots,\omega^k\},\quad \setV = \{\nu,\ldots,\nu^m\}
+\end{gather}
+Let $\{\lambda_i(X)\}_{i=1}^k$ be lagrange basis polynomials
+for the set $\setH$ and $\{\tau_i(X)\}_{i=1}^m$ be the lagrange polynomials for the set $\setV$ satisfying
+$\lambda_i(\omega^j)=\delta_{ij}$ for $i,j\in [k]$ and $\tau_i(\nu^j)=\delta_{ij}$ for $i,j\in [m]$.
+We use $\setH$ to encode a vector $\vec{f}=(f_1,\ldots,f_k)$ of size $k$ as the polynomial $f(X)\in \F_{<k}[X]$ such that $f(\omega^i)=f_i$ for $i\in [k]$.
+Similarly, we use $\setV$ to encode a vector
+$\vec{g}=(g_1,\ldots,g_m)$ of size $m$ as the polynomial $g(X)\in F_{<m}[X]$ such that $g(\nu^i)=g_i$ for $i\in [m]$. We use
+the notation $\enc{f}{\setH}$ and $\enc{g}{\setV}$ to denote polynomial encodings of vectors $\vec{f}\in \F^k$ and $\vec{g}\in \F^m$
+respectively.
+In the other direction, for a polynomial $f(X)\in \F[X]$,
+we use $\vec{f}_{|_\setH}$ and $\vec{f}_{|_\setV}$ to denote the vectors $(f(\omega^1),\ldots,f(\omega^k))$ and $(f(\nu^1),\ldots,f(\nu^m))$ respectively.
+The encoding of vectors as polynomials can be succinctly described using lagrange basis polynomials.
+Then we have $\enc{f}{\setH}=\sum_{i=1}^k f_i\lambda_i(X)$ and $\enc{g}{\setV}=\sum_{i=1}^m g_i\tau_i(X)$.
+
+We extend the encoding of vectors to encode RAM, operations and transcripts.
+For a RAM $T=(\vec{a},\vec{v})\in \RAM{I}{m}$, we define its encoding
+$\wt{T}=(a(X),v(X))$ where $a(X),v(X)\in \F_{<m}[X]$ encode vectors $\vec{a}, \vec{v}$ respectively.
+Given an operation sequence
+$\vec{o}=(o_1,\ldots,o_m)$ with $o_i=(\bar{\op}_i,\bar{a}_i,\bar{v}_i)$ we encode $\vec{o}$ as $\wt{O}=(\bar{\op}(X),\bar{a}(X),\bar{v}(X))$
+where $\bar{\op}(X)$ encodes the
+vector $\vec{\op}=(\bar{\op}_1,\ldots,\bar{\op}_m)$, $\bar{a}(X)$ encodes the vector $(\bar{a}_1,\ldots,\bar{a}_m)$ and $\bar{v}(X)$
+encodes the vector $(\bar{v}_1,\ldots,\bar{v}_m)$.
+Finally, a transcript $\tr=(\vec{t},\vec{\op},\vec{A},\vec{V})$ for tuples $(T,\vec{o},T')$ where $T,T'$ are RAMs of size $m$, and $\vec{o}$ is an
+operation sequence of size $m$ is encoded as $\wt{\tr}$ $=$ $(t(X)$, $\op(X)$, $A(X)$, $V(X))$ where the polynomials
+encode the respective vectors in $\F^k$.
+
+\subsection{Relations over Polynomial Encodings}\label{subsec:encoded-relations}
+In this section, we describe polynomial checks for two important relations we need in subsequent sections, viz,
+(i) checking concatenation of vectors and (ii) checking monotonicity and load-store consistency of a transcript. Let
+$k,m$ be integers with $k=3m$ as in previous section. The lemma below specifies the polynomial checks for verifying
+that vector $\vec{v}\in \F^k$ is concatenation of vectors $\vec{a},\vec{b},\vec{c}$ in $\F^m$.
+
+\begin{lemma}\label{lem:vec-concatenation}
+Let $\vec{a},\vec{b},\vec{c}\in \F^m$  and $v\in \F^k$ be vectors encoded by polynomials
+$a(X),b(X),c(X)$ and $v(X)$ respectively. Then,
+    {\small
+\begin{align}
+    a(X^3) - v(X)  &= 0  \quad \text{ mod $Z(X)$ } \tag{A1}\label{eq:A1}\\
+    b(X^3) - v(\omega^m X)  &= 0   \quad \text{ mod $Z(X)$ } \tag{A2}\label{eq:A2}\\
+    c(X^3) - v(\omega^{2m} X) &= 0 \quad \text{ mod $Z(X)$ } \tag{A3}\label{eq:A3}
+\end{align}
+}
+for $Z(X)=\prod_{i=1}^m (X-\omega^i)$ if and only if $\vec{v}=\vec{a}||\vec{b}||\vec{c}$.
+\end{lemma}
+\begin{proof}
+    Assume that the polynomial identities hold. Substituting $X=\omega^i$ for $i\in [m]$ in above equations implies
+    for $i\in [m]$: $a_i=v_i$ (Eq \eqref{eq:A1}), $b_i=v_{m+i}$ (Eq \eqref{eq:A2}) and $c_i=v_{2m+i}$ (Eq \eqref{eq:A3}),
+    which together imply $\vec{v}=\vec{a}||\vec{b}||\vec{c}$. Converse follows by observing that $\vec{v}=\vec{a}||\vec{b}||\vec{c}$
+    implies that $v(X) = a(X^3)$, $v(\omega^m X)=b(X^3)$ and $v(\omega^{2m} X)=c(X^3)$ holds for all $X=\omega^i, i\in [m]$.
+    Thus, the equalities hold modulo the polynomial $Z(X)$ as defined above.
+\end{proof}
+
+Next, we specify polynomial checks on the encoding of a transcript to ensure it satisfies address-ordering and load-store consistency.
+Let $\tr=(\vec{t},\vec{\op},\vec{A},\vec{V})$ be a transcript encoded as
+$\wt{\tr}=(t(X),\op(X),A(X),V(X))$. Recall that we need to check two conditions on $\tr$, viz (i) {\em monotonicty}:
+the transcript is sorted by address and timestamp respectively, i.e, $A_i\leq A_{i+1}$ for all $i < k$ and
+$t_i < t_{i+1}$ when $A_i=A_{i+1}$, (ii) {\em load-store consistency}: whenever $\op_{i+1}=0$ and $A_i=A_{i+1}$,
+we have $V_i=V_{i+1}$. To do so, we exhibit disjoint sets $I_1,I_2$ with $I_1\uplus I_2=[k]$ such that: (i) for all
+$i\in I_1$, $A_i < A_{i+1}$, (ii) for all $i\in I_2$, $(A_i = A_{i+1})\wedge (t_i < t_{i+1})$ and (iii) for all $i\in I_2$,
+$(\op_i=1)\vee (V_i = V_{i+1})$. We note that the conditions on the sets $I_1$ and $I_2$ ensures monotonicity.
+Moreover it can be seen that load-store consistency requirements are satisfied for all $i\in I_1$ (as $A_i\neq A_{i+1}$).
+Similarly,load-store consistency also holds for all $i\in I_2$.
+It remains to exhibit the sets and show that they satisfy the above invariants using polynomials, as in the following
+lemma:
+\begin{lemma}\label{lem:addr-ordered-transcript}
+Let $\wt{\tr}$ be a polynomial encoding of transcript $\tr$ of size $k$, given by polynomials $t(X),\op(X),A(X)$ and $V(X)$.
+Then for $kN<|\F|$, $\tr$ is address ordered and satisfies load-store consistency if and only if there exist polynomials
+$Z_1,Z_2,\delta_T,\delta_A$
+such that the following hold:
+    {\small
+\begin{align}%\label{eq:loadstore-consitency-constraints}
+    & Z_2(X)(A(\omega X) - A(X) - \delta_A(X)) = 0 \text{ mod } \mathbb{Z}_\setH(X) \tag{C1} \label{eq:C1} \\
+    & A(\omega X) - A(X) = 0  \text{ mod } Z_2(X) \tag{C2} \label{eq:C2} \\
+    & t(\omega X) - t(X) - \delta_T(X) = 0  \text{ mod } Z_2(X) \tag{C3} \label{eq:C3} \\
+    & (\op(X) - 1)(V(\omega X) - V(X)) = 0  \text{ mod } Z_2(X) \tag{C4} \label{eq:C4} \\
+    & Z_1(X)\cdot Z_2(X) = \mathbb{Z}_\setH(X) \quad  \tag{C5} \label{eq:C5} \\
+    & 1\leq A(\omega) < N  \quad \tag{C6} \label{eq:C6} \\
+    & 1\leq t(\omega^i) < N, 1\leq \delta_A(\omega^i)<N,\ 1\leq \delta_T(\omega^i)<N \text{ for } i\in [k] \tag{C7} \label{eq:C7}
+\end{align}
+}
+\end{lemma}
+
+\section{Succinct Argument for Verifiable RAM}\label{sec:poly-proto-ram}
+The polynomial encodings in the previous section can be used to polynomial protocol for
+checking the membership in the language $\LRAM{I}{m}{m}$ for $m\in \N$. The polynomial protocol can be subsequently
+be compiled into a succinct argument using an extractable polynomial commitment scheme.
+In this section, we use $\kzg$ polynomial commitment scheme to obtain a succinct argument for checking membership in $\LRAM{I}{m}{m}$
+in the Algebraic Group Model (AGM).
+At a high level, to prove $(\vec{T},\vec{o},\vec{T'})\in \LRAM{I}{m}{m}$, the prover
+constructs time ordered transcript $\tr$ and then permutes it to obtain the address sorted transcript $\tr^\ast$.
+It then sends the polynomial encodings of $\vec{T},\vec{o},\vec{T'},\tr$ and $\tr^\ast$ to the verifier, who verifies that:
+\begin{enumerate}[leftmargin=1em]
+    \item The time ordered transcript is correctly constructed, i.e, $\tr=\TOT(\vec{T},\vec{o},\vec{T'})$.
+    \item The transcript $\tr^\ast$ is a permutation of the transcript $\tr$, i.e, $\tr^\ast=\sigma(\tr)$ for some permutation $\sigma$ of $[k]$.
+    \item The transcript $\tr^\ast$ is address ordered and satisfies load-store consistency.
+\end{enumerate}
+In fact, we consider memebership in the above language under commitments. Let $\srs$ denote a $\kzg$ setup over a bilinear group, with
+prime order groups $\Gone, \Gtwo$ and $\GT$. We canonically commit to RAM, operation sequences and transcripts by committing to their
+polynomial encodings. Commitment of an encoding represented as tuple of polynomials is simply the tuple consisting of commitments of the component
+polynomials. We now define
+the relation $\CLRAM$ below, and present a succinct argument for the same.
+\begin{definition}\label{defn:committed-vram}
+Let $\CLRAM$ consist of tuples $((c_T, c_o, c_T'), (T, \vec{o},T'))$ where $c_T$ $=$ $\kzgcommit(\srs, \wt{T})$,
+$c_T'$ $=$ $\kzgcommit(\srs, \wt{T'})$,
+$c_o$ $=$ $\kzgcommit(\srs,\wt{O})$ commit to $T$, $T'$ and $\vec{o}$ with $(T,\vec{o},T')\in \LRAM{I}{m}{m}$.
+\end{definition}
+\noindent In the above definition we have $c_T=(c_a,c_v)$ where $c_a$ and $c_v$ are $\kzg$ commitments to polynomials $a(X)$ and $v(X)$ in
+the encoding $\wt{T}=(a(X), v(X))$. Similarly we parse $c_T'=(c_a', c_v')$ and $c_o=(\bar{c}_\op, \bar{c}_a, \bar{c}_v)$ (see Section
+\ref{subsec:poly-encoding} for polynomial encodings).
+For proving relation \ref{defn:committed-vram}, prover's input consists of initial RAM state $T=(\vec{a},\vec{v})$,
+final RAM state $T'=(\vec{a'},\vec{v'})$, operation sequence $\vec{o}=(o_1,\ldots,o_m)$ with $o_i=(\bar{\op}_i,\bar{a}_i,\bar{v}_i)$,
+time-ordered transcript $\tr=(\vec{t},\vec{\op},\vec{A},\vec{V})$ and address-ordered transcript $\tr^\ast=(\vec{t^\ast},\vec{\op^\ast},
+\vec{A^\ast},\vec{V^\ast})$ obtained from $\tr$ using a permutation $\sigma:[k]\rightarrow [k]$. Verifier's input consists of the
+commitments $c_T, c_o$ and $c_T'$ as described above.
+
+The prover starts the protocol by sending commitments $c_\tr$ and $c^\ast_\tr$ to the transcripts $\tr$ and $\tr^\ast$ respectively.
+To show that $\tr$ is correctly formed, the prover needs to prove the concatenations:
+(i) $\vec{\op}=0^m||(\bar{\op}_1,\ldots,\bar{\op}_m)||0^m$, (ii) $\vec{A}=\vec{a}||(\bar{a}_1,\ldots,\bar{a}_m)||\vec{a'}$
+and (iii) $\vec{V}=\vec{v}||(\bar{v}_1,\ldots,\bar{v}_m)||\vec{v'}$. Note that the time-stamp column $\vec{t}$ is implicitly assumed
+to be $(1,\ldots,k)$.
+The verifier checks the concatenations using Lemma \ref{lem:vec-concatenation}.
+It uses a random challenge $\beta$ to reduce the three concatenations to one concatenation, and uses another challenge $\gamma$
+to reduce the three polynomial checks in Lemma \ref{lem:vec-concatenation} to a single check.
+The complete polynomial protocol is detailed in Figure \ref{fig:time-ordered-transcript}.
+
+%\begin{tcolorbox}
+\begin{figure}[htbp]
+    \centering
+    \begin{mdframed}
+    {\footnotesize
+    \noindent{\bf Common Input}: Commitments $c_T=(c_a,c_v)$, $c_o=(\bar{c}_\op, \bar{c}_a, \bar{c}_v)$, $c_T'=(c_a', c_v')$
+        and $c_\tr=(c_t, c_\op, c_A, c_V)$ to $T,o,T'$ and $\tr$ respectively. Commitment $\gone{Z}$ to the polynomial
+        $Z(X)=\prod_{i=1}^m (X-\omega^i)$.
+        \begin{enumerate}[leftmargin=2em]
+            \item $\verifier\rightarrow\prover$: Verifier sends $\beta,\gamma\gets \F$.
+            \item $\prover$ computes:
+            \begin{align}\label{eq:poly-constraints}
+            & G_1(X) = a(X) + \beta v(X),\, G_2(X) = \bar{a}(X) + \beta \bar{v}(X) + \beta^2 \bar{\op}(X) \tag{A1} \\
+            & G_3(X) = a'(X) + \beta v'(X),\, G(X) = A(X) + \beta V(X) + \beta^2 \op(X) \tag{A2} \\
+            & H(X) = G_1(X) + \gamma G_2(X) + \gamma^2 G_3(X), \tag{A3} \\
+            & Q(X) = (H(X^3) - G(X) - \gamma G(\omega^m X) - \gamma^2 G(\omega^{2m} X))/Z(X) \tag{A4}
+            \end{align}
+            \item $\prover\rightarrow\verifier$: The prover sends commitment $\gone{Q}$ to $Q(X)$.
+            \item $\verifier\rightarrow\prover$: Sends $s\gets\F$.
+            \item $\prover\rightarrow\verifier$: Sends evaluations $\val{s}{G}=G(s)$, $\val{\omega^m s}{G}=G(\omega^m s)$,
+            $\val{\omega^{2m}s}{G}=G(\omega^{2m} s)$, $\val{s^3}{H}=H(s^3)$, $\val{s}{Q}=Q(s)$ and $\val{s}{Z}=Z(s)$.
+            \item $\verifier\rightarrow\prover$: Sends $r\gets\F$.
+            \item $\prover\rightarrow\verifier$: Sends $\kzg$ proofs:
+            \begin{itemize}[leftmargin=2em]
+                \item $\Pi_G=\kzgprove(\srs,G,(s,\omega^m s, \omega^{2m}s))$.
+                \item $\Pi_H=\kzgprove(\srs,H,s^3)$.
+                \item $\Pi_F=\kzgprove(\srs,F,s)$ where $F(X)=Z(X) + rQ(X)$.
+            \end{itemize}
+            \item $\verifier$ computes: Compute commitments $\gone{G},\gone{H}$ and $\gone{F}$ using homomorphism. It then checks:
+            \begin{itemize}[leftmargin=2em]
+                \item $\kzgverify(\srs,\gone{G},(s,\omega^m s, \omega^{2m}s), (\val{s}{G}, \val{\omega^m s}{G}, \val{\omega^{2m} s}{G}),\Pi_G)$.
+                \item $\kzgverify(\srs,\gone{H}, s^3, \val{s^3}{H},\Pi_H)$.
+                \item $\kzgverify(\srs,\gone{F}, s, \val{s}{Z} + r\val{s}{Q}, \Pi_F)$.
+                \item $\val{s}{Q}\cdot \val{s}{Z} =? \val{s^3}{H}-\val{s}{G}-\gamma \val{\omega^m s}{G}-\gamma^2\val{\omega^{2m}s}{G}$.
+            \end{itemize}
+            \item $\verifier$ outputs: Accept if all the above checks succeeds, otherwise it rejects.
+        \end{enumerate}
+    }
+    \end{mdframed}
+    \vspace*{-5mm}
+    \caption{Protocol: Check correctness of time-ordered transcript}
+    \label{fig:time-ordered-transcript}
+\end{figure}
+%\end{tcolorbox}
+
+Next, we show a polynomial protocol for proving that the transcript $\tr^\ast$ is a permutation of the transcript $\tr$.
+We first recall the permutation argument for vectors from ~\cite{EPRINT:GabWilCio19}.
+\begin{lemma}[Permutation Check \cite{EPRINT:GabWilCio19}]\label{lem:perm-argument}
+Let $f(X), g(X)$ be polynomials in $\F[\,X\,]$. Then, the vectors $\vec{f}, \vec{g}\in \F^k$ encoded by the polynomials
+are permutations of each other if and only if with overwhelming probability over the choice of $\alpha\gets \F$,
+there exists a polynomial $z(X)$ satisfying the polynomial constraints:
+    {\small
+\begin{align}
+    \lambda_1(X)(z(X) -1) &= 0 \text{ mod } Z_\setH(X) \tag{B1} \label{eq:B1} \\
+    (\alpha - g(X))z(\omega X) &= (\alpha - f(X))z(X) \text{ mod } Z_\setH(X) \tag{B2} \label{eq:B2}
+\end{align}
+}
+\end{lemma}
+The polynomial protocol in Figure \ref{fig:permutated-transcripts} essentially invokes the above argument on
+the random linear combination of the columns of the respective transcripts.
+%\begin{tcolorbox}
+\begin{figure}[htbp]
+    \centering
+    \begin{mdframed}
+    {\footnotesize
+    \noindent{\bf Common Input}: Commitments $c_\tr=(c_t,c_\op,c_A, c_V)$ and $c_\tr^\ast=(c_t^\ast,c_\op^\ast, c_A^\ast, c_V^\ast)$
+        of transcripts $\tr$ and $\tr^\ast$ respectively.
+        \begin{enumerate}[leftmargin=2em]
+            \item $\verifier\rightarrow\prover$: Sends $\alpha,\beta, \chi\gets \F$
+            \item $\prover$ computes $f(X)=t(X) + \beta \op(X) + \beta^2 A(X) + \beta^3 V(X)$, $g(X) = t^\ast(X) + \beta \op^\ast(X)$
+            $+ \beta^2 A^\ast(X) + \beta^3 V^\ast(X)$. It then computes polynomials $z(X),q(X)$ as:
+            \begin{itemize}[leftmargin=1em]
+                \item Interpolate polynomial $z(X)$ of degree $k-1$ such that $z(\omega)=1$ and
+                $z(\omega^{i+1})=\prod_{j=1}^i (\alpha - f(\omega^j))/(\alpha - g(\omega^j))$ for $1\leq i\leq k$.
+                \item Compute $q(X) = ((\alpha - g(X))z(\omega X) - (\alpha - f(X))z(X) + \chi\lambda_1(X)(z(X) - 1))/\mathbb{Z}_{\setH}(X)$.
+            \end{itemize}
+            \item $\prover\rightarrow\verifier$: Sends commitments $\gone{z}$ and $\gone{q}$ to polynomials $z(X)$ and $q(X)$ respectively.
+            \item $\verifier$ computes: The verifier checks that $q(X)Z_\setH(X)$ = $(\alpha - g(X))z(\omega X)-(\alpha - f(X))z(X) + \chi\lambda_1(X)(z(X) - 1)$
+            by requesting evaluations and $\kzg$ proofs of polynomials $f,g$ and $q$ at a random point. It accepts if the check succeeds.
+        \end{enumerate}
+    }
+    \end{mdframed}
+    \vspace*{-5mm}
+    \caption{Protocol: Check permutation of transcripts}
+    \label{fig:permutated-transcripts}
+\end{figure}
+%\end{tcolorbox}
+Finally, we see that Lemma \ref{lem:addr-ordered-transcript} implies a polynomial protocol to check that the transcript
+$\tr^\ast$ is address ordered and satisfies load-store consistency. We skip the formal protocol details, which
+essentially involves the prover identifying sets
+$I_1, I_2$ as described in Section \ref{subsec:encoded-relations} and sending auxiliary polynomials $Z_1(X),Z_2(X),\delta^\ast_A(X)$ and $\delta^\ast_T(X)$ to the verifier.
+The verifier then checks the identities (C1)-(C6) in Lemma \ref{lem:addr-ordered-transcript}.
+The range checks in (C7) can be checked using polynomial protocols in sub-vector lookup arguments such as Caulk+ ~\cite{EPRINT:PosKat22}, CQ
+~\cite{EPRINT:EagFioGab22}. For completeness, we also include a protocol for enforcing range checks using committed index lookup
+described in Section \ref{subsec:committed-index-lookup}.
+
+
 \section{Proof of Lemma \ref{lem:sum computation}}
 Recall the statement of lemma \ref{lem:sum computation}. We want to compute $e_i$ for all $i \in \setind$ and $b_j$ for all $j \in K$ in $O(|K|\log^2|K|)$ $\mathbb{F}$ operations.\\\\
 
