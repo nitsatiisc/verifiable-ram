@@ -14,7 +14,12 @@ that all the setup algorithms for the protocols invoke $\bg$ to generate descrip
 over which the protocol is instantiated. We use $[n]$ to denote the set of integers $\{1,\ldots,n\}$.
 
 \noindent{\bf Lagrange Polynomials.}
-\chaya{move to here from sec 6: Lagrange polynomial, vanishing polynomial, roots of unity}
+%\chaya{move to here from sec 6: Lagrange polynomial, vanishing polynomial, roots of unity}
+We denote the $N$th root of unity by $\xi$ and define the subgroup $\setN$ as $\setN =\{\xi,\ldots,\xi^N\}$. 
+Let $\{\mu_i(X)\}_{i=1}^N$ be the associated
+Lagrange basis polynomials over the set $\setN$; that is, $\mu_i(X) = \prod_{j\neq i-1} \frac{X-\xi^j}{\xi^{i-1}-\xi^j}$.
+We denote by $Z_{\setN}$ the vanishing polynomial of $\setN$;  $Z_{\setN}(X)=X^N-1$.
+
 
 \noindent{\bf Security Model}: We describe public-coin interactive protocols, involving a prover and a verifier,
 where both the parties have access to a structured reference string (SRS). The SRS in our protocols consists of
@@ -28,13 +33,14 @@ polynomial $f\in \F_{<Q}[X]$.
 
 \noindent{\bf Algebraic Group Model}: We analyse our protocols in the Algebraic Group Model (AGM) introduced
 in ~\cite{C:FucKilLos18}. In the AGM, an adversary $\Adv$ is restricted to be {\em algebraic}, which in our SRS-based protocol means an efficient algorithm satisfying the following:
-\begin{itemize}[leftmargin=1em]
-	\item For $i\in \{1,2\}$, whenever $\Adv$ outputs an element $A\in \G_i$, it also outputs a vector $\vec{v}$
+for $i\in \{1,2\}$, whenever $\Adv$ outputs an element $A\in \G_i$, it also outputs a vector $\vec{v}$
 	over $\F$ such that $A=\langle \vec{v},\srs_i\rangle$.
-\end{itemize}
+%\begin{itemize}[leftmargin=1em]
+	%\item For $i\in \{1,2\}$, whenever $\Adv$ outputs an element $A\in \G_i$, it also outputs a vector $\vec{v}$
+	over $\F$ such that $A=\langle \vec{v},\srs_i\rangle$.
+%\end{itemize}
 AGM is a useful framework for analyzing security of succinct non-interactive arguments of knowledge (SNARKs) obtained from interactive protocols that are described as {\em polynomial protocols}~\cite{Gabizon2019PLONKPO}. Informally, the prover's messages in a polynomial protocol are low degree polynomials, and the verifier accepts or rejects by checking certain identities over polynomials output by the prover and possibly public polynomials known to the verifier. A polynomial protocol can be compiled into a succinct argument of knowledge by realizing the polynomial oracles using a \emph{polynomial commitment scheme}. A polynomial commitment scheme allows a prover to commitm to polynomials, and later verifiably open evaluations at chosen points by giving evaluation proofs. This enables the verifier to probabilistically
 check polynomial identities at random points of $\F$. We refer the reader to ~\cite[Section 4.2]{Gabizon2019PLONKPO} for details on polynomial protocols and their compilation to SNARKs.
-
 
 
 \subsection{KZG Commitment Scheme}
@@ -79,6 +85,8 @@ version of $\KZGopen$ is described as follows:
 	Here, the verifier interpolates the polynomial $r(X)\in \F_{<n}[X]$ such that $r(\alpha_i)=v_i$.
 \end{itemize}
 
+\noindent\textbf{KZG for vectors.} For $\vec{f}\in \F^N$, let $\enc{f}{\setN}$ denote the polynomial encoding of $\vec{f}$ over $\setN$ given by $\sum_{i=1}^N f_i\mu_i(X)$. We use KZG to commit to \emph{vectors} by committing to its polynomial encoding.
+
 %\begin{definition}[KZG Polynomial Commitment Scheme \textcolor{red}{degree check included}]
 %    Let $(p,\Gone,\Gtwo,\GT, e, \eltone{1},\elttwo{1})$ be a bilinear group. The KZG polynomial commitment scheme is defined as follows: 
 %    \begin{itemize}
@@ -104,3 +112,22 @@ version of $\KZGopen$ is described as follows:
 Now, for vectors of length $n$, we consider the basis $\{\lambda_i(X)\}$ to be the langrange basis with respect to the set consisting of $n^{th}$ roots of unity $\doubleH=\{\omega,\ldots,\omega^n\}$. The lagrange basis helps us use the property that, for some $i\in [n]$ and a value $\alpha$, $a(\omega^i)=a_i=\alpha$ if and only if there exists a polynomial $W(X)$ such that $W(X)=\frac{a(X)-\alpha}{X-\omega^i}$. 
 \end{comment}
 %Throughout the draft, for $\abf\in \F^n$, we use $\Comone{.}$ to denote $\KZGcommit(\srs,\abf)$ for vectors of length $n$, using the langrange polynomial basis $\{\lambda_i(X)\}$, with respect to the $n^{th}$ root of unity $\omega$, and for $\bbf \in \F^m$, we use $\Comtwo{.}$ to denote $\KZGcommit(\srs,\bbf)$ for vectors of length $m$, using the langrange polynomial basis $\{\mu_i(X)\}$, with respect to the $m^{th}$ root of unity $\nu$.
+
+ 
+
+
+\subsection{Lookup Arguments}
+Works on lookup arguments~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,baloo,cq} 
+consider proving sub-vector relation over committed vectors, i.e, given commitments $c_t$ and $c_v$ to vectors $\vec{t}\in \F^N$
+and $\vec{v}\in \F^m$, one proves that for all $i\in [m]$, there exists $j\in [N]$ such that $v_i=t_j$ .
+We consider a slightly modified relation that we call {\em committed index lookup} (called indexed lookup in~\cite{lasso})  where there is a commitment to the indices where $\vec{v}$ appears in $\vec{t}$.
+
+\begin{definition}
+\label{defn:comm-index-lookup}
+We define the {\em committed index lookup} relation $\RLOOK$ to consist of tuples
+$((c_t,c_a,c_v),(\vec{t},\vec{a},\vec{v}))$ where $c_t,c_a,c_v\in \Gone$, $\vec{t}\in \F^N$, $\vec{a},\vec{v}\in \F^m$ such
+that $v_i = \vec{t}[a_i]=t_{a_i}$ for all $i\in [m]$ and $c_t = \kzgcommit(\srs, \enc{t}{\setN})$, $c_a=\kzgcommit(\srs,\enc{a}{\setV})$
+and $c_v=\kzgcommit(\srs,\enc{v}{\setV})$.
+\end{definition}
+
+A lookup argument is a succinct argument of knowledge for the relation relation $\RLOOK$. \chaya{by defn, in the NI case, the prover is allowed to come up with an adversarial instance, in this case all commitments.}
