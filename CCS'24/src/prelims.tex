@@ -16,19 +16,6 @@ over which the protocol is instantiated. We use $[n]$ to denote the set of integ
 \noindent{\bf Lagrange Polynomials.}
 \chaya{move to here from sec 6: Lagrange polynomial, vanishing polynomial, roots of unity}
 
-\noindent{\bf Algebraic Group Model}: We analyse our protocols in the Algebraic Group Model (AGM) introduced
-in ~\cite{C:FucKilLos18}. We consider {\em algebraic adversaries} $\Adv$, which in our SRS-based protocol means
-an efficient algorithm satisfying the following:
-\begin{itemize}[leftmargin=1em]
-	\item For $i\in \{1,2\}$, whenever $\Adv$ outputs an element $A\in \G_i$, it also outputs a vector $\vec{v}$
-	over $\F$ such that $A=\langle \vec{v},\srs_i\rangle$.
-\end{itemize}
-Algebraic group model is a useful framework for obtaining succinct non-interactive arguments of knowledge (SNARKs) from interactive protocols described as {\em polynomial protocols} ~\cite{Gabizon2019PLONKPO}. Informally, the prover's messages in a polynomial protocol are low degree polynomials, and the verifier accepts or rejects by checking certain identities
-over polynomials output by the prover and possibly public polynomials known to the verifier. A polynomial protocol can
-be compiled into a succinct argument of knowledge by using an extractable polynomial commitment scheme, which allows a
-prover to send commitments to polynomials, and later send evaluation proofs for the same to enable the verifier to probabilistically
-check polynomial identities at random points of $\F$. We refer the reader to ~\cite[Section 4.2]{Gabizon2019PLONKPO} for details on polynomial protocols and their compilation to SNARKs in the AGM.
-
 \noindent{\bf Security Model}: We describe public-coin interactive protocols, involving a prover and a verifier,
 where both the parties have access to a structured reference string (SRS). The SRS in our protocols consists of
 encodings of monomials of the form $\left\{\gone{x^i}\right\}_{a\leq i\leq b}$, $\left\{\gtwo{x^i}\right\}_{c\leq i\leq d}$
@@ -38,6 +25,17 @@ only one honest participant. In practice, this is a superior security model to t
 trusted setup. We use $\srs = (\srs_1,\srs_2)$ to denote the structured reference string of the above form. We say
 that the $\srs$ has degree $Q$ if all the elements of $\srs_i$, $i=1,2$ are of the form $[f(x)]_i$ for a
 polynomial $f\in \F_{<Q}[X]$.
+
+\noindent{\bf Algebraic Group Model}: We analyse our protocols in the Algebraic Group Model (AGM) introduced
+in ~\cite{C:FucKilLos18}. In the AGM, an adversary $\Adv$ is restricted to be {\em algebraic}, which in our SRS-based protocol means an efficient algorithm satisfying the following:
+\begin{itemize}[leftmargin=1em]
+	\item For $i\in \{1,2\}$, whenever $\Adv$ outputs an element $A\in \G_i$, it also outputs a vector $\vec{v}$
+	over $\F$ such that $A=\langle \vec{v},\srs_i\rangle$.
+\end{itemize}
+AGM is a useful framework for analyzing security of succinct non-interactive arguments of knowledge (SNARKs) obtained from interactive protocols that are described as {\em polynomial protocols}~\cite{Gabizon2019PLONKPO}. Informally, the prover's messages in a polynomial protocol are low degree polynomials, and the verifier accepts or rejects by checking certain identities over polynomials output by the prover and possibly public polynomials known to the verifier. A polynomial protocol can be compiled into a succinct argument of knowledge by realizing the polynomial oracles using a \emph{polynomial commitment scheme}. A polynomial commitment scheme allows a prover to commitm to polynomials, and later verifiably open evaluations at chosen points by giving evaluation proofs. This enables the verifier to probabilistically
+check polynomial identities at random points of $\F$. We refer the reader to ~\cite[Section 4.2]{Gabizon2019PLONKPO} for details on polynomial protocols and their compilation to SNARKs.
+
+
 
 \subsection{KZG Commitment Scheme}
 \label{sec:KZG}
