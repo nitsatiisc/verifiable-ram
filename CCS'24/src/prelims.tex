@@ -1,5 +1,5 @@
 
-Throughout the paper, we assume a bilinear group generator $\bg$ which on input $\lambda$ outputs
+\noindent\textbf{Notation.}Throughout the paper, we assume a bilinear group generator $\bg$ which on input $\lambda$ outputs
 parameters for the protocols. Specifically $\bg(1^\secp)$ outputs $(\F,\Gone,\Gtwo,\GT, e, g_1, g_2,g_t)$
 where:
 \begin{itemize}[leftmargin=2em, label=-]
@@ -9,21 +9,12 @@ where:
 	\item Generators $g_1,g_2$ are uniformly chosen from $\Gone$ and $\Gtwo$ respectively and $g_t=e(g_1,g_2)$.
 \end{itemize}
 We write groups $\Gone$ and $\Gtwo$ additively, and use the shorthand notation $\gone{x}$ and $\gtwo{x}$
-to denote group elements $x\cdot g_1$ and $x\cdot g_2$ respectively for $x\in \F$. We will implicity assume
+to denote group elements $x\cdot g_1$ and $x\cdot g_2$ respectively for $x\in \F$. We implicity assume
 that all the setup algorithms for the protocols invoke $\bg$ to generate descriptions of groups and fields
-over which the protocol is instantiated. We will use the notation
-$[n]$ to denote the set of integers $\{1,\ldots,n\}$.
+over which the protocol is instantiated. We use $[n]$ to denote the set of integers $\{1,\ldots,n\}$.
 
-\noindent{\bf Security Model}: We describe public-coin interactive protocols, involving a prover and a verifier,
-where both the parties have access to a structured reference string (SRS). The SRS in our protocol consists of
-encodings of monomials of the form $\left\{\gone{x^i}\right\}_{a\leq i\leq b}$, $\left\{\gtwo{x^i}\right\}_{c\leq i\leq d}$
-for $x$ chosen uniformly from $\F$ and $a,b,c,d$ are bounded by some polynomial in $\lambda$. It then follows
-from ~\cite{EPRINT:BowGabMie17} that such an SRS can be generated using a universal and updatable setup requiring
-only one honest participant. In practice, this gives us a far superior security model to the one requiring a fully
-trusted setup. We use $\srs = (\srs_1,\srs_2)$ to denote the structured reference string of the above form. We say
-that the $\srs$ has degree $Q$ if all the elements of $\srs_i$, $i=1,2$ are of the form $[f(x)]_i$ for a
-polynomial $f\in \F_{<Q}[X]$.\smallskip
-
+\noindent{\bf Lagrange Polynomials.}
+\chaya{move to here from sec 6: Lagrange polynomial, vanishing polynomial, roots of unity}
 
 \noindent{\bf Algebraic Group Model}: We analyse our protocols in the Algebraic Group Model (AGM) introduced
 in ~\cite{C:FucKilLos18}. We consider {\em algebraic adversaries} $\Adv$, which in our SRS-based protocol means
@@ -32,14 +23,21 @@ an efficient algorithm satisfying the following:
 	\item For $i\in \{1,2\}$, whenever $\Adv$ outputs an element $A\in \G_i$, it also outputs a vector $\vec{v}$
 	over $\F$ such that $A=\langle \vec{v},\srs_i\rangle$.
 \end{itemize}
-Algebraic group model is a useful framework for obtaining succinct arguments of knowledge (SNARKs) from interactive
-protocols described as {\em polynomial protocols} ~\cite{Gabizon2019PLONKPO}. Informally, the prover's messages in
-a polynomial protocol are low degree polynomials, and the verifier accepts or rejects by checking certain identities
+Algebraic group model is a useful framework for obtaining succinct non-interactive arguments of knowledge (SNARKs) from interactive protocols described as {\em polynomial protocols} ~\cite{Gabizon2019PLONKPO}. Informally, the prover's messages in a polynomial protocol are low degree polynomials, and the verifier accepts or rejects by checking certain identities
 over polynomials output by the prover and possibly public polynomials known to the verifier. A polynomial protocol can
 be compiled into a succinct argument of knowledge by using an extractable polynomial commitment scheme, which allows a
 prover to send commitments to polynomials, and later send evaluation proofs for the same to enable the verifier to probabilistically
-check polynomial identities at random points of $\F$. We refer the reader to ~\cite[Section 4.2]{Gabizon2019PLONKPO} for details
-on polynomial protocols and their compilation to SNARKs in the algebraic group model.
+check polynomial identities at random points of $\F$. We refer the reader to ~\cite[Section 4.2]{Gabizon2019PLONKPO} for details on polynomial protocols and their compilation to SNARKs in the AGM.
+
+\noindent{\bf Security Model}: We describe public-coin interactive protocols, involving a prover and a verifier,
+where both the parties have access to a structured reference string (SRS). The SRS in our protocols consists of
+encodings of monomials of the form $\left\{\gone{x^i}\right\}_{a\leq i\leq b}$, $\left\{\gtwo{x^i}\right\}_{c\leq i\leq d}$
+for $x$ chosen uniformly from $\F$ and $a,b,c,d$ are bounded by some polynomial in $\lambda$. It then follows
+from ~\cite{EPRINT:BowGabMie17} that such an SRS can be generated using a universal and updatable setup requiring
+only one honest participant. In practice, this is a superior security model to the one requiring a fully
+trusted setup. We use $\srs = (\srs_1,\srs_2)$ to denote the structured reference string of the above form. We say
+that the $\srs$ has degree $Q$ if all the elements of $\srs_i$, $i=1,2$ are of the form $[f(x)]_i$ for a
+polynomial $f\in \F_{<Q}[X]$.
 
 \subsection{KZG Commitment Scheme}
 \label{sec:KZG}
@@ -76,7 +74,7 @@ version of $\KZGopen$ is described as follows:
 	 $p(X)$ is divided by $a(X)$.
 	%Note that the polynomials $a(X)$ and $r(X)$ can be computed by the verifier since $\{\alpha_i,v_i\}_{i\in [n]}$ are known and
 	%$a(X)=(X-\alpha_1)\cdots(X-\alpha_n)$ and $r(\alpha_i)=v_i$ for all $i\in [n]$ such that $0\leq \deg(r(X)) \leq n$.
-	\item $\KZGverify$ on input $(\srs,C,\vec{\alpha},\vec{v},\pi)$, outputs $1$ if the following equations holds, and $0$ otherwise.
+	\item $\KZGverify$ on input $(\srs,C,\vec{\alpha},\vec{v},\pi)$, outputs $1$ if the following equations hold, and $0$ otherwise.
 	\begin{align*}
 		e(C-\eltone{r(\tau)}, \elttwo{\tau}) &= e(\pi, \elttwo{a(\tau)})
 	\end{align*}
