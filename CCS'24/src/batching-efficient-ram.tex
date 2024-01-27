@@ -247,7 +247,7 @@ listing in Figure ~\ref{fig:complete-listing}.
     \underline{Precompute $(\vecT, \vecT')$}:
     \begin{itemize}[leftmargin=1em]
         \item $W_1^i=\gtwo{(T(X)-T(\xi^i))/(X-\xi^i)}$, $i\in [N]$,
-        \item $W_1^i'=\gtwo{(T'(X) - T'(\xi^i))/(X-\xi^i)}$, $i\in [N]$.
+        \item ${W_1^i}'=\gtwo{(T'(X) - T'(\xi^i))/(X-\xi^i)}$, $i\in [N]$.
     \end{itemize}
 
     {\bf Common Input}: $\srs$, $c_T, c_T', c_\op, c_a, c_w\in \Gone$.\\
@@ -283,7 +283,7 @@ listing in Figure ~\ref{fig:complete-listing}.
     \begin{enumerate}[leftmargin=1em, label=\arabic*.]
         \item $\prover$ computes $g(X)=P_I(X) + \gamma \ell_I(X) + \gamma^2 Z_I(X)$.
         \item $\prover$ computes $Q(X) = (g(h(X)) - v(X) -\gamma a(X))/Z_\setV(X)$.
-        \item $\prover$ computes: $W = \sum_{i\in [m]} (W_1^i + \chi W_1^i' + \gamma W_2^i + \gamma^2 W_3^i)$.
+        \item $\prover$ computes: $W = \sum_{i\in [m]} (W_1^i + \chi {W_1^i}' + \gamma W_2^i + \gamma^2 W_3^i)$.
         \item $\prover$ sends $W\in \Gtwo$, $c_Q=\gone{Q(X)}$.
         \item $\verifier$ computes $c_g = c_p + \gamma c_l + \gamma^2 c_z$, $C_G = C_T + \gamma\gone{\ell(X)}+\gamma^2\gone{\vpolyN(X)}$.
         \item $\verifier$ checks: $e(C_G - c_g, \gone{1})=e(c_z, W)$.
