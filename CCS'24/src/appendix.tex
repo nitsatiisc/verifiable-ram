@@ -96,6 +96,49 @@ such that the following hold:
 }
 \end{lemma}
 
+\begin{figure}[htbp]
+	\centering
+	\begin{mdframed}
+		{\footnotesize
+			\noindent{\bf Common Input}: Commitments $c_T=(c_a,c_v)$, $c_o=(\bar{c}_\op, \bar{c}_a, \bar{c}_v)$, $c_T'=(c_a', c_v')$
+			and $c_\tr=(c_t, c_\op, c_A, c_V)$ to $T,o,T'$ and $\tr$ respectively. Commitment $\gone{Z}$ to the polynomial
+			$Z(X)=\prod_{i=1}^m (X-\omega^i)$.
+			\begin{enumerate}[leftmargin=2em]
+				\item $\verifier\rightarrow\prover$: Verifier sends $\beta,\gamma\gets \F$.
+				\item $\prover$ computes:
+				\begin{align}\label{eq:poly-constraints}
+					& G_1(X) = a(X) + \beta v(X),\, G_2(X) = \bar{a}(X) + \beta \bar{v}(X) + \beta^2 \bar{\op}(X) \tag{A1} \\
+					& G_3(X) = a'(X) + \beta v'(X),\, G(X) = A(X) + \beta V(X) + \beta^2 \op(X) \tag{A2} \\
+					& H(X) = G_1(X) + \gamma G_2(X) + \gamma^2 G_3(X), \tag{A3} \\
+					& Q(X) = (H(X^3) - G(X) - \gamma G(\omega^m X) - \gamma^2 G(\omega^{2m} X))/Z(X) \tag{A4}
+				\end{align}
+				\item $\prover\rightarrow\verifier$: The prover sends commitment $\gone{Q}$ to $Q(X)$.
+				\item $\verifier\rightarrow\prover$: Sends $s\gets\F$.
+				\item $\prover\rightarrow\verifier$: Sends evaluations $\val{s}{G}=G(s)$, $\val{\omega^m s}{G}=G(\omega^m s)$,
+				$\val{\omega^{2m}s}{G}=G(\omega^{2m} s)$, $\val{s^3}{H}=H(s^3)$, $\val{s}{Q}=Q(s)$ and $\val{s}{Z}=Z(s)$.
+				\item $\verifier\rightarrow\prover$: Sends $r\gets\F$.
+				\item $\prover\rightarrow\verifier$: Sends $\kzg$ proofs:
+				\begin{itemize}[leftmargin=2em]
+					\item $\Pi_G=\kzgprove(\srs,G,(s,\omega^m s, \omega^{2m}s))$.
+					\item $\Pi_H=\kzgprove(\srs,H,s^3)$.
+					\item $\Pi_F=\kzgprove(\srs,F,s)$ where $F(X)=Z(X) + rQ(X)$.
+				\end{itemize}
+				\item $\verifier$ computes: Compute commitments $\gone{G},\gone{H}$ and $\gone{F}$ using homomorphism. It then checks:
+				\begin{itemize}[leftmargin=2em]
+					\item $\kzgverify(\srs,\gone{G},(s,\omega^m s, \omega^{2m}s), (\val{s}{G}, \val{\omega^m s}{G}, \val{\omega^{2m} s}{G}),\Pi_G)$.
+					\item $\kzgverify(\srs,\gone{H}, s^3, \val{s^3}{H},\Pi_H)$.
+					\item $\kzgverify(\srs,\gone{F}, s, \val{s}{Z} + r\val{s}{Q}, \Pi_F)$.
+					\item $\val{s}{Q}\cdot \val{s}{Z} =? \val{s^3}{H}-\val{s}{G}-\gamma \val{\omega^m s}{G}-\gamma^2\val{\omega^{2m}s}{G}$.
+				\end{itemize}
+				\item $\verifier$ outputs: Accept if all the above checks succeeds, otherwise it rejects.
+			\end{enumerate}
+		}
+	\end{mdframed}
+	\vspace*{-5mm}
+	\caption{Protocol: Check relations over polynomial encodings}
+	\label{fig:encoded-relations}
+\end{figure}
+
 \section{Succinct Argument for Verifiable RAM}\label{sec:poly-proto-ram}
 The polynomial encodings in the previous section can be used to polynomial protocol for
 checking the membership in the language $\LRAM{I}{m}{m}$ for $m\in \N$. The polynomial protocol can be subsequently
