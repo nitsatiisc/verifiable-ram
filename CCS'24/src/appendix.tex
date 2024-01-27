@@ -100,10 +100,9 @@ such that the following hold:
 	\centering
 	\begin{mdframed}
 		{\footnotesize
-			\noindent{\bf Common Input}: Commitments $c_t$, $c_{op}$, $c_A$ and $c_V$ to $t,op,A$ and $V$ respectively. Commitment $\gone{\Z_\setH}$ to the polynomial
-			$\Z_\setH(X)=\prod_{i=1}^k (X-\omega^i) = X^k-1$.
+			\noindent{\bf Common Input}: Commitments $c_t$, $c_{op}$, $c_A$ and $c_V$ to $t,op,A$ and $V$ respectively. 
 			\begin{enumerate}[leftmargin=2em]
-				\item $\prover\rightarrow\verifier$: $\prover$ sends $\gone{Z_1}$, $\gone{Z_2}$, $\gone{\delta_T}$, $\gone{\delta_A}$
+				\item $\prover\rightarrow\verifier$: $\prover$ sends $\gone{\Z_\setH}$, $\gone{Z_2}$, $\gone{\delta_T}$, $\gone{\delta_A}$
 				\item $\verifier\rightarrow\prover$: Verifier sends $\gamma\gets \F$.
 				\item $\prover$ computes:
 				\begin{align}
@@ -114,12 +113,12 @@ such that the following hold:
 				\end{align}
 				\item $\prover\rightarrow\verifier$: Sends commitment $\gone{Q_1}$, $\gone{Q_2}$, $\gone{Q_3}$ and $\gone{Q_4}$ to $Q_1(X)$, $Q_2(X)$, $Q_3(X)$ and $Q_4(X)$.
 				\item $\verifier\rightarrow\prover$: Sends $s\gets\F$.
-				\item $\prover\rightarrow\verifier$: Sends evaluations $\val{s}{A}=A(s)$, $\val{\omega s}{A}=A(\omega s)$, $\val{s}{\delta_A} = \delta_A(s)$, $\val{s}{t}=t(s)$, $\val{\omega s}{t}=t(\omega s)$, $\val{s}{\delta_T} = \delta_T(s)$, $\val{s}{\op}=\op(s)$, $\val{s}{V}=V(s)$, $\val{\omega s}{V}=V(\omega s)$, $\val{s}{Q_1}=Q_1(s)$, $\val{s}{Q_2}=Q_2(s)$, $\val{s}{Q_3}=Q_3(s)$, $\val{s}{Q_4}=Q_4(s)$, $\val{s}{Z_1}=Z_1(s)$, $\val{s}{Z_2}=Z_2(s)$, $\val{s}{\Z_\setH}=\Z_\setH(s)$.
+				\item $\prover\rightarrow\verifier$: Sends evaluations $\val{s}{A}=A(s)$, $\val{\omega s}{A}=A(\omega s)$, $\val{s}{\delta_A} = \delta_A(s)$, $\val{s}{t}=t(s)$, $\val{\omega s}{t}=t(\omega s)$, $\val{s}{\delta_T} = \delta_T(s)$, $\val{s}{\op}=\op(s)$, $\val{s}{V}=V(s)$, $\val{\omega s}{V}=V(\omega s)$, $\val{s}{Q_1}=Q_1(s)$, $\val{s}{Q_2}=Q_2(s)$, $\val{s}{Q_3}=Q_3(s)$, $\val{s}{Q_4}=Q_4(s)$, $\val{s}{Z_2}=Z_2(s)$, $\val{s}{\Z_\setH}=\Z_\setH(s)$.
 				\item $\verifier\rightarrow\prover$: Sends $r\gets\F$.
 				\item $\prover\rightarrow\verifier$: Sends $\kzg$ proofs:
 								\begin{itemize}[leftmargin=2em]
 										\item $\Pi_{F_1}=\kzgprove(\srs,F_1,\omega s)$, where $F_1(X) = A(X) + r t(X) + r^2 V(X)$
-										\item $\Pi_{F_2}=\kzgprove(\srs,F_2,s)$ where $F_2(X) = A(X) + r t(X) + r^2 \op(X) + r^4 V(X) + r^5 \delta_A + r^6 \delta_T(X) + r^7 Z_1(X) + r^8 Z_2(X) + r^9 \Z_\setH(X) + r^{10} Q_1(X) + r^{11} Q_2(X) + r^{12} Q_3(X) + r^{13} Q_4(X)$
+										\item $\Pi_{F_2}=\kzgprove(\srs,F_2,s)$ where $F_2(X) = A(X) + r t(X) + r^2 \op(X) + r^4 V(X) + r^5 \delta_A + r^6 \delta_T(X) + r^7 Z_2(X) + r^8 \Z_\setH(X) + r^{9} Q_1(X) + r^{10} Q_2(X) + r^{11} Q_3(X) + r^{12} Q_4(X)$
 									\end{itemize}
 %				\item $\prover\rightarrow\verifier$: Sends $\rangeproof$ proofs:
 %				\begin{itemize}[leftmargin=2em]
@@ -128,7 +127,7 @@ such that the following hold:
 				\item $\verifier$ computes: Compute commitments $\gone{F_1}$ and $\gone{F_2}$ using homomorphism. It then checks:
 								\begin{itemize}[leftmargin=2em]
 									\item $\kzgverify(\srs,\gone{F_1},\omega s, \val{\omega s}{A}+r \val{\omega s}{t} + r^2 \val{\omega s}{V},\Pi_{F_1})$.
-									\item $\kzgverify(\srs,\gone{F_2}, s, \val{s}{A}=A(s) + r \val{s}{t}=t(s) + r^2 \val{s}{\op}=\op(s) + r^4 \val{s}{V}=V(s) + r^5 \val{s}{\delta_A}=\delta_A(s) + r^6 \val{s}{\delta_T}=\delta_T(s) + r^7 \val{s}{Z_1}=Z_1(s) + r^8 \val{s}{Z_2}=Z_2(s) + r^9 \val{s}{\Z_\setH}=\Z_\setH(s) + r^{10} \val{s}{Q_1}=Q_1(s) + r^{11} \val{s}{Q_2}=Q_2(s) + r^{12} \val{s}{Q_3}=Q_3(s) + r^{13} \val{s}{Q_4}=Q_4(s), \Pi_{F_2})$.
+									\item $\kzgverify(\srs,\gone{F_2}, s, \val{s}{A}=A(s) + r \val{s}{t}=t(s) + r^2 \val{s}{\op}=\op(s) + r^4 \val{s}{V}=V(s) + r^5 \val{s}{\delta_A}=\delta_A(s) + r^6 \val{s}{\delta_T}=\delta_T(s) + r^7 \val{s}{Z_2}=Z_2(s) + r^8 \val{s}{\Z_\setH}=\Z_\setH(s) + r^{9} \val{s}{Q_1}=Q_1(s) + r^{10} \val{s}{Q_2}=Q_2(s) + r^{11} \val{s}{Q_3}=Q_3(s) + r^{12} \val{s}{Q_4}=Q_4(s), \Pi_{F_2})$.
 									\item $\val{s}{Q_1}\cdot \val{s}{\Z_\setH} =? \val{s}{Z_2} (\val{\omega s}{A} - \val{s}{A} - \val{s}{\delta_A})$
 									\item  $\val{s}{Q_2}\cdot \val{s}{Z_2} =? (\val{\omega s}{A} - \val{s}{A})$
 									\item $\val{s}{Q_3}\cdot \val{s}{Z_2} =? (\val{\omega s}{t} - \val{s}{t} - \val{s}{\delta_A})$
