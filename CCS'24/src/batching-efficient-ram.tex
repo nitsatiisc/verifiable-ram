@@ -230,7 +230,9 @@ All that remains is to prove is that the operation sequence $\vec{o}$ is consist
 We check this using the argument in Section ~\ref{sec:poly-proto-ram}. Specifically, the prover and the verifier set
 $c_S = (c_a, c_v)$, $c_S'=(c_a, c_v')$ and $c_o = (c_\op, c_a, c_w)$, and execute the argument of knowledge for
 showing $(c_S, c_o, c_S')\in \CLRAM$ (see Definition ~\ref{defn:committed-ram}). We provide the complete protocol
-listing in Figure ~\ref{fig:complete-listing}.
+listing in Figure ~\ref{fig:complete-listing}. The protocol in Figure ~\ref{fig:complete-listing} assumes pre-computed parameters
+for the tables $T$ and $T'$. In the next section, we discuss how to efficiently maintain table-dependent parameters in the setting
+requiring updates to the table.
 
 %%% complete protocol listing %%%
 \begin{figure}[t!]

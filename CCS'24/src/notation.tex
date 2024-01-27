@@ -19,7 +19,7 @@
 \newcommand{\vecind}{\overrightarrow{\ind}}
 \newcommand{\vecop}{\overrightarrow{\op}}
 \newcommand{\vecval}{\overrightarrow{\val}}
-\newcommand{\setind}{\mathcal{I}}
+\newcommand{\setind}{I}
 \newcommand{\ins}{\mathsf{ins}}
 \newcommand{\ind}{\mathsf{ind}}
 \newcommand{\op}{\mathsf{op}}
@@ -30,10 +30,10 @@
 \newcommand{\vecTcache}{\vec{T}_{\mathsf{ch}}}
 \newcommand{\Tbasepoly}[1]{T_{\mathsf{b}}({#1})}
 \newcommand{\Tcachepoly}[1]{T_{\mathsf{ch}}({#1})}
-\newcommand{\Qbasepoly}[1]{Q_{2,\mathsf{b}}({#1})}
-\newcommand{\Qcachepoly}[1]{Q_{2,\mathsf{ch}}({#1})}
-\newcommand{\Qcachepolyone}[1]{Q'_{2,\mathsf{ch}}({#1})}
-\newcommand{\Qcachepolytwo}[1]{Q''_{2,\mathsf{ch}}({#1})}
+\newcommand{\Qbasepoly}[1]{Q_{\mathsf{b}}({#1})}
+\newcommand{\Qcachepoly}[1]{Q_{\mathsf{ch}}({#1})}
+\newcommand{\Qcachepolyone}[1]{Q'_{\mathsf{ch}}({#1})}
+\newcommand{\Qcachepolytwo}[1]{Q''_{\mathsf{ch}}({#1})}
 \newcommand{\Zinv}[1]{(\mathbb{Z}_#1)^{\times}}
 \newcommand{\Zn}{\mathbb{Z}_N}
 \newcommand{\setH}{\mathbb{K}}
@@ -86,6 +86,7 @@
 % group encodings
 \newcommand{\gone}[1]{\ensuremath{\left[{#1}\right]_1}}
 \newcommand{\gtwo}[1]{\ensuremath{\left[{#1}\right]_2}}
+\newcommand{\gany}[1]{\ensuremath{\left[{#1}\right]_g}}
 
 % provers, verifiers, adversaries
 \newcommand{\prover}{\ensuremath{\mathcal{P}}}
@@ -106,6 +107,7 @@
 %group elements and commitments
 \newcommand{\eltone}[1]{[#1]_1}
 \newcommand{\elttwo}[1]{[#1]_2}
+\newcommand{\elany}[1]{[#1]_g}
 \newcommand{\elt}[1]{[\,{#1}\,]}
 \newcommand{\Comone}[1]{\mathsf{Com}_1(#1)}
 \newcommand{\Comtwo}[1]{\mathsf{Com}_2(#1)}

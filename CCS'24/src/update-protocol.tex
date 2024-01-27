@@ -1,21 +1,45 @@
 
+The recent progress and interest in lookup arguments has been stellar, as exemplified by the series of works
+both in uni-variate setting ~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:ZGKMR22,EPRINT:EagFioGab22} and multi-variate
+setting ~\cite{lasso}. However, the excellent online efficiency of current constructions relies on expensive
+$\wt{O}(|T|)$ table-specific  pre-computation for a table $T$, or on tables exhibiting tensor structure as in ~\cite{lasso}.
+This limits their application in settings where such assumptions are not viable, for example when tables model account balances in
+a layer 2 (L2) blockchain network. We make the first attempt in this direction. Our key idea is to extend the utiltiy of pre-computed
+parameters for a table $\vecT$, to proving lookups from tables $\vecT'\neq \vecT$. Essentially, we show that for $\delta=\Delta(\vecT, \vecT')$,
+an argument for $m$ lookups from $\vecT'$ incurs an additional prover overhead of $(m+\delta)\log^2(m+\delta)$. We note that overhead is additive
+in $\delta$ and that too only {\em quasi} linear. Our competitive overhead rests on several innovative applications of algebraic
+algorithms, which are summarised in Section ~\ref{subsec:comp-algebra-app}.
 
-Recall that our lookup protocol in section 5.1 involves certain precomputations by the prover namely $W_1^i, W_2^i, W_3^i$. $W_2^i$ and $W_3^i$ do not depend on the table. However, $W_1^i$ depends on the lookup table and their values will change even if the table changes by a small amount. It is expensive to recompute all the $W_1^i$ for every small change in the table and this will affect the efficiency of our lookup protocol in the long run.\\\\
-In this section, we show how to achieve efficient lookups even when the table is changing frequently, as long as the cumulative change in the table is small. \\
-In particular, we show how the prover can compute $[Q(X)]_2=\gtwo{\frac{T(X)-T_I(X)}{Z_I(X)}}$ without computing all the $W_1^i$(thus minimizing the overhead).\\
-The overhead(as long as the table doesn't change too much) will be much lower than the time needed for the lookup and so is very practical.
+\noindent{\bf Naive approaches are inadequate}: We note that the aforementioned constructions of lookup arguments require encoded quotients
+of the form $\gany{(T(X)-T(\xi^i))/(X-\xi^i)}$ for upto $m$ values of $i$ during the proof generation. While constructions ~\cite{CCS:ZBKMNS22,EPRINT:PosKat22}
+consider quotients encoded in the group $\Gtwo$, the protocol in ~\cite{EPRINT:EagFioGab22} encodes them in $\Gone$. We use a generic $[\,\cdot\,]_g$ to
+account for protocol-specific choices. We also see that even a small change to the table requires one to update all the quotients (the polynomial $T(X)$ is
+common to all quotients). Updating the $|\vecT|$ quotients for each batch is clearly infeasible. One could consider delaying the updation of the quotients, till
+the time they are actually required in a proof, which happens when the corresponding index in the table is involved in lookup. However, each of the $m$ quotients
+is now potentially ``lagging'' by $\delta$ updates, so we would need $\Omega(m\delta)$ group operations to refresh all of them. This gives us multiplicative degradation
+with $\delta$, and is clearly unsustainable for reasonable values of $\delta$. We abandon the idea of computing individual encoded quotients, and instead attempt
+to directly compute the aggregate encoding $\gany{(T(X)-T_I(X))/Z_I(X)}$, which as seen earlier is given by the summation below:
+\begin{equation}\label{eq:encoded-quotient}
+\gany{\frac{T(X)-T_I(X)}{Z_I(X)}} = \sum_{i\in I}\frac{1}{Z_I'(\xi^i)}\gany{\frac{T(X)-T(\xi^i)}{X-\xi^i}}
+\end{equation}
+We now describe our approach.
+%Recall that our lookup protocol in section 5.1 involves certain precomputations by the prover namely $W_1^i, W_2^i, W_3^i$. $W_2^i$ and $W_3^i$ do not depend on the table. However, $W_1^i$ depends on the lookup table and their values will change even if the table changes by a small amount. It is expensive to recompute all the $W_1^i$ for every small change in the table and this will affect the efficiency of our lookup protocol in the long run.\\\\
+%In this section, we show how to achieve efficient lookups even when the table is changing frequently, as long as the cumulative change in the table is small. \\
+%In particular, we show how the prover can compute $[Q(X)]_2=\gtwo{\frac{T(X)-T_I(X)}{Z_I(X)}}$ without computing all the $W_1^i$(thus minimizing the overhead).\\
+%The overhead(as long as the table doesn't change too much) will be much lower than the time needed for the lookup and so is very practical.
 
-\subsection{The idea: Base + Cache approach}
-
-The idea is that we do not compute $W_1^i$ after each change of the table. Instead, this expensive computation will be done periodically for all $i \in [N]$ after say $s \in \mathbb{Z}$ batches.
-Let current table $\vecT$ can be represented as $\vecTbase + \vecTcache$ where the vector
-$\vecTbase$ denotes the base table (with respect to which $W_1^i$ was last computed for all $i \in [N]$) and the vector $\vecTcache$ corresponds to the changes
-that have happened to the base table since the last rebasing (rebasing denotes computation of all $W_1^i$)\\\\
-Thus, there is an \textbf{online} phase which happens after every batch (which includes computation of $[Q(X)]_2$ among other things) and an \textbf{offline} phase which consists of the rebasing(this is all prover computations) \\\\
-
-
-
-
+\subsection{Base + Cache approach}\label{subsec:base-cache}
+The key idea we employ is to express the current table $\vecT\in \F^N$ as $\vecTbase + \vecTcache$, where $\vecTbase$ is the table for which we assume that
+the encoded quotients are available (via the $O(N\log N)$ computation), and $\vecTcache$ captures the changes to the table since. We will periodically update (say
+after $s$ batch updates) $\vecTbase$ to current table state, and re-compute all the quotients (we call it the {\em offline} phase).
+We will revisit the question on choosing $s$ optimally later. Let $I\subseteq [N]$ denote the set of indices in the current batch of $m$ lookups. The {\em online}
+phase of our proof generation involves computing the sum in Equation \eqref{eq:encoded-quotient} for the table $\vecT$.
+%that we do not compute $W_1^i$ after each change of the table. Instead, this expensive computation will be done periodically for all $i \in [N]$ after say $s \in \mathbb{Z}$ batches.
+%Let current table $\vecT$ can be represented as $\vecTbase + \vecTcache$ where the vector
+%$\vecTbase$ denotes the base table (with respect to which $W_1^i$ was last computed for all $i \in [N]$) and the vector $\vecTcache$ corresponds to the changes
+%that have happened to the base table since the last rebasing (rebasing denotes computation of all $W_1^i$)\\\\
+%Thus, there is an \textbf{online} phase which happens after every batch (which includes computation of $[Q(X)]_2$ among other things) and an \textbf{offline} phase which consists of the rebasing(this is all prover computations) \\\\
+\begin{comment}
 \noindent{\bf Offline Phase}: This computation is executed once after every $s$ rounds. Here, the prover updates the base vector $\vecTbase$ with the changes in the cache vector
 $\vecTcache$ by setting $\vecTbase := \vecTbase + \vecTcache$ and simultaneously clears the cache vector by setting
 $\vecTcache = 0$.\\
@@ -39,121 +63,142 @@ The online phase happens for every batch because the purpose of this phase is to
 
     \item In addition, the other things (apart from $[Q(X)]_2$) needed for the current round of the lookup protocol are also computed by the prover as described in the lookup protocol in section 5.1 as it is just naive computation
 
-
-
 \end{enumerate}
-
 \subsection{Computation of $[Q(X)]_2$}
 Clearly, it suffices to efficiently compute $[Q(X)]_2$ where $[Q(X)]_2=\gtwo{\frac{T(X)-T_I(X)}{Z_I(X)}}$. We have the information of $[\Tbasepoly{X}-\Tbasepoly{\xi^i}/(X-\xi^i)]_2$. For this, we have the following lemma:
-
-
-\begin{lemma}\label{lem:approx-setup}
+\end{comment}
+The following Theorem determines the efficiency of the online phase of our prover.
+\begin{theorem}\label{thm:approx-setup}
 Let $N,\xi$ be as defined previously. Suppose we are given
-$\kzg$ proofs $\{W_i\}_{i=1}^N$ with $W_i=\gtwo{\Tbasepoly{X} - \Tbasepoly{\xi^i}/(X-\xi^i)}$ and where
+$\kzg$ proofs $\{W_i\}_{i=1}^N$ with $W_i=\gtwo{\Tbasepoly{X} - \Tbasepoly{\xi^i}/(X-\xi^i)}$, where
 $\Tbasepoly{X}=\enc{T_{\mathsf{b}}}{\setN}$ encodes a vector $\vecTbase\in \F^N$.
-Let $I \subset [N]$.
-Then,
-there exists an algorithm to compute $\kzg$ multi-opening proof
-$[Q(X)]_2=\gtwo{(T(X) - T_I(X)/Z_I(X)}$ for encoding $T(X)=\enc{T}{\setN}$ of vector $\vecT\in \F^N$ using $O((\delta + |I|) \log^2 (\delta + |I|))$ $\F$-operations and $O(\delta + |I|)$ $\Gtwo$-operations.
-Here, $\delta$ denotes the hamming distance
+Let $I \subset [N]$, $\setN_I=\{\xi^i:i\in I\}$, $Z_I(X)$ denote the vanishing polynomial of $\setN_I$ and
+$T_I(X)$ be the restriction of polynomial $T(X)$ on $\setN_I$.
+Then, there exists an algorithm to compute $\kzg$ multi-opening proof
+$\gany{Q(X)}=\gany{(T(X) - T_I(X)/Z_I(X)}$ for encoding $T(X)=\enc{T}{\setN}$ of vector $\vecT\in \F^N$ using $O((\delta + |I|) \log^2 (\delta + |I|))$ $\F$-operations
+and $O(\delta + |I|)$ $\mathbb{G}$-operations. Here, $\delta$ denotes the hamming distance
 between vectors $\vecTbase$ and $\vecT$.
-\end{lemma}
-
+\end{theorem}
 \begin{proof}
-    We know that $\vecT=\vecTbase+\vecTcache$ and that $T(X)=\Tbasepoly{X}+\Tcachepoly{X}$\\
+    Let $\vecT=\vecTbase+\vecTcache$ and thus $T(X)=\Tbasepoly{X}+\Tcachepoly{X}$.
+    Define $K=I\cup \{j\in [N]: \vecTcache[\,j\,]\neq 0\}$ as a set which captures the indices where the current table $\vecT$ differs from the base $\vecTbase$,
+    where we explicitly also include the lookup indices $I$ in $K$. For $j\in K$, let $\vecTcache[j]=\Delta t_j$. Then $\Tcachepoly{X}=\sum_{j\in K}\Delta t_j\mu_j(X)$.
+    %By definition of $K$, $|K|\leq \delta +|I|$. So, we need to bound $\Gtwo$ operations by $O(|K|)$ and field operations by $O(|K| \log^2|K|)$\\
+    %First of all note that:
+    We write the quotient $Q(X)$ as:
+        {\small
+    \begin{equation*}
+    \begin{aligned}
+    Q(X) = \sum_{i\in \setind}\frac{1}{z_I'(\xi^i)}\left(\frac{\Tbasepoly{X} - \Tbasepoly{\xi^i}}{X-\xi^i}\right)
+     + \sum_{i\in \setind}\frac{1}{z_I'(\xi^i)}\left(\frac{\Tcachepoly{X} - \Tcachepoly{\xi^i}}{X-\xi^i}\right)
+    \end{aligned}
+    %\label{eq:Q2-upd}
+    \end{equation*}
+    }
 
-    Let $K \subset [N]$ be a set which contains $I$ and all those indices $j$ for which $\vecTcache[j] \neq 0$. For these $j$, let $\vecTcache[j]=\Delta t_j$. Then $\Tcachepoly{X}=\sum_{j\in K}\Delta t_j\mu_j(X)$.\\\\
-    By definition of $K$, $|K|\leq \delta +|I|$. So, we need to bound $\Gtwo$ operations by $O(|K|)$ and field operations by $O(|K| \log^2|K|)$\\
-    First of all note that:
-    \begin{align}\label{eq:Q2-upd}
-    Q_2(X) &= \sum_{i\in \setind}\frac{1}{z_I'(\xi^i)}\left(\frac{\Tbasepoly{X} - \Tbasepoly{\xi^i}}{X-\xi^i}\right)
-    + \sum_{i\in \setind}\frac{1}{z_I'(\xi^i)}\left(\frac{\Tcachepoly{X} - \Tcachepoly{\xi^i}}{X-\xi^i}\right)
-    \end{align}
-
-    From the above we can write $\elttwo{Q_2(x)}=\gtwo{\Qbasepoly{x}}+\gtwo{\Qcachepoly{x}}$ where
+    From above, we have $\gany{Q(x)}=\gany{\Qbasepoly{x}}+\gany{\Qcachepoly{x}}$ where
     \begin{gather*}
-        \Qbasepoly{X}=\sum_{i\in \setind}(z_I'(\xi^i))^{-1} (\Tbasepoly{X}-\Tbasepoly{\xi^i})/(X-\xi^i) \\
-        \Qcachepoly{X}=\sum_{i\in \setind}(z_I'(\xi^i))^{-1} (\Tcachepoly{X}-\Tcachepoly{\xi^i})/(X-\xi^i)
+        \Qbasepoly{X}=\sum_{i\in \setind}(Z_I'(\xi^i))^{-1} (\Tbasepoly{X}-\Tbasepoly{\xi^i})/(X-\xi^i) \\
+        \Qcachepoly{X}=\sum_{i\in \setind}(Z_I'(\xi^i))^{-1} (\Tcachepoly{X}-\Tcachepoly{\xi^i})/(X-\xi^i)
     \end{gather*}
     We can compute
     $\elttwo{\Qbasepoly{X}}$ from the pre-computed KZG openings of $\Tbasepoly{X}$ at points $\xi^i,i\in I$ using $O(|I|)$ group operations and
-    $O(|I|\log^2 |I|)$ field operations(as is done in Caulk/Caulk+).\\\\
-
-    \textbf{Thus, it suffices to describe the computation for $\elttwo{\Qcachepoly{X}}$. }\\
-    Using
-    $\Tcachepoly{X}=\sum_{j\in K}\Delta t_j\mu_j(X)$ and defining constants $c_i=(1/z_I'(\xi^i))$ for $i\in I$,
-    we write $\Qcachepoly{X}$ as:
+    $O(|I|\log^2 |I|)$ field operations. Therefore, it suffices to compute $\gany{\Qcachepoly{X}}$ efficiently.
+    %\textbf{Thus, it suffices to describe the computation for $\elttwo{\Qcachepoly{X}}$. }\\
+    Using $\Tcachepoly{X}=\sum_{j\in K}\Delta t_j\mu_j(X)$ and setting $c_i=(1/z_I'(\xi^i))$ for $i\in I$,
+    we write $\Qcachepoly{X}$ as linear combination of table-independent polynomials:
     \begin{align*}
         \Qcachepoly{X} &= \sum_{i\in \setind} c_i\sum_{j\in K} \Delta t_j\frac{\mu_j(X)-\mu_j(\xi^i)}{X-\xi^i} \\
         &= \sum_{i\in \setind} c_i\Delta t_i\frac{\mu_i(X) - 1}{X-\xi^i} + \sum_{i\in \setind}\sum_{j\in K\setminus\{i\}}c_i\Delta t_j\frac{\mu_j(X)}{X-\xi^i}
     \end{align*}
-    Now, we can write $\elttwo{\Qcachepoly{X}}=\elttwo{\Qcachepolyone{X}} + \elttwo{\Qcachepolytwo{X}}$ where:
+    Now, we can write $\gany{\Qcachepoly{X}}=\elany{\Qcachepolyone{X}} + \elany{\Qcachepolytwo{X}}$ where:
+        {\small
     \begin{gather*}
-        \Qcachepolyone{X}=\sum_{i\in \setind}c_i\Delta t_i\frac{\mu_i(X)-1}{X-\xi^i} \\
+        \Qcachepolyone{X}=\sum_{i\in \setind}c_i\Delta t_i\frac{\mu_i(X)-1}{X-\xi^i},\,
         \Qcachepolytwo{X}=\sum_{i\in \setind}\sum_{j\in K\setminus \{i\}} c_i\Delta t_j\frac{\mu_j(X)}{X-\xi^i}
     \end{gather*}
-
-    The term $\elttwo{\Qcachepolyone{X}}$ can be computed using $O(I)$ group operations by pre-computing the
-    \textsf{KZG} openings of polynomials $\mu_i(X)$ at $\xi^i$ for $i\in [N]$. That is by precomputing $[\frac{\mu_i(X)-1}{X-\xi^i}]_2$. This requires just $N$ more precomputations and can be done along with the other precomputations which are done in the lookup protocol\\
-
-    \textbf{Thus, it suffices to describe the computation for $\elttwo{\Qcachepolytwo{X}}$}:
+    }
+    The term $\elttwo{\Qcachepolyone{X}}$ can be computed using $O(|I|)$ group operations by augmenting the setup with pre-computed
+    $\kzg$ opening proofs of polynomials $\mu_i(X)$ at $\xi^i$ for $i\in [N]$. This adds $O(N)$ to the setup parameters, while the computation
+    can be done in $O(N\log N)$ time with methods similar to existing pre-computed parameters. This eventually leaves us with $\elany{\Qcachepolytwo{X}}$.
+    %That is by precomputing $[\frac{\mu_i(X)-1}{X-\xi^i}]_2$. This requires just $N$ more precomputations and can be done along with the other precomputations which are done in the lookup protocol\\
+    Next, we synthesize the polynomial $\Qcachepolytwo{X}$ in a form that reduces group operations required to compute its encoding.
+    %\textbf{Thus, it suffices to describe the computation for $\elttwo{\Qcachepolytwo{X}}$}:
     \begin{align}\label{eq:Qcachepoly2}
-    \Qcachepolytwo{X} &= \sum_{i\in \setind}c_i\sum_{j\in K\setminus \{i\}} \Delta t_j\mu_j(X)/(X-\xi^i) \nonumber \\
-    &= \sum_{i\in\setind}c_i\sum_{j\in K\setminus \{i\}}\frac{\Delta t_j}{Z_{\nroots}'(\xi^j)} \frac{Z_{\nroots}(X)}{(X-\xi^i)(X-\xi^j)} \nonumber \\
-    \intertext{This used definition of $\mu_j(X)$}
-    \intertext{ Now, using $Z_\nroots'(\xi^j)=N\xi^{-j}$ and partial fraction decomposition}
-    &\Qcachepolytwo{X}= N^{-1}\sum_{i\in\setind}c_i\sum_{j\in K\setminus \{i\}}\frac{\xi^j\Delta t_j}{\xi^i-\xi^j}
+    &\Qcachepolytwo{X} = \sum_{i\in \setind}c_i\sum_{j\in K\setminus \{i\}} \Delta t_j\mu_j(X)/(X-\xi^i) \nonumber \\
+    &\quad = \sum_{i\in\setind}c_i\sum_{j\in K\setminus \{i\}}\frac{\Delta t_j}{Z_{\nroots}'(\xi^j)} \frac{Z_{\nroots}(X)}{(X-\xi^i)(X-\xi^j)} \nonumber \\
+    %\intertext{Above, we expanded $\mu_j(X)$. Now using $Z_\nroots'(\xi^j)=N\xi^{-j}$ and using partial fractions}
+    &\quad = N^{-1}\sum_{i\in\setind}c_i\sum_{j\in K\setminus \{i\}}\frac{\xi^j\Delta t_j}{\xi^i-\xi^j}
     \left(\frac{Z_\nroots(X)}{X-\xi^i} - \frac{Z_\nroots(X)}{X-\xi^j}\right) \nonumber \\
-    &\Qcachepolytwo{X}= N^{-1}\sum_{i\in\setind}\left(c_i\cdot \sum_{j\in K\setminus \{i\}} \frac{\xi^j\Delta t_j}{\xi^i-\xi^j}\right)\frac{Z_\nroots(X)}{X-\xi^i} \nonumber \\
+    &\quad = N^{-1}\sum_{i\in\setind}\left(c_i\cdot \sum_{j\in K\setminus \{i\}} \frac{\xi^j\Delta t_j}{\xi^i-\xi^j}\right)\frac{Z_\nroots(X)}{X-\xi^i} \nonumber \\
     &\qquad + \sum_{j\in K}\left(\xi^j\Delta t_j\cdot \sum_{i\in \setind\setminus \{j\}}\frac{c_i}{\xi^j-\xi^i}\right)\frac{Z_{\nroots}(X)}{X-\xi^j}
     \end{align}
-    In this last equality, the first term is just the first term of the distributive property in finite fields.\\
-    The second term is just the second term of the distributive property in finite fields except that the order of the sums is reversed. This follows from the following fact \\
-
-    \begin{fact}
-        $\sum_{i \in I} \sum_{j \in K \setminus \{i\}} f(i,j)=\sum_{j \in K} \sum_{i \in I \setminus \{j\}} f(i,j) $
-    \end{fact}
-
-    In the above equation \eqref{eq:Qcachepoly2}, let us define:
-    \begin{gather*}
-        a_i = \sum_{j\in K\setminus \{i\}}\frac{\xi^j\Delta t_j}{\xi^i-\xi^j}, \text{ for } i\in \setind \\
-        b_j=  \sum_{i\in \setind\setminus \{j\}}\frac{c_i}{\xi^j - \xi^i}, \text{ for } j\in K \\
-        W_3^i(X) = \frac{Z_\nroots(X)}{X-\xi^i}, \text{ for } i\in [N]
-    \end{gather*}
-
-
-    Then, we have:
+    In the first step, we substituted $\mu_j(X)$, while in the final step we re-arranged the summation to accumulate the scalar factor for
+    each distinct polynomial of the form $\vpolyN(X)/(X-\xi^i)$. Define scalars $a_i$, $i\in I$ and $b_j$, $j\in K$ as below:
+    %this last equality, the first term is just the first term of the distributive property in finite fields.\\
+    %The second term is just the second term of the distributive property in finite fields except that the order of the sums is reversed. This follows from the following fact \\
+    %\begin{fact}
+    %    $\sum_{i \in I} \sum_{j \in K \setminus \{i\}} f(i,j)=\sum_{j \in K} \sum_{i \in I \setminus \{j\}} f(i,j) $
+    %\end{fact}
+    %In the above equation \eqref{eq:Qcachepoly2}, let us define:
+    \begin{gather}\label{eq:scalars}
+        a_i = \sum_{j\in K\setminus \{i\}}\frac{\xi^j\Delta t_j}{\xi^i-\xi^j}, i\in \setind\quad
+        b_j=  \sum_{i\in \setind\setminus \{j\}}\frac{c_i}{\xi^j - \xi^i}, j\in K
+        %W_3^i(X) = \frac{Z_\nroots(X)}{X-\xi^i}, \text{ for } i\in [N]
+    \end{gather}
+    Now, recalling that
+    $W_3^j=\gany{\vpolyN(X)/(X-\xi^i)}$, we see that $\elany{\Qcachepolytwo{X}}$ can be written as linear combination of $O(|K|+|I|)$ group elements.
     \begin{equation}\label{eq:Qcachepoly2commit}
-    \elttwo{\Qcachepolytwo{X}} = N^{-1}\left(\sum_{i\in\setind}c_ia_i\elttwo{W_3^i(X)} + \sum_{j\in K}\xi^j \Delta t_j b_j \elttwo{W_3^j(X)}\right)
+    \elttwo{\Qcachepolytwo{X}} = N^{-1}\left(\sum_{i\in\setind}(c_ia_i)\cdot W_3^i + \sum_{j\in K}(\xi^j \Delta t_j b_j)\cdot W_3^j\right)
     \end{equation}
+    Now $c_i=(z_I(\xi^i))^{-1}$ for all $i \in \setind$ can be determined in $O(|I|log^2 |I|)$ field operations by evaluating $Z_{\setind}'(X)$ on
+    $H_{\setind}$. So, given $\{a_i\}_{i\in I}, \{b_j\}_{j\in K}$, $\elttwo{\Qcachepolytwo{x}}$ can be computed in $O(|\setind|+|K|)$ group operations.
+    While we have diligently reduced the group operations, we still seem to need $O(|I||K|)=O(m\delta)$ field operations. We clearly need better than
+    naive way of computing the scalars in \eqref{eq:scalars} to obtain additive overhead in $\delta$. This is what we consider next.
+    Routine calculation shows that we can write $a_i$ as:
+    \begin{equation*}
+        a_i = -\Delta T + \Delta t_i + \xi^i\sum_{j\in K\setminus\{i\}}\frac{\Delta t_j}{\xi^i-\xi^j}, i\in I
+    \end{equation*}
+    where in the above, we have $\Delta T=\sum_{j\in K}\Delta t_j$.
+    %a_i = -\sum_{j\in K\setminus \{i\}}\Delta t_j + \xi^i\sum_{j\in K\setminus \{i\}}\frac{\Delta t_j}{\xi^i-\xi^j} $$
+    %This is because:
+    %$$a_i+\sum_{j\in K\setminus \{i\}}\Delta t_j= \sum_{j \in K \setminus \{i\}}\frac{\xi^j\Delta t_j}{\xi^i-\xi^j}+\Delta t_j$$
+    %$$=\sum_{j \in K \setminus \{i\}}\frac{\xi^i\Delta t_j}{\xi^i-\xi^j} = \xi^i\sum_{j\in K\setminus \{i\}}\frac{\Delta t_j}{\xi^i-\xi^j}$$
+    %Now, define $\Delta T=\sum_{j\in K}\Delta t_j$\\
 
-    $c_i$ for all $i \in \setind$ are determined easily by evaluating $Z_{\setind}'(X)$ on $H_{\setind}$ and $[W_3^i(X)]_2$ for all $i \in [N]$ have been computed in the lookup protocol
-
-    So, given $\{a_i\}_{i\in I}, \{b_j\}_{j\in K}$, $\elttwo{\Qcachepolytwo{x}}$ can be computed in $O(|\setind|+|K|)\, \Gtwo$ operations.\\
-    But $|\setind|+|K|<2|K|$. So, $\Gtwo$ operations are $O(|K|)$ as required.\\\\
-
-    It remains to bound the number of field operations needed to compute the scalar multipliers $a_i, i \in \setind$ and $b_j, j \in K$. \\
-
-    Let us consider $a_i$ first:\\
-    Note that:
-
-    $$ a_i = -\sum_{j\in K\setminus \{i\}}\Delta t_j + \xi^i\sum_{j\in K\setminus \{i\}}\frac{\Delta t_j}{\xi^i-\xi^j} $$
-    This is because:
-    $$a_i+\sum_{j\in K\setminus \{i\}}\Delta t_j= \sum_{j \in K \setminus \{i\}}\frac{\xi^j\Delta t_j}{\xi^i-\xi^j}+\Delta t_j$$
-    $$=\sum_{j \in K \setminus \{i\}}\frac{\xi^i\Delta t_j}{\xi^i-\xi^j} = \xi^i\sum_{j\in K\setminus \{i\}}\frac{\Delta t_j}{\xi^i-\xi^j}$$
-    Now, define $\Delta T=\sum_{j\in K}\Delta t_j$\\
-
-    Here computing $\Delta T$ is a one time computation (per batch). It can be computed from the knowledge of $T_{\text{ch}}$ in the online phase.
-    We have:
-    $$ a_i = -\Delta T + \Delta t_i + \xi^i\sum_{j\in K\setminus\{i\}}\frac{\Delta t_j}{\xi^i-\xi^j} $$
-    Suppose we get $\sum_{j\in K\setminus\{i\}}\frac{\Delta t_j}{\xi^i-\xi_j}$ for all $i \in I$ efficiently. Then $a_i$ for all $i \in I$ can be obtained in $O(|I|)$ field operations. \\
-    \textbf{Thus, to get $a_i$ for all $i \in I$ it suffices to describe the computation of $e_i=\sum_{j\in K\setminus\{i\}}\frac{\Delta t_j}{\xi^i-\xi^j}$ for all $i \in I$}\\\\
-    Our requirement is now to bound the number of field operations for $e_i$ and for $b_j$. For this, we invoke the following lemma with the proof in the appendix.
-
-    \begin{lemma}\label{lem:sum computation}
-    Let $e_i$ for all $i \in \setind$ and $b_j$ for all $j \in K$ be as described above.
+    %Here computing $\Delta T$ is a one time computation (per batch). It can be computed from the knowledge of $T_{\text{ch}}$ in the online phase.
+    %We have:
+    %$$  $$
+    %Suppose we get $\sum_{j\in K\setminus\{i\}}\frac{\Delta t_j}{\xi^i-\xi_j}$ for all $i \in I$ efficiently. Then $a_i$ for all $i \in I$ can be obtained in $O(|I|)$ field operations. \\
+    %\textbf{Thus, to get $a_i$ for all $i \in I$ it suffices to describe the computation of $e_i=\sum_{j\in K\setminus\{i\}}\frac{\Delta t_j}{\xi^i-\xi^j}$ for all $i \in I$}\\\\
+    Above implies that to compute $a_i, i\in I$ efficiently, it is sufficient to efficiently
+    compute $e_i=\sum_{j\in K\setminus\{i\}}\frac{\Delta t_j}{\xi^i-\xi^j}$ for all $i \in I$. Our next lemma claims that
+    such {\em reciprocal sums} can be computed efficiently. The computation of $b_j,j\in K$ can also be reduced a similar computation.
+    We defer this reduction and the full proof of Lemma ~\ref{lem:sum-computation} to the Appendix, but illustrate the key ideas in the proof.
+    %Our requirement is now to bound the number of field operations for $e_i$ and for $b_j$. For this, we invoke the following lemma with the proof in the appendix.
+    \begin{lemma}\label{lem:sum-computation}
+    Let $I\subset K\subset [N]$ and let $e_i$ for all $i \in \setind$ and $b_j$ for all $j \in K$ be as described above.
     Then, $e_i$ for all $i \in I$ and $b_j$ for all $j \in K$ can be computed in $O(|K|\log^2|K|)\, \mathbb{F}$ operations
     \end{lemma}
+    \begin{proof}[Proof-Sketch]
+        First, we mention that the special case of the lemma when $\Delta t_j=1$ for all $j\in K$ admits an efficient computation due to the following identity
+        proved in Lemma ~\ref{lem:sumtoder}.
+        \begin{equation*}
+            \frac{Z_K''(\xi^i)}{Z_K'(\xi^i)} = 2\sum_{j\in K\setminus \{i\}}\frac{1}{\xi^i-\xi^j}
+        \end{equation*}
+        for $Z_K(X)=\prod_{i\in K}(X-\xi^i)$. The polynomial $Z_K$ can be computed in $O(|K|\log^2|K|)$ and subsequent evaluations of its first two
+        derivatives can also be evaluated on the set $\{\xi^i: i\in I\}$ with the same complexity. However, to deal with arbitrary values of $\Delta t_j$ we
+        need more ingenuity. We will {\em imagine} $\Delta t_j$ to be $p(\xi^j)$ for some polynomial $p(X)$. Moreover, we demand that $p(\xi^j)=0$ for $j\not\in K$.
+        We will not compute such a polynomial $p$, as it has degree $O(N)$, but view it as an ``oracle'' which we can hopefully query at the points we need.
+        Then it can be seen that $e_i=g_i(\xi^i) - r_i(\xi^i)$ for rational functions $g_i(X)$ and $r_i(X)$ defined by:
+        \begin{align}\label{eq:rat-fun-f}
+        g_i(X) &=\sum_{j\in [N]\setminus i}\frac{p(X)}{X-\xi^j} \nonumber \\
+        r_i(X) &=\sum_{j\in [N]\setminus i} \frac{p(X)-p(\xi^j)}{X-\xi^j}
+        \end{align}
+        Now, $g_i(\xi^i)$ for $i\in I$ turns out to be (using the special case above):
+        $$p(\xi^i)\sum_{j\in K\setminus \{i\}} 1/(\xi^i-\xi^j)=\Delta t_i (Z_K''(\xi^i)/Z_K'(\xi^i))/2$$
+
+    \end{proof}
 
     From the lemma \ref{lem:sum computation}, we have shown that the field operations needed to get $e_i$ and $b_j$ and thus $\elttwo{\Qcachepolytwo{X}}$ is $O(|K|\log^2|K|)$. \\
 
