@@ -10,16 +10,16 @@ a sequence of $m$ operations which updates $\vec{T}$ to $\vec{T}'$. Let $\vec{a}
 of RAM indices referenced by the operations in $\vec{o}$, i.e, $a_i$ is the index referenced by $i^{th}$ operation.
 To prove the transformation of $\vec{T}$ to $\vec{T}'$ via operation sequence $\vec{o}$, we proceed as follows:
 \begin{itemize}[leftmargin=2em, label=-]
-\item We isolate sub-tables $S=(\vec{a},\vec{v})$ and $S'=(\vec{a},\vec{a'})$ of $T$ and $T'$ consisting of
-rows corresponding to indices in $\vec{a}$. This requires proving $\vec{v}=\vecT[\vec{a}]$ and $\vec{v'}=
-\vecT'[\vec{a}]$, which we show using {\em committed index lookup} discussed in Section ~\ref{subsec:committed-index-lookup}.
+    \item We isolate sub-tables $S=(\vec{a},\vec{v})$ and $S'=(\vec{a},\vec{a'})$ of $T$ and $T'$ consisting of
+    rows corresponding to indices in $\vec{a}$. This requires proving $\vec{v}=\vecT[\vec{a}]$ and $\vec{v'}=
+    \vecT'[\vec{a}]$, which we show using {\em committed index lookup} discussed in Section ~\ref{subsec:committed-index-lookup}.
 
-\item On the isolated sub-table $S$ and $S'$ of size $m$, we use the standard memory checking arguments (c.f. argument
-presented in Section \ref{sec:poly-proto-ram-app}) to prove that sequence $\vec{o}$ correctly updates $S$ to $S'$ with
-prover complexity of $\wt{O}(m)$.
+    \item On the isolated sub-table $S$ and $S'$ of size $m$, we use the standard memory checking arguments (c.f. argument
+    presented in Section \ref{sec:poly-proto-ram-app}) to prove that sequence $\vec{o}$ correctly updates $S$ to $S'$ with
+    prover complexity of $\wt{O}(m)$.
 
-\item Finally, we show that the RAMs $T$ and $T'$ are identical outside indices in $\vec{a}$. We call them $\vec{a}$-identical
-and describe the protocol for proving the same in Section ~\ref{subsec:proximity-ram}.
+    \item Finally, we show that the RAMs $T$ and $T'$ are identical outside indices in $\vec{a}$. We call them $\vec{a}$-identical
+    and describe the protocol for proving the same in Section ~\ref{subsec:proximity-ram}.
 \end{itemize}
 
 \begin{figure}[htbp]
@@ -70,12 +70,12 @@ $h(\nu^i)=\xi^{a(\nu^i)}$. To show that polynomial $h$ correctly ``exponentiates
 inverting polynomial $\ell(X)=\sum_{i=1}^N i\mu_i(X)$ which behaves like ``log'' over $\setN$ by evaluating to $i$ on $\xi^i$. Now, we see
 that all constraints are encoded as polynomial identities below:
 \begin{equation}
-\begin{aligned}
-\ell(h(X)) &= a(X) \quad \text{mod } Z_{\setV}\\  % & \quad\text{ encodes } & \quad \forall i\in [m]:& h(\nu^i) = \xi^{a(\nu^i)}  \\
-T(h(X)) &= v(X) \quad \text{mod } Z_\setV \\ % \quad\text{ encodes } & \quad \forall i\in [m]:& v_i = \vec{t}[a_i] \\
-Z_{\setN}(h(X)) &= 0 \qquad \text{mod } Z_\setV  %&\quad\text{ encodes } & \quad \forall i \in [m]:& h(\nu^i)\in \setN
-\end{aligned}
-\label{eq:comm-index-lookup}
+    \begin{aligned}
+        \ell(h(X)) &= a(X) \quad \text{mod } Z_{\setV}\\  % & \quad\text{ encodes } & \quad \forall i\in [m]:& h(\nu^i) = \xi^{a(\nu^i)}  \\
+        T(h(X)) &= v(X) \quad \text{mod } Z_\setV \\ % \quad\text{ encodes } & \quad \forall i\in [m]:& v_i = \vec{t}[a_i] \\
+        Z_{\setN}(h(X)) &= 0 \qquad \text{mod } Z_\setV  %&\quad\text{ encodes } & \quad \forall i \in [m]:& h(\nu^i)\in \setN
+    \end{aligned}
+    \label{eq:comm-index-lookup}
 \end{equation}
 The last polynomial identity ensures that evaluations of $h$ on $\setV$ lie in $\setN$ (the set of roots of $\vpolyN$). Since the polynomial $\ell$ is one-one
 over $\setN$, the first equation implies $h(\nu^i)=\xi^{a_i}$ for all $i\in [m]$. The desired relation $v_i=T_{a_i}$ now follows from the second identity.
@@ -85,12 +85,12 @@ $\setN_I=\{{h(\nu^i)}: i\in I\}=\{\xi^{a_i}:i\in I\}\subseteq \setN$, where $I=\
 commits to the polynomials $Z_I(X)=\prod_{i\in I}(X-\xi^i)$, $h(X)$ and low degree ($<m$) restrictions $T_I, \ell_I$ of $T$ and $\ell$
 on the $\setN_I$ respectively. The polynomial protocol then checks the following:
 \begin{equation}
-\begin{alignedat}{3}
-T(X) - T_I(X) &= 0 \quad \text{ mod } Z_I ,&\quad& T_I(h(X)) &= v(X) \quad \text{ mod } Z_{\setV} \\
-\ell(X) - \ell_I(X) &= 0 \quad \text{ mod } Z_I ,&\quad& \ell_I(h(X)) &= a(X) \quad \text{ mod } Z_{\setV} \\
-Z_{\setN}(X) &= 0 \quad \text{ mod } Z_I ,&\quad& Z_I(h(X)) &= 0 \quad \text{ mod } Z_{\setV}
-\end{alignedat}
-\label{eq:poly-comm-index}
+    \begin{alignedat}{3}
+        T(X) - T_I(X) &= 0 \quad \text{ mod } Z_I ,&\quad& T_I(h(X)) &= v(X) \quad \text{ mod } Z_{\setV} \\
+        \ell(X) - \ell_I(X) &= 0 \quad \text{ mod } Z_I ,&\quad& \ell_I(h(X)) &= a(X) \quad \text{ mod } Z_{\setV} \\
+        Z_{\setN}(X) &= 0 \quad \text{ mod } Z_I ,&\quad& Z_I(h(X)) &= 0 \quad \text{ mod } Z_{\setV}
+    \end{alignedat}
+    \label{eq:poly-comm-index}
 \end{equation}
 It must be noted that the above identities imply the earlier polynomial identities in \eqref{eq:comm-index-lookup}. This is so because evaluations
 of $h$ on $\setV$ are roots of $Z_I$, which implies $T_I(h(\nu^i))=T(h(\nu^i))$, $\ell_I(h(\nu^i))=\ell(h(\nu^i))$ and $\vpolyN(h(\nu^i))=0$ over $\setV$.
@@ -98,7 +98,7 @@ While the identities on the left still involve a degree $N$ polynomial, we can u
 identity at the point $\tau$ encoded in the $\srs$. For example, we can evaluate the encoded quotient $\gtwo{Q(X)} =$
 $\gtwo{\frac{(T(X) - T_I(X)}{Z_I(X)}}$ using the relation:
 \begin{equation*}
-\gtwo{\frac{T(X)-T_I(X)}{Z_I(X)}} = \sum_{i\in I}\frac{1}{Z_I'(\xi^i)}\gtwo{\frac{T(X)-t_i}{X-\xi^i}}
+    \gtwo{\frac{T(X)-T_I(X)}{Z_I(X)}} = \sum_{i\in I}\frac{1}{Z_I'(\xi^i)}\gtwo{\frac{T(X)-t_i}{X-\xi^i}}
 \end{equation*}
 By pre-computing the $\kzg$ proofs $W_1^i=\gtwo{\frac{T(X)-t_i}{X-\xi^i}}$ for all $i\in [N]$, the encoded quotient can be
 evaluated using $O(m)$ $\Gtwo$-operations and $O(m\log^2 m)$ $\F$-operations.
@@ -141,24 +141,23 @@ RAM states $\vecT, \vecT'\in \F^N$ to be $\vec{a}$-{\em identical} if $\vecT[i]=
 let $T(X),T'(X)$ and $a(X)$ be polynomials encoding the vectors $\vecT,\vecT'$ (over $\setN$) and $\vec{a}$ (over $\setV$). Given
 commitments $c_T, c_T'$ and $c_a$ polynomial protocol to prove that committed vectors $\vecT,\vecT'\in \F^N$ and $\vec{a}\in \F^m$
 are such that $\vecT,\vecT'$ are $\vec{a}$-identical involves proving the relation $Z_I(X)(T(X) - T'(X)) = 0$ over $Z_\setN$ where
- $I=\uniq{a}$ and $Z_I(X)=\prod_{i\in I}(X-\xi^i)$ denotes the vanishing polynomial for the set $\setN_I=\{\xi^i: i\in I\}$.
+$I=\uniq{a}$ and $Z_I(X)=\prod_{i\in I}(X-\xi^i)$ denotes the vanishing polynomial for the set $\setN_I=\{\xi^i: i\in I\}$.
 The prover commits to polynomial $Z_I$ and proves (i) $Z_I(T - T') = 0 \text{ mod } Z_\setN$ and (ii) $Z_I$ is the vanishing
 polynomial of the set $\setN_I$ as defined. To prove the first relation, the prover computes the polynomial $Q(X)$ as below:
 \begin{align}\label{eq:poly-q}
-Q(X) &= \frac{(T(X)-T'(X))\cdot Z_I(X)}{Z_\setN(X)} \nonumber \\
+D(X) &= \frac{(T(X)-T'(X))\cdot Z_I(X)}{Z_\setN(X)} \nonumber \\
 &= \sum_{i\in I}\frac{(t_i - t_i')\mu_i(X)}{Z_\setN(X)} Z_I(X) \nonumber \\
 \intertext{ Substituting, $\Delta_i=t_i-t_i'$, $\mu_i(X)=\vpolyN(X)/(\vpolyN'(\xi^i)(X-\xi^i))$ }
 &=\sum_{i\in I}\frac{\Delta_i}{Z_\setN'(\xi^i)}\left(\frac{Z_I(X)}{X-\xi^i}\right) = \sum_{i\in I}\frac{\Delta_i Z_I'(\xi^i)}{Z_\setN'(\xi^i)}\kappa_i(X)
 \end{align}
 In the above, the summation only runs over indices in $I$, as $\Delta i = 0$ for $i\not\in I$. In the final equality, we use
 $\kappa_i(X) = Z_I(X)/(Z_I'(\xi^i)(X-\xi^i))$ for $i\in I$ which we recognize as the lagrange basis polynomials for the set
-$\{\xi^i: i\in I\}$. Thus, Equation \eqref{eq:poly-q} implies that $Q$ is at most degree $|I|-1$ polynomial, with
-$Q(\xi^i)=\Delta_i Z_I'(\xi^i)/\vpolyN'(\xi^i)$ for $i\in I$.
-The prover can therefore interpolate $Q(X)$ (in power basis)
-in $O(|I|\log^2 |I|)$ $\F$-operations and compute $\gone{Q(X)}$ in $O(|I|)$ $\Gone$-operations. The prover sends the
-commitment $\gone{Q(X)}$ to the verifier. Finally, the verifier can
-check the identity $Z_I(T - T') = Q\cdot Z_\setN$ at a random point $\alpha\gets \F$, as it knows commitments to all
-polynomials involved.
+$\{\xi^i: i\in I\}$. Thus, Equation \eqref{eq:poly-q} implies that $D(X)$ is at most degree $|I|-1$ polynomial, with
+$D(\xi^i)=\Delta_i Z_I'(\xi^i)/\vpolyN'(\xi^i)$ for $i\in I$.
+The prover can therefore interpolate $D(X)$ (in power basis)
+in $O(|I|\log^2 |I|)$ $\F$-operations and compute $\gone{D(X)}$ in $O(|I|)$ $\Gone$-operations. The prover sends the
+commitment $\gone{D(X)}$ to the verifier. Finally, the verifier can
+check the identity $Z_I(T - T') = D\cdot Z_\setN$ by a pairing check. For this, since the tables are committed in $\Gone$, prover will need to send $\elttwo{Z_I(X)}$.
 
 Next, the prover needs to show that $Z_I(X)$ is indeed the vanishing polynomial of $\setN_I$.
 We again use the polynomial $h(X)=\sum_{i=1}^m \xi^{a_i}\tau_i(X)$ which interpolates the vector $(\xi^{a_1},\ldots,\xi^{a_m})$.
@@ -174,13 +173,15 @@ $u(X)$ satisfying $u(\nu^i)=\prod_{j=1}^{i-1}\big((\alpha - h(\nu^j))/(1 + \beta
 where $\beta=K(\alpha) - 1$.
 The verifier ensures the correctness of $u(X)$ by
 \begin{equation}
-\begin{aligned}
-\tau_1(X)(u(X) - 1) &= 0 \text{ mod } Z_{\setV} \\
-u(\nu X)(1+\beta \tau_1(X))-u(X)(\alpha - h(X)) &= 0 \text{ mod } Z_\setV.
-\end{aligned}
-\label{eq:kh-check}
+    \begin{aligned}
+        \tau_1(X)(u(X) - 1) &= 0 \text{ mod } Z_{\setV} \\
+        u(\nu X)(1+\beta \tau_1(X))-u(X)(\alpha - h(X)) &= 0 \text{ mod } Z_\setV.
+    \end{aligned}
+    \label{eq:kh-check}
 \end{equation}
 We prove that the above constraints imply that $K(\alpha)=\prod_{i\in [m]}(\alpha - h(\nu^i))$.
+
+Moreover, another pairing check will be needed to show that the $Z_I(X)$ committed in $\Gone$(whose well formation is shown in the protocol as described above) is the same as the $Z_I(X)$ committed in $\Gtwo$.
 \begin{lemma}\label{lem:kh-check}
 There exists a polynomial $u(X)\in \F[X]$ satisfying the identities in Equation ~\eqref{eq:kh-check}
 if and only if $K(\alpha)=1+\beta=\prod_{i\in [m]} (\alpha - h(\nu^i))$.
@@ -209,11 +210,11 @@ We define the {\em committed ram} relation
 $\CRAM$ to consist of tuples $((c_T, c_T', c_\op, c_a, c_w),(\vecT, \vecT',\vec{\op},\vec{a},\vec{w}))$
 such that:
 \begin{itemize}[leftmargin=1em]
-\item $(T,\vec{o},T')\in \LRAM{I}{N}{m}$ for $T=(\setind_N,\vecT)$, $T'=(\setind_N,\vecT')$ and $\vec{o}=(o_1,\ldots,o_m)$
-where $o_i=(\op_i, a_i, w_i)\in \RAMOp{I}$ for all $i\in [m]$.
-\item $c_T=\KZGcommit(\srs, T(X))$, $c_T'=\KZGcommit(\srs, T'(X))$, $c_\op = \KZGcommit(\srs,\op(X))$,  $c_a=\KZGcommit(\srs, a(X))$,
- $c_w = \KZGcommit(\srs, w(X))$ where polynomials $T(X), T'(X)$ encode vectors $\vecT, \vecT'$ over $\setN$, while $\op(X), a(X)$ and
-$w(X)$ encode vectors $\vec{\op}=(\op_1,\ldots,\op_m)$, $\vec{a}$ and $\vec{w}$ over $\setV$.
+    \item $(T,\vec{o},T')\in \LRAM{I}{N}{m}$ for $T=(\setind_N,\vecT)$, $T'=(\setind_N,\vecT')$ and $\vec{o}=(o_1,\ldots,o_m)$
+    where $o_i=(\op_i, a_i, w_i)\in \RAMOp{I}$ for all $i\in [m]$.
+    \item $c_T=\KZGcommit(\srs, T(X))$, $c_T'=\KZGcommit(\srs, T'(X))$, $c_\op = \KZGcommit(\srs,\op(X))$,  $c_a=\KZGcommit(\srs, a(X))$,
+    $c_w = \KZGcommit(\srs, w(X))$ where polynomials $T(X), T'(X)$ encode vectors $\vecT, \vecT'$ over $\setN$, while $\op(X), a(X)$ and
+    $w(X)$ encode vectors $\vec{\op}=(\op_1,\ldots,\op_m)$, $\vec{a}$ and $\vec{w}$ over $\setV$.
 \end{itemize}
 \end{definition}
 As outlined in the blueprint, the prover first commits to ``smaller'' RAMs $S=(\vec{a},\vec{v})$ and $S'=(\vec{a},\vec{v}')$
@@ -236,112 +237,126 @@ requiring updates to the table.
 
 %%% complete protocol listing %%%
 \begin{figure}[t!]
-\begin{mdframed}
+    \begin{mdframed}
 
-    \underline{Setup $(1^\secp,N,m, \vecT, \vecT')$}:
-    \begin{itemize}[leftmargin=1em]
-        \item $\srs = (\{\gone{\tau^i}\}_{i=0}^N, \{\gtwo{\tau^i}\}_{i=0}^N)$ for $\tau\gets \F$.
-        \item $W_2^i=\gtwo{(\ell(X) - i)/(X-\xi^i)}$, $i\in [N]$,
-        \item $W_3^i=\gtwo{\vpolyN(X)/(X-\xi^i)}$, $i\in [N]$.
-        \item $\gone{\ell(X)}, \gone{\vpolyN(X)}$.
-    \end{itemize}
-
-    \underline{Precompute $(\vecT, \vecT')$}:
-    \begin{itemize}[leftmargin=1em]
-        \item $W_1^i=\gtwo{(T(X)-T(\xi^i))/(X-\xi^i)}$, $i\in [N]$,
-        \item ${W_1^i}'=\gtwo{(T'(X) - T'(\xi^i))/(X-\xi^i)}$, $i\in [N]$.
-    \end{itemize}
-
-    {\bf Common Input}: $\srs$, $c_T, c_T', c_\op, c_a, c_w\in \Gone$.\\
-    {\bf Prover's Input}: Vectors $\vecT,\vecT',\vec{\op},\vec{a},\vec{w}$ and their encoding polynomials.\\
-
-    {\bf Round 1}: Commit to sub RAMs.
-    \begin{enumerate}[leftmargin=1em, label=\arabic*.]
-        \item $\prover$ computes $\vec{v}=\vecT[\,\vec{a}\,]$, $\vec{v}'=\vecT'[\,\vec{a}\,]$ and the encoding
-        polynomials $v(X)$ and $v'(X)$.
-        \item $\prover$ sends $c_v = \gone{v(X)}$, $c_v'=\gone{v'(X)}$.
-        \item $\verifier$ sends $\chi\gets \F$.
-    \end{enumerate}
-
-    {\bf Round 2}: Execute committed index lookup.
-    \begin{enumerate}[leftmargin=1em, label=\arabic*.]
-        \item $\prover$ and $\verifier$ compute $C_T=c_T + \chi c_T'$, $C_V=c_v + \chi c_v'$.
-        \item $\prover$ computes $P(X) = T(X) + \chi T'(X)$, $V(X)=v(X) + \chi v'(X)$.
-        \item $\prover$ computes $I=\{a_i: i\in [m]\}$, $\setN_I=\{\xi^i: i\in I\}$.
-        \item $\prover$ computes polynomials:
-        \begin{itemize}[leftmargin=1em, label=-]
-            \item Vanishing polynomial $Z_I(X)$ of $\setN_I$.
-            \item Polynomial $h(X)=\sum_{i\in [m]}\xi^{a_i}\tau_i(X)$.
-            \item Restrictions $P_I(X),\ell_I(X)$ of $P(X),\ell(X)$ on set $I$.
-            \item $K(X)=\prod_{i\in [m]}(X-\xi^{a_i})$, $q(X)=K(X)/Z_I(X)$.
+        \underline{Setup $(1^\secp,N,m, \vecT, \vecT')$}:
+        \begin{itemize}[leftmargin=1em]
+            \item $\srs = (\{\gone{\tau^i}\}_{i=0}^N, \{\gtwo{\tau^i}\}_{i=0}^N)$ for $\tau\gets \F$.
+            \item $W_2^i=\gtwo{(\ell(X) - i)/(X-\xi^i)}$, $i\in [N]$(needed by prover)
+            \item $W_3^i=\gtwo{\vpolyN(X)/(X-\xi^i)}$, $i\in [N]$(needed by prover)
+            \item $\gone{\ell(X)}, \gone{\vpolyN(X)}, \gtwo{\vpolyN(X)}$(known by both)
         \end{itemize}
 
-        \item $\prover$ sends $c_p = \gone{P(X)}$, $c_z=\gone{Z_I(X)}$, $c_h=\gone{h(X)}$, $c_l = \gone{\ell_I(X)}$,
-        $c_k = \gone{K(X)}$, $c_q = \gone{q(X)}$.
-        \item $\verifier$ sends $\gamma\gets \F$.
-    \end{enumerate}
+        \underline{Precompute $(\vecT, \vecT')$}:
+        \begin{itemize}[leftmargin=1em]
+            \item $W_1^i=\gtwo{(T(X)-T(\xi^i))/(X-\xi^i)}$, $i\in [N]$,
+            \item ${W_1^i}'=\gtwo{(T'(X) - T'(\xi^i))/(X-\xi^i)}$, $i\in [N]$.
+        \end{itemize}
 
-    {\bf Round 3}: Prover send aggregated quotients.
-    \begin{enumerate}[leftmargin=1em, label=\arabic*.]
-        \item $\prover$ computes $g(X)=P_I(X) + \gamma \ell_I(X) + \gamma^2 Z_I(X)$.
-        \item $\prover$ computes $Q(X) = (g(h(X)) - v(X) -\gamma a(X))/Z_\setV(X)$.
-        \item $\prover$ computes: $W = \sum_{i\in [m]} (W_1^i + \chi {W_1^i}' + \gamma W_2^i + \gamma^2 W_3^i)$.
-        \item $\prover$ sends $W\in \Gtwo$, $c_Q=\gone{Q(X)}$.
-        \item $\verifier$ computes $c_g = c_p + \gamma c_l + \gamma^2 c_z$, $C_G = C_T + \gamma\gone{\ell(X)}+\gamma^2\gone{\vpolyN(X)}$.
-        \item $\verifier$ checks: $e(C_G - c_g, \gone{1})=e(c_z, W)$.
-        \item $\verifier$ sends $\alpha\gets \F$.
-    \end{enumerate}
+        {\bf Common Input}: $\srs$, $c_T, c_T', c_\op, c_a, c_w\in \Gone$.\\
+        {\bf Prover's Input}: Vectors $\vecT,\vecT',\vec{\op},\vec{a},\vec{w}$ and their encoding polynomials.\\
 
-    {\bf Round 4}: Prover sends evaluations.
-    \begin{enumerate}[leftmargin=1em, label=\arabic*.]
-        \item $\prover$ computes $\val{\alpha}{v}=v(\alpha)$, $\val{\alpha}{a}=a(\alpha)$, $\val{\alpha}{h}=h(\alpha)$, $\val{\alpha}{K}=K(\alpha)$,
-         $\val{h(\alpha)}{g}=g(h(\alpha))$, $\val{\alpha}{Q}=Q(\alpha)$, $\val{\alpha}{q}=q(\alpha)$, $\val{\alpha}{Z}=Z_I(\alpha)$.
-        \item $\prover$ sends $\val{\alpha}{v}$, $\val{\alpha}{a}$, $\val{\alpha}{h}$, $\val{\alpha}{K}$, $\val{h(\alpha)}{g}$, $\val{\alpha}{Q_2}$,
-        $\val{\alpha}{q}$, $\val{\alpha}{Z}$
-        \item $\prover$ computes polynomial $u(X)$ as in Section ~\ref{subsec:proximity-ram}
-        and sends $c_u=\gone{u(X)}$.
-        \item $\verifier$ checks $\val{\alpha}{Q}(\alpha^m-1)=\val{h(\alpha)}{g}-\val{\alpha}{v}-\gamma \val{\alpha}{a}$.
-        \item $\verifier$ checks $\val{\alpha}{Z}\val{\alpha}{q}=\val{\alpha}{K}$.
-        \item $\verifier$ sets $\beta=\val{\alpha}{K}-1$ and sends $\theta\gets\F$.
-    \end{enumerate}
-    Continued in Figure ~\ref{fig:complete-listing-2}
-\end{mdframed}
+        {\bf Round 1}: Commit to sub RAMs.
+        \begin{enumerate}[leftmargin=1em, label=\arabic*.]
+            \item $\prover$ computes $\vec{v}=\vecT[\,\vec{a}\,]$, $\vec{v}'=\vecT'[\,\vec{a}\,]$ and the encoding
+            polynomials $v(X)$ and $v'(X)$.
+            \item $\prover$ sends $c_v = \gone{v(X)}$, $c_v'=\gone{v'(X)}$.
+            \item $\verifier$ sends $\chi\gets \F$.
+        \end{enumerate}
+
+        {\bf Round 2}: Execute committed index lookup.
+        \begin{enumerate}[leftmargin=1em, label=\arabic*.]
+            \item $\prover$ and $\verifier$ compute $C_T=c_T + \chi c_T'$, $C_V=c_v + \chi c_v'$.
+            \item $\prover$ computes $P(X) = T(X) + \chi T'(X)$, $V(X)=v(X) + \chi v'(X)$.
+            \item $\prover$ computes $I=\{a_i: i\in [m]\}$, $\setN_I=\{\xi^i: i\in I\}$.
+            \item $\prover$ computes polynomials:
+            \begin{itemize}[leftmargin=1em, label=-]
+                \item Vanishing polynomial $Z_I(X)$ of $\setN_I$.
+                \item Polynomial $h(X)=\sum_{i\in [m]}\xi^{a_i}\tau_i(X)$.
+                \item Restrictions $P_I(X),\ell_I(X)$ of $P(X),\ell(X)$ on set $I$.
+                \item $K(X)=\prod_{i\in [m]}(X-\xi^{a_i})$, $q(X)=K(X)/Z_I(X)$
+                \item $D(X)= \sum_{i\in I}\frac{\Delta_i Z_I'(\xi^i)}{Z_\setN'(\xi^i)}\kappa_i(X)$ by interpolation as described in section 5.2
+            \end{itemize}
+
+            \item $\prover$ sends $c_p = \gone{P_I(X)}$, $c_z=\gone{Z_I(X)}$, $c_{z2}=\gtwo{Z_I(X)}$, $c_h=\gone{h(X)}$, $c_l = \gone{\ell_I(X)}$,
+            $c_k = \gone{K(X)}$, $c_q = \gone{q(X)}$, $c_d=\gone{D(X)}$
+            \item $\verifier$ sends $\gamma\gets \F$.
+        \end{enumerate}
+
+        {\bf Round 3}: Prover send aggregated quotients.
+        \begin{enumerate}[leftmargin=1em, label=\arabic*.]
+            \item $\prover$ computes $g(X)=P_I(X) + \gamma \ell_I(X) + \gamma^2 Z_I(X)$.
+            \item $\prover$ computes $Q(X) = (g(h(X)) - v(X) -\gamma a(X))/Z_\setV(X)$.
+            \item $\prover$ computes: $W = \sum_{i\in [m]} \frac{1}{Z_I'(\xi^i)} (W_1^i + \chi {W_1^i}' + \gamma W_2^i + \gamma^2 W_3^i)$.
+            \item $\prover$ sends $W\in \Gtwo$, $c_Q=\gone{Q(X)}$.
+            \item $\verifier$ computes $c_g = c_p + \gamma c_l + \gamma^2 c_z$, $C_G = C_T + \gamma\gone{\ell(X)}+\gamma^2\gone{\vpolyN(X)}$.
+            \item $\verifier$ checks: $e(C_G - c_g, \gtwo{1})=e(c_z, W)$.
+            \item $\verifier$ checks: $e(c_T-c_{T'}, c_{z2})=e(c_d, \gtwo{\vpolyN(X)})$
+            \item $\verifier$ checks: $e(c_z, [1]_2)=e([1]_1, c_{z2})$
+            \item $\verifier$ sends $\alpha\gets \F$.
+        \end{enumerate}
+
+        Continued in Figure ~\ref{fig:complete-listing-2}
+    \end{mdframed}
     \caption{Batching Efficient RAM Protocol}
     \label{fig:complete-listing}
 \end{figure}
 
 \begin{figure}[t!]
     \begin{mdframed}
-    \begin{center}
-    Continued from Figure \ref{fig:complete-listing}
-    \end{center}
+        \begin{center}
+            Continued from Figure \ref{fig:complete-listing}
+        \end{center}
+        {\bf Round 4}: Prover sends evaluations.
+        \begin{enumerate}[leftmargin=1em, label=\arabic*.]
+            \item $\prover$ computes $\val{\alpha}{v}=v(\alpha)$, $\val{\alpha}{a}=a(\alpha)$, $\val{\alpha}{h}=h(\alpha)$, $\val{\alpha}{K}=K(\alpha)$,
+            $\val{h(\alpha)}{g}=g(h(\alpha))$, $\val{\alpha}{Q}=Q(\alpha)$, $\val{\alpha}{q}=q(\alpha)$, $\val{\alpha}{Z}=Z_I(\alpha)$.
+            \item $\prover$ sends $\val{\alpha}{v}$, $\val{\alpha}{a}$, $\val{\alpha}{h}$, $\val{\alpha}{K}$, $\val{h(\alpha)}{g}$, $\val{\alpha}{Q}$,
+            $\val{\alpha}{q}$, $\val{\alpha}{Z}$
+            \item $\prover$ computes polynomial $u(X)$ as in Section ~\ref{subsec:proximity-ram}
+            and sends $c_u=\gone{u(X)}$.
+            \item $\verifier$ checks $\val{\alpha}{Q}(\alpha^m-1)=\val{h(\alpha)}{g}-\val{\alpha}{v}-\gamma \val{\alpha}{a}$.
+            \item $\verifier$ checks $\val{\alpha}{Z}\val{\alpha}{q}=\val{\alpha}{K}$.
+            \item $\verifier$ sets $\beta=\val{\alpha}{K}-1$ and sends $\theta\gets\F$.
+        \end{enumerate}
 
-    {\bf Round 5}: Check correctness of $K$.
-    \begin{enumerate}[leftmargin=1em, label=\arabic*.]
-        \item $\prover$ computes:
-        \begin{align*}
-            Q'(X) &= \big(u(\nu X)(1+\beta \tau_1(X))-u(X)(\alpha - h(X)) \\
-            &\quad + \theta \tau_1(X)(u(X)-1)\big)/Z_\setV(X).
-        \end{align*}
-        \item $\prover$ sends $c_Q'=\gone{Q'(X)}$.
-        \item $\verifier$ sends $x\gets \F$.
-    \end{enumerate}
+        {\bf Round 5}: Check correctness of $K$.
+        \begin{enumerate}[leftmargin=1em, label=\arabic*.]
+            \item $\prover$ computes:
+            \begin{align*}
+                Q'(X) &= \big(u(\nu X)(1+\beta \tau_1(X))-u(X)(\alpha - h(X)) \\
+                &\quad + \theta \tau_1(X)(u(X)-1)\big)/Z_\setV(X).
+            \end{align*}
+            \item $\prover$ sends $c_Q'=\gone{Q'(X)}$.
+            \item $\verifier$ sends $x\gets \F$.
+        \end{enumerate}
 
-    {\bf Round 6}: Prover sends more evaluations.
+        {\bf Round 6}: Prover sends more evaluations.
         \begin{enumerate}[leftmargin=1em, label=\arabic*.]
             \item $\prover$ computes $\val{x}{u}=u(x)$, $\val{\nu x}{u}=u(\nu x)$, $\val{x}{h}=h(x)$, $\val{x}{Q'}=Q'(x)$
             \item $\prover$ sends $\val{x}{u}$, $\val{\nu x}{u}$, $\val{x}{h}$, $\val{x}{Q'}$.
             \item $\verifier$ checks $\val{x}{Q'}(x^m-1)=\val{\nu x}{u}(1+\beta \tau_1(x))-\val{x}{u}(\alpha - \val{x}{h})$.
-            \item $\verifier$ sends $r_a, r_h, r_q, r_v, r_K, r_Q, r_Z\gets \F$ and $r_h', r_u'\gets \F$.
+            \item $\verifier$ sends $r_a, r_h, r_q, r_v, r_K, r_Q, r_Z\gets \F$ and $r_h', r_u', r_Q'\gets \F$.
         \end{enumerate}
 
-    \item {\bf Round 7}: Check aggregated evaluation.
+
+    \end{mdframed}
+    \caption{Batching Efficient RAM Protocol: Continued}
+    \label{fig:complete-listing-2}
+\end{figure}
+
+\begin{figure}[t!]
+    \begin{mdframed}
+        \begin{center}
+            Continued from Figure \ref{fig:complete-listing-2}
+        \end{center}
+        \item {\bf Round 7}: Check aggregated evaluation.
         \begin{enumerate}[leftmargin=1em, label=\arabic*.]
             \item $\prover$ computes:
             \begin{align*}
                 \Phi_\alpha(X) &= r_a a(X)+ r_h h(X) + r_q q(X) + r_v v(X) \\
-                    &\quad + r_K K(X) + r_Q Q(X) + r_Z Z_I(X) \\
-                \Phi_x(X) &= r_h' h(X) + r_u' u(X)
+                &\quad + r_K K(X) + r_Q Q(X) + r_Z Z_I(X) \\
+                \Phi_x(X) &= r_h' h(X) + r_u' u(X)+r_Q'Q'(X)
             \end{align*}
             \item $\prover$ computes $\Pi_\alpha = \KZGopen(\srs, \Phi_\alpha(X), \alpha)$.
             \item $\prover$ computes $\Pi_x = \KZGopen(\srs, \Phi_x(X), x)$.
@@ -351,32 +366,31 @@ requiring updates to the table.
             \item $\verifier$ computes:
             \begin{align*}
                 \gone{\Phi_\alpha} &= r_a c_a + r_h c_h + r_q c_q + r_v c_v + r_z c_z + r_K c_K + r_Q c_Q. \\
-                \gone{\Phi_x} &= r_h' c_h + r_u' c_u. \\
+                \gone{\Phi_x} &= r_h' c_h + r_u' c_u + r_Q' c_Q' \\
                 V_{\alpha} &= r_a \val{\alpha}{a} + r_h \val{\alpha}{h} + r_q \val{\alpha}{q} + r_v \val{\alpha}{v} \\
                 &\quad + r_z\val{\alpha}{Z} r_K \val{\alpha}{K} + r_Q \val{\alpha}{Q}. \\
-                V_x &= r_h' \val{x}{h} + r_u' \val{x}{u}.
+                V_x &= r_h' \val{x}{h} + r_u' \val{x}{u}+r_Q' \val{x}{Q'}
             \end{align*}
             \item $\verifier$ checks:
             \begin{itemize}[leftmargin=1em]
                 \item $\KZGverify(\srs, \gone{\Phi_\alpha}, V_\alpha, \alpha, \Pi_\alpha)$.
                 \item $\KZGverify(\srs, \gone{\Phi_x}, V_x, x, \Pi_x)$.
                 \item $\KZGverify(\srs, c_g, \val{h(\alpha)}{g}, \val{\alpha}{h}, \Pi_g)$.
-                \item $\KZGverify(\srs, c_u, \nu x, \Pi_u)$.
+                \item $\KZGverify(\srs, c_u,\val{\nu x}{u}, \nu x, \Pi_u)$.
             \end{itemize}
-            \item $\prover$ and $\verifier$ set $c_S=(c_a, c_v)$, $c_S'=(c_a', c_v')$, $c_o=(c_\op, c_a, c_w)$.
+            \item $\prover$ and $\verifier$ set $c_S=(c_a, c_v)$, $c_S'=(c_a, c_v')$, $c_o=(c_\op, c_a, c_w)$.
             \item $\prover$ and $\verifier$ execute argument for $(c_S, c_o, c_S')\in \CLRAM$ (Section ~\ref{sec:poly-proto-ram}).
-            \end{enumerate}
+        \end{enumerate}
     \end{mdframed}
-    \caption{Batching Efficient RAM Protocol: Continued}
-    \label{fig:complete-listing-2}
+    \caption{Batching efficient RAM Protocol-Continued}
+    \label{fig:enter-label}
 \end{figure}
 
 
 
 
 
-
-    \section{Fast Lookups from Approximate Pre-Processing}\label{sec:update-protocol}
+\section{Fast Lookups from Approximate Pre-Processing}\label{sec:update-protocol}
 \input{update-protocol}
 
 
