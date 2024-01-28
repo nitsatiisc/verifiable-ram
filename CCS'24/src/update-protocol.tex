@@ -151,7 +151,7 @@ between vectors $\vecTbase$ and $\vecT$.
     \begin{equation}\label{eq:Qcachepoly2commit}
     \elttwo{\Qcachepolytwo{X}} = N^{-1}\left(\sum_{i\in\setind}(c_ia_i)\cdot W_3^i + \sum_{j\in K}(\xi^j \Delta t_j b_j)\cdot W_3^j\right)
     \end{equation}
-    Now $c_i=(z_I(\xi^i))^{-1}$ for all $i \in \setind$ can be determined in $O(|I|log^2 |I|)$ field operations by evaluating $Z_{\setind}'(X)$ on
+    Now $c_i=(z_I(\xi^i))^{-1}$ for all $i \in \setind$ can be determined in $O(|I|\log^2 |I|)$ field operations by evaluating $Z_{\setind}'(X)$ on
     $H_{\setind}$. So, given $\{a_i\}_{i\in I}, \{b_j\}_{j\in K}$, $\elttwo{\Qcachepolytwo{x}}$ can be computed in $O(|\setind|+|K|)$ group operations.
     While we have diligently reduced the group operations, we still seem to need $O(|I||K|)=O(m\delta)$ field operations. We clearly need better than
     naive way of computing the scalars in \eqref{eq:scalars} to obtain additive overhead in $\delta$. This is what we consider next.
@@ -192,32 +192,39 @@ between vectors $\vecTbase$ and $\vecT$.
         We will not compute such a polynomial $p$, as it has degree $O(N)$, but view it as an ``oracle'' which we can hopefully query at the points we need.
         Then it can be seen that $e_i=g_i(\xi^i) - r_i(\xi^i)$ for rational functions $g_i(X)$ and $r_i(X)$ defined by:
         \begin{align}\label{eq:rat-fun-f}
-        g_i(X) &=\sum_{j\in [N]\setminus i}\frac{p(X)}{X-\xi^j} \nonumber \\
-        r_i(X) &=\sum_{j\in [N]\setminus i} \frac{p(X)-p(\xi^j)}{X-\xi^j}
+        g_i(X) =\sum_{j\in [N]\setminus i}\frac{p(X)}{X-\xi^j},\quad
+        r_i(X) =\sum_{j\in [N]\setminus i} \frac{p(X)-p(\xi^j)}{X-\xi^j}
         \end{align}
         Now, $g_i(\xi^i)$ for $i\in I$ turns out to be (using the special case above):
         $$p(\xi^i)\sum_{j\in K\setminus \{i\}} 1/(\xi^i-\xi^j)=\Delta t_i (Z_K''(\xi^i)/Z_K'(\xi^i))/2$$
-
+        Defining $u(X,Y)=(p(X)-p(Y))/(X-Y)$, we can write $r_i(\xi^i)$ as:
+        \begin{equation}
+            r_i(X) = \sum_{j\in [N]}u(X,\xi^j) - u(X,\xi^i)
+        \end{equation}
+        Using the fact that $u(X,X)=p'(X)$ gives the formal derivative of polynomial $p(X)$, we get
+        $r_i(\xi^i)=r(\xi^i)-p'(\xi^i)$ for all $i\in I$, where $r(X)=\sum_{j\in [N]}u(X,\xi^j)$. Fortunately,
+        $r(X)$ is simply $Nu(X,0)=N(p(X) - p(0))/X$, a fact that follows from univariate sum-check. The problem
+        thus reduces to being able to compute derivates $p'(\xi^i)$ for $i\in I$ and the value $p(0)$. In the
+        complete proof, we show how we leverage special structure of the high degree polynomial $p(X)$ to compute
+        the above efficiently, without computing $p(X)$ itself. This concludes the proof-sketch of the lemma.
     \end{proof}
 
-    From the lemma \ref{lem:sum computation}, we have shown that the field operations needed to get $e_i$ and $b_j$ and thus $\elttwo{\Qcachepolytwo{X}}$ is $O(|K|\log^2|K|)$. \\
+    From the lemma ~\ref{lem:sum-computation}, we conclude that the scalars $a_i,i\in I$ and $b_j, j\in K$ can be computed in
+    time $O(|K|\log^2 |K|)$, which proves the bound in Theorem ~\ref{thm:approx-setup}.
+    %have shown that the field operations needed to get $e_i$ and $b_j$ and thus $\elttwo{\Qcachepolytwo{X}}$ is $O(|K|\log^2|K|)$. \\
 
-    This completes the proof of Lemma \ref{lem:approx-setup}.
+    %This completes the proof of Lemma \ref{lem:approx-setup}.
 \end{proof}
 
-\subsection{Amortized Analysis of the update protocol}
-Recall that we were able to get $[Q(X)]_2$ in $O(|K|)$ group operations and $O(|K|\log^2|K|)$ field operations. \\
-For concrete analysis, let $s$ be the period after which the rebasing takes place. Also, the lookup happens at maximum of $m$ indices during a single batch. Thus, $|I|\leq m$.\\
-This gives an upper bound on $\delta$, that is $ms$ and an upper bound on $K$, that is $ms+m=m(s+1)$.\\
-
-Clearly $O(K)=O(ms)$ and $O(|K|\log^2|K|)=O(ms \log^2(ms))$ so group operations are $O(ms)$ and field operations are $O(ms\log^2(ms))$ \\
-
-Moreover, after every $s$ batches, the rebasing(offline phase) is done which we know takes $O(N\log N)$ group and field operations.\\
-
-So, the amortized number of operations for the offline and online phase in total is:
-$O(ms \log^2(ms)+\frac{N\log N}{s})$ $\mathbb{F}$ operations and $O(ms +\frac{N\log N}{s})$ $\Gtwo$ operations\\
-
-The value of $s$ which minimizes the group operations is $\sqrt{\frac{N}{m}}$. For this value of $s$:\\
-\textbf{The amortized group operations needed are $\tilde{O}(\sqrt{mN})$}\\
-\textbf{The amortized field operations needed are also $\tilde{O}(\sqrt{mN})$}\\
-Here $\tilde{O}$ denotes that the polylog factors have been neglected\\\\
+\subsection{Amortized Sublinear Batching}\label{sec:amortization}
+We now return to the question of how frequently should we run the offline phase to compute full parameters.
+For concrete analysis, let $s$ be the period after which the rebasing takes place; i.e., after $s$ batches of $m$ operations
+each, we set the base table $\vecTbase$ to the current table, setting $\vecTcache=\vec{0}$. At this point we also compute all
+encoded quotients for $\vecTbase$ using the $O(N\log N)$ algorithm of ~\cite{EPRINT:FeiKho23}. Consider $\delta\leq ms$ as
+the upper-bound on $\delta$, and distributing the cost of re-basing, the amortized overhead for the batch of $m$ operations is:
+$O(ms \log^2(ms)+\frac{N\log N}{s})$ $\mathbb{F}$-operations and $O(ms +\frac{N\log N}{s})$ $\mathbb{G}$-operations. Ignoring
+the logarithmic factors, the cost is minimized by setting $s\approx \sqrt{N/m}$, resulting in amortized prover overhead of
+$\wt{O}(\sqrt{mN})$. We note that the above analysis considers the worst case scenario, where each update affects a distinct
+position in the table. In settings, where frequency of updates is non-uniform accross positions in the table (e.g, in the
+blockchain example, if bulk of transactions come from small number of clients), we may be able to defer the offline phase even longer.
+Same is also true for settings where updates to the table are infrequent.

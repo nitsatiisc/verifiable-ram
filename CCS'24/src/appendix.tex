@@ -322,10 +322,9 @@ The range checks in (C7) can be checked using polynomial protocols in sub-vector
 described in Section \ref{subsec:committed-index-lookup}.
 
 
-\section{Proof of Lemma \ref{lem:sum computation}}
-Recall the statement of lemma \ref{lem:sum computation}. We want to compute $e_i$ for all $i \in \setind$ and $b_j$ for all $j \in K$ in $O(|K|\log^2|K|)$ $\mathbb{F}$ operations.\\\\
-
-Before starting the proof, we list some preliminaries and some lemmas/facts which will be useful in the proof.\\
+\section{Proof of Lemma ~\ref{lem:sum-computation}}
+%Recall the statement of lemma \ref{lem:sum computation}. We want to compute $e_i$ for all $i \in \setind$ and $b_j$ for all $j \in K$ in $O(|K|\log^2|K|)$ $\mathbb{F}$ operations.\\\\
+Before starting the proof, we collect some preliminaries which will be useful in the proof.
 
 \subsection{Computational Algebra Preliminaries}\label{subsec:comp-algebra-app}
 Let $\F$ be a finite field of prime order $p$ and $\G$ be a cyclic additive group of order $p$ with generator $g$. For $s \in \F$, we use
@@ -349,7 +348,7 @@ Let $\xi_1,\ldots,\xi_r$ be distinct points in $\F$. Then coefficients of $f(X)=
 can be computed in $O(r\log^2 r)$ operations in $\F$.
 \end{fact}
 
-\begin{fact}[\textsf{Multi KZG proofs}]\label{fc:multkzg}
+\begin{fact}[\textsf{Multi KZG proofs} ~\cite{EPRINT:FeiKho23}]\label{fc:multkzg}
 Let $\{\elt{x^i}\}_{i=1}^d$ be given for some $x\in \F$. Then for set of $r$ distinct points $\xi_1,\ldots,\xi_r$,
 and a polynomial $f(X)\in \F[X]$ of degree $<d$,the vector $(\elt{h_1(x)},\ldots,\elt{h_r(x)})$,
 where $h_i(X) = (f(X) - f(\xi_i))/(X - \xi_i)$ can be computed in
@@ -367,48 +366,60 @@ for $\mathbb{S}$. Then we have:
 \end{gather*}
 \end{fact}
 
-\subsection{Notion of derivative in finite field setting}
+\noindent{\bf Formal Derivative}: For a polynomial $p(X) \in \F[X]$, we define the formal derivative of $p(X)$ as the polynomial
+$u(X,X)$ where $u(X,Y)=\frac{p(X)-p(Y)}{X-Y}$. It can be seen that $u(X,X)$ equals the polynomial $p'(X)$ by differentiating
+$p(X)$ according to regular rules of calculus.
+%Let us denote the formal derivative of $p(X)$ as $p^f(X)$.\\
+%Then, $p^f(X)= u(X,X)$ where $u(X,Y)=\frac{p(X)-p(Y)}{X-Y}$\\\\
+%It is well known that the formal derivative of a polynomial satisfies all the properties that we want the derivative of a polynomial to satisfy, like linearity, product rule, quotient rule etc.\\\\
+%As a result, the formal derivative $p^f(X)$ defined as above can be computed from $p(X)$ in the \textit{usual} way, that is $\frac{d}{dx}X^k=k X^{k-1}$ and extend using linearity of derivative.\\
+%Henceforth, we will represent the formal derivative of $p(X)$ as $p'(X)$ and because of the above statements, we will compute it in the usual way and freely use all the properties of derivatives on it.\\
 
-\textbf{Formal Derivative}- For a polynomial $p(X) \in \F[X]$, we define the formal derivative of $p(X)$ as the polynomial $u(X,X)$ where $u(X,Y)=\frac{p(X)-p(Y)}{X-Y}$\\
-Let us denote the formal derivative of $p(X)$ as $p^f(X)$.\\
-Then, $p^f(X)= u(X,X)$ where $u(X,Y)=\frac{p(X)-p(Y)}{X-Y}$\\\\
-It is well known that the formal derivative of a polynomial satisfies all the properties that we want the derivative of a polynomial to satisfy, like linearity, product rule, quotient rule etc.\\\\
-As a result, the formal derivative $p^f(X)$ defined as above can be computed from $p(X)$ in the \textit{usual} way, that is $\frac{d}{dx}X^k=k X^{k-1}$ and extend using linearity of derivative.\\
-Henceforth, we will represent the formal derivative of $p(X)$ as $p'(X)$ and because of the above statements, we will compute it in the usual way and freely use all the properties of derivatives on it.\\
+\subsection{Some Useful Results}\label{subsec:sub-results}
+We state and prove some facts which are used later througout the proof.
 
-\subsection{Some useful lemmas:}
-
-We need the following lemma:\\
 \begin{lemma}\label{lem:sumtoder}
-For $K\subset [N]$, define $H_K$ to be $\{\xi^i:i \in K\}$. Let $p(X)$ be the vanishing polynomial of $H_{K}$. Let $p'(X)$ and $p''(X)$ denote the formal first derivative and second derivative of $p(X)$ respectively.\\
+For $K\subset [N]$, define $H_K$ to be $\{\xi^i:i \in K\}$. Let $p(X)$ be the vanishing polynomial of $H_{K}$.
+Let $p'(X)$ and $p''(X)$ denote the formal first derivative and second derivative of $p(X)$ respectively.
 Then, $p''(\xi^i)/p'(\xi^i)=2 \cdot \sum_{j\in K\setminus \{i\}} 1/(\xi^i-\xi^j)$ for all $i \in K$
 \end{lemma}
 
 \begin{proof}
-
-    We have for any $r \in K$:\\
-    $p'(\xi^r)=\prod_{j \in K \setminus \{r\}}(\xi^r-\xi^j)$\\
-    To compute $p''(\xi^r)$, note that $p''(X)$ is a (double) sum of many products. When one substitutes $\xi^r$ in a product, the product is non zero if and only if $r=i\, \text{or}\, r=j$\\\\
-
-    Putting $\xi^r$ gives:
-    $$ p''(\xi^r)=\sum_{j\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,j\}} (\xi^r-\xi^k)+$$
-    $$ \sum_{i\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,i\}} (\xi^r-\xi^k) $$
-    But this is just,
-    $$2\cdot \sum_{j\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,j\}} (\xi^r-\xi^k) $$
-
-    Now, we are left to show that $\frac{\frac{p''(\xi^r)}{2}}{p'(\xi^r})=\sum_{j\in K\setminus \{r\}} 1/(\xi^r-\xi^j)$, or
-    $$\sum_{j\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,j\}} (\xi^r-\xi^k)=\prod_{j \in K \setminus \{r\}}(\xi^r-\xi^j) \sum_{j\in K\setminus \{r\}} 1/(\xi^r-\xi^j)$$
-
-    But we observe that:
-    $$\sum_{j\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,j\}} (\xi^r-\xi^k)=\sum_{j\in K\setminus \{r\}}\frac{\prod_{k\in K\setminus \{r\}} (\xi^r-\xi^k)}{(\xi^r-\xi^j)}$$
-
-    But $\prod_{k\in K\setminus \{r\}} (\xi^r-\xi^k)$ is independent of $j$, so it can be pulled outside the sum:
-    $$\sum_{j\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,j\}} (\xi^r-\xi^k)=\prod_{k\in K\setminus \{r\}} (\xi^r-\xi^k) \sum_{j\in K\setminus \{r\}} 1/(\xi^r-\xi^j) $$
-    But $k$ is just a dummy variable. We can replace $k$ by $j$ on the RHS:
-    $$\sum_{j\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,j\}} (\xi^r-\xi^k)=\prod_{j\in K\setminus \{r\}} (\xi^r-\xi^j) \sum_{j\in K\setminus \{r\}} 1/(\xi^r-\xi^j) $$
-    This completes the proof.
+    Observe that $p'(X)=\sum_{i\in K}\prod_{j\in K\setminus \{i\}}(X-\xi^j)$ and
+    $p''(X)=\sum_{i\in K}\sum_{j\in K\setminus \{i\}}\prod_{k\in K\setminus \{i,j\}}(X-\xi^k)$. Thus for $r\in K$,
+    we have:
+    \begin{align*}
+    p'(\xi^r) &= \prod_{j \in K \setminus \{r\}}(\xi^r-\xi^j), \\
+    p''(\xi^r)&=\sum_{j\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,j\}} (\xi^r-\xi^k)
+            +\sum_{i\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,i\}} (\xi^r-\xi^k)
+    \end{align*}
+    Note that only non-zero products in the expansion of $p''(\xi^r)$ occur when $i=r$ or $j=r$, resulting in the two summands for the same in the above equation.
+    Moreover, we notice that both summands are the same, giving us $p''(\xi^r)=2\sum_{i\in K\setminus \{r\}}\prod_{k\in \setminus \{r,i\}}(\xi^r-\xi^k)$. One may
+    now verify that $p'(\xi^r)/p''(\xi^r)$ gives the desired result claimed in the lemma.
 \end{proof}
+    %To compute $p''(\xi^r)$, note that $p''(X)$ is a (double) sum of many products. When one substitutes $\xi^r$ in a product, the product is non zero if and only if $r=i\, \text{or}\, r=j$\\\\
 
+%    Putting $\xi^r$ gives:
+%    $$ p''(\xi^r)=\sum_{j\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,j\}} (\xi^r-\xi^k)+$$
+%    $$ \sum_{i\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,i\}} (\xi^r-\xi^k) $$
+%    But this is just,
+%    $$2\cdot \sum_{j\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,j\}} (\xi^r-\xi^k) $$
+
+%    Now, we are left to show that $\frac{\frac{p''(\xi^r)}{2}}{p'(\xi^r})=\sum_{j\in K\setminus \{r\}} 1/(\xi^r-\xi^j)$, or
+%    $$\sum_{j\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,j\}} (\xi^r-\xi^k)=\prod_{j \in K \setminus \{r\}}(\xi^r-\xi^j) \sum_{j\in K\setminus \{r\}} 1/(\xi^r-\xi^j)$$
+
+%    But we observe that:
+%    $$\sum_{j\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,j\}} (\xi^r-\xi^k)=\sum_{j\in K\setminus \{r\}}\frac{\prod_{k\in K\setminus \{r\}} (\xi^r-\xi^k)}{(\xi^r-\xi^j)}$$
+
+%    But $\prod_{k\in K\setminus \{r\}} (\xi^r-\xi^k)$ is independent of $j$, so it can be pulled outside the sum:
+%    $$\sum_{j\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,j\}} (\xi^r-\xi^k)=\prod_{k\in K\setminus \{r\}} (\xi^r-\xi^k) \sum_{j\in K\setminus \{r\}} 1/(\xi^r-\xi^j) $$
+%    But $k$ is just a dummy variable. We can replace $k$ by $j$ on the RHS:
+%    $$\sum_{j\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,j\}} (\xi^r-\xi^k)=\prod_{j\in K\setminus \{r\}} (\xi^r-\xi^j) \sum_{j\in K\setminus \{r\}} 1/(\xi^r-\xi^j) $$
+%    This completes the proof.
+%\end{proof}
+
+\begin{comment}
+    ************ ALTERNATIVE PROOF **************
 \textbf{An alternative proof of \ref{lem:sumtoder}}:\\
 An alternative proof is possible by inducting on the cardinality of $K\subset N$.\\
 The base case where $K$ has one element, say $i$ is trivial. This is because in that case $p$ is a linear polynomial $X-\xi^i$ and LHS=$\frac{p''}{p'}=\frac{0}{1}=0$ and on RHS we are summing over the empty set so the sum is $0$.\\\\
@@ -451,53 +462,53 @@ So, $$\frac{2p'(\xi^{\alpha})}{p(\xi^{\alpha})}=\frac{2\cdot \prod_{i \in K' \se
 $$=2\cdot\sum_{j \in K'\setminus \{\alpha\}}\frac{1}{\xi^{\alpha}-\xi^j}$$
 
 This completes the proof of case 2 and thus the proof of the lemma.
+\end{comment}
 
 \begin{lemma}[Sumcheck]\label{lem:sumcheck}
-Let $u(X,Y)$ be a bi-variate polynomial over a finite field $\F$ and $\nroots$ be defined as the group of $N^{\text{th}}$ roots of unity $(N<<|\F|)$ with generator $\xi \in \F$ \\
-Then $\sum_{i\in [N]}u(X,\xi^i)= Nu(X,0)$
+Let $u(X,Y)$ be a bi-variate polynomial over a finite field $\F$ with degree less than $N$ in each of the variables and
+$\nroots$ be defined as the group of $N^{\text{th}}$ roots of unity $(N<<|\F|)$
+with generator $\xi \in \F$. Then $\sum_{i\in [N]}u(X,\xi^i)= Nu(X,0)$
 \end{lemma}
 
 \begin{proof}
-    First of all, by a basic result in algebra, $\F[X,Y]=\F[X][Y]$\\
-    $u(X,Y) \in \F[X,Y]$ thus $u(X,Y) \in \F[X][Y]$\\
-    Let it have degree $d<N$ ($u(X,Y)$ itself had degree less than $N$)
-    Thus, $u(X,Y)=a_0+a_1 Y+ a_2 Y^2+\cdots+ a_d Y^d$\\
-    Here each $a_i$ is a polynomial function in $X$\\
-    Now,  $\sum_{i\in [N]}u(X,\xi^i)$
-    $$N a_0+a_1(\xi^+\xi^2+\cdots+\xi^N)+a_2(\xi^2+\xi^4+\cdots+\xi^{2N})+ \cdots + a_d(\xi^d+\cdots +\xi^{Nd})$$
-    But for any $\alpha=\xi^k$ for $k<N$, $\alpha+\alpha^2+\cdots \alpha^N=0$ (basic property of complex numbers)\\
-    Thus, all terms vanish except the first term\\
-    So, $\sum_{i\in [N]}u(X,\xi^i)=N a_0$\\
-    But $a_0=u(X, 0)$\\
-    Thus, $\sum_{i\in [N]}u(X,\xi^i)=N u(X, 0)$
+    For some $d<N$, we write $u(X,Y)=a_0+a_1 Y+ a_2 Y^2+\cdots+ a_d Y^d$
+    where each $a_i$ is a polynomial in $X$ of degree less than $N$.
+    Now we write the sum:
+    \begin{align*}
+    \sum_{i\in [N]}u(X,\xi^i) &= N a_0+a_1(\xi^+\xi^2+\cdots+\xi^N) \\
+     &\, +a_2(\xi^2+\xi^4+\cdots+\xi^{2N})+ \cdots + a_d(\xi^d+\cdots +\xi^{Nd})
+    \end{align*}
+    But for any $\alpha=\xi^k$ for $k<N$, $\alpha+\alpha^2+\cdots \alpha^N=0$. Thus, all terms vanish except the first term
+    and hence $\sum_{i\in [N]}u(X,\xi^i)=N a_0$.
+    The lemma follows by observing that $a_0=u(X, 0)$.
 \end{proof}
 
 \begin{lemma}\label{lem:zk-hat}
-Let polynomials $Z_\nroots(X)$ be the vanishing polynomial for $\nroots$, let $\widehat{Z}_K(X)$ and $Z_K(X)$ be the vanishing polynomials for $H_{[N]\setminus K}$ and $H_K$ respectively. Let $\mu_1(X),\ldots,\mu_N(X)$
-be Lagrange polynomials for the set $\nroots=\{\xi,\ldots,\xi^N\}$. Then:
+Let $Z_\nroots(X)$ be the vanishing polynomial for $\nroots$, let $\widehat{Z}_K(X)$ and  $Z_K(X)$ be the vanishing polynomials for $H_{[N]\setminus K}$ and $H_K$ respectively.
+Let $\mu_1(X),\ldots,\mu_N(X)$ be Lagrange polynomials for the set $\nroots=\{\xi,\ldots,\xi^N\}$. Then:
 \begin{gather}
     \widehat{Z}_K(X) = \sum_{j\in K}\frac{Z_\nroots'(\xi^j)}{Z_K'(\xi^j)}\mu_j(X), \\
     \widehat{Z}_K'(X)= \sum_{j\in K}\frac{Z_\nroots'(\xi^j)}{Z_K'(\xi^j)}\mu_j'(X)
 \end{gather}
 \end{lemma}
-The following fact will be useful in proving the lemma.
-\begin{fact}[\textsf{Standard result from Algebra}]
-    If $2$ polynomials $f,g$ of degree $<N$ agree on $N$ points, then they are equal as polynomials, that is, $f(X)=g(X)$
+We use the following standard observation:
+\begin{fact}
+    If polynomials $f,g$ of degree $<N$ agree on $N$ points, then they are equal as polynomials, that is, $f(X)=g(X)$
 \end{fact}
 
 \begin{proof}
-    The second equation follows from the first by simple differentiation (linearity of derivative)\\
-    It suffices to prove the first equation\\
-    Both LHS and RHS are of degree $<N$. We will show that LHS and RHS agree on $N$ points. That will finish proof of (11) by the fact\\
-    Consider evaluating LHS and RHS at $\xi^i$ for $i \in [N]\setminus K$ \\
-    LHS is 0 by definition of $\hat{Z}_K(X)$. RHS is also 0 by properties of Lagrange polynomials.\\
-    Consider evaluating LHS and RHS at $\xi^i$ for $i \in K$\\
-    RHS is $\frac{Z_\nroots'(\xi^i)}{Z_K'(\xi^i)}$ by properties of Lagrange polynomials.\\
+    Note that the second equation follows from the first by linearity of derivatives, so it suffices to prove the first equation.
+    Both the sides of the identity are polynomials of degree $<N$, so it suffices to show their evaluations are identical over $N$ distcint points.
+    In particular we show their evaluations are identical over $\nroots$.
+    Consider evaluating LHS and RHS at $\xi^i$ for $i \in [N]\setminus K$.
+    The left side is $0$ by definition of $\hat{Z}_K(X)$, while the right hand side is zero by the properties of Lagrange polynomials.
+    Now consider evaluations LHS and RHS at $\xi^i$ for $i \in K$.
+    The RHS is $\frac{Z_\nroots'(\xi^i)}{Z_K'(\xi^i)}$ by properties of Lagrange polynomials, while the
     LHS is $\prod_{j \in [N]\setminus K} (\xi^i-\xi^j)$\\
     Multiplying dividing by $\prod_{ j \in K \setminus \{i\}}(\xi^i-\xi^j)$ gives:
-    $$\frac{\prod_{j \in [N] \setminus \{i\}} (\xi^i-\xi^j)}{\prod_{j \in K \setminus \{i\}}(\xi^i-\xi^j)}$$
-    Which is $\frac{Z_\nroots'(\xi^i)}{Z_K'(\xi^i)}$ =RHS\\
-    Thus, LHS and RHS of (11) agree on $\nroots$. Thus, they agree on $N$ points
+    $$LHS = \frac{\prod_{j \in [N] \setminus \{i\}} (\xi^i-\xi^j)}{\prod_{j \in K \setminus \{i\}}(\xi^i-\xi^j)}$$
+    Which is $\frac{Z_\nroots'(\xi^i)}{Z_K'(\xi^i)}$, the same as the right hand side.
+    This proves the claim.
 \end{proof}
 
 \begin{lemma}\label{lem:lamda-deriv}
@@ -512,27 +523,30 @@ of the $N^{th}$ roots of unity. Then we have:
 \end{lemma}
 
 \begin{proof}
-    Suppose first that $i \neq j$:\\
-    We know that $\mu_i(X)= \frac{Z_H(X)}{Z_H'(\xi^i)(X-\xi^i)}$\\
+    Suppose first that $i \neq j$.
+    We know that $\mu_i(X)= \frac{Z_H(X)}{Z_H'(\xi^i)(X-\xi^i)}$.
     Thus, by applying quotient rule(we can apply quotient rule because $\mu_i$ is defined at $\xi^j$ as $j\neq i$):
     $$\mu_i'(X) \cdot Z_H'(\xi^i)= \frac{(X-\xi^i)(N\cdot X^{N-1})-(X^N-1)}{(X-\xi^i)^2}$$
     Substituting $X$ by $\xi^j$, we get:
     $$\mu_i'(\xi^j) \cdot \frac{N}{\xi^i}= \frac{N(\xi^j-\xi^i)}{\xi^j (\xi^j-\xi^i)^2}$$
     Thus, we get:
-    $$\mu_i'(\xi^j)=\frac{\xi^i}{\xi^j(\xi^j-\xi^i)}$$\\
-    Now consider $i=j$:\\
+    $$\mu_i'(\xi^j)=\frac{\xi^i}{\xi^j(\xi^j-\xi^i)}$$
+    Now consider $i=j$:
     Then, $\mu_i(X)=\frac{\prod_{j \in [N] \setminus \{i\}}(X-\xi^j)}{Z_H'(\xi^i)}$\\
     Thus,  $\mu_i(X)\cdot Z_H'(\xi^i)=\prod_{j \in [N] \setminus \{i\}}(X-\xi^j)$\\
     Thus, $\mu_i'(X) \cdot \frac{N}{\xi^i}=\sum_{j \in [N] \setminus \{i\}}\prod_{k \in [N]\setminus\{i,j\}}(X-\xi^k)$\\
     Now, substituting $X$ by $\xi^i$ gives:
-    $$\mu_i'(\xi^i) \cdot \frac{N}{\xi^i}=\sum_{j \in [N] \setminus \{i\}}\prod_{k \in [N]\setminus\{i,j\}}(\xi^i-\xi^k)$$
-    or
-    $$\mu_i'(\xi^i) \cdot \frac{N}{\xi^i}=\sum_{j \in [N] \setminus \{i\}}\frac{\prod_{k \in [N]\setminus\{i\}}(\xi^i-\xi^k)}{\xi^i-\xi^j}$$
-    or$$\mu_i'(\xi^i) \cdot \frac{N}{\xi^i}= \prod_{k \in [N]\setminus\{i\}}(\xi^i-\xi^k)\sum_{j\in [N]\setminus \{i\}}\frac{1}{\xi^i-\xi^j}$$
-    or $$\mu_i'(\xi^i) \cdot \frac{N}{\xi^i}=Z_H'(\xi^i)\sum_{j\in [N]\setminus \{i\}}\frac{1}{\xi^i-\xi^j}$$
-    or $$\mu_i'(\xi^i)=\sum_{j\in [N]\setminus \{i\}}\frac{1}{\xi^i-\xi^j}$$
-    or $$\mu_i'(\xi^i)=\frac{Z_H''(\xi^i)}{2 Z_H'(\xi^i)} \text{ From the lemma \ref{lem:sumtoder}}$$
-    or $$ \mu_i'(\xi^i)=\frac{N-1}{2\xi^i}$$
+    \begin{align*}
+    \mu_i'(\xi^i) \cdot \frac{N}{\xi^i} &= \sum_{j \in [N] \setminus \{i\}}\prod_{k \in [N]\setminus\{i,j\}}(\xi^i-\xi^k) \\
+     &=\sum_{j \in [N] \setminus \{i\}}\frac{\prod_{k \in [N]\setminus\{i\}}(\xi^i-\xi^k)}{\xi^i-\xi^j} \\
+     &= \prod_{k \in [N]\setminus\{i\}}(\xi^i-\xi^k)\sum_{j\in [N]\setminus \{i\}}\frac{1}{\xi^i-\xi^j} \\
+     &=Z_H'(\xi^i)\sum_{j\in [N]\setminus \{i\}}\frac{1}{\xi^i-\xi^j}
+    \end{align*}
+    Cancelling off $Z_H'(\xi^i)=N/\xi^i$ in the above, and using Lemma ~\ref{lem:sumtoder}, we get:
+    \begin{align*}
+    \mu_i'(\xi^i) = \sum_{j\in [N]\setminus \{i\}}\frac{1}{\xi^i-\xi^j} =\frac{Z_H''(\xi^i)}{2 Z_H'(\xi^i)}
+     =\frac{N-1}{2\xi^i}
+    \end{align*}
 
 \end{proof}
 
