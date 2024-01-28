@@ -176,9 +176,9 @@ such that the following hold:
 \begin{figure}[htbp]
     \begin{mdframed}
     {
-        \noindent{\bf Common Input}: Commitments $c_a$, $c_b$, $c_c$, $c_v$, and $\gone{Z}$ (to the polynomial
+            {\bf Common Input}: Commitments $c_a$, $c_b$, $c_c$, $c_v$, and $\gone{Z}$ (to the polynomial
         $Z(X)=\prod_{i=1}^m (X-\omega^i)$). \\
-    \noindent{\bf Prover's Input}: Vectors $\vec{a},\vec{b},\vec{c}\in\F^m$ and $\vec{v}\in \F^k$.
+    {\bf Prover's Input}: Vectors $\vec{a},\vec{b},\vec{c}\in\F^m$ and $\vec{v}\in \F^k$.
         \begin{enumerate}[leftmargin=1em, label=\arabic*.]
             \item $\verifier$ sends $\gamma\gets \F$.
             \item $\prover$ computes:
@@ -261,40 +261,42 @@ The complete polynomial protocol is detailed in Figure \ref{fig:time-ordered-tra
 
 %\begin{tcolorbox}
 \begin{figure}[htbp]
-    \centering
+
     \begin{mdframed}
-    {\footnotesize
-    \noindent{\bf Common Input}: Commitments $c_T=(c_a,c_v)$, $c_o=(\bar{c}_\op, \bar{c}_a, \bar{c}_v)$, $c_T'=(c_a', c_v')$
-        and $c_\tr=(c_t, c_\op, c_A, c_V)$ to $T,o,T'$ and $\tr$ respectively. Commitment $\gone{Z}$ to the polynomial
-        $Z(X)=\prod_{i=1}^m (X-\omega^i)$.
-        \begin{enumerate}[leftmargin=2em]
-            \item $\verifier\rightarrow\prover$: Verifier sends $\beta,\gamma\gets \F$.
+    {
+            {\bf Common Input}: Commitments $c_T=(c_a,c_v)$, $c_o=(\bar{c}_\op, \bar{c}_a, \bar{c}_v)$, $c_T'=(c_a', c_v')$
+        and $c_\tr=(c_t, c_\op, c_A, c_V)$ to $T,o,T'$ and $\tr$(which is supposed to be the time ordered transcript) respectively. Commitment $\gone{Z(X)}$ to the polynomial
+        $Z(X)=\prod_{i=1}^m (X-\omega^i)$\\
+    {\bf Prover's Input}: $\tr, T, T', \vec{o}$ and their polynomial encodings, $Z(X)$
+        \begin{enumerate}[leftmargin=1em, label=\arabic*.]
+            \item $\verifier$ sends $\beta,\gamma\gets \F$.
             \item $\prover$ computes:
             \begin{align}\label{eq:poly-constraints}
             & G_1(X) = a(X) + \beta v(X),\, G_2(X) = \bar{a}(X) + \beta \bar{v}(X) + \beta^2 \bar{\op}(X) \tag{A1} \\
             & G_3(X) = a'(X) + \beta v'(X),\, G(X) = A(X) + \beta V(X) + \beta^2 \op(X) \tag{A2} \\
             & H(X) = G_1(X) + \gamma G_2(X) + \gamma^2 G_3(X), \tag{A3} \\
-            & Q(X) = (H(X^3) - G(X) - \gamma G(\omega^m X) - \gamma^2 G(\omega^{2m} X))/Z(X) \tag{A4}
+            & Q(X) = [(H(X^3) - G(X) - \gamma G(\omega^m X) - \gamma^2 G(\omega^{2m} X))]/Z(X) \tag{A4}
             \end{align}
-            \item $\prover\rightarrow\verifier$: The prover sends commitment $\gone{Q}$ to $Q(X)$.
-            \item $\verifier\rightarrow\prover$: Sends $s\gets\F$.
-            \item $\prover\rightarrow\verifier$: Sends evaluations $\val{s}{G}=G(s)$, $\val{\omega^m s}{G}=G(\omega^m s)$,
+            \item $\prover$ sends commitment $\gone{Q}$ to $Q(X)$.
+            \item $\verifier$ sends $s\gets\F$.
+            \item $\prover$ sends evaluations $\val{s}{G}=G(s)$, $\val{\omega^m s}{G}=G(\omega^m s)$,
             $\val{\omega^{2m}s}{G}=G(\omega^{2m} s)$, $\val{s^3}{H}=H(s^3)$, $\val{s}{Q}=Q(s)$ and $\val{s}{Z}=Z(s)$.
-            \item $\verifier\rightarrow\prover$: Sends $r\gets\F$.
-            \item $\prover\rightarrow\verifier$: Sends $\kzg$ proofs:
-            \begin{itemize}[leftmargin=2em]
-                \item $\Pi_G=\kzgprove(\srs,G,(s,\omega^m s, \omega^{2m}s))$.
-                \item $\Pi_H=\kzgprove(\srs,H,s^3)$.
-                \item $\Pi_F=\kzgprove(\srs,F,s)$ where $F(X)=Z(X) + rQ(X)$.
+            \item $\verifier$ sends $r\gets\F$.
+            \item $\prover$ sends $\kzg$ proofs:
+            \begin{itemize}[leftmargin=1em]
+                \item $\Pi_G=\kzgprove(\srs,G(X),(s,\omega^m s, \omega^{2m}s))$.
+                \item $\Pi_H=\kzgprove(\srs,H(X),s^3)$.
+                \item $\Pi_F=\kzgprove(\srs,F(X),s)$ where $F(X)=Z(X) + rQ(X)$.
             \end{itemize}
-            \item $\verifier$ computes: Compute commitments $\gone{G},\gone{H}$ and $\gone{F}$ using homomorphism. It then checks:
-            \begin{itemize}[leftmargin=2em]
-                \item $\kzgverify(\srs,\gone{G},(s,\omega^m s, \omega^{2m}s), (\val{s}{G}, \val{\omega^m s}{G}, \val{\omega^{2m} s}{G}),\Pi_G)$.
-                \item $\kzgverify(\srs,\gone{H}, s^3, \val{s^3}{H},\Pi_H)$.
-                \item $\kzgverify(\srs,\gone{F}, s, \val{s}{Z} + r\val{s}{Q}, \Pi_F)$.
-                \item $\val{s}{Q}\cdot \val{s}{Z} =? \val{s^3}{H}-\val{s}{G}-\gamma \val{\omega^m s}{G}-\gamma^2\val{\omega^{2m}s}{G}$.
+            \item $\verifier$ computes $\gone{G(X)},\gone{H(X)}$ and $\gone{F(X)}$ using homomorphism.
+            \item $\verifier$ checks:
+            \begin{itemize}[leftmargin=1em]
+                \item $\kzgverify(\srs,\gone{G}, (\val{s}{G}, \val{\omega^m s}{G}, \val{\omega^{2m} s}{G}),\\(s,\omega^m s, \omega^{2m}s),\Pi_G)$.
+                \item $\kzgverify(\srs,\gone{H}, \val{s^3}{H}, s^3, \Pi_H)$.
+                \item $\kzgverify(\srs,\gone{F}, \val{s}{Z} + r\val{s}{Q}, s, \Pi_F)$.
+                \item $\val{s}{Q}\cdot \val{s}{Z} = \val{s^3}{H}-\val{s}{G}-\gamma \val{\omega^m s}{G}-\gamma^2\val{\omega^{2m}s}{G}$.
             \end{itemize}
-            \item $\verifier$ outputs: Accept if all the above checks succeeds, otherwise it rejects.
+            \item $\verifier$ accepts if all the above checks succeeds, otherwise it rejects.
         \end{enumerate}
     }
     \end{mdframed}
@@ -321,23 +323,26 @@ The polynomial protocol in Figure \ref{fig:permutated-transcripts} essentially i
 the random linear combination of the columns of the respective transcripts.
 %\begin{tcolorbox}
 \begin{figure}[htbp]
-    \centering
+
     \begin{mdframed}
-    {\footnotesize
-    \noindent{\bf Common Input}: Commitments $c_\tr=(c_t,c_\op,c_A, c_V)$ and $c_\tr^\ast=(c_t^\ast,c_\op^\ast, c_A^\ast, c_V^\ast)$
-        of transcripts $\tr$ and $\tr^\ast$ respectively.
-        \begin{enumerate}[leftmargin=2em]
-            \item $\verifier\rightarrow\prover$: Sends $\alpha,\beta, \chi\gets \F$
+    {
+            {\bf Common Input}: Commitments $c_\tr=(c_t,c_\op,c_A, c_V)$ and $c_\tr^\ast=(c_t^\ast,c_\op^\ast, c_A^\ast, c_V^\ast)$
+        of transcripts $\tr$ and $\tr^\ast$ respectively.\\
+    {\bf Prover's Input}: Transcripts $\tr, \tr^{*}$ and their polynomial encodings, permutation $\sigma$ such that $\tr^{*}=\sigma(\tr)$
+        \begin{enumerate}[leftmargin=1em, label=\arabic*]
+            \item $\verifier$ sends $\alpha,\beta, \chi\gets \F$
             \item $\prover$ computes $f(X)=t(X) + \beta \op(X) + \beta^2 A(X) + \beta^3 V(X)$, $g(X) = t^\ast(X) + \beta \op^\ast(X)$
             $+ \beta^2 A^\ast(X) + \beta^3 V^\ast(X)$. It then computes polynomials $z(X),q(X)$ as:
             \begin{itemize}[leftmargin=1em]
                 \item Interpolate polynomial $z(X)$ of degree $k-1$ such that $z(\omega)=1$ and
-                $z(\omega^{i+1})=\prod_{j=1}^i (\alpha - f(\omega^j))/(\alpha - g(\omega^j))$ for $1\leq i\leq k$.
+                $z(\omega^{i+1})=\prod_{j=1}^i (\alpha - f(\omega^j))/(\alpha - g(\omega^j))$ for $1\leq i\leq k-1$.
                 \item Compute $q(X) = ((\alpha - g(X))z(\omega X) - (\alpha - f(X))z(X) + \chi\lambda_1(X)(z(X) - 1))/\mathbb{Z}_{\setH}(X)$.
             \end{itemize}
-            \item $\prover\rightarrow\verifier$: Sends commitments $\gone{z}$ and $\gone{q}$ to polynomials $z(X)$ and $q(X)$ respectively.
-            \item $\verifier$ computes: The verifier checks that $q(X)Z_\setH(X)$ = $(\alpha - g(X))z(\omega X)-(\alpha - f(X))z(X) + \chi\lambda_1(X)(z(X) - 1)$
-            by requesting evaluations and $\kzg$ proofs of polynomials $f,g$ and $q$ at a random point. It accepts if the check succeeds.
+            \item $\prover$ sends commitments $\gone{z(X)}$ and $\gone{q(X)}$ to polynomials $z(X)$ and $q(X)$ respectively.
+            \item $\verifier$ computes commitments $[f]_1, [g]_1$ by homomorphism
+            \item $\verifier$ checks that $q(X)Z_\setH(X)$ = $(\alpha - g(X))z(\omega X)-(\alpha - f(X))z(X) + \chi\lambda_1(X)(z(X) - 1)$
+            by requesting evaluations and $\kzg$ proofs of polynomials $f,g, q, z$ at a random point, say $s$ and evaluation and $\kzg$ proof of $z$ at $\omega s$.
+            \item $\verifier$ accepts if all the checks succeed, else it rejects
         \end{enumerate}
     }
     \end{mdframed}
@@ -345,16 +350,47 @@ the random linear combination of the columns of the respective transcripts.
     \caption{Protocol: Check permutation of transcripts}
     \label{fig:permutated-transcripts}
 \end{figure}
-%\end{tcolorbox}
+
+
 Finally, we see that Lemma \ref{lem:addr-ordered-transcript} implies a polynomial protocol to check that the transcript
-$\tr^\ast$ is address ordered and satisfies load-store consistency. We skip the formal protocol details, which
+$\tr^\ast$ is address ordered and satisfies load-store consistency, which
 essentially involves the prover identifying sets
 $I_1, I_2$ as described in Section \ref{subsec:encoded-relations} and sending auxiliary polynomials $Z_1(X),Z_2(X),\delta^\ast_A(X)$ and $\delta^\ast_T(X)$ to the verifier.
 The verifier then checks the identities (C1)-(C6) in Lemma \ref{lem:addr-ordered-transcript}.
 The range checks in (C7) can be checked using polynomial protocols in sub-vector lookup arguments such as Caulk+ ~\cite{EPRINT:PosKat22}, CQ
-~\cite{EPRINT:EagFioGab22}. For completeness, we also include a protocol for enforcing range checks using committed index lookup
-described in Section \ref{subsec:committed-index-lookup}.
+~\cite{EPRINT:EagFioGab22}. The protocol(compiled using KZG commitments in AGM) can be found in figure \ref{fig:encoded-relations}. The overall covering protocol for $\CLRAM$ which combines figures \ref{fig:time-ordered-transcript}, \ref{fig:permutated-transcripts}, \ref{fig:encoded-relations} in this order can be found in figure \ref{fig:covering-protocol}.
+\begin{figure}[htbp]
 
+    \begin{mdframed}
+    {
+            {\bf Common Input}: Commitments $c_T=(c_a,c_v)$, $c_o=(\bar{c}_\op, \bar{c}_a, \bar{c}_v)$, $c_T'=(c_a', c_v')$
+
+            {\bf Prover's Input}: $ T, T', \vec{o}$ and their polynomial encodings
+        \begin{enumerate}[leftmargin=1em, label=\arabic*.]
+            \item $\prover$ computes:
+            \begin{itemize}
+                \item $\tr$, which is the time ordered transcript corresponding to $T, \vec{o}, T'$, and its polynomial encoding
+                \item $Z(X)=\prod_{i=1}^m (X-\omega^i)$
+                \item $c_\tr=(c_t, c_\op, c_A, c_V)$ which is the commitment of $\tr$
+                \item $[Z(X)]_1$
+            \end{itemize}
+
+            \item $\prover$ sends  $c_\tr=(c_t, c_\op, c_A, c_V)$ and $[Z(X)]_1$
+            \item $\left<\prover, \verifier \right>$ run the protocol for checking correctness of time ordered transcript as in figure \ref{fig:time-ordered-transcript}
+            \item $\prover$ computes the address ordered transcript $\tr^{*}$ from the time ordered transcript $\tr$ by permuting suitably. It also computes its polynomial encoding
+            \item $\prover$ computes the permutation $\sigma$ such that $\tr^{*}= \sigma(\tr)$ (this is computed along with the $\tr^{*}$)
+            \item $\prover$ computes the commitment $c_\tr^\ast=(c_t^\ast,c_\op^\ast, c_A^\ast, c_V^\ast)$ of $\tr^{*}$
+            \item $\prover$ sends  $c_\tr^\ast$
+            \item $\left<\prover, \verifier \right>$ run the protocol for checking that the two transcripts are permuatations of each other as in figure \ref{fig:permutated-transcripts}
+            \item $\left<\prover, \verifier \right>$ run the protocol for checking the constraints given in lemma \ref{lem:addr-ordered-transcript} as in figure \ref{fig:encoded-relations}
+            \item $\verifier$ accepts if all the three sub protocols lead to accept. $\verifier$ rejects otherwise
+        \end{enumerate}
+    }
+    \end{mdframed}
+    \vspace*{-5mm}
+    \caption{Protocol:Overall protocol for the relation $\CLRAM$}
+    \label{fig:covering-protocol}
+\end{figure}
 
 \section{Proof of Lemma ~\ref{lem:sum-computation}}
 %Recall the statement of lemma \ref{lem:sum computation}. We want to compute $e_i$ for all $i \in \setind$ and $b_j$ for all $j \in K$ in $O(|K|\log^2|K|)$ $\mathbb{F}$ operations.\\\\
