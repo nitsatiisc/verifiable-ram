@@ -204,12 +204,19 @@ between vectors $\vecTbase$ and $\vecT$.
         Using the fact that $u(X,X)=p'(X)$ gives the formal derivative of polynomial $p(X)$, we get
         $r_i(\xi^i)=r(\xi^i)-p'(\xi^i)$ for all $i\in I$, where $r(X)=\sum_{j\in [N]}u(X,\xi^j)$. Fortunately,
         $r(X)$ is simply $Nu(X,0)=N(p(X) - p(0))/X$, a fact that follows from univariate sum-check. The problem
-        thus reduces to being able to compute derivates $p'(\xi^i)$ for $i\in I$ and the value $p(0)$. In the
-        complete proof, we show how we leverage special structure of the high degree polynomial $p(X)$ to compute
-        the above efficiently, without computing $p(X)$ itself. This concludes the proof-sketch of the lemma.
+        thus reduces to being able to compute derivates $p'(\xi^i)$ for $i\in I$ and the value $p(0)$. Before
+        concluding the proof-sketch, we briefly highlight the structure of the polynomial $p(X)$. Since $p(X)$
+        vanishes for $p(\xi^i)$ for $i\not\in K$, it can we written as the product $\widehat{Z}_K(X)q(X)$ where
+        $\widehat{Z}_K$ is the vanishing polynomial of ``complementary'' roots of unity $\{\xi^i: i\not\in K\}$
+        and $q$ is a low-degree ($<K$) polynomial. Assuming we can interpolate $q(X)$, we can write:
+        \[ p'(\xi^i) = \widehat{Z}_K(\xi^i)q'(\xi^i) + \widehat{Z}_K'(\xi^i)q(\xi^i). \]
+        In the above expression, we require evaluations of high-degree polynomials $\widehat{Z}_K(X)$ and $\widehat{Z}_K'(X)$
+        at $\xi^i$, $i\in I$. This is discussed in Lemma ~\ref{lem:zk-hat} and other related lemmas in Section ~\ref{subsec:sub-results},
+        and motivates the at times tedious algebra there. We conclude the proof-sketch, deferring the missing details to the full
+        proof in Section ~\ref{subsec:sum-computational}.
     \end{proof}
 
-    From the lemma ~\ref{lem:sum-computation}, we conclude that the scalars $a_i,i\in I$ and $b_j, j\in K$ can be computed in
+    From the Lemma ~\ref{lem:sum-computation}, we conclude that the scalars $a_i,i\in I$ and $b_j, j\in K$ can be computed in
     time $O(|K|\log^2 |K|)$, which proves the bound in Theorem ~\ref{thm:approx-setup}.
     %have shown that the field operations needed to get $e_i$ and $b_j$ and thus $\elttwo{\Qcachepolytwo{X}}$ is $O(|K|\log^2|K|)$. \\
 
