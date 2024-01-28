@@ -405,15 +405,15 @@ Then, $p''(\xi^i)/p'(\xi^i)=2 \cdot \sum_{j\in K\setminus \{i\}} 1/(\xi^i-\xi^j)
     $p''(X)=\sum_{i\in K}\sum_{j\in K\setminus \{i\}}\prod_{k\in K\setminus \{i,j\}}(X-\xi^k)$. Thus for $r\in K$,
     we have:
     \begin{align*}
-    p'(\xi^r) &= \prod_{j \in K \setminus \{r\}}(\xi^r-\xi^j), \\
-    p''(\xi^r)&=\sum_{j\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,j\}} (\xi^r-\xi^k)
-            +\sum_{i\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,i\}} (\xi^r-\xi^k)
+        p'(\xi^r) &= \prod_{j \in K \setminus \{r\}}(\xi^r-\xi^j), \\
+        p''(\xi^r)&=\sum_{j\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,j\}} (\xi^r-\xi^k)
+        +\sum_{i\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,i\}} (\xi^r-\xi^k)
     \end{align*}
     Note that only non-zero products in the expansion of $p''(\xi^r)$ occur when $i=r$ or $j=r$, resulting in the two summands for the same in the above equation.
     Moreover, we notice that both summands are the same, giving us $p''(\xi^r)=2\sum_{i\in K\setminus \{r\}}\prod_{k\in \setminus \{r,i\}}(\xi^r-\xi^k)$. One may
     now verify that $p'(\xi^r)/p''(\xi^r)$ gives the desired result claimed in the lemma.
 \end{proof}
-    %To compute $p''(\xi^r)$, note that $p''(X)$ is a (double) sum of many products. When one substitutes $\xi^r$ in a product, the product is non zero if and only if $r=i\, \text{or}\, r=j$\\\\
+%To compute $p''(\xi^r)$, note that $p''(X)$ is a (double) sum of many products. When one substitutes $\xi^r$ in a product, the product is non zero if and only if $r=i\, \text{or}\, r=j$\\\\
 
 %    Putting $\xi^r$ gives:
 %    $$ p''(\xi^r)=\sum_{j\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,j\}} (\xi^r-\xi^k)+$$
@@ -436,48 +436,48 @@ Then, $p''(\xi^i)/p'(\xi^i)=2 \cdot \sum_{j\in K\setminus \{i\}} 1/(\xi^i-\xi^j)
 
 \begin{comment}
     ************ ALTERNATIVE PROOF **************
-\textbf{An alternative proof of \ref{lem:sumtoder}}:\\
-An alternative proof is possible by inducting on the cardinality of $K\subset N$.\\
-The base case where $K$ has one element, say $i$ is trivial. This is because in that case $p$ is a linear polynomial $X-\xi^i$ and LHS=$\frac{p''}{p'}=\frac{0}{1}=0$ and on RHS we are summing over the empty set so the sum is $0$.\\\\
-Now let $|K|=k$ and the elements of $K$ be $a_1, a_2, \cdots, a_k$.
-Consequently $p(X)=\prod_{i \in K}(X-\xi^i)$\\
-We assume that the result holds for this case. Thus,
-$$p''(\xi^i)/p'(\xi^i)=2 \cdot \sum_{j\in K\setminus \{i\}} 1/(\xi^i-\xi^j)$$ for all $i \in K$.\\
-Suppose we introduce another element in the set $K$, call it $\alpha$
-The vanishing polynomial for the new $K$(call it $K')$ is $q(X)=p(X)(X-\xi^{\alpha})$\\
-Then by the product rule for derivatives, we have:
-$$q'(X)=p'(X)(X-\xi^{\alpha})+p(X)$$ and
-$$q''(X)=2p'(X)+p''(X)(X-\xi^{\alpha})$$
+    \textbf{An alternative proof of \ref{lem:sumtoder}}:\\
+    An alternative proof is possible by inducting on the cardinality of $K\subset N$.\\
+    The base case where $K$ has one element, say $i$ is trivial. This is because in that case $p$ is a linear polynomial $X-\xi^i$ and LHS=$\frac{p''}{p'}=\frac{0}{1}=0$ and on RHS we are summing over the empty set so the sum is $0$.\\\\
+    Now let $|K|=k$ and the elements of $K$ be $a_1, a_2, \cdots, a_k$.
+    Consequently $p(X)=\prod_{i \in K}(X-\xi^i)$\\
+    We assume that the result holds for this case. Thus,
+    $$p''(\xi^i)/p'(\xi^i)=2 \cdot \sum_{j\in K\setminus \{i\}} 1/(\xi^i-\xi^j)$$ for all $i \in K$.\\
+    Suppose we introduce another element in the set $K$, call it $\alpha$
+    The vanishing polynomial for the new $K$(call it $K')$ is $q(X)=p(X)(X-\xi^{\alpha})$\\
+    Then by the product rule for derivatives, we have:
+    $$q'(X)=p'(X)(X-\xi^{\alpha})+p(X)$$ and
+    $$q''(X)=2p'(X)+p''(X)(X-\xi^{\alpha})$$
 
-It suffices to show that $$\frac{q''(\xi^i)}{q'(\xi^i)}=2\sum_{j\in K'\setminus \{i\}}\frac{1}{\xi^i-\xi^j}$$
-for all $i \in K'$\\
-For this we make 2 cases:\\
-\textbf{Case 1-}$i \in K$
-Then
-$$q'(\xi^i)=p'(\xi^i)(\xi^i-\xi^{\alpha})$$ and
-$$q''(\xi^i)=2p'(\xi^i)+p''(\xi^i)(\xi^i-\xi^{\alpha})$$
-This used that $p(\xi^i)=0$\\
-Thus, $$\frac{q''(\xi^i)}{q'(\xi^i)}=\frac{2p'(\xi^i)+p''(\xi^i)(\xi^i-\xi^{\alpha})}{p'(\xi^i)(\xi^i-\xi^{\alpha})}$$
-Dividing numerator and denominator by $p'(\xi^i)(\xi^i-\xi^{\alpha})$ gives:
-$$\frac{q''(\xi^i)}{q'(\xi^i)}=\frac{2}{\xi^i-\xi^\alpha}+\frac{p''(\xi^i)}{p'(\xi^i)}$$
-By induction hypothesis this becomes:
-$$\frac{q''(\xi^i)}{q'(\xi^i)}=\frac{2}{\xi^i-\xi^\alpha}+2 \cdot \sum_{j\in K\setminus \{i\}} 1/(\xi^i-\xi^j)$$
-Note that $$\frac{1}{\xi^i-\xi^\alpha}+ \sum_{j\in K\setminus \{i\}} 1/(\xi^i-\xi^j)=\sum_{j\in K'\setminus \{i\}}\frac{1}{\xi^i-\xi^j}$$
-Using that $K'=K \cup \{\alpha\}$\\
-Thus, $$\frac{q''(\xi^i)}{q'(\xi^i)}=2\sum_{j\in K'\setminus \{i\}}\frac{1}{\xi^i-\xi^j}$$ which completes case 1. \\\\
-\textbf{Case 2-}$i=\alpha$. Then
-$$q'(\xi^{\alpha})=p(\xi^{\alpha})$$ and
-$$q''(\xi^{\alpha})=2p'(\xi^{\alpha})$$
-These we get by replacing $X$ by $\xi^{\alpha}$ in the expressions of $q', q''$
-So, it is sufficient to prove that:
-$$\frac{2p'(\xi^{\alpha})}{p(\xi^{\alpha})}=2\sum_{j\in K'\setminus \{\alpha\}}\frac{1}{\xi^{\alpha}-\xi^j}$$
+    It suffices to show that $$\frac{q''(\xi^i)}{q'(\xi^i)}=2\sum_{j\in K'\setminus \{i\}}\frac{1}{\xi^i-\xi^j}$$
+    for all $i \in K'$\\
+    For this we make 2 cases:\\
+    \textbf{Case 1-}$i \in K$
+    Then
+    $$q'(\xi^i)=p'(\xi^i)(\xi^i-\xi^{\alpha})$$ and
+    $$q''(\xi^i)=2p'(\xi^i)+p''(\xi^i)(\xi^i-\xi^{\alpha})$$
+    This used that $p(\xi^i)=0$\\
+    Thus, $$\frac{q''(\xi^i)}{q'(\xi^i)}=\frac{2p'(\xi^i)+p''(\xi^i)(\xi^i-\xi^{\alpha})}{p'(\xi^i)(\xi^i-\xi^{\alpha})}$$
+    Dividing numerator and denominator by $p'(\xi^i)(\xi^i-\xi^{\alpha})$ gives:
+    $$\frac{q''(\xi^i)}{q'(\xi^i)}=\frac{2}{\xi^i-\xi^\alpha}+\frac{p''(\xi^i)}{p'(\xi^i)}$$
+    By induction hypothesis this becomes:
+    $$\frac{q''(\xi^i)}{q'(\xi^i)}=\frac{2}{\xi^i-\xi^\alpha}+2 \cdot \sum_{j\in K\setminus \{i\}} 1/(\xi^i-\xi^j)$$
+    Note that $$\frac{1}{\xi^i-\xi^\alpha}+ \sum_{j\in K\setminus \{i\}} 1/(\xi^i-\xi^j)=\sum_{j\in K'\setminus \{i\}}\frac{1}{\xi^i-\xi^j}$$
+    Using that $K'=K \cup \{\alpha\}$\\
+    Thus, $$\frac{q''(\xi^i)}{q'(\xi^i)}=2\sum_{j\in K'\setminus \{i\}}\frac{1}{\xi^i-\xi^j}$$ which completes case 1. \\\\
+    \textbf{Case 2-}$i=\alpha$. Then
+    $$q'(\xi^{\alpha})=p(\xi^{\alpha})$$ and
+    $$q''(\xi^{\alpha})=2p'(\xi^{\alpha})$$
+    These we get by replacing $X$ by $\xi^{\alpha}$ in the expressions of $q', q''$
+    So, it is sufficient to prove that:
+    $$\frac{2p'(\xi^{\alpha})}{p(\xi^{\alpha})}=2\sum_{j\in K'\setminus \{\alpha\}}\frac{1}{\xi^{\alpha}-\xi^j}$$
 
-But $$p(\xi^{\alpha})=\prod_{i \in K}(\xi^{\alpha}-\xi^i)=\prod_{i \in K'\setminus \{\alpha\}}(\xi^{\alpha}-\xi^i)$$ and $$p'(\xi^{\alpha})=\sum_{j \in K} \prod_{i \in K \setminus \{j\}}(\xi^{\alpha}-\xi^i)=\sum_{j \in K'\setminus \{\alpha\}} \prod_{i \in K' \setminus \{j, \alpha\}}(\xi^{\alpha}-\xi^i)$$
-But now, note that $$\sum_{j \in K'\setminus \{\alpha\}} \prod_{i \in K' \setminus \{j, \alpha\}}(\xi^{\alpha}-\xi^i)=\prod_{i \in K' \setminus \{ \alpha\}}(\xi^{\alpha}-\xi^i)\sum_{j \in K'\setminus \{\alpha\}}\frac{1}{\xi^{\alpha}-\xi^j}$$
-So, $$\frac{2p'(\xi^{\alpha})}{p(\xi^{\alpha})}=\frac{2\cdot \prod_{i \in K' \setminus \{ \alpha\}}(\xi^{\alpha}-\xi^i)\sum_{j \in K'\setminus \{\alpha\}}\frac{1}{\xi^{\alpha}-\xi^j}}{\prod_{i \in K'\setminus \{\alpha\}}(\xi^{\alpha}-\xi^i)}=$$\\
-$$=2\cdot\sum_{j \in K'\setminus \{\alpha\}}\frac{1}{\xi^{\alpha}-\xi^j}$$
+    But $$p(\xi^{\alpha})=\prod_{i \in K}(\xi^{\alpha}-\xi^i)=\prod_{i \in K'\setminus \{\alpha\}}(\xi^{\alpha}-\xi^i)$$ and $$p'(\xi^{\alpha})=\sum_{j \in K} \prod_{i \in K \setminus \{j\}}(\xi^{\alpha}-\xi^i)=\sum_{j \in K'\setminus \{\alpha\}} \prod_{i \in K' \setminus \{j, \alpha\}}(\xi^{\alpha}-\xi^i)$$
+    But now, note that $$\sum_{j \in K'\setminus \{\alpha\}} \prod_{i \in K' \setminus \{j, \alpha\}}(\xi^{\alpha}-\xi^i)=\prod_{i \in K' \setminus \{ \alpha\}}(\xi^{\alpha}-\xi^i)\sum_{j \in K'\setminus \{\alpha\}}\frac{1}{\xi^{\alpha}-\xi^j}$$
+    So, $$\frac{2p'(\xi^{\alpha})}{p(\xi^{\alpha})}=\frac{2\cdot \prod_{i \in K' \setminus \{ \alpha\}}(\xi^{\alpha}-\xi^i)\sum_{j \in K'\setminus \{\alpha\}}\frac{1}{\xi^{\alpha}-\xi^j}}{\prod_{i \in K'\setminus \{\alpha\}}(\xi^{\alpha}-\xi^i)}=$$\\
+    $$=2\cdot\sum_{j \in K'\setminus \{\alpha\}}\frac{1}{\xi^{\alpha}-\xi^j}$$
 
-This completes the proof of case 2 and thus the proof of the lemma.
+    This completes the proof of case 2 and thus the proof of the lemma.
 \end{comment}
 
 \begin{lemma}[Sumcheck]\label{lem:sumcheck}
@@ -491,8 +491,8 @@ with generator $\xi \in \F$. Then $\sum_{i\in [N]}u(X,\xi^i)= Nu(X,0)$
     where each $a_i$ is a polynomial in $X$ of degree less than $N$.
     Now we write the sum:
     \begin{align*}
-    \sum_{i\in [N]}u(X,\xi^i) &= N a_0+a_1(\xi^+\xi^2+\cdots+\xi^N) \\
-     &\, +a_2(\xi^2+\xi^4+\cdots+\xi^{2N})+ \cdots + a_d(\xi^d+\cdots +\xi^{Nd})
+        \sum_{i\in [N]}u(X,\xi^i) &= N a_0+a_1(\xi^+\xi^2+\cdots+\xi^N) \\
+        &\, +a_2(\xi^2+\xi^4+\cdots+\xi^{2N})+ \cdots + a_d(\xi^d+\cdots +\xi^{Nd})
     \end{align*}
     But for any $\alpha=\xi^k$ for $k<N$, $\alpha+\alpha^2+\cdots \alpha^N=0$. Thus, all terms vanish except the first term
     and hence $\sum_{i\in [N]}u(X,\xi^i)=N a_0$.
@@ -553,15 +553,15 @@ of the $N^{th}$ roots of unity. Then we have:
     Thus, $\mu_i'(X) \cdot \frac{N}{\xi^i}=\sum_{j \in [N] \setminus \{i\}}\prod_{k \in [N]\setminus\{i,j\}}(X-\xi^k)$\\
     Now, substituting $X$ by $\xi^i$ gives:
     \begin{align*}
-    \mu_i'(\xi^i) \cdot \frac{N}{\xi^i} &= \sum_{j \in [N] \setminus \{i\}}\prod_{k \in [N]\setminus\{i,j\}}(\xi^i-\xi^k) \\
-     &=\sum_{j \in [N] \setminus \{i\}}\frac{\prod_{k \in [N]\setminus\{i\}}(\xi^i-\xi^k)}{\xi^i-\xi^j} \\
-     &= \prod_{k \in [N]\setminus\{i\}}(\xi^i-\xi^k)\sum_{j\in [N]\setminus \{i\}}\frac{1}{\xi^i-\xi^j} \\
-     &=Z_H'(\xi^i)\sum_{j\in [N]\setminus \{i\}}\frac{1}{\xi^i-\xi^j}
+        \mu_i'(\xi^i) \cdot \frac{N}{\xi^i} &= \sum_{j \in [N] \setminus \{i\}}\prod_{k \in [N]\setminus\{i,j\}}(\xi^i-\xi^k) \\
+        &=\sum_{j \in [N] \setminus \{i\}}\frac{\prod_{k \in [N]\setminus\{i\}}(\xi^i-\xi^k)}{\xi^i-\xi^j} \\
+        &= \prod_{k \in [N]\setminus\{i\}}(\xi^i-\xi^k)\sum_{j\in [N]\setminus \{i\}}\frac{1}{\xi^i-\xi^j} \\
+        &=Z_H'(\xi^i)\sum_{j\in [N]\setminus \{i\}}\frac{1}{\xi^i-\xi^j}
     \end{align*}
     Cancelling off $Z_H'(\xi^i)=N/\xi^i$ in the above, and using Lemma ~\ref{lem:sumtoder}, we get:
     \begin{align*}
-    \mu_i'(\xi^i) = \sum_{j\in [N]\setminus \{i\}}\frac{1}{\xi^i-\xi^j} =\frac{Z_H''(\xi^i)}{2 Z_H'(\xi^i)}
-     =\frac{N-1}{2\xi^i}
+        \mu_i'(\xi^i) &= \sum_{j\in [N]\setminus \{i\}}\frac{1}{\xi^i-\xi^j} =\frac{Z_H''(\xi^i)}{2 Z_H'(\xi^i)}
+        =\frac{N-1}{2\xi^i}
     \end{align*}
 
 \end{proof}
@@ -607,27 +607,23 @@ $F_K(X)$ is defined as
 
 \end{proof}
 
-\subsection{Brief Proof Summary of lemma \ref{lem:sum computation}}
+\subsection{Brief Proof Summary of lemma \ref{lem:sum-computation}}
 What we want to compute is a sum over the set $K$ for all $i \in I$ or a sum over the set $I$ for all $j \in K$. Let us give a sketch for the first case.
 
-We interpolate a polynomial $p$ in such a way that its evaluations at $\nroots$ correspond to the numerators of the required sum. We take the full $\nroots$ and not subsets of it so that we can apply sumcheck easily later. \\
-Next we introduce some rational functions. These will be very useful to reduce the sum we need to compute to an evaluation of the rational functions at some points\\
-
-
-These evaluations can be reduced to evaluations of polynomials using the simple form of $Z_{\nroots}$. \\
-
-By introducing some more polynomials and using formulas for sumcheck, finally, the entire task can be reduced to calculating $p(0)$ and $p'(X)$ at certain points. \\
+We interpolate a polynomial $p$ in such a way that its evaluations at $\nroots$ correspond to the numerators of the required sum. We take the full $\nroots$ and not subsets of it so that we can apply sumcheck easily later.
+Next we introduce some rational functions. These will be very useful to reduce the sum we need to compute to an evaluation of the rational functions at some points.
+These evaluations can be reduced to evaluations of polynomials using the simple form of $Z_{\nroots}$. By introducing some more polynomials and using formulas for sumcheck, finally, the entire task can be reduced to calculating $p(0)$ and $p'(X)$ at certain points.
 
 The polynomial $p$ turns out to be a product of polynomials: $p(X)=\widehat{Z}_K(X)\cdot q(X)$ and so the next step is to get the evaluations of $\widehat{Z}_K(X)$ and $q(X)$ at those points.
-For this, some further lemmas are used to get evaluations of $q(X)$ at degree $q$ many points and thus $q(X)$ is obtained by interpolation. \\
-Next $q(0)$ can be computed and thus $p(0)$ is also computed.\\
+For this, some further lemmas are used to get evaluations of $q(X)$ at degree $q$ many points and thus $q(X)$ is obtained by interpolation.
+Next $q(0)$ can be computed and thus $p(0)$ is also computed.
 $Z_K(X)$ and $q'(X)$ can also be computed easily(details in the proof)\\
-This leaves computation of $\widehat{Z}_K(X)$ at those points as the main task. For this another lemma is needed related to derivatives of Lagrange polynomials. \\
+This leaves computation of $\widehat{Z}_K(X)$ at those points as the main task. For this another lemma is needed related to derivatives of Lagrange polynomials.
 Eventually the task reduces to needing to compute something which can be computed efficiently using another lemma.\\
-Moreover, every single step involves a reduction which can be done in the number of operations allowed in the statement of the lemma. So, we get what we want.\\
+Finally, every single step involves a reduction which can be done in the number of operations allowed in the statement of the lemma. So, we get what we want.\\\\
 For the second case, the proof is very similar, except for some interchanging of $I$ and $K$, and interchanging of $i$ and $j$. \\
 This completes a brief summary of the proof.
-\subsection{Proof of lemma \ref{lem:sum computation}}
+\subsection{Proof of lemma \ref{lem:sum-computation}}
 
 \begin{proof}
 
@@ -636,11 +632,10 @@ This completes a brief summary of the proof.
     \begin{equation}\label{eq:ei}
     e_i = \sum_{j\in K\setminus \{i\}} \frac{\Delta t_j}{\xi^i - \xi^j}
     \end{equation}
-    We need this for all $i \in \setind$. Recall that $\setind \subset K$ in this case.\\
+    We need this for all $i \in \setind$. Recall that $\setind \subset K$ in this case.
     To compute $e_i$, we will first define a polynomial $p(X)$ of degree at most $N-1$ such that
-    $p(\xi^j)=\Delta t_j$ for $j\in K$ and $p(\xi^j)=0$ for $j \in [N]\setminus K$.\\
-    Now, because $p(\xi^j)=0$ for $j \in [N]\setminus K$, it is clear that the vanishing polynomial of $H_{[N]\setminus K}$ divides $p(X)$.\\\\
-
+    $p(\xi^j)=\Delta t_j$ for $j\in K$ and $p(\xi^j)=0$ for $j \in [N]\setminus K$.
+    Now, because $p(\xi^j)=0$ for $j \in [N]\setminus K$, it is clear that the vanishing polynomial of $H_{[N]\setminus K}$ divides $p(X)$.
     Thus, there exists a polynomial $q(X)$ of degree at most $|K|-1$ such that:
     \begin{equation}\label{eq:px}
     p(X) = \hat{Z}_K(X)\cdot q(X)
@@ -653,22 +648,22 @@ This completes a brief summary of the proof.
     g_i(X) = \sum_{j\in [N]\setminus \{i\}}\frac{p(X)}{X-\xi^j}, i\in \setind \\
     r_i(X) = \sum_{j\in [N]\setminus \{i\}}\frac{p(X) - p(\xi^j)}{X-\xi^j}, i\in \setind
     \end{gather}
-    Note that $f_i(\xi^i)=\sum_{j\in [N]\setminus \{i\}}\frac{p(\xi^j)}{\xi^i-\xi^j}$\\\\
+    Note that $f_i(\xi^i)=\sum_{j\in [N]\setminus \{i\}}\frac{p(\xi^j)}{\xi^i-\xi^j}$.
     But, by the way $p(X)$ is defined, we have that $f_i(\xi^i)=\sum_{j\in K\setminus \{i\}}\frac{\Delta t_j}{\xi^i-\xi^j}=e_i$\\
     \textbf{Thus, we need $f_i(\xi^i)$ for all $i \in I$.}
 
-    Note that $f_i(X) = g_i(X) - r_i(X)$ for $i\in I$\\
-    Thus, $e_i=g_i(\xi^i)-r_i(\xi^i)$\\
-    Thus, we need to compute $g_i(\xi^i)$ and $r_i(\xi^i)$ for all $i \in I \subset K$
+    Note that $f_i(X) = g_i(X) - r_i(X)$ for $i\in I$.
+    Thus, $e_i=g_i(\xi^i)-r_i(\xi^i)$.
+    Thus, we need to compute $g_i(\xi^i)$ and $r_i(\xi^i)$ for all $i \in I \subset K$.
     \begin{align*}
         g_i(\xi^i) &= p(\xi^i)\sum_{j\in [N]\setminus \{i\}} \frac{1}{\xi^i-\xi^j} \\
         &= \frac{p(\xi^i)Z_{\nroots}''(\xi^i)}{2 Z_{\nroots}'(\xi^i)} \text{From lemma \ref{lem:sumtoder}} \\
         &= \frac{(N-1)\Delta t_i}{2\xi^i}
     \end{align*}
 
-    We used the fact that $Z_H(X)=X^N-1$ and that $p(\xi^i)=\Delta t_i$.\\
-    Thus, in $O(|\setind|)$ operations, we get $g_i(\xi^i)$ for all $i$\\
-    If we get $r_i(\xi^i)$ for all $i \in \setind$, then getting $f_i(\xi^i)$ will take only $O(|\setind|)$ operations\\\\
+    We used the fact that $Z_H(X)=X^N-1$ and that $p(\xi^i)=\Delta t_i$.
+    Thus, in $O(|\setind|)$ operations, we get $g_i(\xi^i)$ for all $i$.
+    If we get $r_i(\xi^i)$ for all $i \in \setind$, then getting $f_i(\xi^i)$ will take only $O(|\setind|)$ operations\\
     \textbf{So, it suffices to compute $r_i(\xi^i)$ for all $i \in I$}\\
 
     First of all, we write $r_i(X)$ as:
@@ -677,93 +672,84 @@ This completes a brief summary of the proof.
     \intertext{Now, defining the bivariate polynomial $u(X,Y)=(p(X) - p(Y))/(X-Y)$ gives:}
     &r_i(X)= \sum_{j\in [N]}u(X,\xi^j) - u(X,\xi^i) \nonumber
     \end{align}
-    Now, define $r(X)=\sum_{j\in [N]}u(X,\xi^j)$\\
-    Thus, we get:\\
+    Now, define $r(X)=\sum_{j\in [N]}u(X,\xi^j)$.
+    Thus, we get
     $$r_i(X)=r(X)-u(X, \xi^i)$$
     or
     $$r_i(\xi^i)=r(\xi^i) - u(\xi^i,\xi^i)$$
     But, by definition and properties of formal derivative, we have the following polynomial identity
     $$u(X, X)= p'(X)$$
     where $p'(X)$ denotes the derivative of the polynomial $p(X)$ computed in the usual way. Thus, $u(\xi^i, \xi^i)=p'(\xi^i)$\\
-
     Thus, we have that:
     $$r_i(\xi^i)=r(\xi^i) - p'(\xi^i) $$
 
     \textbf{Thus, $r_i(\xi^i)$ for all $i \in \setind$ can be computed by evaluating polynomials $r(X)$ and $p'(X)$ at the set $H_{\setind}$}
-
-
     Now, from Lemma \ref{lem:sumcheck}, we have that $r(X)=N u(X,0)=N \frac{(p(X) - p(0))}{X}$ and thus $r(\xi^i)$ for $i\in \setind$ is given by:
     $$r(\xi^i)=N \frac{(\Delta t_i - p(0))}{\xi^i}$$
-    If we get $p(0)$, then we can get $r(\xi^i)$ for all $i$ in $O(m)$ operations.\\\\
+    If we get $p(0)$, then we can get $r(\xi^i)$ for all $i$ in $O(m)$ operations.
     \textbf{Thus, it suffices to compute $p(0)$ and $p'(X)$ at the set $\{\xi^i:i \in I\}$}\\\\
-
     Let $p(X)=\widehat{Z}_K(X)\cdot q(X)$
-    as in Equation \eqref{eq:px} and let $Z_K(X)$ be the vanishing polynomial for $H_K$\\
-    Note that $Z_K(X) \cdot \hat{Z}_K(X)=X^N-1$(by definition)\\
-
-    Notice that $Z_\nroots'(\xi^j)= \frac{N}{\xi^j} $\\
-    Moreover, $Z_K(X)$ can be computed by fast multiplication in $O(|K|\log^2 |K|)$ operations and then it can be differentiated monomial by monomial to get $Z_K'(X)$. \\
+    as in Equation \eqref{eq:px} and let $Z_K(X)$ be the vanishing polynomial for $H_K$.
+    Note that $Z_K(X) \cdot \hat{Z}_K(X)=X^N-1$(by definition).
+    Notice that $Z_\nroots'(\xi^j)= \frac{N}{\xi^j} $.
+    Moreover, $Z_K(X)$ can be computed by fast multiplication in $O(|K|\log^2 |K|)$ operations and then it can be differentiated monomial by monomial to get $Z_K'(X)$.\\
     Then, we can do fast evaluation to get $Z_K'(X)$ at $\{\xi^j:j\in K\}$ in $O(|K|\log^2 |K|)$ operations\\
-    Recall the lemma \ref{lem:zk-hat} which tells us that $\hat{Z}_K(\xi^j)=\frac{Z_{\nroots}'(\xi^j)}{Z_K'(\xi^j)}$.\\
-    Thus, we can compute $\hat{Z}_K(\xi^j)=\frac{\frac{N}{\xi^j}}{Z_K'(\xi^j)}$ for all $j \in K$\\\\
-    Now, recall from \eqref{eq:px} that $q(\xi^j)=\frac{p(\xi^j)}{\hat{Z}_K(\xi^j)}=\frac{\Delta t_j}{\widehat{Z}_K(\xi^j)}$\\
-    So, we can compute $q(\xi^j)$ for all $j \in K$. \\
-    As degree of $q(X)$ is strictly less than $|K|$ we can interpolate to get $q(X)$ in $O(|K|\log^2 |K|)$ field operations. \\
+    Recall the lemma \ref{lem:zk-hat} which tells us that $\hat{Z}_K(\xi^j)=\frac{Z_{\nroots}'(\xi^j)}{Z_K'(\xi^j)}$.
+    Thus, we can compute $\hat{Z}_K(\xi^j)=\frac{\frac{N}{\xi^j}}{Z_K'(\xi^j)}$ for all $j \in K$\\
+    Now, recall from \eqref{eq:px} that $q(\xi^j)=\frac{p(\xi^j)}{\hat{Z}_K(\xi^j)}=\frac{\Delta t_j}{\widehat{Z}_K(\xi^j)}$.
+    So, we can compute $q(\xi^j)$ for all $j \in K$.
+    As degree of $q(X)$ is strictly less than $|K|$ we can interpolate to get $q(X)$ in $O(|K|\log^2 |K|)$ field operations.
     Again by differentiating monomial by monomial, we get $q'(X)$ and by fast evaluation we can get evaluations of $q'(X)$ at $\xi^i$ for all $i \in I$, again in $O(|K|\log^2 |K|)$ field operations.\\\\
-
     Now we can compute $p(0)$\\
-    Consider $p(0)=q(0)\cdot \hat{Z}_K(0)$\\
-    But $\hat{Z}_K(0)=\frac{Z_H(0)}{Z_K(0)}=\frac{-1}{Z_K(0)}$\\
-    But this can be computed as we know $Z_K(X)$ and $Z_K(0)$ is just its constant term.\\
-    Similarly, we know $q(X)$ so can compute $q(0)$ as it is just the constant term. \\
+    Consider $p(0)=q(0)\cdot \hat{Z}_K(0)$
+    But $\hat{Z}_K(0)=\frac{Z_H(0)}{Z_K(0)}=\frac{-1}{Z_K(0)}$
+    But this can be computed as we know $Z_K(X)$ and $Z_K(0)$ is just its constant term.
+    Similarly, we know $q(X)$ so can compute $q(0)$ as it is just the constant term.
     Thus, we get $p(0)$\\
     \textbf{Now it remains to compute $p'(X)$ at $\{\xi^i:i \in I\}=H_I$\\\\}
-    For this, by product rule of derivatives, $p'(X)=q(X) \hat{Z}_K'(X)+q'(X) \hat{Z}_K(X)$\\
+    For this, by product rule of derivatives, $p'(X)=q(X) \hat{Z}_K'(X)+q'(X) \hat{Z}_K(X)$.
 
-    Thus, to get $p'(X)$ at $H_I$, we need $q, q', \hat{Z}_K$ and $\hat{Z}_K'$ at $H_I$. If we get these, then in $O(|I|)$ operations we would get $p'(X)$ at $H_I$.\\
-    Whatever we have done so far has given us $q, q', \hat{Z}_K$ at $H_I$\\\\
+    Thus, to get $p'(X)$ at $H_I$, we need $q, q', \hat{Z}_K$ and $\hat{Z}_K'$ at $H_I$. If we get these, then in $O(|I|)$ operations we would get $p'(X)$ at $H_I$.
+    Whatever we have done so far has given us $q, q', \hat{Z}_K$ at $H_I$.
     \textbf{So, it suffices to compute $\hat{Z}_K'(X)$ at $H_I$\\}
 
-    For this, we recall the second equation of lemma \ref{lem:zk-hat} and replace $X$ by $\xi^i$ to get:\\
+    For this, we recall the second equation of lemma \ref{lem:zk-hat} and replace $X$ by $\xi^i$ to get:
     $$  \widehat{Z}_K'(\xi^i) = \sum_{j\in K\setminus \{i\}} \frac{Z_\nroots'(\xi^j)}{Z_K'(\xi^j)}\mu_j'(\xi^i) + \frac{Z_\nroots'(\xi^i)}{Z_K'(\xi^i)}\mu_i'(\xi^i)$$
     This we got by splitting the sum $j \in K$ into 2 sums, one with $j \in K \setminus \{i\}$ and another with $j=i$
 
     Using lemma \ref{lem:lamda-deriv}, this becomes:
     $$ \widehat{Z}_K'(\xi^i)= N\xi^{-i}\sum_{j\in K\setminus \{i\}}\frac{1}{Z_K'(\xi^j)(\xi^i-\xi^j)} + \frac{N(N-1)}{2\xi^{2i}Z_K'(\xi^i)}$$
-
-
     So, if we can compute $\sum_{j\in K\setminus \{i\}}\frac{1}{Z_K'(\xi^j)(\xi^i-\xi^j)}$ for all $i \in I$, then in $O(|I|)$ operations, we will get $\hat{Z}_K'(\xi^i)$ for all $i \in I$ which is what we want.\\
 
-    Let $$\varphi_i=\sum_{j\in K\setminus \{i\}}\frac{1}{Z_K'(\xi^j)(\xi^i-\xi^j)}$$\\\\
-    Thus,\textbf{ it suffices to compute $\varphi_i$ for all $i \in I$}\\\\
+    Let $$\varphi_i=\sum_{j\in K\setminus \{i\}}\frac{1}{Z_K'(\xi^j)(\xi^i-\xi^j)}$$
+    Thus,\textbf{ it suffices to compute $\varphi_i$ for all $i \in I$}\\
 
     Define:
     $$ \Phi_i(X) = \sum_{j\in K\setminus \{i\}} \frac{1}{Z_K'(\xi^j)(X-\xi^j)} $$
-    at $X=\xi^i$. Then it is clear that $\varphi_i=\Phi_i(\xi^i)$.\\\\
-    Let $\{\eta_i(X)\}_{i\in K}$ be the Lagrange polynomials for the set $\{\xi^i:i\in K\}= H_K$. \\\\
-    Then, $\eta_j(X)=\frac{Z_K(X)}{Z_K'(\xi^j)(X-\xi^j)}$.\\
-    Thus, $\frac{\eta_j(X)}{Z_K(X)}=\frac{1}{Z_K'(\xi^j)(X-\xi^j)}$\\
+    at $X=\xi^i$. Then it is clear that $\varphi_i=\Phi_i(\xi^i)$.
+    Let $\{\eta_i(X)\}_{i\in K}$ be the Lagrange polynomials for the set $\{\xi^i:i\in K\}= H_K$.
+    Then, $\eta_j(X)=\frac{Z_K(X)}{Z_K'(\xi^j)(X-\xi^j)}$.
+    Thus, $\frac{\eta_j(X)}{Z_K(X)}=\frac{1}{Z_K'(\xi^j)(X-\xi^j)}$.\\
     Thus, $\Phi_i(X)$ can be rewritten as:
-    $$\Phi_i(X)=\sum_{j\in K\setminus \{i\}} \frac{\eta_j(X)}{Z_K(X)}$$
+    \begin{align*}
+        \Phi_i(X)&=\sum_{j\in K\setminus \{i\}} \frac{\eta_j(X)}{Z_K(X)}\\
+        &= \sum_{j\in K\setminus \{i\}} \frac{\eta_j(X)/(X-\xi^i)}{Z_K(X)/(X-\xi^i)}
+    \end{align*}
 
-
-    or  $$\Phi_i(X)
-    = \sum_{j\in K\setminus \{i\}} \frac{\eta_j(X)/(X-\xi^i)}{Z_K(X)/(X-\xi^i)}$$
-
-    We need to compute $\varphi_i=\Phi_i(\xi^i)$ for all $i \in I$
-
-
-    Thus, putting $X=\xi^i$ in the above, we have:
+    We need to compute $\varphi_i=\Phi_i(\xi^i)$ for all $i \in I$. Thus, putting $X=\xi^i$ in the above, we have:
 
     $$\varphi_i = \Phi_i(\xi^i) = \left(\sum_{j\in K\setminus \{i\}}\frac{\eta_j(X)/(X-\xi^i)}{Z_K(X)/(X-\xi^i)}\right)(\xi^i)$$
     This can be simplified as:
-    $$\varphi_i = \Phi_i(\xi^i) = \left(\sum_{j\in K\setminus \{i\}}\frac{\eta_j(X)/(X-\xi^i)}{\prod_{j \in K \setminus \{i\}}(X-\xi^j)}\right)(\xi^i)$$
-    or $$\varphi_i = \Phi_i(\xi^i) = \sum_{j\in K\setminus \{i\}}\left(\frac{\eta_j(X)/(X-\xi^i)}{\prod_{j \in K \setminus \{i\}}(X-\xi^j)}\right)(\xi^i)$$
-    or $$\varphi_i = \Phi_i(\xi^i) = \sum_{j\in K\setminus \{i\}}\frac{\left(\eta_j(X)/(X-\xi^i)\right)(\xi^i)}{\left(\prod_{j \in K \setminus \{i\}}(X-\xi^j)\right)(\xi^i)}$$
-    or $$\varphi_i =\Phi_i(\xi^i) =  \frac{1}{Z_K'(\xi^i)}\sum_{j\in K\setminus \{i\}}\left(\eta_j(X)/(X-\xi^i)\right)(\xi^i)$$
+    \begin{align*}\varphi_i = \Phi_i(\xi^i) &= \left(\sum_{j\in K\setminus \{i\}}\frac{\eta_j(X)/(X-\xi^i)}{\prod_{j \in K \setminus \{i\}}(X-\xi^j)}\right)(\xi^i)\\
+    &= \sum_{j\in K\setminus \{i\}}\left(\frac{\eta_j(X)/(X-\xi^i)}{\prod_{j \in K \setminus \{i\}}(X-\xi^j)}\right)(\xi^i)\\
+    &= \sum_{j\in K\setminus \{i\}}\frac{\left(\eta_j(X)/(X-\xi^i)\right)(\xi^i)}{\left(\prod_{j \in K \setminus \{i\}}(X-\xi^j)\right)(\xi^i)}\\
+    &= \frac{1}{Z_K'(\xi^i)}\sum_{j\in K\setminus \{i\}}\left(\eta_j(X)/(X-\xi^i)\right)(\xi^i)
+    \end{align*}
 
-    Now, $$ \left(\eta_j(X)/(X-\xi^i)\right)(\xi^i)=\left(\frac{Z_K(X)}{(X-\xi^j)(X-\xi^i)Z_K'(\xi^j)}\right)(\xi^i)$$
-    or $$\left(\eta_j(X)/(X-\xi^i)\right)(\xi^i)= \frac{Z_K'(\xi^i)}{(\xi^i-\xi^j)Z_K'(\xi^j)}$$
+    Now, \begin{align*}
+             \left(\eta_j(X)/(X-\xi^i)\right)(\xi^i)&=\left(\frac{Z_K(X)}{(X-\xi^j)(X-\xi^i)Z_K'(\xi^j)}\right)(\xi^i)\\
+             &= \frac{Z_K'(\xi^i)}{(\xi^i-\xi^j)Z_K'(\xi^j)}
+    \end{align*}
 
     But if we compute, $\eta_j'(\xi^i)$ by quotient rule, we get:
     $$\eta_j'(\xi^i)=\frac{Z_K'(\xi^i)}{(\xi^i-\xi^j)Z_K'(\xi^j)}$$
@@ -775,40 +761,33 @@ This completes a brief summary of the proof.
 
     $$\varphi_i =\Phi_i(\xi^i) =  \frac{1}{Z_K'(\xi^i)}\sum_{j\in K\setminus \{i\}}\eta_j'(\xi^i)$$
     But, $$\sum_{j\in K\setminus \{i\}}\eta_j'(\xi^i)= \sum_{j\in K}\eta_j'(\xi^i)-\eta_i'(\xi^i)=-\eta_i'(\xi^i)$$
-    using that the sum of Lagrange polynomials is $1$ and thus the sum of the derivatives of the Lagrange polynomials is $0$(section A.1)
+    using that the sum of Lagrange polynomials is $1$ and thus the sum of the derivatives of the Lagrange polynomials is $0$
 
     Thus,
     $$\varphi_i =\Phi_i(\xi^i) = \frac{-\eta_i'(\xi^i)}{Z_K'(\xi^i)}$$
 
-    If we get $\eta_i'(\xi^i)$ for all $i\in \setind$, then as we already have $Z_K'(\xi^i)$ for all $i \in I$, we get $\varphi_i$ for all $i \in I$ in $O(|I|)$ computations which is what we need.
-
-
-    \textbf{Thus, it suffices to efficiently compute $\eta_i'(\xi^i)$ for $i\in \setind$}
+    If we get $\eta_i'(\xi^i)$ for all $i\in \setind$, then as we already have $Z_K'(\xi^i)$ for all $i \in I$, we get $\varphi_i$ for all $i \in I$ in $O(|I|)$ computations which is what we need. \textbf{Thus, it suffices to efficiently compute $\eta_i'(\xi^i)$ for $i\in \setind$}
 
     For this recall Lemma \ref{lem:tau} and observe that in our setting $\mathcal{X}$ is just $H_K$, $x_j$ are $\xi^j$ and $Z_\mathcal{X}(X)$ which is the vanishing polynomial of $H_K$ is just $Z_K(X)$. The $\eta_i$ in the lemma are the Lagrange polynomials corresponding to $\mathcal{X}=H_K$ so they are same as the $\eta_i$ in our setting\\\\
-    Thus, we get:\\
+    Thus, we get:
     $$\eta_i'(\xi^i)=\frac{F_K(\xi^i)}{Z_K'(\xi^i)}$$
 
-    $Z_K'(\xi^i)$ we already have for all $i \in I$\\
-    If we get $F_K(\xi^i)$ for all $i \in I$, we will be able to get $\eta_i'(\xi^i)$ for all $i \in I$ in $O(|I|)$ operations which is what we want\\\\
+    $Z_K'(\xi^i)$ we already have for all $i \in I$.
+    If we get $F_K(\xi^i)$ for all $i \in I$, we will be able to get $\eta_i'(\xi^i)$ for all $i \in I$ in $O(|I|)$ operations which is what we want.
+    \textbf{Thus, it suffices to compute $F_K(\xi^i)$ for all $i \in I$}\\
 
-    \textbf{Thus, it suffices to compute $F_K(\xi^i)$ for all $i \in I$}\\\\
-
-    But now recall the definition $F_K$. To compute this, we need information about $z_0, z_1, z_2, \cdots, z_k$.\\
-    But, we know the polynomial $Z_K$(fast multiplication) hence we know $z_0, z_1, \cdots, z_{k}$\\
-    Thus, we get the coefficients of the polynomial $F_K(X)$, hence the polynomial $F_K(X)$\\\\
-    Now, by fast evaluation, we can get $F_K(\xi^i)$ for all $i \in I$. This will take $O(|K| \log^2|K|)$ field operations. \\
+    But now recall the definition $F_K$. To compute this, we need information about $z_0, z_1, z_2, \cdots, z_k$.
+    But, we know the polynomial $Z_K$(fast multiplication) hence we know $z_0, z_1, \cdots, z_{k}$.
+    Thus, we get the coefficients of the polynomial $F_K(X)$, hence the polynomial $F_K(X)$.
+    Now, by fast evaluation, we can get $F_K(\xi^i)$ for all $i \in I$. This will take $O(|K| \log^2|K|)$ field operations.
     \textbf{Thus, we have computed $F_K(\xi^i)$ for all $i \in I$}\\
 
-    This completes the proof for $e_i$ (Note that in the proof we throughout used that $|\setind| \leq |K|$ so that the various $O(|\setind|)$ operations do not contribute to the final complexity) \\\\
-
+    This completes the proof for $e_i$ (Note that in the proof we throughout used that $|\setind| \leq |K|$ so that the various $O(|\setind|)$ operations do not contribute to the final complexity).\\
     For the case of $b_j$, notice first that it is very similar to the case of $e_i$ except that the roles of $\setind$ and $K$ are reversed and $i$ and $j$ are reversed.
 
     First of all define $c_i$ for $i$ outside $\setind$ to be 0. For $i \in \setind$, we already know what $c_i$ is(can be computed by fast evaluation).
-    Next, define polynomial $p$ of degree atmost $N-1$ such that $p(\xi^i)=c_i$ for all $i \in [N]$.\\
-
-    From here on, we proceed exactly as we did for the $e_i$ case, replacing every $\setind$ with $K$, every $K$ with $\setind$, every $i$ with $j$ and every $j$ with $i$\\
-
+    Next, define polynomial $p$ of degree atmost $N-1$ such that $p(\xi^i)=c_i$ for all $i \in [N]$.
+    From here on, we proceed exactly as we did for the $e_i$ case, replacing every $\setind$ with $K$, every $K$ with $\setind$, every $i$ with $j$ and every $j$ with $i$.
     All the required lemmas are also modified in this way.
 
     We reach till
@@ -816,39 +795,31 @@ This completes a brief summary of the proof.
     and we need to compute $\varphi_j=\Phi_j(\xi^j)$ for all $j \in K$.\\
 
     Here, we deviate: For $j \in K\setminus I$, we can very easily compute $\varphi_j=\Phi_j(\xi^j)$ as
-    $$\Phi_j(\xi^j)=\sum_{i\in I\setminus \{j\}} \frac{\eta_i(\xi^j)}{Z_I(\xi^j)}$$
-    or
-    $$\Phi_j(\xi^j)=\frac{1}{Z_I(\xi^j)} \sum_{i\in I}\eta_i(\xi^j)$$
-    or
-    $$\Phi_j(\xi^j)=\frac{1}{Z_I(\xi^j)}$$
+    \begin{align*}
+        \Phi_j(\xi^j)&=\sum_{i\in I\setminus \{j\}} \frac{\eta_i(\xi^j)}{Z_I(\xi^j)}\\
+        &=\frac{1}{Z_I(\xi^j)} \sum_{i\in I}\eta_i(\xi^j)\\
+        &=\frac{1}{Z_I(\xi^j)}
+    \end{align*}
 
-    Using that the sum of all Lagrange polynomials is $1$
-
-    \textbf{So, it suffices to compute $\varphi_j$ for all $j \in \setind$}
+    Using that the sum of all Lagrange polynomials is $1$. \textbf{So, it suffices to compute $\varphi_j$ for all $j \in \setind$}
 
     Now, again continue exactly as in the $e_i$ case until we reach:
     $$\varphi_j =\Phi_j(\xi^j) = \frac{-\eta_j'(\xi^j)}{Z_I'(\xi^j)}$$
-    for all $j \in \setind$\\
-
-    But $Z_I'(\xi^j)$ we would have already computed for all $j \in \setind$ (fast multiplication and fast evaluation). \\
-
+    for all $j \in \setind$. But $Z_I'(\xi^j)$ we would have already computed for all $j \in \setind$ (fast multiplication and fast evaluation). \\
     \textbf{So, it suffices to compute $-\eta_j'(\xi^j)$ for all $j \in \setind$\\}
-    But we computed $\eta_i'(\xi^i)$ for $i\in \setind$ during the computation of $e_i$. Just reuse whatever we got!\\
-
+    But we computed $\eta_i'(\xi^i)$ for $i\in \setind$ during the computation of $e_i$. Just reuse whatever we got!
     This completes the computation for $b_j$ for all $j \in K$.
-    Thus, this finishes the proof of lemma \ref{lem:sum computation}
+    Thus, this finishes the proof of lemma \ref{lem:sum-computation}
 \end{proof}
 
 \section{Reducing indexed lookups to subvector lookups}\label{sec:generic-transformation-app}
-Let us say we have a subvector lookup argument $L$ which takes as input two vectors say $a, b$ and determines whether $b$ is a subvector of $a$. It outputs $1$ if $b$ is a subvector of $a$ and $0$ if $b$ is not a subvector of $a$. \\
-Recall that $b$ is said to be a subvector of $a$ if every element of $b$ is in $a$\\\\
-
-
-Indexed lookup argument $L'$ takes in 3 vectors $a, b, c$ where $c$ is a vector of indices with $|b|=|c|$ and checks that $b$ is a subvector of $a$ and that $a[c_i]=b_i$ for all $i$. That is, it does $L(a, b)$ first and further checks that $a$ restricted to the indices in $c$(in a particular order) gives $b$(in that particular order).\\
+Let us say we have a subvector lookup argument $L$ which takes as input two vectors say $a, b$ and determines whether $b$ is a subvector of $a$. It outputs $1$ if $b$ is a subvector of $a$ and $0$ if $b$ is not a subvector of $a$.
+Recall that $b$ is said to be a subvector of $a$ if every element of $b$ is in $a$\\
+Indexed lookup argument $L'$ takes in 3 vectors $a, b, c$ where $c$ is a vector of indices with $|b|=|c|$ and checks that $b$ is a subvector of $a$ and that $a[c_i]=b_i$ for all $i$. That is, it does $L(a, b)$ first and further checks that $a$ restricted to the indices in $c$(in a particular order) gives $b$(in that particular order).
 If $b$ is a subvector of $a$ and $a[c_i]=b_i$ for all $i$ then it outputs $1$ else it outputs $0$.\\
 
 \textbf{Note:} Given $a,b$ with $b$ subvector of $a$, there will always exist a $c$ with $|c|=|b|$ such that $a[c_i]=b_i$ for all $i$. The $c$ may not be unique though. \\\\
-So, we are given $T, v, a$ with $|a|=|v|$ and we want to compute $L'(T, v, a)$ using $L(\cdot, \cdot)$. \\
+So, we are given $T, v, a$ with $|a|=|v|$ and we want to compute $L'(T, v, a)$ using $L(\cdot, \cdot)$.
 Let $|T|=N$. Let $|v|=m=|a|$.
 Procedure to compute $L'(T, v, a)$ is as follows:
 \begin{itemize}
@@ -872,68 +843,71 @@ Let the procedure for getting $L'(\cdot, \cdot, \cdot)$ be as above. Then, if $L
         \item If either $v$ is not a subvector of $T$ or if $v$ is a subvector of $T$ but restriction of $T$ to $a$ is not $v$, then at least one of $b_1, b_2, b_3$ is $0$ with probability lower bounded by $1-\frac{O(1)}{|\F|}$
     \end{enumerate}
 
-    For 1., suppose $v$ is a subvector of $T$ with $T$ restricted to $a$ giving $v$. Then $L(T, v)=b_2=1$. \\
-    Moreover, $a$ is a subvector of $[N]$(else restricting $T$ to $a$ won't even make sense). \\
-    So, $L([N], a)=b_1=1$ \\
+    For (1), suppose $v$ is a subvector of $T$ with $T$ restricted to $a$ giving $v$. Then $L(T, v)=b_2=1$.
+    Moreover, $a$ is a subvector of $[N]$(else restricting $T$ to $a$ won't even make sense).
+    So, $L([N], a)=b_1=1$.
     Lastly, since $v_i=T[a_i]$ for all $i \in m$, we have that for any $\gamma \in \F^{*}$,
     $$T[a_i]+\gamma a_i=v_i+\gamma a_i$$ for all $i$ \\
-    But $T[a_i]+\gamma a_i$ is of course an element of $T+\gamma [N] $ for all $i \in [m]$.(Every $a_i \in [N]$)\\
-    So, $\{T[a_i]+\gamma a_i:i \in [m]\}$ is a subvector of $T+\gamma [N] $.\\
-    Thus, $\{v_i+\gamma a_i:i \in [m]\}$ is a subvector of $T+\gamma [N] $.\\
-    So, $v+\gamma a$ is a subvector of $T+\gamma [N] $.\\
+    But $T[a_i]+\gamma a_i$ is of course an element of $T+\gamma [N] $ for all $i \in [m]$.(Every $a_i \in [N]$).
+    So, $\{T[a_i]+\gamma a_i:i \in [m]\}$ is a subvector of $T+\gamma [N] $.
+    Thus, $\{v_i+\gamma a_i:i \in [m]\}$ is a subvector of $T+\gamma [N] $.
+    So, $v+\gamma a$ is a subvector of $T+\gamma [N] $.
     Thus, $L(T+\gamma[N], v+\gamma a)=b_3=1$
 
-    This completes proof of 1.(In this case the probability is actually 1) \\\\
-    For proof of 2., if $v$ is not a subvector of $T$ then $L(T, v)=b_2=0$ with probability 1 and we are done \\
-    So let us assume that $v$ is a subvector of $T$ and restriction of $T$ to $a$ is not $v$.\\
-    If $a$ is not a vector of indices (that is, some $a_i \notin [N]$) then $L([N], a)=b_1=0$ with probability 1 and we are done. \\
+    This completes proof of (1).(In this case the probability is actually 1) \\\\
+    For proof of (2). if $v$ is not a subvector of $T$ then $L(T, v)=b_2=0$ with probability 1 and we are done.
+    So let us assume that $v$ is a subvector of $T$ and restriction of $T$ to $a$ is not $v$.
+    If $a$ is not a vector of indices (that is, some $a_i \notin [N]$) then $L([N], a)=b_1=0$ with probability 1 and we are done.
     So, let us assume that $a$ is a vector of indices (of course by definition of $L'$, we have that $|a|=|v|=m$).\\
-
     \textbf{It suffices to show that $L(T+\gamma[N], v+\gamma a)=b_3$ is 0 with probability lower bounded by $1-\frac{O(1)}{|\F|}$.}
 
-    Since $v$ is a subvector of $T$ there is a restriction of $T$ which gives $v$. Say the restriction is $b$. Then $|b|=|v|=m$ and $T[b_i]=v_i$ for all $i \in [m]$. \\
-    Moreover, by our assumption that restriction of $T$ to $a$ is not $v$, we have that $a \neq b$. \\
-    But $a\neq b$ implies there exists a $k \in [m]$ such that $a_k\neq b_k$.\\
+    Since $v$ is a subvector of $T$ there is a restriction of $T$ which gives $v$. Say the restriction is $b$. Then $|b|=|v|=m$ and $T[b_i]=v_i$ for all $i \in [m]$.
+    Moreover, by our assumption that restriction of $T$ to $a$ is not $v$, we have that $a \neq b$.
+    But $a\neq b$ implies there exists a $k \in [m]$ such that $a_k\neq b_k$.
     As restriction of $T$ to $a$ is not $v$, there exists a $k \in [m]$ such that $T[a_k]\neq v_k$\\
-    Let $I=\{k \in [m]: T[a_k]\neq v_k\}$\\
-    By the fact that restriction of $T$ to $a$ is not $v$ , $I \neq \phi$\\
-    Also, $I \subset [N]$\\
-    By well ordering principle, $I$ has a smallest element, say $i$.\\
+    Let $I=\{k \in [m]: T[a_k]\neq v_k\}$.
+    By the fact that restriction of $T$ to $a$ is not $v$ , $I \neq \phi$.
+    Also, $I \subset [N]$.
+    By well ordering principle, $I$ has a smallest element, say $i$.
     Then for this $i$, $T[a_i]\neq v_i$. Moreover, as $v_i=T[b_i]$; $a_i \neq b_i$ \\
-    Let $\gamma$ be picked uniformly at random from $\F^*$\\
-    Consider the vector $T+\gamma[N]$. Once $\gamma$ has been chosen, this is a fixed vector. \\
-    Also, consider the vector $v+\gamma a$. One of the elements in this vector is $v_i +\gamma a_i$.\\
-    We will upper bound the probability that this element is an element of the vector $T+\gamma[N]$. \\\\
+
+    Let $\gamma$ be picked uniformly at random from $\F^*$.
+    Consider the vector $T+\gamma[N]$. Once $\gamma$ has been chosen, this is a fixed vector..
+    Also, consider the vector $v+\gamma a$. One of the elements in this vector is $v_i +\gamma a_i$.
+    We will upper bound the probability that this element is an element of the vector $T+\gamma[N]$. \\
     $$\Pr[v_i +\gamma a_i \in T+\gamma[N]]=\Pr[\exists j \in [N] \ni v_i +\gamma a_i=T[j]+\gamma j]$$
     But by union bound:
     $$\Pr[\exists j \in [N] \ni v_i +\gamma a_i=T[j]+\gamma j] \leq \sum_{j=1}^N \Pr[v_i +\gamma a_i=T[j]+\gamma j]$$
     Thus,
     $$\Pr[v_i +\gamma a_i \in T+\gamma[N]] \leq \sum_{j=1}^N \Pr\left[\gamma = \frac{T[j]-v_i}{a_i-j}\right] $$
 
-    Let $M'$ be defined as $M'=\{j\in [N] \ni T[j]=v_i \}$ \\
-    Let $M$ be defined as $M' \cup \{a_i\}$. Clearly $M \subset [N]$\\
-    But now, consider $\frac{T[j]-v_i}{a_i-j}$. For $j=a_i$ this is not defined. And for $j$ such that $T[j]=v_i$, this is 0. So, for such values of $j$, probability that $\gamma$ equals to it is $0$.\\
+    Let $M'$ be defined as $M'=\{j\in [N] \ni T[j]=v_i \}$.
+    Let $M$ be defined as $M' \cup \{a_i\}$. Clearly $M \subset [N]$.\\
+    But now, consider $\frac{T[j]-v_i}{a_i-j}$. For $j=a_i$ this is not defined. And for $j$ such that $T[j]=v_i$, this is 0. So, for such values of $j$, probability that $\gamma$ equals to it is $0$.
     For other values of $j$, $\frac{T[j]-v_i}{a_i-j}$ is an element of $\F^{*}$ and since $\gamma$ is a random element of $F^{*}$, the probability that $\gamma$ equals to it is $\frac{1}{|\F|-1}$\\
     In other words,
-    $$\Pr\left[\gamma = \frac{T[j]-v_i}{a_i-j}\right]=\frac{1}{|\F|-1}$$ for $j \in [N]\setminus M$
-    $$\Pr\left[\gamma = \frac{T[j]-v_i}{a_i-j}\right]=0$$ for $j \in M$
+    \begin{gather}
+        \Pr\left[\gamma = \frac{T[j]-v_i}{a_i-j}\right]=\frac{1}{|\F|-1}\, \forall j \in [N]\setminus M\\
+        \Pr\left[\gamma = \frac{T[j]-v_i}{a_i-j}\right]=0 \, \forall j \in M
+    \end{gather}
 
     Thus, we get that:
-    $$\Pr[v_i +\gamma a_i \in T+\gamma[N]] \leq \sum_{j \in [N]\setminus M} \Pr\left[\gamma = \frac{T[j]-v_i}{a_i-j}\right]+$$
+    $$\Pr[v_i +\gamma a_i \in T+\gamma[N]] \leq
+    \sum_{j \in [N]\setminus M} \Pr\left[\gamma = \frac{T[j]-v_i}{a_i-j}\right]+$$
     $$\sum_{j \in M} \Pr\left[\gamma = \frac{T[j]-v_i}{a_i-j}\right]=\sum_{j \in [N]\setminus M} \Pr\left[\gamma = \frac{T[j]-v_i}{a_i-j}\right]$$
     $$=\sum_{j \in [N]\setminus M} \frac{1}{|\F|-1}=\frac{|[N]\setminus M|}{|\F|-1} \leq \frac{N-2}{|\F|-1}$$
     We used first that $[N]\setminus M$ and $M$ are disjoint and union is $[N]$, then we used the above equalities for $\Pr\left[\gamma = \frac{T[j]-v_i}{a_i-j}\right]$ and finally used that $|M| \geq 2$ as $M$ atleast contains $a_i$ and $b_i$.\\
     So we have obtained:
     $$\Pr[v_i +\gamma a_i \in T+\gamma[N]] \leq \frac{N-2}{|\F|-1}$$
-    All this was done for the smallest element $i$ of the set $I$.\\
+    All this was done for the smallest element $i$ of the set $I$.
     For $v+\gamma a$ to be a subvector of $T+\gamma [N]$, we need that:
-    $$v_i +\gamma a_i \in T+\gamma[N]$$ for all $i \in I$\\
+    $$v_i +\gamma a_i \in T+\gamma[N]$$ for all $i \in I$.
     But observe that,
     $$\Pr[v_i +\gamma a_i \in T+\gamma[N] \, \text{for all} \, i \in I] \leq \Pr[v_i +\gamma a_i \in T+\gamma[N]] \leq \frac{N-2}{|\F|-1}$$
     So, we have that $$\Pr[v_i +\gamma a_i \in T+\gamma[N] \, \text{for all} \,i \in I] \leq \frac{N-2}{|\F|-1}$$
-    So, the probability that $v+\gamma a$ is a subvector of $T+\gamma [N]$ is upper bounded by $\frac{N-2}{|\F|-1}$. \\
-    But $N <<|\F|$. So, $\frac{N-2}{|\F|-1}$ is $\frac{O(1)}{|\F|}$. \textbf{Thus, the error probability is upper bounded by $\frac{O(1)}{|\F|}$} \\
-    So, with a probability of atleast $(1-\frac{N-2}{|\F|-1})$, $v+\gamma a$ is not a subvector of $T+\gamma [N]$. \\
-    So, $L(T+\gamma[N], v+\gamma a)=b_3$ is 0 with probability lower bounded by $1-\frac{O(1)}{|\F|}$ \\
-    This completes the proof of lemma \ref{lem:reduction}.
+    So, the probability that $v+\gamma a$ is a subvector of $T+\gamma [N]$ is upper bounded by $\frac{N-2}{|\F|-1}$.
+    But $N <<|\F|$. So, $\frac{N-2}{|\F|-1}$ is $\frac{O(1)}{|\F|}$. \textbf{Thus, the error probability is upper bounded by $\frac{O(1)}{|\F|}$}.\\
+    So, with a probability of atleast $(1-\frac{N-2}{|\F|-1})$, $v+\gamma a$ is not a subvector of $T+\gamma [N]$.
+    So, $L(T+\gamma[N], v+\gamma a)=b_3$ is 0 with probability lower bounded by $1-\frac{O(1)}{|\F|}$. \\
+    This completes the proof of lemma \ref{lem:reduction}
 \end{proof}
