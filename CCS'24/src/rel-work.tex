@@ -1,0 +1,38 @@
+Efficient modelling of the random access memory (RAM) primitive is a widely studied problem in
+verifiable computation (VC), due to its inherent usefulness in modelling several computations of interest.
+Encapsulating RAM semantics in VC circuits is also challenging; (i) arithmetic/boolean circuits do not
+adequately model random access, and (ii) incorporating entire memory as gates in a circuit is prohibitive.
+Several novel techniques have been proposed to work around the above limitations of circuit based representation
+of RAM. Among them, merkle tree based accumulators to model the RAM state are popular
+~\cite{EPRINT:BFRSBW13,compwithstate,C:BCTV14} as they can efficiently
+prove updates to the state, without modelling the entire memory in the constraint system. Other
+approaches based on {\em address ordered time-scripts} avoid the concrete costs of tree based approaches
+by letting the prover provide inputs and outputs of RAM operations in a non-deterministic manner, which
+are then checked to satisfy consistency of {\em loads} and {\em stores}.
+Several works such as \cite{NDSS:WSRBW15,USENIX:BCTV14,C:BCGTV13,SP:ZGKPP18} implement and improve variants
+of the aforementioned approach. Most transcript based realizations of RAM only consider it to be transient,
+i.e, its state is useful only during the execution of a program, and do not consider {\em persistence} of the
+RAM state across several executions. Another feature, which has only been consisdered in recent works
+\cite{USENIX:OWWB20, EPRINT:CFHKKO21} is {\em batching}, where a verifiable update of RAM state is required
+for a batch of $m$ updates, with $m$ being much smaller than the RAM size. While the approaches based on tree
+based accumulators realized using collision resistant hash functions suffer from high concrete costs and poor
+ability to batch proofs, those based on checking consistency using transcripts incur a linear overhead in the
+size of the RAM.
+
+\subsection{Batching Efficient RAM}\label{subsec:batching-efficient-ram}
+The focus of our work, as in recent efforts \cite{USENIX:OWWB20, EPRINT:CFHKKO21} is on batching efficient
+realization of the RAM primitive. This is a natural setting in several recent applications of verifiable
+computation, most notably in the context of blockchain {\em rollups}. In such a scenario, one is required
+to show that a batch of $m$ transactions correctly updates the state of a table of account balances, which
+is maintained off-chain by the rollup provider. Here the batch-size $m$ ranges from few hundreds to few
+thousands, whereas the table itself could contain several million accounts.
+Like prior work on batching efficient
+RAMs ~\cite{USENIX:OWWB20, EPRINT:CFHKKO21} our work is also motivated by the problem of enabling more efficient rollup for tables, which are
+naturally modelled as RAMs. While the aforementioned works substantially mitigate disadvantages of both the
+merkle-tree based approaches and transcript based approaches by using RSA accumulators to model the state,
+they still incur large prover costs and memory requirements even for modest sized batches. (Write why they are
+costly).
+
+
+
+
