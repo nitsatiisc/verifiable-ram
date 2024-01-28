@@ -9,53 +9,54 @@ of different RAM artefacts.
 %translate checking memory consistency (equivalently, checking membership in $\LRAM{I}{n}{m}$) to checking polynomial identities
 %over the encoded polynomials. For
 %simplicity and its usefulness later, we consider the case $m=n$, and accordingly check the membership in the language $\LRAM{I}{m}{m}$.
-Let $k=3m$ and let $\omega$ be the $k^{th}$ root of unity in $\F$.
-Let $\nu=\omega^3$, and thus $\nu$ is an $m^{th}$ root of unity in $\F$ (We assume, these roots exist in $\F$).
-We define sets $\setH$ and $\setV$ below consisting of $k^{th}$ and $m^{th}$ roots of unity respectively.
+Let $k=3m$ and let $\omega$ be a primitive $k^{th}$ root of unity in $\F$.
+Let $\nu=\omega^3$, and thus $\nu$ is a primitive $m^{th}$ root of unity in $\F$ (We assume, these roots exist in $\F$).
+We recall $\setV$ as the subgroup consisting of $m^{th}$ roots of unity with associated Lagrange basis polynomials
+$\{\tau_i(X)\}_{i\in [m]}$, while we additionally introduce the set $\setH$ of $k^{th}$ roots of unity with
+$\{\lambda_i(X)\}_{i\in [k]}$ as the associated Lagrange polynomials.
 \begin{gather}\label{eq:interpolation-sets}
 \setH = \{\omega,\ldots,\omega^k\},\quad \setV = \{\nu,\ldots,\nu^m\}
 \end{gather}
-Let $\{\lambda_i(X)\}_{i=1}^k$ be lagrange basis polynomials
-for the set $\setH$ and $\{\tau_i(X)\}_{i=1}^m$ be the lagrange polynomials for the set $\setV$ satisfying
-$\lambda_i(\omega^j)=\delta_{ij}$ for $i,j\in [k]$ and $\tau_i(\nu^j)=\delta_{ij}$ for $i,j\in [m]$.
-We use $\setH$ to encode a vector $\vec{f}=(f_1,\ldots,f_k)$ of size $k$ as the polynomial $f(X)\in \F_{<k}[X]$ such that $f(\omega^i)=f_i$ for $i\in [k]$.
-Similarly, we use $\setV$ to encode a vector
-$\vec{g}=(g_1,\ldots,g_m)$ of size $m$ as the polynomial $g(X)\in F_{<m}[X]$ such that $g(\nu^i)=g_i$ for $i\in [m]$. We use
-the notation $\enc{f}{\setH}$ and $\enc{g}{\setV}$ to denote polynomial encodings of vectors $\vec{f}\in \F^k$ and $\vec{g}\in \F^m$
-respectively.
-In the other direction, for a polynomial $f(X)\in \F[X]$,
-we use $\vec{f}_{|_\setH}$ and $\vec{f}_{|_\setV}$ to denote the vectors $(f(\omega^1),\ldots,f(\omega^k))$ and $(f(\nu^1),\ldots,f(\nu^m))$ respectively.
-The encoding of vectors as polynomials can be succinctly described using lagrange basis polynomials.
-Then we have $\enc{f}{\setH}=\sum_{i=1}^k f_i\lambda_i(X)$ and $\enc{g}{\setV}=\sum_{i=1}^m g_i\tau_i(X)$.
-
-We extend the encoding of vectors to encode RAM, operations and transcripts.
-For a RAM $T=(\vec{a},\vec{v})\in \RAM{I}{m}$, we define its encoding
+As before, we define the encoding of vectors in $\vec{f}\in \F^k$ as $\enc{f}{\setH}=\sum_{i\in [k]}f_i\lambda_i(X)$.
+%Let $\{\lambda_i(X)\}_{i=1}^k$ be lagrange basis polynomials
+%for the set $\setH$ and $\{\tau_i(X)\}_{i=1}^m$ be the lagrange polynomials for the set $\setV$ satisfying
+%$\lambda_i(\omega^j)=\delta_{ij}$ for $i,j\in [k]$ and $\tau_i(\nu^j)=\delta_{ij}$ for $i,j\in [m]$.
+%We use $\setH$ to encode a vector $\vec{f}=(f_1,\ldots,f_k)$ of size $k$ as the polynomial $f(X)\in \F_{<k}[X]$ such that $f(\omega^i)=f_i$ for $i\in [k]$.
+%Similarly, we use $\setV$ to encode a vector
+%$\vec{g}=(g_1,\ldots,g_m)$ of size $m$ as the polynomial $g(X)\in F_{<m}[X]$ such that $g(\nu^i)=g_i$ for $i\in [m]$. We use
+%the notation $\enc{f}{\setH}$ and $\enc{g}{\setV}$ to denote polynomial encodings of vectors $\vec{f}\in \F^k$ and $\vec{g}\in \F^m$
+%respectively.
+%In the other direction, for a polynomial $f(X)\in \F[X]$,
+%we use $\vec{f}_{|_\setH}$ and $\vec{f}_{|_\setV}$ to denote the vectors $(f(\omega^1),\ldots,f(\omega^k))$ and $(f(\nu^1),\ldots,f(\nu^m))$ respectively.
+%The encoding of vectors as polynomials can be succinctly described using lagrange basis polynomials.
+%Then we have $\enc{f}{\setH}=\sum_{i=1}^k f_i\lambda_i(X)$ and $\enc{g}{\setV}=\sum_{i=1}^m g_i\tau_i(X)$.
+We canonically extend the encoding of vectors to encode RAM, operations and transcripts by encoding their component vectors.
+Thus, for a RAM $T=(\vec{a},\vec{v})\in \RAM{I}{m}$, we define its encoding
 $\wt{T}=(a(X),v(X))$ where $a(X),v(X)\in \F_{<m}[X]$ encode vectors $\vec{a}, \vec{v}$ respectively.
 Given an operation sequence
-$\vec{o}=(o_1,\ldots,o_m)$ with $o_i=(\bar{\op}_i,\bar{a}_i,\bar{v}_i)$ we encode $\vec{o}$ as $\wt{O}=(\bar{\op}(X),\bar{a}(X),\bar{v}(X))$
+$\vec{o}=(o_1,\ldots,o_m)$ with $o_i=(\bar{\op}_i,\bar{a}_i,\bar{v}_i)$ we encode $\vec{o}$ as
+$\wt{O}$ $=$ $(\bar{\op}(X)$ ,$\bar{a}(X)$ ,$\bar{v}(X))$
 where $\bar{\op}(X)$ encodes the
-vector $\vec{\op}=(\bar{\op}_1,\ldots,\bar{\op}_m)$, $\bar{a}(X)$ encodes the vector $(\bar{a}_1,\ldots,\bar{a}_m)$ and $\bar{v}(X)$
-encodes the vector $(\bar{v}_1,\ldots,\bar{v}_m)$.
-Finally, a transcript $\tr=(\vec{t},\vec{\op},\vec{A},\vec{V})$ for tuples $(T,\vec{o},T')$ where $T,T'$ are RAMs of size $m$, and $\vec{o}$ is an
-operation sequence of size $m$ is encoded as $\wt{\tr}$ $=$ $(t(X)$, $\op(X)$, $A(X)$, $V(X))$ where the polynomials
-encode the respective vectors in $\F^k$.
+vector $\vec{\op}=(\bar{\op}_1,\ldots,\bar{\op}_m)$, $\bar{a}(X)$ encodes the vector $(\bar{a}_1,\ldots,\bar{a}_m)$ and
+$\bar{v}(X)$encodes the vector $(\bar{v}_1,\ldots,\bar{v}_m)$.
+Finally, a transcript $\tr=(\vec{t},\vec{\op},\vec{A},\vec{V})$ for tuples $(T,\vec{o},T')$ where $T,T'$ are RAMs of size $m$,
+and $\vec{o}$ is an operation sequence of size $m$ is encoded as $\wt{\tr}$ $=$ $(t(X)$, $\op(X)$, $A(X)$, $V(X))$
+where the polynomials $t(X),\op(X),V(X)$ and $A(X)$ encode the respective vectors in $\F^k$ (See Section \ref{sec:model-for-ram}).
 
 \subsection{Relations over Polynomial Encodings}\label{subsec:encoded-relations}
 In this section, we describe polynomial checks for two important relations we need in subsequent sections, viz,
-(i) checking concatenation of vectors and (ii) checking monotonicity and load-store consistency of a transcript. Let
-$k,m$ be integers with $k=3m$ as in previous section. The lemma below specifies the polynomial checks for verifying
+(i) checking concatenation of vectors and (ii) checking monotonicity and load-store consistency of a transcript.
+The lemma below specifies the polynomial identities for verifying
 that vector $\vec{v}\in \F^k$ is concatenation of vectors $\vec{a},\vec{b},\vec{c}$ in $\F^m$.
 
 \begin{lemma}\label{lem:vec-concatenation}
 Let $\vec{a},\vec{b},\vec{c}\in \F^m$  and $v\in \F^k$ be vectors encoded by polynomials
 $a(X),b(X),c(X)$ and $v(X)$ respectively. Then,
-    {\small
 \begin{align}
     a(X^3) - v(X)  &= 0  \quad \text{ mod $Z(X)$ } \tag{A1}\label{eq:A1}\\
     b(X^3) - v(\omega^m X)  &= 0   \quad \text{ mod $Z(X)$ } \tag{A2}\label{eq:A2}\\
     c(X^3) - v(\omega^{2m} X) &= 0 \quad \text{ mod $Z(X)$ } \tag{A3}\label{eq:A3}
 \end{align}
-}
 for $Z(X)=\prod_{i=1}^m (X-\omega^i)$ if and only if $\vec{v}=\vec{a}||\vec{b}||\vec{c}$.
 \end{lemma}
 \begin{proof}
@@ -67,39 +68,51 @@ for $Z(X)=\prod_{i=1}^m (X-\omega^i)$ if and only if $\vec{v}=\vec{a}||\vec{b}||
 \end{proof}
 
 Next, we specify polynomial checks on the encoding of a transcript to ensure it satisfies address-ordering and load-store consistency.
+Let $N$ be an upper bound on the values of $\vec{A}$, i.e, the index set $\setind\subseteq [N]$.
 Let $\tr=(\vec{t},\vec{\op},\vec{A},\vec{V})$ be a transcript encoded as
-$\wt{\tr}=(t(X),\op(X),A(X),V(X))$. Recall that we need to check two conditions on $\tr$, viz (i) {\em monotonicty}:
+$\wt{\tr}=(t(X),\op(X),A(X),V(X))$. Recall that we need to check two conditions on $\tr$, viz, (i) {\em monotonicty}:
 the transcript is sorted by address and timestamp respectively, i.e, $A_i\leq A_{i+1}$ for all $i < k$ and
-$t_i < t_{i+1}$ when $A_i=A_{i+1}$, (ii) {\em load-store consistency}: whenever $\op_{i+1}=0$ and $A_i=A_{i+1}$,
-we have $V_i=V_{i+1}$. To do so, we exhibit disjoint sets $I_1,I_2$ with $I_1\uplus I_2=[k]$ such that: (i) for all
+$t_i < t_{i+1}$ whenever $A_i=A_{i+1}$, (ii) {\em load-store consistency}: whenever $\op_{i+1}=0$ and $A_i=A_{i+1}$,
+we have $V_i=V_{i+1}$.
+To do so, we exhibit disjoint sets $I_1,I_2$ with $I_1\uplus I_2=[k]$ such that: (i) for all
 $i\in I_1$, $A_i < A_{i+1}$, (ii) for all $i\in I_2$, $(A_i = A_{i+1})\wedge (t_i < t_{i+1})$ and (iii) for all $i\in I_2$,
-$(\op_i=1)\vee (V_i = V_{i+1})$. We note that the conditions on the sets $I_1$ and $I_2$ ensures monotonicity.
-Moreover it can be seen that load-store consistency requirements are satisfied for all $i\in I_1$ (as $A_i\neq A_{i+1}$).
+$(\op_i=1)\vee (V_i = V_{i+1})$. We vacuously allow $k$ to be part of either of the sets.
+Note that the conditions on the sets $I_1$ and $I_2$ ensures monotonicity.
+Moreover, it can be seen that load-store consistency requirements are satisfied for all $i\in I_1$ (as $A_i\neq A_{i+1}$).
 Similarly,load-store consistency also holds for all $i\in I_2$.
 It remains to exhibit the sets and show that they satisfy the above invariants using polynomials, as in the following
 lemma:
 \begin{lemma}\label{lem:addr-ordered-transcript}
-Let $\wt{\tr}$ be a polynomial encoding of transcript $\tr$ of size $k$, given by polynomials $t(X),\op(X),A(X)$ and $V(X)$.
-Then for $kN<|\F|$, $\tr$ is address ordered and satisfies load-store consistency if and only if there exist polynomials
+Let $\wt{\tr}$ be a polynomial encoding of transcript $\tr$ of size $k$, given by polynomials $t(X),\op(X),A(X)$ and $V(X)$,
+with index set $[N]$. Then assuming $kN<|\F|$, $\tr$ is address ordered and satisfies load-store consistency if and only if there exist polynomials
 $Z_1,Z_2,\delta_T,\delta_A$
 such that the following hold:
-    {\small
 \begin{align}%\label{eq:loadstore-consitency-constraints}
     & Z_2(X)(A(\omega X) - A(X) - \delta_A(X)) = 0 \text{ mod } \mathbb{Z}_\setH(X) \tag{C1} \label{eq:C1} \\
     & A(\omega X) - A(X) = 0  \text{ mod } Z_2(X) \tag{C2} \label{eq:C2} \\
     & t(\omega X) - t(X) - \delta_T(X) = 0  \text{ mod } Z_2(X) \tag{C3} \label{eq:C3} \\
     & (\op(X) - 1)(V(\omega X) - V(X)) = 0  \text{ mod } Z_2(X) \tag{C4} \label{eq:C4} \\
     & Z_1(X)\cdot Z_2(X) = \mathbb{Z}_\setH(X) \quad  \tag{C5} \label{eq:C5} \\
-    & 1\leq A(\omega) < N  \quad \tag{C6} \label{eq:C6} \\
-    & 1\leq t(\omega^i) < N, 1\leq \delta_A(\omega^i)<N,\ 1\leq \delta_T(\omega^i)<N \text{ for } i\in [k] \tag{C7} \label{eq:C7}
+    & 1\leq A(\omega^i) \leq N  \quad \tag{C6} \label{eq:C6} \\
+    & 1\leq t(\omega^i) \leq N, 1\leq \delta_A(\omega^i)\leq N,\ 1\leq \delta_T(\omega^i)\leq N \text{ for } i\in [k] \tag{C7} \label{eq:C7}
 \end{align}
-}
 \end{lemma}
+\begin{proof}
+Suppose there exist polynomials $Z_1(X),Z_2(X),\delta_T(X)$ and $\delta_A(X)$ satisfying above identities. From Equation
+~\eqref{eq:C5}, we conclude that their exist sets $I_1,I_2$ with $I_1\uplus I_2=[k]$ such that $Z_b(X)$, $b\in \{0,1\}$ is the
+    vanishing polynomial of the set $\{\omega^i: i\in I_b\}$. We now note that the following are true for $i\in I_1$:
+    \begin{itemize}[leftmargin=1em]
+        \item $A(\omega^{i+1})-A(\omega^i)=\delta_A(\omega^i)$. Since $1\leq \delta_A(\omega^i)\leq N$, this ensures $A_i < A_{i+1}$ for the vector $\vec{A}$ encoded
+        by $A(X)$. We note that $kN < |\F|$ implies there is no overflow modulo the field characteristic.
+    \end{itemize}
+    Similarly, it can be seen that for $i\in I_2$, we must have (i) $A_i=A_{i+1}\wedge t_i < t_{i+1}$
+    and (ii) $\op_i=1\,\vee\,V_i=V_{i+1}$. Together these imply that the encoded transcript is address-ordered.
+\end{proof}
 
 \begin{figure}[htbp]
 	\centering
 	\begin{mdframed}
-		{\footnotesize
+		{\small
 			\noindent{\bf Common Input}: Commitments $c_t$, $c_{op}$, $c_A$ and $c_V$ to $t,op,A$ and $V$ respectively. 
 			\begin{enumerate}[leftmargin=2em]
 				\item $\prover\rightarrow\verifier$: $\prover$ sends $\gone{\Z_\setH}$, $\gone{Z_2}$, $\gone{\delta_T}$, $\gone{\delta_A}$
@@ -137,47 +150,50 @@ such that the following hold:
 			\end{enumerate}
 		}
 	\end{mdframed}
-	\vspace*{-5mm}
+	%\vspace*{-5mm}
 	\caption{Protocol: Check relations over polynomial encodings}
 	\label{fig:encoded-relations}
 \end{figure}
 
 \begin{figure}[htbp]
-	\centering
 	\begin{mdframed}
-		{\footnotesize
-			\noindent{\bf Common Input}: Commitments $c_a$, $c_b$, $c_c$ and $c_v$ to $a,b,c$ and $v$ respectively. Commitment $\gone{Z}$ to the polynomial
-			$Z(X)=\prod_{i=1}^m (X-\omega^i)$.
-			\begin{enumerate}[leftmargin=2em]
-				\item $\verifier\rightarrow\prover$: Verifier sends $\gamma\gets \F$.
+    {
+			\noindent{\bf Common Input}: Commitments $c_a$, $c_b$, $c_c$, $c_v$, and $\gone{Z}$ (to the polynomial
+			$Z(X)=\prod_{i=1}^m (X-\omega^i)$). \\
+            \noindent{\bf Prover's Input}: Vectors $\vec{a},\vec{b},\vec{c}\in\F^m$ and $\vec{v}\in \F^k$.
+			\begin{enumerate}[leftmargin=1em, label=\arabic*.]
+				\item $\verifier$ sends $\gamma\gets \F$.
 				\item $\prover$ computes:
 				\begin{align}
 					& h(X) = a(X) + \gamma b(X) + \gamma^2 c(X),\\
 					& Q(X) = (h(X^3) - v(X) - \gamma v(\omega^m X) - \gamma^2 v(\omega^{2m} X))/Z(X)
 				\end{align}
-				\item $\prover\rightarrow\verifier$: Sends commitment $\gone{Q}$ to $Q(X)$.
-				\item $\verifier\rightarrow\prover$: Sends $s\gets\F$.
-				\item $\prover\rightarrow\verifier$: Sends evaluations $\val{s}{v}=v(s)$, $\val{\omega^m s}{v}=v(\omega^m s)$,
+				\item $\prover$ sends commitment $\gone{Q}$ = $\gone{Q(X)}$.
+				\item $\verifier$ sends $s\gets\F$.
+				\item $\prover$ sends evaluations $\val{s}{v}=v(s)$, $\val{\omega^m s}{v}=v(\omega^m s)$,
 				$\val{\omega^{2m}s}{v}=v(\omega^{2m} s)$, $\val{s^3}{h}=h(s^3)$, $\val{s}{Q}=Q(s)$ and $\val{s}{Z}=Z(s)$.
-				\item $\verifier\rightarrow\prover$: Sends $r\gets\F$.
-				\item $\prover\rightarrow\verifier$: Sends $\kzg$ proofs:
-				\begin{itemize}[leftmargin=2em]
+				\item $\verifier$ sends $r\gets\F$.
+				\item $\prover$ computes $\kzg$ proofs:
+				\begin{itemize}[leftmargin=1em]
 					\item $\Pi_v=\kzgprove(\srs,v,(s,\omega^m s, \omega^{2m}s))$.
 					\item $\Pi_h=\kzgprove(\srs,h,s^3)$.
 					\item $\Pi_f=\kzgprove(\srs,f,s)$ where $f(X)=Z(X) + rQ(X)$.
 				\end{itemize}
-				\item $\verifier$ computes: Compute commitments $\gone{h}$ and $\gone{f}$ using homomorphism. It then checks:
-				\begin{itemize}[leftmargin=2em]
-					\item $\kzgverify(\srs,\gone{v},(s,\omega^m s, \omega^{2m}s), (\val{s}{v}, \val{\omega^m s}{v}, \val{\omega^{2m} s}{v}),\Pi_v)$.
+                \item $\prover$ sends $\Pi_v$, $\Pi_h$ and $\Pi_f$.
+				\item $\verifier$ Computes commitments $\gone{h}$ and $\gone{f}$ using homomorphism.
+                \item $\verifier$ checks:
+				\begin{itemize}[leftmargin=1em]
+					\item $\kzgverify(\srs,\gone{v},\vec{p}_v, \vec{e}_v, \Pi_v)$ where
+                    $\vec{p}_v$ = $(s,\omega^m s, \omega^{2m}s)$ and $\vec{e}_v$ = $(\val{s}{v}, \val{\omega^m s}{v}, \val{\omega^{2m} s}{v})$.
 					\item $\kzgverify(\srs,\gone{h}, s^3, \val{s^3}{h},\Pi_h)$.
 					\item $\kzgverify(\srs,\gone{f}, s, \val{s}{Z} + r\val{s}{Q}, \Pi_f)$.
 					\item $\val{s}{Q}\cdot \val{s}{Z} =? \val{s^3}{h}-\val{s}{v}-\gamma \val{\omega^m s}{v}-\gamma^2\val{\omega^{2m}s}{v}$.
 				\end{itemize}
-				\item $\verifier$ outputs: Accept if all the above checks succeeds, otherwise it rejects.
+				\item $\verifier$ outputs accept if all the above checks succeed, else it rejects.
 			\end{enumerate}
 		}
 	\end{mdframed}
-	\vspace*{-5mm}
+	%\vspace*{-5mm}
 	\caption{Protocol: Check concatenation via commitments}
 	\label{fig:concatenation}
 \end{figure}
@@ -919,5 +935,5 @@ Let the procedure for getting $L'(\cdot, \cdot, \cdot)$ be as above. Then, if $L
     But $N <<|\F|$. So, $\frac{N-2}{|\F|-1}$ is $\frac{O(1)}{|\F|}$. \textbf{Thus, the error probability is upper bounded by $\frac{O(1)}{|\F|}$} \\
     So, with a probability of atleast $(1-\frac{N-2}{|\F|-1})$, $v+\gamma a$ is not a subvector of $T+\gamma [N]$. \\
     So, $L(T+\gamma[N], v+\gamma a)=b_3$ is 0 with probability lower bounded by $1-\frac{O(1)}{|\F|}$ \\
-    This completes the proof of lemma \ref{lem:reduction}
+    This completes the proof of lemma \ref{lem:reduction}.
 \end{proof}
