@@ -437,7 +437,7 @@ for $\mathbb{S}$. Then we have:
 \end{fact}
 
 \noindent{\bf Formal Derivative}: For a polynomial $p(X) \in \F[X]$, we define the formal derivative of $p(X)$ as the polynomial
-$u(X,X)$ where $u(X,Y)=\frac{p(X)-p(Y)}{X-Y}$. It can be seen that $u(X,X)$ equals the polynomial $p'(X)$ by differentiating
+$u(X,X)$ where $u(X,Y)=\frac{p(X)-p(Y)}{X-Y}$. It can be seen that $u(X,X)$ equals the polynomial $p'(X)$ obtained by differentiating
 $p(X)$ according to regular rules of calculus.
 %Let us denote the formal derivative of $p(X)$ as $p^f(X)$.\\
 %Then, $p^f(X)= u(X,X)$ where $u(X,Y)=\frac{p(X)-p(Y)}{X-Y}$\\\\
@@ -661,6 +661,7 @@ $F_K(X)$ is defined as
 
 \end{proof}
 
+\begin{comment}
 \subsection{Brief Proof Summary of lemma \ref{lem:sum-computation}}\label{subsec:sum-computational}
 What we want to compute is a sum over the set $K$ for all $i \in I$ or a sum over the set $I$ for all $j \in K$. Let us give a sketch for the first case.
 
@@ -677,20 +678,22 @@ Eventually the task reduces to needing to compute something which can be compute
 Finally, every single step involves a reduction which can be done in the number of operations allowed in the statement of the lemma. So, we get what we want.\\\\
 For the second case, the proof is very similar, except for some interchanging of $I$ and $K$, and interchanging of $i$ and $j$. \\
 This completes a brief summary of the proof.
+\end{comment}
+
 \subsection{Proof of lemma \ref{lem:sum-computation}}
 
 \begin{proof}
 
-    We give the proof for $e_i$ for all $i \in \setind$ in full detail and briefly mention the modifications needed for $b_j$ for all $j \in K$. \\
+    We give the proof for $e_i$ for all $i \in \setind$ in full detail and briefly mention the modifications needed to compute $b_j$ for all $j \in K$. \\
 
     \begin{equation}\label{eq:ei}
     e_i = \sum_{j\in K\setminus \{i\}} \frac{\Delta t_j}{\xi^i - \xi^j}
     \end{equation}
-    We need this for all $i \in \setind$. Recall that $\setind \subset K$ in this case.
-    To compute $e_i$, we will first define a polynomial $p(X)$ of degree at most $N-1$ such that
+    We need the above for all $i \in \setind$. Recall that we assume $\setind \subset K$ in this case.
+    To compute $e_i$, we first define a polynomial $p(X)$ of degree at most $N-1$ such that
     $p(\xi^j)=\Delta t_j$ for $j\in K$ and $p(\xi^j)=0$ for $j \in [N]\setminus K$.
-    Now, because $p(\xi^j)=0$ for $j \in [N]\setminus K$, it is clear that the vanishing polynomial of $H_{[N]\setminus K}$ divides $p(X)$.
-    Thus, there exists a polynomial $q(X)$ of degree at most $|K|-1$ such that:
+    Therefore, the vanishing polynomial of $H_{[N]\setminus K}$ divides $p(X)$ and
+    there exists a polynomial $q(X)$ of degree at most $|K|-1$ such that:
     \begin{equation}\label{eq:px}
     p(X) = \hat{Z}_K(X)\cdot q(X)
     \end{equation}
@@ -717,27 +720,26 @@ This completes a brief summary of the proof.
 
     We used the fact that $Z_H(X)=X^N-1$ and that $p(\xi^i)=\Delta t_i$.
     Thus, in $O(|\setind|)$ operations, we get $g_i(\xi^i)$ for all $i$.
-    If we get $r_i(\xi^i)$ for all $i \in \setind$, then getting $f_i(\xi^i)$ will take only $O(|\setind|)$ operations\\
-    \textbf{So, it suffices to compute $r_i(\xi^i)$ for all $i \in I$}\\
-
-    First of all, we write $r_i(X)$ as:
+    If we compute $r_i(\xi^i)$ for all $i \in \setind$, then computing $f_i(\xi^i)$ takes only
+    $O(|\setind|)$ operations. Therefore, it suffices to compute $r_i(\xi^i)$ for all $i \in I$.
+    We write $r_i(X)$ as:
     \begin{align}\label{eq:rx}
     r_i(X) &= \sum_{j\in [N]}\frac{p(X)-p(\xi^j)}{X-\xi^j} - \frac{p(X)-p(\xi^i)}{X-\xi^i} \nonumber \\
     \intertext{Now, defining the bivariate polynomial $u(X,Y)=(p(X) - p(Y))/(X-Y)$ gives:}
     &r_i(X)= \sum_{j\in [N]}u(X,\xi^j) - u(X,\xi^i) \nonumber
     \end{align}
-    Now, define $r(X)=\sum_{j\in [N]}u(X,\xi^j)$.
-    Thus, we get
+    Next, we define $r(X)=\sum_{j\in [N]}u(X,\xi^j)$.
+    Thus, we have:
     $$r_i(X)=r(X)-u(X, \xi^i)$$
     or
     $$r_i(\xi^i)=r(\xi^i) - u(\xi^i,\xi^i)$$
     But, by definition and properties of formal derivative, we have the following polynomial identity
     $$u(X, X)= p'(X)$$
-    where $p'(X)$ denotes the derivative of the polynomial $p(X)$ computed in the usual way. Thus, $u(\xi^i, \xi^i)=p'(\xi^i)$\\
-    Thus, we have that:
+    where $p'(X)$ denotes the derivative of the polynomial $p(X)$ computed in the usual way.
+    Thus, $u(\xi^i, \xi^i)=p'(\xi^i)$ from which we conclude:
     $$r_i(\xi^i)=r(\xi^i) - p'(\xi^i) $$
 
-    \textbf{Thus, $r_i(\xi^i)$ for all $i \in \setind$ can be computed by evaluating polynomials $r(X)$ and $p'(X)$ at the set $H_{\setind}$}
+    \textbf{Thus, $r_i(\xi^i)$ for all $i \in \setind$ can be computed by evaluating polynomials $r(X)$ and $p'(X)$ at the set $H_{\setind}$.}
     Now, from Lemma \ref{lem:sumcheck}, we have that $r(X)=N u(X,0)=N \frac{(p(X) - p(0))}{X}$ and thus $r(\xi^i)$ for $i\in \setind$ is given by:
     $$r(\xi^i)=N \frac{(\Delta t_i - p(0))}{\xi^i}$$
     If we get $p(0)$, then we can get $r(\xi^i)$ for all $i$ in $O(m)$ operations.
@@ -748,32 +750,36 @@ This completes a brief summary of the proof.
     Notice that $Z_\nroots'(\xi^j)= \frac{N}{\xi^j} $.
     Moreover, $Z_K(X)$ can be computed by fast multiplication in $O(|K|\log^2 |K|)$ operations and then it can be differentiated monomial by monomial to get $Z_K'(X)$.\\
     Then, we can do fast evaluation to get $Z_K'(X)$ at $\{\xi^j:j\in K\}$ in $O(|K|\log^2 |K|)$ operations\\
-    Recall the lemma \ref{lem:zk-hat} which tells us that $\hat{Z}_K(\xi^j)=\frac{Z_{\nroots}'(\xi^j)}{Z_K'(\xi^j)}$.
-    Thus, we can compute $\hat{Z}_K(\xi^j)=\frac{\frac{N}{\xi^j}}{Z_K'(\xi^j)}$ for all $j \in K$\\
-    Now, recall from \eqref{eq:px} that $q(\xi^j)=\frac{p(\xi^j)}{\hat{Z}_K(\xi^j)}=\frac{\Delta t_j}{\widehat{Z}_K(\xi^j)}$.
+    Recall that Lemma \ref{lem:zk-hat} tells us that $\hat{Z}_K(\xi^j)=\frac{Z_{\nroots}'(\xi^j)}{Z_K'(\xi^j)}$ and
+     thus we can compute $\hat{Z}_K(\xi^j)=\frac{\frac{N}{\xi^j}}{Z_K'(\xi^j)}$ for all $j \in K$.
+     Moreover, recall from \eqref{eq:px} that $q(\xi^j)=\frac{p(\xi^j)}{\hat{Z}_K(\xi^j)}=\frac{\Delta t_j}{\widehat{Z}_K(\xi^j)}$.
     So, we can compute $q(\xi^j)$ for all $j \in K$.
     As degree of $q(X)$ is strictly less than $|K|$ we can interpolate to get $q(X)$ in $O(|K|\log^2 |K|)$ field operations.
-    Again by differentiating monomial by monomial, we get $q'(X)$ and by fast evaluation we can get evaluations of $q'(X)$ at $\xi^i$ for all $i \in I$, again in $O(|K|\log^2 |K|)$ field operations.\\\\
-    Now we can compute $p(0)$\\
-    Consider $p(0)=q(0)\cdot \hat{Z}_K(0)$
-    But $\hat{Z}_K(0)=\frac{Z_H(0)}{Z_K(0)}=\frac{-1}{Z_K(0)}$
-    But this can be computed as we know $Z_K(X)$ and $Z_K(0)$ is just its constant term.
-    Similarly, we know $q(X)$ so can compute $q(0)$ as it is just the constant term.
-    Thus, we get $p(0)$\\
-    \textbf{Now it remains to compute $p'(X)$ at $\{\xi^i:i \in I\}=H_I$\\\\}
-    For this, by product rule of derivatives, $p'(X)=q(X) \hat{Z}_K'(X)+q'(X) \hat{Z}_K(X)$.
+    Again by differentiating monomial by monomial, we get $q'(X)$ and by fast evaluation we can get evaluations of $q'(X)$ at $\xi^i$ for all $i \in I$, again in $O(|K|\log^2 |K|)$ field operations.
 
-    Thus, to get $p'(X)$ at $H_I$, we need $q, q', \hat{Z}_K$ and $\hat{Z}_K'$ at $H_I$. If we get these, then in $O(|I|)$ operations we would get $p'(X)$ at $H_I$.
-    Whatever we have done so far has given us $q, q', \hat{Z}_K$ at $H_I$.
+    Now we can compute $p(0)$:
+    Since $p(0)=q(0)\cdot \hat{Z}_K(0)$, and
+    $\hat{Z}_K(0)=\frac{Z_H(0)}{Z_K(0)}=\frac{-1}{Z_K(0)}$, this enables us to compute $p(0)$,
+    since we know $Z_K(X)$ and $Z_K(0)$ is just its constant term.
+    Similarly, we know $q(X)$ so can compute $q(0)$ as it is just the constant term.
+    Thus, we can compute $p(0)$.
+
+    \textbf{Now it remains to compute $p'(X)$ at $\{\xi^i:i \in I\}=H_I$.}
+    Using the  product rule for derivatives we have: $p'(X)=q(X) \hat{Z}_K'(X)+q'(X) \hat{Z}_K(X)$.
+
+    Thus, to get $p'(X)$ at $H_I$, we need $q, q', \hat{Z}_K$ and $\hat{Z}_K'$ at $H_I$.
+    If we get these, then in $O(|I|)$ operations we would get $p'(X)$ at $H_I$.
+    So far we have computed $q, q', \hat{Z}_K$ at $H_I$. There's only one last remaining item which
+    is $\hat{Z}_K'(X)$ at the set $H_I$.
+
     \textbf{So, it suffices to compute $\hat{Z}_K'(X)$ at $H_I$\\}
 
     For this, we recall the second equation of lemma \ref{lem:zk-hat} and replace $X$ by $\xi^i$ to get:
     $$  \widehat{Z}_K'(\xi^i) = \sum_{j\in K\setminus \{i\}} \frac{Z_\nroots'(\xi^j)}{Z_K'(\xi^j)}\mu_j'(\xi^i) + \frac{Z_\nroots'(\xi^i)}{Z_K'(\xi^i)}\mu_i'(\xi^i)$$
-    This we got by splitting the sum $j \in K$ into 2 sums, one with $j \in K \setminus \{i\}$ and another with $j=i$
-
+    We obtained the above by splitting the sum $j \in K$ into two sums, one with $j \in K \setminus \{i\}$ and other with $j=i$.
     Using lemma \ref{lem:lamda-deriv}, this becomes:
-    $$ \widehat{Z}_K'(\xi^i)= N\xi^{-i}\sum_{j\in K\setminus \{i\}}\frac{1}{Z_K'(\xi^j)(\xi^i-\xi^j)} + \frac{N(N-1)}{2\xi^{2i}Z_K'(\xi^i)}$$
-    So, if we can compute $\sum_{j\in K\setminus \{i\}}\frac{1}{Z_K'(\xi^j)(\xi^i-\xi^j)}$ for all $i \in I$, then in $O(|I|)$ operations, we will get $\hat{Z}_K'(\xi^i)$ for all $i \in I$ which is what we want.\\
+    $$ \widehat{Z}_K'(\xi^i)= N\xi^{-i}\sum_{j\in K\setminus \{i\}}\frac{1}{Z_K'(\xi^j)(\xi^i-\xi^j)} + \frac{N(N-1)}{2\xi^{2i}Z_K'(\xi^i)}.$$
+    So, if we can compute $\sum_{j\in K\setminus \{i\}}\frac{1}{Z_K'(\xi^j)(\xi^i-\xi^j)}$ for all $i \in I$, then in $O(|I|)$ operations, we will get $\hat{Z}_K'(\xi^i)$ for all $i \in I$ which is what we want.
 
     Let $$\varphi_i=\sum_{j\in K\setminus \{i\}}\frac{1}{Z_K'(\xi^j)(\xi^i-\xi^j)}$$
     Thus,\textbf{ it suffices to compute $\varphi_i$ for all $i \in I$}\\

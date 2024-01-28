@@ -1,3 +1,80 @@
+\begin{figure}[t!]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+        ybar,
+        ylabel={Number of Constraints},
+        ymin = 3,
+        ymax = 8.5,
+        ytick = {4, 5, 6, 7, 8},
+        xlabel={},
+        xtick=data,
+        symbolic x coords= {A, B, C, D},
+        xticklabels = {{Our Work}, ~\cite{CCS:CFHKKO22}, ~\cite{USENIX:OWWB20}, MT-20},
+        yticklabels = {$10^4$, $10^5$, $10^6$, $10^7$, $10^8$},
+        xlabel near ticks,
+        ylabel near ticks,
+        nodes near coords,
+        nodes near coords align={vertical},
+        ]
+        \addplot coordinates {(A,4.7) (B,6.8) (C,7.2) (D,7.5)};
+        \legend{Batching RAMs}
+        \end{axis}
+
+    \end{tikzpicture}
+    \caption{Comparison of Constraints incurred by different approaches for batching RAMs.}
+    \label{fig:batch-ram-constraints}
+\end{figure}
+
+\begin{figure}[t!]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+        title={Batching Efficient RAM from CQ},
+        xmin=0,
+        xmax=9,
+        ymin=0,
+        ymax=200,
+        xlabel={Number of updated positions},
+        ylabel={Time (sec)},
+        xtick={0, 1, 2, 3, 4, 5, 6, 7, 8, 9},
+        ytick={20, 40, 60, 80, 100, 120, 140, 160, 180, 200},
+        xticklabels={$2^{10}$, $2^{11}$, $2^{12}$, $2^{13}$, $2^{14}$, $2^{15}$, $2^{16}$, $2^{17}$, $2^{18}$, $2^{19}$},
+        yticklabels={20, 40, 60, 80, 100, 120, 140, 160, 180, 200},
+        legend pos=north west,
+        ymajorgrids=true,
+        grid style=dashed,
+        xlabel near ticks,
+        ylabel near ticks
+        ]
+        \addlegendimage{color=blue, mark=square}
+        \addlegendentry{CQ:$m=2^{10}$}
+        \addlegendimage{color=red, mark=square}
+        \addlegendentry{Caulk+:$m=2^{9}$}
+        \addplot[
+            color=blue,
+            mark=square,
+        ]
+        coordinates {
+            (0,1.2)(1,1.5)(2,2.1)(3,3.3)(4,6.0)(5,11.1)(6,22.0)(7,46)(8,98)(9,208)
+        };
+
+        \addplot[
+            color=red,
+            mark=square,
+        ]
+        coordinates {
+            (0,16.2)(1,16.5)(2,17.1)(3,18.2)(4,20.4)(5,25.6)(6,36)(7,60)(8,108)(9,216)
+        };
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Performance of Batching RAM with updates}
+    \label{fig:batch-ram-proving-time}
+\end{figure}
+
+
+
+
 In this section we report on the experimental evaluation of our batching efficient RAM.
 In addition, we also report on the overhead (as a function of changes since last parameter computation)
 incurred by our updatable lookup arguments over the vanilla lookup arguments with read-only table. We
@@ -7,3 +84,48 @@ for our evaluation. Our implementation is built on top of existing implementatio
 of lookup argument Caulk ~\cite{CCS:ZBKMNS22}. We make our implementation available at
 \url{https://anonymous.4open.science/r/updatableRAM/} for anonymous submission. We later plan to
 make the implementation available as open-source project.
+We first provide overall running time of batching efficient RAM primitive instantiated with Caulk+
+and CQ lookup arguments. The degradation in running time is plotted as function of accumulated updates
+since the last computation of full table-specific parameters in Figure ~\ref{fig:batch-ram-proving-time}.
+We choose batch size of $m=512$ for Caulk+ based instantiation (to avoid prohibitive performance),
+while we consider $m=1024$ for CQ based instantiation. Our overhead remains barely noticable against
+the quadratic costs incurred by Caulk+ base protocol till about $2^{15}$ accumulated changes, equivalent of
+$128$ lookups of size $512$. While the performance overhead compared to base CQ protocol is much more apparent,
+overall we continue to achieve online proof generation time of under a minute all the way upto
+$\approx 2\times 10^5$ accumulated changes, equivalent of roughly $200$ batch updates (assuming the worst-case
+scenario). In real application scenarios, we can expect better degradation curve, as its unlikely that updates
+to the table occur uniformly across all positions.
+
+In Figure ~\ref{fig:batch-ram-constraints}, we compare the
+R1CS constraints incurred by existing approaches to batching friendly RAMs/accumulators. For our work, we assume
+that the memory checking on the RAM instance of size $m$ is implemented as an arithmetic circuit using a Bene's
+routing network ~\cite{benes}, though we also provide a purely polynomial protocol for the same in Section ~\ref{sec:poly-proto-ram-app}.
+Our construction is relatively ``circuit-free'' and relies on the efficiency of lookup arguments coupled with
+our novel modifications to make them update resilient.
+
+Finally, we also compare the efficacy of our quasi-linear algorithm to compute scalar coefficients in
+Lemma ~\ref{lem:sum-computation}, required to assemble the encoded quotients from pre-computed quotients.
+In Table ~\ref{tbl:sum-computation-compare}, we compare it against the naive computation of the quotients.
+In the table, we vary the sizes of set $I$ in Lemma ~\ref{lem:sum-computation} in the set $\{2^i:7\leq i\leq 10\}$
+and set $K=2^7|I|$, i.e, we compare the two methods to sustain $\approx 100$ online proofs. We clearly see
+$5\times-20\times$ advantage over the naive computation.
+
+\begin{table}[htbp]
+    \centering
+    \begin{tabularx}{0.45\textwidth}{@{}XXXX@{}}
+        \toprule
+         $|I|$ & $|K|$ & Lemma ~\ref{lem:sum-computation} & Naive \\ \midrule
+        $2^7$ & $2^{14}$ & 3.3s  & 12s \\
+        $2^8$ & $2^{15}$ & 7.7s  & 48s \\
+        $2^9$ & $2^{16}$ & 16.8s & 198s \\
+        $2^{10}$ & $2^{17}$ & 39.2s & 839s \\
+        \bottomrule
+    \end{tabularx}
+    \caption{Comparison of Lemma ~\ref{lem:sum-computation} and naive computation for calculating
+    scalar coefficients for encoded quotients.}
+    \label{tbl:sum-computation-compare}
+\end{table}
+
+
+
+
