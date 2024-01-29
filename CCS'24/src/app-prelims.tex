@@ -60,14 +60,14 @@ A polynomial commitment scheme $\pc$ is binding if for all PPT $\Adv$, the follo
  \]
 \end{definition}
 
-\begin{definition}[Extractability]
+\begin{definition}[Knowledge Soundness]
 \label{def:pcs-ext-app}
 For any PPT adversary $\Adv = (\Adv_{1},\Adv_{2})$, there exists a PPT algorithm $\ext$ such that the following probability is negligible in $\secp$:
 	 \[
     \Pr\left(
       \begin{matrix}
       %\pccheck(\pp,C,d,z,v,\pi) = 1 \wedge
-      b = 1 \wedge
+      b = 1 \wedge \\
       \R_{\pceval}(\pp,C,x,v; \tilde{f},\mathbf{\tilde{c}}) = 0
       \end{matrix}
       \,:\,
@@ -102,3 +102,48 @@ $\mathsf{poly}(\secp) \cdot \allowbreak \mathsf{log} (d)$ for the verifier.
 
 \subsection{Succinct Argument of Knowledge}
 \label{sec:aok}
+
+Let $\R$ be a NP-relation and $\L$ be the corresponding NP-language, where $\L=\{x : \exists$ $w$ such that $(x,w) \in \R\}$. Here, a prover $\prover$ aims to convince a verifier $\verifier$ that $x\in \L$ by proving that it knows a witness $w$ for a public statement $x$ such that $(x,w)\in \R$. An interactive argument of knowledge for a relation $\R$ consists of a PPT algorithm $\setup$, that takes an input the security parameter $\secp$, and outputs the public parameter $\pp$, and a pair of interactive PPT algorithms $\langle\prover,\verifier\rangle$, where $\prover$ takes as input $(\pp,x,w)$ and $\verifier$ takes as input $(\pp,x)$. An interactive argument of knowledge  $\langle\prover,\verifier\rangle$, must satisfy completeness and knowledge soundness. % and a succinct argument of knowledge must additionally satisfy the property of succinctness.
+
+\begin{definition}[Completeness]
+	\label{def:aok-comp}
+	For all security parameter $\secp \in \mathbb{N}$ and statement $x$ and witness $w$ such that $(x,w)\in \R$, we have
+	\[
+	\Pr \left( 
+	\begin{matrix}
+		%\pccheck(\pp,C,d,z,v,\pi) = 1 
+		b=1
+	\end{matrix}
+	\,:\,
+	\begin{matrix}
+		\pp \leftarrow \setup(1^\secp) \\
+		b \leftarrow \langle\prover (w) ,\verifier\rangle (\pp,x)
+	\end{matrix}
+	\right) = 1.
+	\]
+\end{definition}
+
+\begin{definition}[Knowledge Soundness]
+	\label{def:aok-ks}
+	%An interactive argument of knowledge  $\langle\prover,\verifier\rangle$ satisfies knowledge soundness with error $\kappa$, if for
+	For any PPT malicious prover $\prover^* = (\prover_1^*,\prover_2*)$, there exists a PPT algorithm $\ext$ such that the following probability is negligible:
+	\[
+		\Pr \left( 
+		\begin{matrix}
+			b=1 \wedge \\
+			(x,w)\not\in \R
+		\end{matrix}
+		\,:\,
+		\begin{matrix}
+			\pp \leftarrow \setup(1^\secp) \\
+			(x,\mathsf{st}) \leftarrow \prover_1^*(1^\secp,\pp) \\
+			b \leftarrow \langle\prover_2^* (\mathsf{st}) ,\verifier\rangle (\pp,x) \\
+			w \leftarrow \ext^{\prover_2^*} (\pp,x)
+		\end{matrix}
+		\right) .
+		\]	
+\end{definition}
+
+A \emph{succinct} argument of knowledge $\langle\prover,\verifier\rangle$ for a relation $\R$, must satisfy completeness and knowledge soundness and additionally ensure that the communication complexity between prover and verifier, as well as the verification complexity is bounded by $\mathsf{poly}(\secp,\log |w|)$, where $w$ is the witness for the relation.
+
+
