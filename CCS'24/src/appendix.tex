@@ -201,11 +201,11 @@ such that the following hold:
             \item $\verifier$ Computes commitments $\gone{h}$ and $\gone{f}$ using homomorphism.
             \item $\verifier$ checks:
             \begin{itemize}[leftmargin=1em]
-                \item $\kzgverify(\srs,\gone{v},\vec{p}_v, \vec{e}_v, \Pi_v)$ where
+                \item $\kzgverify(\srs,\gone{v}, \vec{e}_v, \vec{p}_v, \Pi_v)$ where
                 $\vec{p}_v$ = $(s,\omega^m s, \omega^{2m}s)$ and $\vec{e}_v$ = $(\val{s}{v}, \val{\omega^m s}{v}, \val{\omega^{2m} s}{v})$.
-                \item $\kzgverify(\srs,\gone{h}, s^3, \val{s^3}{h},\Pi_h)$.
-                \item $\kzgverify(\srs,\gone{f}, s, \val{s}{Z} + r\val{s}{Q}, \Pi_f)$.
-                \item $\val{s}{Q}\cdot \val{s}{Z} =? \val{s^3}{h}-\val{s}{v}-\gamma \val{\omega^m s}{v}-\gamma^2\val{\omega^{2m}s}{v}$.
+                \item $\kzgverify(\srs,\gone{h},  \val{s^3}{h}, s^3,\Pi_h)$.
+                \item $\kzgverify(\srs,\gone{f},  \val{s}{Z} + r\val{s}{Q}, s,\Pi_f)$.
+                \item $\val{s}{Q}\cdot \val{s}{Z} = \val{s^3}{h}-\val{s}{v}-\gamma \val{\omega^m s}{v}-\gamma^2\val{\omega^{2m}s}{v}$.
             \end{itemize}
             \item $\verifier$ outputs accept if all the above checks succeed, else it rejects.
         \end{enumerate}
