@@ -163,13 +163,14 @@ such that the following hold:
                 \item $\KZGverify(\srs, \gone{\Phi_{s}}, V_{s}, s, \Pi_{s})$
             \end{itemize}
 
-            \item $\left<\prover, \verifier\right>$ run 4 instances of subvector lookup protocol $L(\cdot, \cdot)$, namely $L([N], A), L([N], t), L([N], \delta_A), L([N], \delta_t)$, using say, CQ
+            \item $\left<\prover, \verifier\right>$ run 4 instances of subvector lookup protocol $L(\cdot, \cdot)$, namely $L([N], A), L([N], t), L([N], \delta_A), L([N], \delta_t)$ \\
+            (eg. using \cite{EPRINT:EagFioGab22})
             \item $\verifier$ accepts if all checks succeed and the lookups succeed, rejects otherwise
         \end{enumerate}
     }
     \end{mdframed}
 
-    \caption{Protocol: Check relations over polynomial encodings}
+    \caption{Protocol: Check transcript is address ordered}
     \label{fig:encoded-relations}
 \end{figure}
 
