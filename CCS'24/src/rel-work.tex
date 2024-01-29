@@ -19,14 +19,14 @@ based accumulators realized using collision resistant hash functions suffer from
 ability to batch proofs, those based on checking consistency using transcripts incur a linear overhead in the
 size of the RAM.
 
-\noindent\textbf{Batching Efficient RAM.}\label{subsec:batching-efficient-ram}
+\subsection{Batching-Efficient RAM}\label{subsec:batching-efficient-ram}
 There have been several recent efforts~\cite{USENIX:OWWB20,CCS:CFHKKO22} on batching efficient
 realization of the RAM primitive. This is a natural setting in applications of verifiable
 computation, most notably in the context of blockchain {\em rollups}. Here, one is required
 to show that a batch of $m$ transactions correctly updates the state of a table of account balances, which
 is maintained off-chain by the rollup provider. Here the batch-size $m$ ranges from few hundreds to few
 thousands, whereas the table itself could contain several million accounts.
-Like prior work on batching efficient
+Like prior work on batching-efficient
 RAMs~\cite{USENIX:OWWB20,CCS:CFHKKO22} our work is also motivated by the problem of enabling more efficient rollup for tables, which are
 naturally modelled as RAMs. While the aforementioned works substantially mitigate disadvantages of both the
 Merkle-tree based approaches and transcript-based approaches by using RSA accumulators to model the state,
@@ -52,19 +52,16 @@ Our approach is also in the updatable SRS setting in constrast to trusted setup 
 compare our work with the prior approaches more elaborately in Section ~\ref{sec:experiments}.
 
 
-\noindent\textbf{Lookup arguments.}
-Caulk~\cite{CCS:ZBKMNS22} provides lookup arguments where a vector of size $m$ is proved to be a subvector of a large vector of size $N$ (table), while maintaining privacy regarding the positions of the subvector (called \emph{position-hiding linkability}) where the prover complexity is $O(m^2+m\log N)$ with $O(N\log N)$ preprocessing and $O(N)$ storage. Caulk+~\cite{EPRINT:PosKat22} improves over Caulk to $O(m^2)$ prover complexity by removing the dependency on the size of the large vector $N$, and CQ~\cite{EPRINT:EagFioGab22} further improves it to $O(m\log m)$, while retaining the same $O(N\log N)$ preprocessing. However, the aforementioned works only consider the setting where the table does not change, whereas we consider updates to the table. Unlike preceding works, we do not consider zero-knowledge in our construction, though we believe it can be augmented via minor modifications.
+\subsection{Lookup arguments}
 
-%However, we aim to provide committed index lookup arguments that can `link' a set of indices in the vector of size $N$ to the `claimed' subvector of size $m$, that helps in ensuring that we can always `lookup' relevant indices from a committed vector. 
-%We also present techniques to extend lookup argument \cite{EPRINT:EagFioGab22}, which uses homomorphic commitments, to provide a committed index lookup argument.
-%Additionally, note that any updates to the large table requires $O(N\log N)$ recomputation each time in the prior works. Our work ensures a batching friendly preprocessing can be done whenever there are incremental changes to the vector of size $N$, and avoid performing the $O(N\log N)$ recomputation per update. This modification extends to the other works as well.
+Caulk~\cite{CCS:ZBKMNS22} provides with lookup arguments where a vector of size $m$ is proved to be a subvector of a large vector of size $N$, while maintaining privacy regarding the positions of the subvector (called \emph{position-hiding linkability}) where the prover complexity is $O(m^2+m\log N)$ with $O(N\log N)$ preprocessing and $O(N)$ storage. Caulk+~\cite{EPRINT:PosKat22} improves over Caulk to $O(m^2)$ prover complexity by removing the dependency on the size of the large vector $N$, and CQ~\cite{EPRINT:EagFioGab22} further improves it to $O(m\log m)$, while retaining the same $O(N\log N)$ preprocessing. 
+However, we aim to provide committed index lookup arguments that can `link' a set of indices in the vector of size $N$ to the `claimed' subvector of size $m$, that helps in ensuring that we can always `lookup' relevant indices from a committed vector. Additionally, note that any updates to the large table requires $O(N\log N)$ recomputation each time in the prior works. Our work ensures a batching friendly preprocessing can be done whenever there are incremental changes to the vector of size $N$, and avoid performing the $O(N\log N)$ recomputation per update. This modification extends to the other works as well. We also present techniques to extend lookup argument \cite{EPRINT:EagFioGab22}, which uses homomorphic commitments, to provide a committed index lookup argument.
 
 Lasso~\cite{lasso} gives a new family of lookup arguments where the prover's cost only grows with table entries that are
-accessed by the lookup operations, for tables that are structured. Our work applies to tables without any structure and additionally we can handle \emph{updatable} tables -- both of these are crucially the case with rollup application.%\chaya{agree on spelling of updatable throughout} tables.
+accessed by the lookup operations, for tables that are structured. Our work applies to tables without any structure (as is the case with rollup application), and additionally we can handle \emph{updatable}\chaya{agree on spelling of updatable throughout} tables.
 Lasso also defines a committed index lookup relation like us and gives a reduction between indexed and unindexed lookups (subvector relation); however, their reduction needs an upper bound on the elements of the table. We provide a different reduction without this restriction. 
 A recent work called Jolt~\cite{jolt} expresses all constraints of a computation as lookups by creating a lookup table that contains the entire evaluation table of each instruction $f$ in an instruction set.
-This approach of using table lookups requires memory checking arguments as well. However Jolt uses lookup arguments to \emph{model} CPU operations, whereas our work uses lookup arguments to reduce the size of memory in memory-checking methods. 
-%\chaya{could add a line here or in conclusion that our techniques could be used to improve Jolt's mem consistency approach.}
+This approach of using table lookups requires memory checking arguments as well. However Jolt uses lookup arguments to \emph{model} CPU operations, whereas our work uses lookup arguments to reduce the size of memory in memory-checking methods. \chaya{could add a line here or in conclusion that our techniques could be used to improve Jolt's mem consistency approach.}
 
 
 

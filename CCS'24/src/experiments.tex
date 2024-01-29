@@ -68,11 +68,11 @@
         };
         \end{axis}
     \end{tikzpicture}
-    \caption{Online Prover Performance of our Batching Efficient RAM with updates}
+    \caption{Online Prover Performance of our Batching-Efficient RAM with updates}
     \label{fig:batch-ram-proving-time}
 \end{figure}
 
-In this section we report on the experimental evaluation of our batching efficient RAM.
+In this section we report on the experimental evaluation of our batching-efficient RAM.
 In addition, we also report on the overhead (as a function of changes since last parameter computation)
 incurred by our updatable lookup arguments over the vanilla lookup arguments with read-only table. We
 benchmark this overhead over vanilla implementations of Caulk+ ~\cite{EPRINT:PosKat22} and
@@ -86,7 +86,7 @@ $16$ GB memory running Ubuntu Linux 22.04. The implementation was compiled using
 flag in Rust. Generating table specific parameters for table of size $1$ million takes around $12,000$
 seconds for CQ based instantiation.
 
-We first provide overall running time of batching efficient RAM primitive instantiated with Caulk+
+We first provide overall running time of batching-efficient RAM primitive instantiated with Caulk+
 and CQ lookup arguments. The degradation in running time is plotted as function of accumulated updates
 since the last computation of full table-specific parameters in Figure ~\ref{fig:batch-ram-proving-time}.
 We choose batch size of $m=128$ for Caulk+ based instantiation (to avoid prohibitive performance),
