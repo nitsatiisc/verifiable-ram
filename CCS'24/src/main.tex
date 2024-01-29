@@ -369,6 +369,7 @@ In this paper, we do not require commitments to be {\em hiding}, as our focus is
 We consider privacy as an orthogonal goal, one we believe is easily achievable
 via small adaptations to our construction.
 
+\begin{comment}
 \noindent{\bf Application to Blockchain Rollups}: We consider the application of persistent RAM primitive to a common rollup scenario.
 Our application is a simplified adaptation of rollup protocols such as ZkSync ~\cite{ZkSync}.
 We assume a layer two (L2) chain \textsf{DemoChain}, which issues its clients \textsf{DemoCoins}. The clients have accounts on
@@ -386,9 +387,10 @@ such transactions and updates the RAM state accordingly. The operator maintains 
 each batch of transactions. Only the succinct digest of the state (polynomial commitments) is stored on the main chain, and the proof of
 validity of the state update is verified by a main-chain transaction. In later sections, we provide more details on the application and the
 performance achieved when instantiated using our primitive.
-
+\end{comment}
 \subsection{Techniques}\label{subsec:techniques}
-\noindent{\bf Improved lookup from updatable tables}: Starting point for our work are the recent lookup arguments which prove that a vector of size $m$ appears as
+\noindent{\bf Update friendly lookup arguments}: Starting point for our work are the recent lookup arguments which prove
+that a vector of size $m$ appears as
 a sub-vector in a large fixed vector (table) of size $N$ with succinct proof sizes and verification, but most notably
 ensuring that prover runs in time sub-linear in the size of the table ($N$). The pioneering work ~\cite{CCS:ZBKMNS22}
 obtained prover complexity of $O(m^2+m\log N)$, which was improved in subsequent works to $O(m^2)$ ~\cite{EPRINT:PosKat22},
@@ -396,23 +398,46 @@ $O(m\log^2 m)$ ~\cite{EPRINT:ZGKMR22}, and $O(m\log m)$ ~\cite{EPRINT:EagFioGab2
 complexity requires table-dependent $O(N\log N)$ pre-processing and $O(N)$ storage. This table-dependent
 pre-processing implies that while
 the aforementioned lookup arguments can be used to obtain efficient ROM (read only memory) semantics
-\footnote{The protocols for sub-vector relation in ~\cite{CCS:ZBKMNS22, EPRINT:ZGKMR22} also implicitly support indexed lookup semantics},
-they cannot be used as is for RAM (which supports update operations). Moreover, an update involving even a single
-index renders the entire $O(N)$ pre-processing unusable for further lookups, thus necessitating entire $O(N\log N)$
-re-computation. An important contribution of this work is modified pre-processing and prover for lookup scheme
-in ~\cite{EPRINT:PosKat22} which continues to ensure efficient lookups if updates to the table are small since the pre-processing.
-Informally, we achieve the following:
-
+%\footnote{The protocols for sub-vector relation in ~\cite{CCS:ZBKMNS22, EPRINT:ZGKMR22} also implicitly support indexed lookup semantics},
+they cannot be used as is for RAM (which supports update operations).
+Moreover, an update involving even a single
+index renders the entire $O(N)$ pre-processing unusable for further lookups,
+thus necessitating entire $O(N\log N)$ re-computation. This work is the first effort towards
+mitigating this rigid dependence, thereby increasing the applicability of the recent lookup arguments.
+An important contribution we make here is a new method for computing ``encoded quotients'' used in several
+recent lookup constructions such as ~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:EagFioGab22}.
+Our approach for computing these quotients from pre-computed parameters remains efficient even when
+the table is updated, and it directly applies to all the aforementioned constructions.
+For a table $\delta$-hamming distance away from the pre-processed one, we incur
+$(m+\delta)\log^2(m+\delta)$ additional overhead for proving $m$ lookups. This additive and quasi-linear
+overhead in $\delta$ rests on novel algebraic algorithms described in Section ~\ref{sec:update-protocol}.
+We informally summarise our contribution in this regard below, whereas Theorem ~\ref{thm:approx-setup}
+states the precise result.
 \begin{theorem}[Informal]\label{thm:pre-process}
-	There exists a deterministic $O(N\log N)$ time algorithm $\textsf{Params}(\vecT)\outp \pp_T$
+	There exists a deterministic $O(N\log N)$ time algorithm $\textsf{Preprocess}(\vecT)\outp \pp_T$
 	which on input $\vecT\in \F^N$, outputs parameters $\pp_T$ of size $O(N)$ such
 	that: Given $\pp_T$, vectors $\vecT'\in \F^N$, $\vec{t}\in \F^m$ with $\vec{t}$ being a sub-vector of $\vecT'$
 	an argument of knowledge for the same can be computed in time
-	$O((m+\delta)\log^2 (m+\delta) + m^2)$ where $\delta=\Delta(\vecT, \vecT')$
-	is the number of positions where $\vecT$ and $\vecT'$ differ.
+	$O((m+\delta)\log^2 (m+\delta) + f(m))$ where $\delta=\Delta(\vecT, \vecT')$
+	is the hamming distance of $\vecT$ and $\vecT'$ while $f(m)$ depends on the specific lookup protocol.
 \end{theorem}
-For the construction in ~\cite{EPRINT:EagFioGab22}, a corresponding version of the above theorem holds with the prover complexity
-of $O((m+\delta)\log^2(m+\delta))$. We also remark that above theorem also holds for the indexed lookups that we briefly discussed before.\smallskip
+For the constructions ~\cite{CCS:ZBKMNS22,EPRINT:PosKat22}, we set $f(m)=m^2$ in the above,
+while for ~\cite{EPRINT:EagFioGab22}, we have $f(m)=m\log m$.\smallskip
+
+\noindent{\bf Committed Index Lookup}: We augment the sub-vector relation in prior lookup arguments which
+considers whether each entry of a given vector appears in the target vector to one that also identifies
+the precise positions where the given vector appears in the target vector. When this relation is checked
+over commitments of the respective vectors; given vector, the target vector and the position vector, we call
+it {\em committed index lookup}. The relation we consider is similar to the one considered in ~\cite{lasso}.
+For lookup arguments with homo-morphic commitment scheme, we show that committed index lookup can be obtained
+using three instantiations of sub-vector lookup (Lemma ~\ref{lem:generic-transformation}). Such reduction was
+also considered in ~\cite{lasso}, but under a more restrictive assumption on the elements in the table being
+within a certain bound. The reduction readily implies
+efficient constructions of arguments for committed index lookups from
+~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:ZGKMR22,EPRINT:EagFioGab22}.
+In the case of ~\cite{EPRINT:PosKat22}, we give an explicit adaptation in
+Section ~\ref{subsec:committed-index-lookup} that incurs costs comparable to single instance of the underlying sub-vector
+protocol.
 
 \noindent{\bf Polynomial Protocol for RAM}: Most of the efficient implementations of RAM in verifiable computation ~\cite{C:BCGTV13, NDSS:WSRBW15, SP:ZGKPP18}
 rely on the {\em address-ordered transcript} to check that a sequence of $\load$s and $\store$s are {\em consistent} with some initial state
