@@ -437,9 +437,47 @@ efficient constructions of arguments for committed index lookups from
 ~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:ZGKMR22,EPRINT:EagFioGab22}.
 In the case of ~\cite{EPRINT:PosKat22}, we give an explicit adaptation in
 Section ~\ref{subsec:committed-index-lookup} that incurs costs comparable to single instance of the underlying sub-vector
-protocol.
+protocol.\smallskip
 
-\noindent{\bf Polynomial Protocol for RAM}: Most of the efficient implementations of RAM in verifiable computation ~\cite{C:BCGTV13, NDSS:WSRBW15, SP:ZGKPP18}
+
+\noindent{\bf Batching Efficient RAM from Lookup Arguments}:
+Memory checking methods based on {\em address ordered transcripts}
+~\cite{NDSS:WSRBW15,USENIX:BCTV14,C:BCGTV13,SP:ZGKPP18} which are popularly used in
+efficient RAM abstractions incur a cost linear in the size of the RAM, which is prohibitive when
+aiming for efficient batching. As a key idea in this work, we invoke ``committed index lookup'' on
+the large RAMs, to verifiably extract smaller RAMs, which correspond to indices actually involved in
+the batch update. Then we can use the linear time memory-checking techniques to argue the consistency of these
+smaller RAMs. The idea needs to work through some more issues; such as showing the the larger RAMs are identical
+on positions not referenced by the batch of updates (considered in Section ~\ref{subsec:proximity-ram}).
+The overall idea is illustrated in Figure ~\ref{fig:blueprint}. We also note that the extracted sub-RAMs can
+have duplicate records, corresponding to multiple updates referencing the same RAM index, however, memory
+checking methods can easily handle such cases. Finally, we would still hit the ``rigidity'' of lookup arguments
+in realizing this plan; once the table has changed, lookups are no longer efficient from it. Fortunately,
+we can use our first contribution on extending the utility of table-specific parameters to defer parameter
+re-computation optimally while still availing efficient lookups. More specifically, if we choose to
+re-compute the full talbe-specific parameters after $k$batches (of $m$ updates each),
+the average cost per batch is $O(N\log N/k + mk\log^2(mk) + f(m))$. Here, $f(m)$ as earlier denotes complexity
+of the non-updatable base protocol. Setting $k\approx \sqrt{N/m}$ yields the average cost of $m$ updates as $O(f(m)+\sqrt{mN})$,
+which scales sub-linearly with the size of the RAM.
+While the preceding analysis considers the worst case,
+in specific applications (such as account transactions, where few accounts contribute a large volume of transactions), it may be
+possible to further delay the computation of table-specific parameters.
+Thus we have:
+\begin{theorem}[Informal]\label{thm:inc-ver-ram-informal}
+Given $m,N\in \mathbb{N}$, there exists an argument for verifiable RAM which proves updates of batch size $m$ on RAM of size $N$
+with amortized prover complexity of $O(f(m) + \sqrt{mN})$.
+\end{theorem}
+
+
+\noindent{\bf Polynomial Protocol for RAM}: There are several ways to implement the ordered transcript based
+memory consistency check on the smaller $O(m)$-sized RAMs, for example by expressing the same as an arithmetic
+circuit. However, for completeness we also present an argument for RAM using the above techniques as an
+interactive {\em polynomial protocol} ~\cite{Gabizon2019PLONKPO}, which is then compiled into an argument of knowledge using $\kzg$ ~\cite{AC:KatZavGol10}
+commitment scheme in the algebraic group model (AGM) ~\cite{C:FucKilLos18}. This construction appears in
+Section ~\ref{sec:poly-proto-ram-app}.
+
+\begin{comment}
+Most of the efficient implementations of RAM in verifiable computation ~\cite{C:BCGTV13, NDSS:WSRBW15, SP:ZGKPP18}
 rely on the {\em address-ordered transcript} to check that a sequence of $\load$s and $\store$s are {\em consistent} with some initial state
 of the RAM. Using the tuple $(t,\op,\ind, v)$ to denote a RAM instruction with $t$ being the execution {\em timestamp}, $\op\in \{\load,\store\}$ being
 the operation type, $\ind$ being the index referenced and $v$ denoting the value read/stored, a time ordered execution transcript $\mathsf{tr} = (\ins_1,\ldots,\ins_m)$ is a sequence
@@ -464,43 +502,11 @@ of the vectors $\vecT_0,\vecT_1$ and $\vec{\op}$ are represented via polynomials
 	For $m,n\in \mathbb{N}$, there exists a polynomial protocol to prove that sequence of operations $\vec{\op}=\{(\op_i,\ind_i,v_i)\}_{i=1}^m$ updates a
 	RAM state $\vecT_0\in \F^n$ to RAM state $\vecT_1\in \F^n$ with the prover-complexity of $\tilde{O}(m+n)$.
 \end{theorem}
+\end{comment}
 
-\noindent{\bf Improved RAM from Lookup Arguments}: The approach of the previous paragraph incurs a linear cost in
-the size of the RAM, even though the number of operations $m$ could be much smaller $m\ll n$. To circumvent the
-dependence on RAM size $n$, we use the efficient lookup arguments to isolate the part of RAM which is involved
-in the operation sequence $\vec{\op}=\{(\op_i,\ind_i,v_i)\}_{i=1}^m$.
-Concretely, from the vectors $\vecT_0,\vecT_1\in \F^n$ denoting the initial and final RAM states, we claim
-vectors $\vec{t}_0, \vec{t}_1\in \F^m$ such that $\vec{t}_j[\,i\,] = \vecT_j[\,\ind_i\,]$ for all $i\in [m]$ and
-$j=0,1$. Intuitively (modulo certain technicalities), we need to show that (i) the operation sequence $\vec{\op}$
-transforms $\vec{t}_0$ to $\vec{t}_1$ and (ii) the RAMs $\vecT_0$ and $\vecT_1$ are identical at indices not
-involved in $\vec{\op}$, i.e $\vecT_0[\,i\,]=\vecT_1[\,i\,]$ for $i\not\in \{\ind_i: i\in [m]\}$. In later
-sections, we show that the latter check can be accomplished with $\tilde{O}(m)$ prover complexity. The former
-check involves an adaptation of folklore approach using address ordered transcript (we consider additional subtleties such
-as the possibility of multiple rows of $\vec{t}_0$ and $\vec{t}_1$ referring to the same index of their parent RAMs $\vecT_0$ and
-$\vecT_1$ respectively).
-In later sections, we show that this is efficiently handled by using the inherited indices in constructing the transcript showing
-consistency of $\vec{t}_0$ and $\vec{t}_1$. Since the lookup protocol is $O(m^2)$ and the memory consistency check involves transcript
-of size $O(m)$, the overall complexity of this step is $O(m^2)$. Figure ~\ref{fig:subtable-lookup} illustrates the above idea on
-a concrete example.
 %and ~\ref{fig:subtable-consistency}
 %illustrate the overall idea for the first check with a concrete example.
 
-\noindent{\bf Incrementally Verifiable RAM with Deferred Pre-processing}:
-	The approach in the previous paragraph yields an argument for RAM with
-table-independent prover-complexity ($O(m^2)$), {\em provided} the prover has access to the table-dependent pre-processing
-$\pp_{T,0}$ for the table $\vecT_0$. We also require lookup from table $\vecT_1$, but it differs from $\vecT_0$ in at most $m$
-positions, so by Theorem \ref{thm:pp-for-ram-informal}, this lookup also requires $O(m^2)$ prover time. Next, let's suppose we apply an
-update of $m$ operations to obtain $\vecT_2$ from $\vecT_1$, and incrementally obtain $\vecT_3,\ldots,\vecT_k$. By Theorem ~\ref{thm:pp-for-ram-informal},
-the update $\vecT_k\rightarrow \vecT_{k+1}$ costs $O(m^2 + (mk)\log^2(mk))$. If we choose to re-compute the pre-processing parameters after $k$
-batches (of $m$ updates each), the average cost per batch is $O(N\log N/k + m^2 + mk\log^2(mk))$. Setting $k\approx \sqrt{N/m}$ yields the
-average cost of $m$ updates as $O(m^2+\sqrt{mN})$, which scales sub-linearly with the size of the RAM. While the preceding analysis considers
-worst case, in specific applications (such as account transactions, where few accounts contribute a large volume of transactions), it may be
-possible to further defer the computation of pre-processing parameters. Thus we have:
-
-\begin{theorem}[Informal]\label{thm:inc-ver-ram-informal}
-	Given $m,N\in \mathbb{N}$, there exists a polynomial protocol which incrementally proves updates of batch size $m$ on RAM of size $N$
-	with amortized prover complexity of $O(m^2 + \sqrt{mN})$.
-\end{theorem}
 
 \begin{comment}
 \begin{figure}[t]
@@ -520,7 +526,7 @@ possible to further defer the computation of pre-processing parameters. Thus we 
 \end{comment}
 %\input{figure-subtable-consistency}
 
-\noindent{\bf Our Contributions}: (Summarise later)
+\noindent{\bf Our Contributions}: (Summarise)
 
 \section{Related Work}\label{sec:rel-work}
 	\input{rel-work}
