@@ -207,7 +207,7 @@ However, we can use more $O(m\log m)$ complexity committed index lookup obtained
 $h(X)$ by proving that it interpolates vector $\vec{h}$ on $\setV$ obtained as committed index lookup using vector $\vec{a}$ on the vector $\vecT_{exp}=(\xi,\xi^2,\ldots,\xi^N)$
 i.e., $\vec{h}=\vecT_{exp}[\, \vec{a}\,]$.
 
-\subsection{Batching Efficient RAM: Combined Protocol}\label{subsec:all-together}
+\subsection{Batching-Efficient RAM: Combined Protocol}\label{subsec:all-together}
 We put the entire protocol together now. Let $\setind$ denote the set of indices $\{1,\ldots,N\}$, and $\mathcal{I}_N$
 denote the vector $(1,\ldots,N)$. We formally define the committed RAM relation for which we present an argument of
 knowledge in this section.
@@ -310,7 +310,7 @@ the AGM, under the $Q$-DLOG assumption for the bilinear group $(\F,\Gone,\Gtwo,\
 
         Continued in Figure ~\ref{fig:complete-listing-2}
     \end{mdframed}
-    \caption{Batching Efficient RAM Protocol}
+    \caption{Batching-Efficient RAM Protocol}
     \label{fig:complete-listing}
 \end{figure}
 
@@ -357,7 +357,7 @@ the AGM, under the $Q$-DLOG assumption for the bilinear group $(\F,\Gone,\Gtwo,\
 
 
     \end{mdframed}
-    \caption{Batching Efficient RAM Protocol: Continued}
+    \caption{Batching-Efficient RAM Protocol: Continued}
     \label{fig:complete-listing-2}
 \end{figure}
 
@@ -398,7 +398,7 @@ the AGM, under the $Q$-DLOG assumption for the bilinear group $(\F,\Gone,\Gtwo,\
             \item $\prover$ and $\verifier$ execute argument for $(c_S, c_o, c_S')\in \CLRAM$ (Section ~\ref{sec:poly-proto-ram}).
         \end{enumerate}
     \end{mdframed}
-    \caption{Batching efficient RAM Protocol-Continued}
+    \caption{Batching-Efficient RAM Protocol-Continued}
     \label{fig:complete-listing-3}
 \end{figure}
 
