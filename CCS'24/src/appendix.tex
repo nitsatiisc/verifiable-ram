@@ -832,12 +832,14 @@ This completes a brief summary of the proof.
     Thus, we get:
     $$\eta_i'(\xi^i)=\frac{F_K(\xi^i)}{Z_K'(\xi^i)}$$
 
-    $Z_K'(\xi^i)$ we already have for all $i \in I$.
-    If we get $F_K(\xi^i)$ for all $i \in I$, we will be able to get $\eta_i'(\xi^i)$ for all $i \in I$ in $O(|I|)$ operations which is what we want.
+    Since we already have $Z_K'(\xi^i)$ for all $i \in I$,
+    it suffices to compute $F_K(\xi^i)$ for all $i \in I$ to compute $\eta_i'(\xi^i)$ , $i \in I$.
+    % in $O(|I|)$ operations which is what we want.
     \textbf{Thus, it suffices to compute $F_K(\xi^i)$ for all $i \in I$}\\
 
-    But now recall the definition $F_K$. To compute this, we need information about $z_0, z_1, z_2, \cdots, z_k$.
-    But, we know the polynomial $Z_K$(fast multiplication) hence we know $z_0, z_1, \cdots, z_{k}$.
+    From the definition $F_K$ (Lemma ~\ref{lem:tau}), it can be computed once we know
+    coefficients  $z_0, z_1, z_2, \cdots, z_k$ of the polynomial $Z_K(X)$.
+    But, we know the polynomial $Z_K$ (via fast multiplication) hence we know $z_0, z_1, \cdots, z_{k}$.
     Thus, we get the coefficients of the polynomial $F_K(X)$, hence the polynomial $F_K(X)$.
     Now, by fast evaluation, we can get $F_K(\xi^i)$ for all $i \in I$. This will take $O(|K| \log^2|K|)$ field operations.
     \textbf{Thus, we have computed $F_K(\xi^i)$ for all $i \in I$}\\
@@ -872,7 +874,21 @@ This completes a brief summary of the proof.
     Thus, this finishes the proof of lemma \ref{lem:sum-computation}
 \end{proof}
 
+
 \section{Reducing indexed lookups to subvector lookups}\label{sec:generic-transformation-app}
+We give the proof of Lemma ~\ref{lem:generic-transformation} here.
+\begin{proof}[Proof of Lemma ~\ref{lem:generic-transformation}]
+Assume that there exists $i\in [n]$ such that $v_i\neq \vec{t}[\,a_i\,]$.
+ We bound the probability
+that the check $\vec{v} + \gamma \vec{a}\leq \vec{t}+\gamma \vec{I}_n$ succeeds for
+$\gamma\gets \F$ chosen uniformly. The probability is clearly upper bound by the probability
+that $v_i + \gamma a_i\in \vec{t}+\gamma \vec{I}_n$, or $v_i+\gamma a_i=t_j + \gamma j$ for
+some $j\in [n]$, or $v_i + \gamma (a_i - j)=t_j$. We note that for $a_i\neq j$ (by assumption),
+the left hand side is uniform in $\F$, and hence occurs in $\vec{t}$ with probability at most
+$n/|\F|$. This concludes the proof of the lemma.
+\end{proof}
+
+\begin{comment}
 Let us say we have a subvector lookup argument $L$ which takes as input two vectors say $a, b$ and determines whether $b$ is a subvector of $a$. It outputs $1$ if $b$ is a subvector of $a$ and $0$ if $b$ is not a subvector of $a$.
 Recall that $b$ is said to be a subvector of $a$ if every element of $b$ is in $a$\\
 Indexed lookup argument $L'$ takes in 3 vectors $a, b, c$ where $c$ is a vector of indices with $|b|=|c|$ and checks that $b$ is a subvector of $a$ and that $a[c_i]=b_i$ for all $i$. That is, it does $L(a, b)$ first and further checks that $a$ restricted to the indices in $c$(in a particular order) gives $b$(in that particular order).
@@ -971,3 +987,4 @@ Let the procedure for getting $L'(\cdot, \cdot, \cdot)$ be as above. Then, if $L
     So, $L(T+\gamma[N], v+\gamma a)=b_3$ is 0 with probability lower bounded by $1-\frac{O(1)}{|\F|}$. \\
     This completes the proof of lemma \ref{lem:reduction}
 \end{proof}
+\end{comment}
