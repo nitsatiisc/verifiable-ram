@@ -337,11 +337,11 @@ of the computation. Accordingly, there is a rich and expanding body of work to e
 addressable memory in verifiable computations. While complete acknowledgement of this vast body of work is beyond
 the scope of this paper (a fairly recent survey in \cite{WB15} is a good starting point) we summarise key approaches towards
 modelling RAM in verifiable computation. Often we demand additional properties of the RAM primitive, such as
-{\em persistence} - which is the ability to persist the RAM state across several computations, and {\em batching} -
+{\em persistence} -- which is the ability to persist the RAM state across several computations, and {\em batching} -
 where verifiable update of the RAM state is required for small batches of updates. These properties are also
 the focus of this work.
 
-Batching efficient RAM primitive is especially relevant in the context of blockchain {\em rollups} ~\cite{rollup},
+Batching-efficient RAM primitive is especially relevant in the context of blockchain {\em rollups} ~\cite{rollup},
 an umbrella term for recent efforts to scale blockchains
 by moving expensive computation off the blockchain to the so-called {\em layer two} or L2 chains. The blockchain
 only needs to verify the succinct proofs attesting to the correctness of the off-chain computation. This approach
@@ -350,7 +350,7 @@ modifying the L2 state, as part of one transaction verified on the main chain.
 This simultaneously helps the scalability and lowers the cost (e.g. gas fees)
 per transaction due to succinct verification.
 We consider improving efficiency of rollups an important
-motivation for our work, though in this work we do not go into precise details of a smart-contract based
+motivation for our work, though in this work we do not go into details of a smart-contract based
 instantiation of our solution.
 
 \subsection{Our Contribution}\label{subsec:ourwork}
