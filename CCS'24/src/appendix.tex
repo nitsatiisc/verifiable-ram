@@ -67,6 +67,7 @@ for $Z(X)=\prod_{i=1}^m (X-\omega^i)$ if and only if $\vec{v}=\vec{a}||\vec{b}||
     Thus, the equalities hold modulo the polynomial $Z(X)$ as defined above.
 \end{proof}
 
+
 Next, we specify polynomial checks on the encoding of a transcript to ensure it satisfies address-ordering and load-store consistency.
 Let $N$ be an upper bound on the values of $\vec{A}$, i.e, the index set $\setind\subseteq [N]$.
 Let $\tr=(\vec{t},\vec{\op},\vec{A},\vec{V})$ be a transcript encoded as
@@ -109,6 +110,51 @@ such that the following hold:
     and (ii) $\op_i=1\,\vee\,V_i=V_{i+1}$. Together these imply that the encoded transcript is address-ordered.
 \end{proof}
 
+Protocols facilitating the checks mentioned in Lemma \ref{lem:vec-concatenation} and Lemma \ref{lem:addr-ordered-transcript} are presented in Figure \ref{fig:concatenation} and \ref{fig:encoded-relations} respectively.
+
+\begin{figure}[htbp]
+	\begin{mdframed}
+		{
+			{\bf Common Input}: Commitments $c_a$, $c_b$, $c_c$, $c_v$, and $\gone{Z}$ (to the polynomial
+			$Z(X)=\prod_{i=1}^m (X-\omega^i)$). \\
+			{\bf Prover's Input}: Vectors $\vec{a},\vec{b},\vec{c}\in\F^m$ and $\vec{v}\in \F^k$.
+			\begin{enumerate}[leftmargin=1em, label=\arabic*.]
+				\item $\verifier$ sends $\gamma\gets \F$.
+				\item $\prover$ computes:
+				\begin{align}
+					& h(X) = a(X) + \gamma b(X) + \gamma^2 c(X),\\
+					& Q(X) = (h(X^3) - v(X) - \gamma v(\omega^m X) - \gamma^2 v(\omega^{2m} X))/Z(X)
+				\end{align}
+				\item $\prover$ sends commitment $\gone{Q}$ = $\gone{Q(X)}$.
+				\item $\verifier$ sends $s\gets\F$.
+				\item $\prover$ sends evaluations $\val{s}{v}=v(s)$, $\val{\omega^m s}{v}=v(\omega^m s)$,
+				$\val{\omega^{2m}s}{v}=v(\omega^{2m} s)$, $\val{s^3}{h}=h(s^3)$, $\val{s}{Q}=Q(s)$ and $\val{s}{Z}=Z(s)$.
+				\item $\verifier$ sends $r\gets\F$.
+				\item $\prover$ computes $\kzg$ proofs:
+				\begin{itemize}[leftmargin=1em]
+					\item $\Pi_v=\kzgprove(\srs,v,(s,\omega^m s, \omega^{2m}s))$.
+					\item $\Pi_h=\kzgprove(\srs,h,s^3)$.
+					\item $\Pi_f=\kzgprove(\srs,f,s)$ where $f(X)=Z(X) + rQ(X)$.
+				\end{itemize}
+				\item $\prover$ sends $\Pi_v$, $\Pi_h$ and $\Pi_f$.
+				\item $\verifier$ Computes commitments $\gone{h}$ and $\gone{f}$ using homomorphism.
+				\item $\verifier$ checks:
+				\begin{itemize}[leftmargin=1em]
+					\item $\kzgverify(\srs,\gone{v}, \vec{e}_v, \vec{p}_v, \Pi_v)$ where
+					$\vec{p}_v$ = $(s,\omega^m s, \omega^{2m}s)$ and $\vec{e}_v$ = $(\val{s}{v}, \val{\omega^m s}{v}, \val{\omega^{2m} s}{v})$.
+					\item $\kzgverify(\srs,\gone{h},  \val{s^3}{h}, s^3,\Pi_h)$.
+					\item $\kzgverify(\srs,\gone{f},  \val{s}{Z} + r\val{s}{Q}, s,\Pi_f)$.
+					\item $\val{s}{Q}\cdot \val{s}{Z} = \val{s^3}{h}-\val{s}{v}-\gamma \val{\omega^m s}{v}-\gamma^2\val{\omega^{2m}s}{v}$.
+				\end{itemize}
+				\item $\verifier$ outputs accept if all the above checks succeed, else it rejects.
+			\end{enumerate}
+		}
+	\end{mdframed}
+	%\vspace*{-5mm}
+	\caption{Protocol: Check concatenation via commitments}
+	\label{fig:concatenation}
+\end{figure}
+
 \begin{figure}[htbp]
 
     \begin{mdframed}
@@ -145,9 +191,6 @@ such that the following hold:
                 \item $\prover$ computes $\Pi_{\omega s} = \KZGopen(\srs, \Phi_{\omega s}(X), \omega s)$
                 \item $\prover$ computes $\Pi_{s} = \KZGopen(\srs, \Phi_{s}(X),s)$
 
-
-
-
             \end{itemize}
             \item $\prover$ sends $\Pi_{\omega s}, \Pi_{s}$
             \item $\verifier$ computes:
@@ -172,49 +215,6 @@ such that the following hold:
 
     \caption{Protocol: Check transcript is address ordered}
     \label{fig:encoded-relations}
-\end{figure}
-
-\begin{figure}[htbp]
-    \begin{mdframed}
-    {
-            {\bf Common Input}: Commitments $c_a$, $c_b$, $c_c$, $c_v$, and $\gone{Z}$ (to the polynomial
-        $Z(X)=\prod_{i=1}^m (X-\omega^i)$). \\
-    {\bf Prover's Input}: Vectors $\vec{a},\vec{b},\vec{c}\in\F^m$ and $\vec{v}\in \F^k$.
-        \begin{enumerate}[leftmargin=1em, label=\arabic*.]
-            \item $\verifier$ sends $\gamma\gets \F$.
-            \item $\prover$ computes:
-            \begin{align}
-                & h(X) = a(X) + \gamma b(X) + \gamma^2 c(X),\\
-                & Q(X) = (h(X^3) - v(X) - \gamma v(\omega^m X) - \gamma^2 v(\omega^{2m} X))/Z(X)
-            \end{align}
-            \item $\prover$ sends commitment $\gone{Q}$ = $\gone{Q(X)}$.
-            \item $\verifier$ sends $s\gets\F$.
-            \item $\prover$ sends evaluations $\val{s}{v}=v(s)$, $\val{\omega^m s}{v}=v(\omega^m s)$,
-            $\val{\omega^{2m}s}{v}=v(\omega^{2m} s)$, $\val{s^3}{h}=h(s^3)$, $\val{s}{Q}=Q(s)$ and $\val{s}{Z}=Z(s)$.
-            \item $\verifier$ sends $r\gets\F$.
-            \item $\prover$ computes $\kzg$ proofs:
-            \begin{itemize}[leftmargin=1em]
-                \item $\Pi_v=\kzgprove(\srs,v,(s,\omega^m s, \omega^{2m}s))$.
-                \item $\Pi_h=\kzgprove(\srs,h,s^3)$.
-                \item $\Pi_f=\kzgprove(\srs,f,s)$ where $f(X)=Z(X) + rQ(X)$.
-            \end{itemize}
-            \item $\prover$ sends $\Pi_v$, $\Pi_h$ and $\Pi_f$.
-            \item $\verifier$ Computes commitments $\gone{h}$ and $\gone{f}$ using homomorphism.
-            \item $\verifier$ checks:
-            \begin{itemize}[leftmargin=1em]
-                \item $\kzgverify(\srs,\gone{v}, \vec{e}_v, \vec{p}_v, \Pi_v)$ where
-                $\vec{p}_v$ = $(s,\omega^m s, \omega^{2m}s)$ and $\vec{e}_v$ = $(\val{s}{v}, \val{\omega^m s}{v}, \val{\omega^{2m} s}{v})$.
-                \item $\kzgverify(\srs,\gone{h},  \val{s^3}{h}, s^3,\Pi_h)$.
-                \item $\kzgverify(\srs,\gone{f},  \val{s}{Z} + r\val{s}{Q}, s,\Pi_f)$.
-                \item $\val{s}{Q}\cdot \val{s}{Z} = \val{s^3}{h}-\val{s}{v}-\gamma \val{\omega^m s}{v}-\gamma^2\val{\omega^{2m}s}{v}$.
-            \end{itemize}
-            \item $\verifier$ outputs accept if all the above checks succeed, else it rejects.
-        \end{enumerate}
-    }
-    \end{mdframed}
-    %\vspace*{-5mm}
-    \caption{Protocol: Check concatenation via commitments}
-    \label{fig:concatenation}
 \end{figure}
 
 \section{Succinct Argument for Verifiable RAM}\label{sec:poly-proto-ram}
