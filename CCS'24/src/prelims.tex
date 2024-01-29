@@ -20,15 +20,22 @@ Let $\{\mu_i(X)\}_{i=1}^N$ be the associated
 Lagrange basis polynomials over the set $\setN$; that is, $\mu_i(X) = \prod_{j\neq i-1} \frac{X-\xi^j}{\xi^{i-1}-\xi^j}$.
 We denote by $Z_{\setN}$ the vanishing polynomial of $\setN$;  $Z_{\setN}(X)=X^N-1$.
 
-\chaya{define interactive protocols, completeness, knowledge soundness, succinctness.}
+\subsection{Succinct Arguments of Knowledge}
+Let $\R$ be a NP-relation and $\L$ be the corresponding NP-language, where $\L=\{x : \exists$ $w$ such that $(x,w) \in \R\}$. 
+A \emph{succinct argument of knowledge} consists of a pair of PPT algorithms $(\prover,\verifier)$.
+Given a public instance $x$, the prover $\prover$, convinces the verifier $\verifier$, that $x\in \L$, where the prover additionally has as a witness $w$, and $\verifier$.
+The \emph{knowledge-soundness} property says that if the verifier is convinced, then an efficient extractor algorithm given oracle access to the prover outputs a witness $w$ such that $(x,w)\in \R$. An argument system is \emph{succinct} if the communication complexity and the compelxity of $\verifier$ is polylogarithmic in the size of the witness. We provide formal definitions in Appendix~\ref{sec:aok}.
+
+\noindent\textbf{Fiat-Shamir.} An interactive protocol is said to be \emph{public-coin} if the verifier's messages are uniformly random strings. Public-coin protocols can be transformed into non-interactive arguments in the Random Oracle Model (ROM) by using the Fiat-Shamir~\cite{C:FiaSha86} heuristic to derive the verifier's messages as the output of a Random Oracle. 
+
 \noindent{\bf Modular Approach.}
-A modular approach for designing efficient argument systems consists of two steps; constructing an information theoretic protocol in an idealized model, and then compiling the information-theoretic protocol via a cryptographic compiler to obtain an argument system. 
+A modular approach for designing efficient succinct arguments consists of two steps; constructing an information theoretic protocol in an idealized model, and then compiling the information-theoretic protocol via a cryptographic compiler to obtain an argument system. 
 Informally, the prover and the verifier interact where the prover provides oracle access to a set of polynomials, and the verifier accepts or rejects by checking certain identities over the polynomials output by the prover and possibly public polynomials known to the verifier. Such a protocol can be compiled into a succinct argument of knowledge by realizing the polynomial oracles using a \emph{polynomial commitment scheme}. A polynomial commitment scheme allows a prover to commit to polynomials, and later verifiably open evaluations at chosen points by giving evaluation proofs. This enables the verifier to probabilistically
 check polynomial identities at random points of $\F$. %We refer the reader to ~\cite[Section 4.2]{Gabizon2019PLONKPO} for details on polynomial protocols and their compilation to SNARKs. 
 Many recent constructions of zkSNARKs~\cite{EC:BunFisSze20,EC:CHMMVW20,Gabizon2019PLONKPO} follow this approach where the information theoretic object is a polynomial interactive oracle proof (PIOP) (or a polynomial protocol), and the cryptographic primitive in the compiler is a polynomial commitment scheme.
 
-\noindent{\bf Security Model.} We describe public-coin interactive protocols, involving a prover and a verifier,
-where both the parties have access to a structured reference string (SRS). The SRS in our protocols consists of
+\subsection{Security Model} We describe public-coin interactive protocols in the structured reference string (SRS) model where
+where both the parties have access to a SRS. The SRS in our protocols consists of
 encodings of monomials of the form $\left\{\gone{x^i}\right\}_{a\leq i\leq b}$, $\left\{\gtwo{x^i}\right\}_{c\leq i\leq d}$
 for $x$ chosen uniformly from $\F$ and $a,b,c,d$ are bounded by some polynomial in $\lambda$. It then follows
 from ~\cite{EPRINT:BowGabMie17} that such an SRS can be generated using a universal and updatable setup~\cite{C:GKMMM18} requiring
@@ -48,7 +55,6 @@ for $i\in \{1,2\}$, whenever $\Adv$ outputs an element $A\in \G_i$, it is accomp
 	over $\F$ such that $A=\langle \vec{v},\srs_i\rangle$.
 %\end{itemize}
 \chaya{do we use this in proofs?}Following~\cite{C:FucKilLos18}, we write $[A]$ to denote a group element enhanced with its representation; $[A] = (A,v_1,\ldots,v_k)$.
-\chaya{we should state assumptions and/or AGM in theorems}
 %AGM is a useful framework for analyzing security of succinct non-interactive arguments of knowledge (SNARKs) obtained from interactive protocols that are described as {\em polynomial protocols}. 
 
 \noindent{\bf Real and Ideal Pairing Checks}: For an algebraic adversary $\Adv$ interacting in a protocol with a degree $Q$ SRS over a bilinear group, the verifier
@@ -65,9 +71,9 @@ uniformly chosen $x\gets \F$, the probability of an efficient $\Adv$ outputting 
 
 \subsection{KZG Commitment Scheme}
 \label{sec:KZG}
+A polynomial commitment scheme allows the prover to open evaluations of a committed polynomial succinctly (Appendix~\ref{sec:pcs_def}).
 We use the $\kzg$ commitment scheme introduced in ~\cite{AC:KatZavGol10} which satisfies succinctness, completeness and knowledge-soundness (extractability)
-in the algebraic group model, while additionally featuring a universal and updatable setup. We denote the $\kzg$ scheme by the tuple
-of $\ppt$ algorithms $(\KZGsetup$,$\KZGcommit$, $\KZGopen$, $\KZGverify)$ as defined below.
+in the algebraic group model, while additionally featuring a universal and updatable setup. We denote the $\kzg$ scheme by the tuple of $\ppt$ algorithms $(\KZGsetup$,$\KZGcommit$, $\KZGopen$, $\KZGverify)$ as defined below.
 %We then establish the isomorphism of the KZG polynomial commitment scheme as a vector commitment scheme.
 \begin{definition}[KZG Polynomial Commitment Scheme]
 	Let $(\F,\Gone,\Gtwo,\GT, e, g_1, g_2, g_t)$ be output of bilinear group generator $\bg(1^\secp)$ for security parameter $\secp$.
