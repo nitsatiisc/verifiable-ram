@@ -419,7 +419,7 @@ to sub-vector arguments is obtained under a more restrictive assumption about th
 \item We cruicially employ above two contributions to construct a {\em batching-efficient} RAM, which
 can verifiably prove a batch of $m$ updates with an amortized prover complexity of $O(m\log m + \sqrt{mN})$,
 with $N$ being the size of the RAM. Our dependence on the RAM size is sub-linear, in contrast to linear complexity
-inherent in recent works on batching-efficient RAM using RSA accumulators ~\cite{CCS:CFHKKO22}.
+inherent in recent works on batching-efficient RAM using RSA accumulators ~\cite{USENIX:OWWB20,CCS:CFHKKO22}.
 \item We implement our scheme in Rust\footnote{\url{https://anonymous.4open.science/r/updatableRAM/}}.
 Experimentally, we show that our scheme performs significantly better than the aforementioned prior works,
 and is eminently deployable on a commodity hardware.
@@ -459,7 +459,7 @@ states the precise result.
 	$O((m+\delta)\log^2 (m+\delta) + f(m))$ where $\delta=\Delta(\vecT, \vecT')$
 	is the hamming distance of $\vecT$ and $\vecT'$ while $f(m)$ depends on the specific lookup protocol.
 \end{theorem}
-For the constructions ~\cite{CCS:ZBKMNS22,EPRINT:PosKat22}, we set $f(m)=m^2$ in the above,
+For the constructions  based on~\cite{CCS:ZBKMNS22,EPRINT:PosKat22}, we set $f(m)=m^2$ in the above,
 while for ~\cite{EPRINT:EagFioGab22}, we have $f(m)=m\log m$.\smallskip
 
 \noindent{\bf Committed Index Lookup}: We augment the sub-vector relation in prior lookup arguments which
