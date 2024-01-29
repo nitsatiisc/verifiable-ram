@@ -80,12 +80,12 @@ in the algebraic group model, while additionally featuring a universal and updat
 	The KZG polynomial commitment scheme is defined as follows:
 	\begin{itemize}[leftmargin=1em]
 		\item $\KZGsetup$ on input $(1^\secp,d)$, where $d$ is the degree bound, outputs
-		$\srs = \{\eltone{\tau},\ldots,\eltone{\tau^d}\}$ ,$\{\elttwo{\tau},\ldots,\elttwo{\tau^d}\}$.
+		$\srs = (\{\eltone{\tau},\ldots,\eltone{\tau^d}\}$ ,$\{\elttwo{\tau},\ldots,\elttwo{\tau^d}\})$.
 		\item $\KZGcommit$ on input $(\srs,p(X))$, where $p(X) \in \F_{\leq d}[X]$, outputs $C=\eltone{p(\tau)}$
 		\item $\KZGopen$ on input $(\srs,p(X),\alpha)$, where $p(X) \in \F_{\leq d}[X]$ and $\alpha\in \F$, outputs $(v, \pi)$ such that $v=p(\alpha)$ and $\pi=\eltone{q(\tau)}$, for
 		\[ q(X)=\frac{p(X)-p(\alpha)}{X-\alpha} \]
 		\item $\KZGverify$ on input $(\srs,C,\alpha,v,\pi)$, outputs $1$ if the following equation holds, and $0$ otherwise.
-		\[ e(C-v, \elttwo{\tau}) = e(\pi, \elttwo{\tau-\alpha}) \]
+		\[ e(C-v\eltone{1}, \elttwo{1}) = e(\pi, \elttwo{\tau-\alpha}) \]
 	\end{itemize}
 \end{definition}
 
@@ -106,7 +106,7 @@ version of $\KZGopen$ is described as follows:
 	%$a(X)=(X-\alpha_1)\cdots(X-\alpha_n)$ and $r(\alpha_i)=v_i$ for all $i\in [n]$ such that $0\leq \deg(r(X)) \leq n$.
 	\item $\KZGverify$ on input $(\srs,C,\vec{\alpha},\vec{v},\pi)$, outputs $1$ if the following equations hold, and $0$ otherwise.
 	\begin{align*}
-		e(C-\eltone{r(\tau)}, \elttwo{\tau}) &= e(\pi, \elttwo{a(\tau)})
+		e(C-\eltone{r(\tau)}, \elttwo{1}) &= e(\pi, \elttwo{a(\tau)})
 	\end{align*}
 	Here, the verifier interpolates the polynomial $r(X)\in \F_{<n}[X]$ such that $r(\alpha_i)=v_i$.
 \end{itemize}
