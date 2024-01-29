@@ -68,7 +68,8 @@ Under the $Q$-DLOG assumption stated below, the aforementioned ideal check
 is equivalent (except with a negligible probability) to a real pairing check $(a\cdot T_1)\cdot (T_2\cdot b)=0$ with $a$ and $b$ denoting vectors in $\F$ encoding polynomials in $R_1$ and $R_2$ in
 groups $\Gone$ and $\Gtwo$ respectively (see ~\cite[Lemma 2.2]{Gabizon2019PLONKPO}).
 \begin{definition}[Q-DLOG Assumption ~\cite{C:FucKilLos18}]\label{defn:q-dlog}
-Fix an integer $Q$. The $Q$-DLOG assumption for $(\Gone,\Gtwo)$ states that given $\gone{1}$,$\gone{x}$,$\ldots$,$\gone{x^Q}$, $\gtwo{1},\gtwo{x},\ldots,\gtwo{x^Q}$ for
+Fix an integer $Q$. The $Q$-DLOG assumption for $(\Gone,\Gtwo)$ states that given $\gone{1}$,$\gone{x}$,$\ldots$, \\
+$\gone{x^Q}$, $\gtwo{1},\gtwo{x},\ldots,\gtwo{x^Q}$ for
 uniformly chosen $x\gets \F$, the probability of an efficient $\Adv$ outputting $x$ is $\negl(\secp)$.
 \end{definition}
 
@@ -80,7 +81,8 @@ We use the $\kzg$ commitment scheme introduced in ~\cite{AC:KatZavGol10} which s
 in the algebraic group model, while additionally featuring a universal and updatable setup. We denote the $\kzg$ scheme by the tuple of $\ppt$ algorithms $(\KZGsetup$,$\KZGcommit$, $\KZGopen$, $\KZGverify)$ as defined below.
 %We then establish the isomorphism of the KZG polynomial commitment scheme as a vector commitment scheme.
 \begin{definition}[KZG Polynomial Commitment Scheme]
-	Let $(\F,\Gone,\Gtwo,\GT, e, g_1, g_2, g_t)$ be output of bilinear group generator $\bg(1^\secp)$ for security parameter $\secp$.
+	Let $(\F,\Gone,\Gtwo,\GT, e, g_1, g_2, g_t)$ be output of bilinear group generator \\
+	$\bg(1^\secp)$ for security parameter $\secp$.
 	The KZG polynomial commitment scheme is defined as follows:
 	\begin{itemize}[leftmargin=1em]
 		\item $\KZGsetup$ on input $(1^\secp,d)$, where $d$ is the degree bound, outputs
@@ -163,4 +165,4 @@ that $v_i = \vec{t}[a_i]=t_{a_i}$ for all $i\in [m]$ and $c_t = \kzgcommit(\srs,
 and $c_v=\kzgcommit(\srs,\enc{v}{\setV})$.
 \end{definition}
 
-A lookup argument is a succinct argument of knowledge for the relation relation $\RLOOK$. \chaya{by defn, in the NI case, the prover is allowed to come up with an adversarial instance, in this case all commitments.}
+A lookup argument is a succinct argument of knowledge for the relation $\RLOOK$. \chaya{by defn, in the NI case, the prover is allowed to come up with an adversarial instance, in this case all commitments.}
