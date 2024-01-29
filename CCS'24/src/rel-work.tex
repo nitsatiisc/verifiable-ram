@@ -20,41 +20,45 @@ ability to batch proofs, those based on checking consistency using transcripts i
 size of the RAM.
 
 \subsection{Batching Efficient RAM}\label{subsec:batching-efficient-ram}
-The focus of our work, as in recent efforts \cite{USENIX:OWWB20,CCS:CFHKKO22} is on batching efficient
-realization of the RAM primitive. This is a natural setting in several recent applications of verifiable
-computation, most notably in the context of blockchain {\em rollups}. In such a scenario, one is required
+There have been several recent efforts~\cite{USENIX:OWWB20,CCS:CFHKKO22} on batching efficient
+realization of the RAM primitive. This is a natural setting in applications of verifiable
+computation, most notably in the context of blockchain {\em rollups}. Here, one is required
 to show that a batch of $m$ transactions correctly updates the state of a table of account balances, which
 is maintained off-chain by the rollup provider. Here the batch-size $m$ ranges from few hundreds to few
 thousands, whereas the table itself could contain several million accounts.
 Like prior work on batching efficient
-RAMs ~\cite{USENIX:OWWB20,CCS:CFHKKO22} our work is also motivated by the problem of enabling more efficient rollup for tables, which are
+RAMs~\cite{USENIX:OWWB20,CCS:CFHKKO22} our work is also motivated by the problem of enabling more efficient rollup for tables, which are
 naturally modelled as RAMs. While the aforementioned works substantially mitigate disadvantages of both the
-merkle-tree based approaches and transcript based approaches by using RSA accumulators to model the state,
+Merkle-tree based approaches and transcript-based approaches by using RSA accumulators to model the state,
 they still incur large prover costs and memory requirements even for modest sized batches. The approaches
-in ~\cite{USENIX:OWWB20,CCS:CFHKKO22} encode complex modular arithmetic over RSA groups and {\em hash
+in~\cite{USENIX:OWWB20,CCS:CFHKKO22} encode complex modular arithmetic over RSA groups and {\em hash
 to prime} functions as arithmetic circuits results in a fixed overhead of around $10$ million R1CS constraints
 at batch sizes of $m=1000$ (this overhead is significantly larger for ~\cite{USENIX:OWWB20}), which already
 is prohibitive on a modest hardware. In addition, the witness computation for each update incurs cost
 linear in the size of accumulated set, which authors seek to mitigate through pre-computation and
 parallel/distributed processing. Our solution, by contrast is almost ``circuit-free''. Our entire
 RAM operation is modelled as a polynomial protocol, which is readily transformed into an argument of
-knowledge using a polynomial commitment scheme. In an application such as rollups, the only part we
-need expressed as a circuit is the verification of ED-DSA digital signatures on transactions,
+knowledge using a polynomial commitment scheme. In an application such as rollups, the only part of the statement 
+that is expressed as a circuit is the verification of EDDSA digital signatures on transactions,
 which for is around 500 constraints per verification.
 Combining our novel update protocol with highly efficient
-lookup arguments such as \cite{CCS:CFHKKO22}, our online proof generation can prove around $0.5$ million
+lookup arguments such as~\cite{CCS:CFHKKO22}, our online proof generation can prove around $0.5$ million
 updates at an average of just $120$ seconds per batch of $1000$ updates on a commodity laptop. Even
 this performance is under worst-case assumption that each update is to a different position in the table.
 The expensive off-line computation, mainly consisting of highly parallelize FFTs over groups requires around $3$ hours for a
 table of size 1 million, with a single-threaded implementation. Clearly, with more potent hardware and
-parallelization, one can process a table of size upto $10$ million in a few hours. Our approach also
-features a setup with universal and updatable SRS, which lends it a superior security posture. We
+parallelization, one can process a table of size upto $10$ million in a few hours. 
+Our approach is also in the updatable SRS setting in constrast to trusted setup required for RSA parameter generation. We
 compare our work with the prior approaches more elaborately in Section ~\ref{sec:experiments}.
 
 
-
-
-
+\subsection{Lookup arguments}
+\chaya{Moumita: compare with Caulk+, CQ}
+Lasso~\cite{lasso} new family of lookup arguments where the prover's cost only grows with table entries that are
+accessed by the lookup operations, for tables that are structured. Our work applies to tables without any structure (as is the case with rollup application), and additionally we can handle \emph{updatable}\chaya{agree on spelling of updatable throughout} tables.
+Lasso also defines a committed index lookup relation like us and gives a reduction between indexed and unindexed lookups (subvector relation); however, their reduction needs an upper bound on the elements of the table. We provide a different reduction without this restriction. 
+A recent work called Jolt~\cite{jolt} expresses all constraints of a computation as lookups by creating a lookup table that contains the entire evaluation table of each instruction $f$ in an instruction set.
+This approach of using table lookups requires memory checking arguments as well. However Jolt uses lookup arguments to model CPU operations, whereas our work uses lookup arguments to reduce the size of memory in memory-checking methods. \chaya{could add a line here or in conclusion that our techniques could be used to improve Jolt's mem consistency approach.}
 
 
 
