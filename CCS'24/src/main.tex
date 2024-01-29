@@ -245,22 +245,22 @@
 
 		RAM (random access memory) is an important primitive in verifiable computation.
 		In this paper, we focus on realizing RAM with efficient batching property, i.e,
-		proving a batch of $m$ updates on a RAM of size $N$, should incur a cost sub-linear in $N$.
-		Classical approaches based on merkle-trees or address ordered transcripts to model
+		proving a batch of $m$ updates on a RAM of size $N$ incurring a cost sublinear in $N$.
+		Classical approaches based on Merkle-trees or address ordered transcripts to model
 		RAM correctness are either concretely inefficient, or incur linear overhead in the size of the RAM.
-		Recent works have explored cryptographic accumulators based on unknown-order groups (RSA, class-groups)
-		to model the RAM state. While the recent RSA accumulator based approaches
+		Recent works explore cryptographic accumulators based on unknown-order groups (RSA, class-groups)
+		to model the RAM state. While recent RSA accumulator based approaches
 		offer significant improvement over classical methods,
 		they continue to incur linear overhead in the size of the
 		accumulated set to compute witnesses, as well as concretely prohibitive constant overhead.
 		
 		In this paper, we realize a batching-efficient RAM with superior asymptotic and concrete
 		costs. Towards this (i) we build on recent constructions of lookup arguments to allow efficient
-		lookups even in presence of table updates, and (ii) we realize a variant of sub-vector relation
+		lookups even in presence of table \textit{updates}, and (ii) we realize a variant of sub-vector relation
 		addressed in prior works, which we call {\em committed index lookup}. We combine the two
 		building blocks to realize batching-efficient RAM with sublinear ($\sqrt{N}$) dependence on
 		size of the RAM. Our construction incurs an amortized proving cost of $O(m\log m + \sqrt{mN})$
-		for a batch of $m$ updates on the RAM of size $N$.
+		for a batch of $m$ updates on a RAM of size $N$.
 		Our results also benefit the recent arguments for sub-vector relation, by
 		enabling them to be efficient in presence of updates to the table.
 		This is we believe to be of independent interest.
@@ -427,7 +427,7 @@ and is eminently deployable on a commodity hardware.
 
 
 \subsection{Techniques}\label{subsec:techniques}
-\noindent{\bf Update friendly lookup arguments}: Starting point for our work are the recent lookup arguments which prove
+\noindent{\bf Update-friendly Lookup Arguments}: Starting point for our work are the recent lookup arguments which prove
 that a vector of size $m$ appears as
 a sub-vector in a large fixed vector (table) of size $N$ with succinct proof sizes and verification, but most notably
 ensuring that prover runs in time sub-linear in the size of the table ($N$). The pioneering work ~\cite{CCS:ZBKMNS22}
