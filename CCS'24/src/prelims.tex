@@ -17,7 +17,7 @@ over which the protocol is instantiated. We use $[n]$ to denote the set of integ
 %\chaya{move to here from sec 6: Lagrange polynomial, vanishing polynomial, roots of unity}
 We denote the $N$th root of unity by $\xi$ and define the subgroup $\setN$ as $\setN =\{\xi,\ldots,\xi^N\}$. 
 Let $\{\mu_i(X)\}_{i=1}^N$ be the associated
-Lagrange basis polynomials over the set $\setN$; that is, $\mu_i(X) = \prod_{j\neq i-1} \frac{X-\xi^j}{\xi^{i-1}-\xi^j}$.
+Lagrange basis polynomials over the set $\setN$; that is, $\mu_i(X) = \prod_{j\neq i} \frac{X-\xi^j}{\xi^{i}-\xi^j}$.
 We denote by $Z_{\setN}$ the vanishing polynomial of $\setN$;  $Z_{\setN}(X)=X^N-1$.
 
 \subsection{Succinct Arguments of Knowledge}
@@ -84,7 +84,7 @@ in the algebraic group model, while additionally featuring a universal and updat
 		\item $\KZGcommit$ on input $(\srs,p(X))$, where $p(X) \in \F_{\leq d}[X]$, outputs $C=\eltone{p(\tau)}$
 		\item $\KZGopen$ on input $(\srs,p(X),\alpha)$, where $p(X) \in \F_{\leq d}[X]$ and $\alpha\in \F$, outputs $(v, \pi)$ such that $v=p(\alpha)$ and $\pi=\eltone{q(\tau)}$, for
 		\[ q(X)=\frac{p(X)-p(\alpha)}{X-\alpha} \]
-		\item $\KZGverify$ on input $(\srs,C,\alpha,v,\pi)$, outputs $1$ if the following equation holds, and $0$ otherwise.
+		\item $\KZGverify$ on input $(\srs,C,v, \alpha,\pi)$, outputs $1$ if the following equation holds, and $0$ otherwise.
 		\[ e(C-v\eltone{1}, \elttwo{1}) = e(\pi, \elttwo{\tau-\alpha}) \]
 	\end{itemize}
 \end{definition}
@@ -104,7 +104,7 @@ version of $\KZGopen$ is described as follows:
 	 $p(X)$ is divided by $a(X)$.
 	%Note that the polynomials $a(X)$ and $r(X)$ can be computed by the verifier since $\{\alpha_i,v_i\}_{i\in [n]}$ are known and
 	%$a(X)=(X-\alpha_1)\cdots(X-\alpha_n)$ and $r(\alpha_i)=v_i$ for all $i\in [n]$ such that $0\leq \deg(r(X)) \leq n$.
-	\item $\KZGverify$ on input $(\srs,C,\vec{\alpha},\vec{v},\pi)$, outputs $1$ if the following equations hold, and $0$ otherwise.
+	\item $\KZGverify$ on input $(\srs,C,\vec{v}, \vec{\alpha}, \pi)$, outputs $1$ if the following equations hold, and $0$ otherwise.
 	\begin{align*}
 		e(C-\eltone{r(\tau)}, \elttwo{1}) &= e(\pi, \elttwo{a(\tau)})
 	\end{align*}

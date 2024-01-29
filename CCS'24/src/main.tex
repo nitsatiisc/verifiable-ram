@@ -354,14 +354,14 @@ motivation for our work, though in this work we do not go into precise details o
 instantiation of our solution.
 
 \subsection{Our work}\label{subsec:ourwork}
-We present batching efficient RAM construction, which advances the efforts
+We present batching-efficient RAM construction, which advances the efforts
 towards achieving {\em verifiable outsourcing of state update} such as in ~\cite{EPRINT:BFRSBW13}
 and more recently in ~\cite{USENIX:OWWB20, CCS:CFHKKO22}.
 The most popular approaches to succinctly represent
 state involve accumulators based on Merkle-trees ~\cite{C:Merkle87}, or ones based on groups of unknown order
 (e.g. RSA, class-groups) ~\cite{C:CamLys02,C:BonBunFis19,USENIX:OWWB20, CCS:CFHKKO22}.
 The updates to the state are effected by insertions or deletions in the  accumulated set.
-By contrast, in this work we
+In contrast, in this work we
 model the state as an addressable memory (RAM) described by vector $\vecT$, which stores a value $v_i$ at address $i$.
 We denote this as $\vecT[\,i\,]=v_i$. The RAM supports two operations, viz, {\em loads} expressed
 as $v_i := \vecT[\,i\,]$, and {\em stores} expressed as $\vecT[\,i\,]=v_i$.
@@ -372,7 +372,7 @@ values $v_i\in \F$ for some finite field $\F$. In our construction, we represent
 as polynomials, and use appropriate polynomial commitment schemes to obtain succinct commitments (digests) to them.
 In this paper, we do not require commitments to be {\em hiding}, as our focus is on succinctness.
 We consider privacy as an orthogonal goal, one we believe is easily achievable
-via small adaptations to our construction.\smallskip
+via minor, standard adaptations to our construction.\smallskip
 
 
 \begin{comment}
@@ -397,19 +397,18 @@ performance achieved when instantiated using our primitive.
 
 \noindent{\bf Our Contributions}:
 \begin{itemize}[leftmargin=2em]
-\item As our first contribution, we propose {\em update friendly lookup arguments}, which addresses
-the strict dependence of recent constructions on table-specific pre-computed parameters. Our
-innovation extends the utility of table-specific parameters to enable efficient lookups from tables,
-which are within certain hamming distance of the pre-processed table.
+\item As our first contribution, we propose {\em update-friendly lookup arguments},  which addresses
+the strict dependence of recent lookup arguments~\cite{CCS:ZBKMNS22,EPRINT:EagFioGab22} on table-specific pre-computed parameters. Our
+innovation extends the utility of table-specific parameters to enable efficient lookups from tables
+that are within a certain hamming distance of the pre-processed table.
 \item We construct {\em committed index lookup} arguments via black-box reduction to
 sub-vector arguments that use homomorphic commitments. A committed index lookup involves
 three committed vectors $\vec{t},\vec{a}$ and $\vec{v}$ satisfying $v_i=t_{a_i}$ for all $i$. Similar
-definition is also used in recent multi-variate lookup arguments in ~\cite{lasso}, where a similar reduction
-to sub-vector arguments is obtained under a more restrictive assumption about the elements of the table.
-\item We cruicially employ above two contributions to construct a {\em batching efficient} RAM, which
+definition was put forth in Lasso~\cite{lasso}, a recent  work on lookup arguments for structured tables where a similar reduction to sub-vector arguments is obtained, but under a restrictive assumption about the elements of the table.
+\item We crucially employ above two contributions to construct a {\em batching-efficient} RAM, which
 can verifiably prove a batch of $m$ updates with an amortized prover complexity of $O(m\log m + \sqrt{mN})$,
-with $N$ being the size of the RAM. Our dependence on the RAM size is sub-linear, in contrast to linear complexity
-inherent in recent works on batching efficient RAM using RSA accumulators ~\cite{}.
+where $N$ is the size of the RAM. The dependence on the RAM size is sub-linear, in contrast to linear complexity
+inherent in recent works on batching-efficient RAM using RSA accumulators~\cite{USENIX:OWWB20,CCS:CFHKKO22}.
 \item We implement our scheme in Rust\footnote{\url{https://anonymous.4open.science/r/updatableRAM/}}.
 Experimentally, we show that our scheme performs significantly better than the aforementioned prior works,
 and is eminently deployable on a commodity hardware.
@@ -417,7 +416,7 @@ and is eminently deployable on a commodity hardware.
 
 
 \subsection{Techniques}\label{subsec:techniques}
-\noindent{\bf Update friendly lookup arguments}: Starting point for our work are the recent lookup arguments which prove
+\noindent{\bf Update-friendly lookup arguments}: Starting point for our work are the recent lookup arguments which prove
 that a vector of size $m$ appears as
 a sub-vector in a large fixed vector (table) of size $N$ with succinct proof sizes and verification, but most notably
 ensuring that prover runs in time sub-linear in the size of the table ($N$). The pioneering work ~\cite{CCS:ZBKMNS22}
@@ -459,7 +458,7 @@ over commitments of the respective vectors; given vector, the target vector and 
 it {\em committed index lookup}. The relation we consider is similar to the one considered in ~\cite{lasso}.
 For lookup arguments with homomorphic commitment scheme, we show that committed index lookup can be obtained
 using three instantiations of sub-vector lookup (Lemma ~\ref{lem:generic-transformation}). Such reduction was
-also considered in ~\cite{lasso}, but under a more restrictive assumption on the elements in the table being
+also considered in~\cite{lasso}, but under a more restrictive assumption on the elements in the table being
 within a certain bound. The reduction readily implies
 efficient constructions of arguments for committed index lookups from
 ~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:ZGKMR22,EPRINT:EagFioGab22}.
@@ -468,7 +467,7 @@ Section ~\ref{subsec:committed-index-lookup} that incurs costs comparable to sin
 protocol.\smallskip
 
 
-\noindent{\bf Batching Efficient RAM from Lookup Arguments}:
+\noindent{\bf Batching-Efficient RAM from Lookup Arguments}:
 Memory checking methods based on {\em address ordered transcripts}
 ~\cite{NDSS:WSRBW15,USENIX:BCTV14,C:BCGTV13,SP:ZGKPP18} which are popularly used in
 efficient RAM abstractions incur a cost linear in the size of the RAM, which is prohibitive when
