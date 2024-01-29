@@ -2,18 +2,18 @@
 
 \subsection{Polynomial Commitment Scheme}
 \label{sec:pcs_def}
-The notion of a polynomial commitment scheme that allows the prover to open evaluations of the committed polynomial succinctly was introduced in~\cite{AC:KatZavGol10} who gave a construction under the trusted setup assumption.
+The notion of a polynomial commitment scheme (PCS) that allows the prover to open evaluations of the committed polynomial succinctly was introduced in~\cite{AC:KatZavGol10} who gave a construction under the trusted setup assumption.
 A polynomial commitment scheme over $\F$ is a tuple $\pc = 
 (\pcsetup,\pccommit,\pcopen,\pceval)$ where:
 
 \begin{itemize}
-    \item $\pcsetup(1^\secp,D) \rightarrow \pp$. On input security parameter $\secp$, and an upper bound $D \in \mathbb{N}$ on the degree, $\pcsetup$ generates public parameters $\pp$.
+    \item $\pp \leftarrow \pcsetup(1^\secp,D) $. On input security parameter $\secp$, and an upper bound $D \in \mathbb{N}$ on the degree, $\pcsetup$ generates public parameters $\pp$.
     
-    \item $\pccommit(\pp, f(X),d) \rightarrow (C,\mathbf{\tilde{c}})$. On input the public parameters $\pp$, and a univariate polynomial $f(X) \in \F[X]$ with degree at most $d \leq D$, $\pccommit$ outputs a commitment to the polynomial $C$, and additionally an opening hint $\mathbf{\tilde{c}}$.
+    \item $(C,\mathbf{\tilde{c}}) \leftarrow \pccommit(\pp, f(X),d) $. On input the public parameters $\pp$, and a univariate polynomial $f(X) \in \F[X]$ with degree at most $d \leq D$, $\pccommit$ outputs a commitment to the polynomial $C$, and additionally an opening hint $\mathbf{\tilde{c}}$.
 	
-	\item $\pcopen(\pp,f(X),d,C,\mathbf{\tilde{c}}) \rightarrow b$. On input the public parameters $\pp$, the commitment $C$ and the opening hint $\mathbf{\tilde{c}}$, a polynomial $f(X)$ of degree $d \leq D$, $\pcopen$ outputs a bit indicating accept or reject. 
+	\item $b \leftarrow \pcopen(\pp,f(X),d,C,\mathbf{\tilde{c}})$. On input the public parameters $\pp$, the commitment $C$ and the opening hint $\mathbf{\tilde{c}}$, a polynomial $f(X)$ of degree $d \leq D$, $\pcopen$ outputs a bit indicating accept or reject. 
     
-	    \item $\pceval(\pp,C,d,x,v;f(X)) \rightarrow b $. A public coin interactive protocol 
+	    \item $b \leftarrow \pceval(\pp,C,d,x,v;f(X)) $. A public coin interactive protocol 
 	    $\langle P_{\mathsf{eval}}(f(X)), V_{\mathsf{eval}} \rangle(\pp,C,d,z,v)$ between a PPT prover and a PPT verifier. The parties have as common input public parameters $\pp$, commitment $C$, degree $d$, evaluation point $x$, and claimed evaluation $v$. The prover has, in addition, the opening $f(X)$ of $C$, with $\deg(f) \leq d$. At the end of the protocol, the verifier outputs $1$ indicating accepting the proof that $f(x)=v$, or outputs $0$ indicating rejecting the proof.
 		
 		\end{itemize}
@@ -90,7 +90,7 @@ For any PPT adversary $\Adv = (\Adv_{1},\Adv_{2})$, there exists a PPT algorithm
 \end{definition}
 
 We denote by $\mathsf{Prove}, \mathsf{Verify}$, the non-interactive prover and verifier algorithms obtained by applying FS to the 
-$\pceval$ public-coin interactive protocol.
+$\pceval$ public-coin interactive protocol, giving a non-interactive PCS scheme $(\pcsetup,\pccommit,\allowbreak \mathsf{Prove},\mathsf{Verify})$.
 
 \begin{definition}[Succinctness]
 \label{def:pcs-succinct}
