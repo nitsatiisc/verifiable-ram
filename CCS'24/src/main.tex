@@ -419,7 +419,7 @@ to sub-vector arguments is obtained under a more restrictive assumption about th
 \item We cruicially employ above two contributions to construct a {\em batching-efficient} RAM, which
 can verifiably prove a batch of $m$ updates with an amortized prover complexity of $O(m\log m + \sqrt{mN})$,
 with $N$ being the size of the RAM. Our dependence on the RAM size is sub-linear, in contrast to linear complexity
-inherent in recent works on batching-efficient RAM using RSA accumulators ~\cite{}.
+inherent in recent works on batching-efficient RAM using RSA accumulators ~\cite{CCS:CFHKKO22}.
 \item We implement our scheme in Rust\footnote{\url{https://anonymous.4open.science/r/updatableRAM/}}.
 Experimentally, we show that our scheme performs significantly better than the aforementioned prior works,
 and is eminently deployable on a commodity hardware.
