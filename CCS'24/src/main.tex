@@ -430,7 +430,7 @@ considers whether each entry of a given vector appears in the target vector to o
 the precise positions where the given vector appears in the target vector. When this relation is checked
 over commitments of the respective vectors; given vector, the target vector and the position vector, we call
 it {\em committed index lookup}. The relation we consider is similar to the one considered in ~\cite{lasso}.
-For lookup arguments with homo-morphic commitment scheme, we show that committed index lookup can be obtained
+For lookup arguments with homomorphic commitment scheme, we show that committed index lookup can be obtained
 using three instantiations of sub-vector lookup (Lemma ~\ref{lem:generic-transformation}). Such reduction was
 also considered in ~\cite{lasso}, but under a more restrictive assumption on the elements in the table being
 within a certain bound. The reduction readily implies
@@ -456,7 +456,7 @@ checking methods can easily handle such cases. Finally, we would still hit the `
 in realizing this plan; once the table has changed, lookups are no longer efficient from it. Fortunately,
 we can use our first contribution on extending the utility of table-specific parameters to defer parameter
 re-computation optimally while still availing efficient lookups. More specifically, if we choose to
-re-compute the full talbe-specific parameters after $k$batches (of $m$ updates each),
+re-compute the full table-specific parameters after $k$ batches (of $m$ updates each),
 the average cost per batch is $O(N\log N/k + mk\log^2(mk) + f(m))$. Here, $f(m)$ as earlier denotes complexity
 of the non-updatable base protocol. Setting $k\approx \sqrt{N/m}$ yields the average cost of $m$ updates as $O(f(m)+\sqrt{mN})$,
 which scales sub-linearly with the size of the RAM.
