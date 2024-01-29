@@ -800,9 +800,9 @@ This completes a brief summary of the proof.
 
     $$\varphi_i = \Phi_i(\xi^i) = \left(\sum_{j\in K\setminus \{i\}}\frac{\eta_j(X)/(X-\xi^i)}{Z_K(X)/(X-\xi^i)}\right)(\xi^i)$$
     This can be simplified as:
-    \begin{align*}\varphi_i = \Phi_i(\xi^i) &= \left(\sum_{j\in K\setminus \{i\}}\frac{\eta_j(X)/(X-\xi^i)}{\prod_{j \in K \setminus \{i\}}(X-\xi^j)}\right)(\xi^i)\\
-    &= \sum_{j\in K\setminus \{i\}}\left(\frac{\eta_j(X)/(X-\xi^i)}{\prod_{j \in K \setminus \{i\}}(X-\xi^j)}\right)(\xi^i)\\
-    &= \sum_{j\in K\setminus \{i\}}\frac{\left(\eta_j(X)/(X-\xi^i)\right)(\xi^i)}{\left(\prod_{j \in K \setminus \{i\}}(X-\xi^j)\right)(\xi^i)}\\
+    \begin{align*}\varphi_i = \Phi_i(\xi^i) &= \left(\sum_{j\in K\setminus \{i\}}\frac{\eta_j(X)/(X-\xi^i)}{\prod_{k \in K \setminus \{i\}}(X-\xi^k)}\right)(\xi^i)\\
+    &= \sum_{j\in K\setminus \{i\}}\left(\frac{\eta_j(X)/(X-\xi^i)}{\prod_{k \in K \setminus \{i\}}(X-\xi^k)}\right)(\xi^i)\\
+    &= \sum_{j\in K\setminus \{i\}}\frac{\left(\eta_j(X)/(X-\xi^i)\right)(\xi^i)}{\left(\prod_{k \in K \setminus \{i\}}(X-\xi^k)\right)(\xi^i)}\\
     &= \frac{1}{Z_K'(\xi^i)}\sum_{j\in K\setminus \{i\}}\left(\eta_j(X)/(X-\xi^i)\right)(\xi^i)
     \end{align*}
 

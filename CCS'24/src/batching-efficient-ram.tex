@@ -36,12 +36,15 @@ in ~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:EagFioGab22} to prove the correctn
 However, employing them directly is difficult; their table-independent efficiency relies on
 table specific expensive pre-computation, which does not help when the table is updatable. This is the problem we solve
 in Section ~\ref{sec:update-protocol}, where we modify the prover algorithm for the lookup arguments to remain efficient
-with access to pre-computed parameters for an ``approximate'' table. In particular, we show that lookup protocols in
+with access to pre-computed parameters for an ``approximate'' table.
+\begin{comment} %repetition
+In particular, we show that lookup protocols in
 ~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:EagFioGab22} can be used to show $m$ lookups from a table $\vecT'$, given pre-computed parameters
 for a table $\vecT$ with additional overhead of $O((m+\delta)\log^2 (m+\delta))$, where $\delta$ denotes the hamming distance
 of tables $\vecT$ and $\vecT'$. By optimally deferring the $O(N\log N)$ re-computation till we
 accumulate $\delta \approx \sqrt{mN}$ updates, we achieve an amortized prover overhead $O(\sqrt{mN})$ over the lookup protocols for non-updatable tables.
 This modification described in ~\ref{sec:update-protocol} applies to all the aforementioned lookup protocols.
+\end{comment}
 
 \noindent{\bf Additional Notation}:
 Before proceeding, we introduce the subgroup $\setN=\{\xi,\ldots,\xi^N\}$ consisting of $N^{th}$ roots of unity,
@@ -82,7 +85,7 @@ The last polynomial identity ensures that evaluations of $h$ on $\setV$ lie in $
 over $\setN$, the first equation implies $h(\nu^i)=\xi^{a_i}$ for all $i\in [m]$. The desired relation $v_i=T_{a_i}$ now follows from the second identity.
 The above formulation involves composition with polynomials $\ell,T$ and $\vpolyN$ of degree $O(N)$, which is inefficient. We use the trick from
 \cite{EPRINT:PosKat22}, where we work with low-degree restrictions of $O(N)$-degree polynomials such as $T, \ell$ over the set
-$\setN_I=\{{h(\nu^i)}: i\in I\}=\{\xi^{a_i}:i\in I\}\subseteq \setN$, where $I=\{a_i: i\in [m]\}$. The prover
+$\setN_I=\{{h(\nu^i)}: i\in [m]\}=\{\xi^{a_i}:i\in I\}\subseteq \setN$, where $I=\{a_i: i\in [m]\}$. The prover
 commits to the polynomials $Z_I(X)=\prod_{i\in I}(X-\xi^i)$, $h(X)$ and low degree ($<m$) restrictions $T_I, \ell_I$ of $T$ and $\ell$
 on the $\setN_I$ respectively. The polynomial protocol then checks the following:
 \begin{equation}
@@ -136,7 +139,7 @@ $\vec{t} + \gamma \vec{I}_n$ for the final instantiation of sub-vector argument.
 protocol using lookup argument in ~\cite{EPRINT:EagFioGab22}, which incurs prover complexity of $O(m\log m)$.
 ~
 
-\subsection{Almost idential RAM States}\label{subsec:proximity-ram}
+\subsection{Almost Identical RAM States}\label{subsec:proximity-ram}
 For a vector $\vec{a}\in [N]^m$, let $\uniq{a}=\{a_i: i\in [m]\}$ denote the subset of unique values in $\vec{a}$. We call two
 RAM states $\vecT, \vecT'\in \F^N$ to be $\vec{a}$-{\em identical} if $\vecT[i]=\vecT'[i]$ for all $i\not\in\uniq{a}$. As before,
 let $T(X),T'(X)$ and $a(X)$ be polynomials encoding the vectors $\vecT,\vecT'$ (over $\setN$) and $\vec{a}$ (over $\setV$). Given
@@ -181,8 +184,10 @@ The verifier ensures the correctness of $u(X)$ by
     \label{eq:kh-check}
 \end{equation}
 We prove that the above constraints imply that $K(\alpha)=\prod_{i\in [m]}(\alpha - h(\nu^i))$.
-
-Moreover, another pairing check will be needed to show that the $Z_I(X)$ committed in $\Gone$(whose well formation is shown in the protocol as described above) is the same as the $Z_I(X)$ committed in $\Gtwo$.
+Note that in this protocol we require commitment to the polynomial $Z_I$ in both $\Gone$ and $\Gtwo$,
+and thus another pairing check is required to show that the $Z_I(X)$ committed in $\Gone$
+(whose well formation is shown in the protocol as described above) is the same as the $Z_I(X)$ committed in $\Gtwo$,
+used for the real pairing check.
 \begin{lemma}\label{lem:kh-check}
 There exists a polynomial $u(X)\in \F[X]$ satisfying the identities in Equation ~\eqref{eq:kh-check}
 if and only if $K(\alpha)=1+\beta=\prod_{i\in [m]} (\alpha - h(\nu^i))$.
@@ -204,7 +209,7 @@ i.e., $\vec{h}=\vecT_{exp}[\, \vec{a}\,]$.
 
 \subsection{Batching Efficient RAM: Combined Protocol}\label{subsec:all-together}
 We put the entire protocol together now. Let $\setind$ denote the set of indices $\{1,\ldots,N\}$, and $\mathcal{I}_N$
-denote the vector $(1,\ldots,N)$. We formally define the committed RAM relation for which we present the argument of
+denote the vector $(1,\ldots,N)$. We formally define the committed RAM relation for which we present an argument of
 knowledge in this section.
 \begin{definition}\label{defn:committed-ram}
 We define the {\em committed ram} relation
@@ -235,6 +240,12 @@ showing $(c_S, c_o, c_S')\in \CLRAM$ (see Definition ~\ref{defn:committed-ram}).
 listing in Figure ~\ref{fig:complete-listing}. The protocol in Figure ~\ref{fig:complete-listing} assumes pre-computed parameters
 for the tables $T$ and $T'$. In the next section, we discuss how to efficiently maintain table-dependent parameters in the setting
 requiring updates to the table.
+
+\begin{theorem}\label{thm:committed-ram}
+The protocol in Figure~\ref{fig:complete-listing} (continued in Figures~\ref{fig:complete-listing-2} and
+~\ref{fig:complete-listing-3}) is a succinct argument of knowledge for the relation $\CLRAM$ in
+the AGM, under the $Q$-DLOG assumption for the bilinear group $(\F,\Gone,\Gtwo,\GT,e,g_1,g_2)$.
+\end{theorem}
 
 %%% complete protocol listing %%%
 \begin{figure}[t!]
@@ -340,6 +351,10 @@ requiring updates to the table.
             \item $\verifier$ sends $r_a, r_h, r_q, r_v, r_K, r_Q, r_Z\gets \F$ and $r_h', r_u', r_Q'\gets \F$.
         \end{enumerate}
 
+        \begin{center}
+        Continue in Figure ~\ref{fig:complete-listing-3}.
+        \end{center}
+
 
     \end{mdframed}
     \caption{Batching Efficient RAM Protocol: Continued}
@@ -384,7 +399,7 @@ requiring updates to the table.
         \end{enumerate}
     \end{mdframed}
     \caption{Batching efficient RAM Protocol-Continued}
-    \label{fig:enter-label}
+    \label{fig:complete-listing-3}
 \end{figure}
 
 

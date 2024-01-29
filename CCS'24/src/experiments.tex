@@ -22,7 +22,8 @@
         \end{axis}
 
     \end{tikzpicture}
-    \caption{Comparison of Constraints incurred by different approaches for batching RAMs.}
+    \caption{Comparison of Constraints incurred by different approaches for batching RAMs. MT-20
+    refers to Merkle-tree with depth 20.}
     \label{fig:batch-ram-constraints}
 \end{figure}
 
@@ -49,7 +50,7 @@
         \addlegendimage{color=blue, mark=square}
         \addlegendentry{CQ:$m=2^{10}$}
         \addlegendimage{color=red, mark=square}
-        \addlegendentry{Caulk+:$m=2^{9}$}
+        \addlegendentry{Caulk+:$m=2^{7}$}
         \addplot[
             color=blue,
             mark=square,
@@ -71,9 +72,6 @@
     \label{fig:batch-ram-proving-time}
 \end{figure}
 
-
-
-
 In this section we report on the experimental evaluation of our batching efficient RAM.
 In addition, we also report on the overhead (as a function of changes since last parameter computation)
 incurred by our updatable lookup arguments over the vanilla lookup arguments with read-only table. We
@@ -83,10 +81,15 @@ for our evaluation. Our implementation is built on top of existing implementatio
 of lookup argument Caulk ~\cite{CCS:ZBKMNS22}. We make our implementation available at
 \url{https://anonymous.4open.science/r/updatableRAM/} for anonymous submission. We later plan to
 make the implementation available as open-source project.
+All the benchmarks were run single-threaded on a commodity configuration featuring a $2.1GHz$ Intel-I5 processor,
+$16$ GB memory running Ubuntu Linux 22.04. The implementation was compiled using {\tt --release}
+flag in Rust. Generating table specific parameters for table of size $1$ million takes around $12,000$
+seconds for CQ based instantiation.
+
 We first provide overall running time of batching efficient RAM primitive instantiated with Caulk+
 and CQ lookup arguments. The degradation in running time is plotted as function of accumulated updates
 since the last computation of full table-specific parameters in Figure ~\ref{fig:batch-ram-proving-time}.
-We choose batch size of $m=512$ for Caulk+ based instantiation (to avoid prohibitive performance),
+We choose batch size of $m=128$ for Caulk+ based instantiation (to avoid prohibitive performance),
 while we consider $m=1024$ for CQ based instantiation. Our overhead remains barely noticable against
 the quadratic costs incurred by Caulk+ base protocol till about $2^{15}$ accumulated changes, equivalent of
 $128$ lookups of size $512$. While the performance overhead compared to base CQ protocol is much more apparent,
@@ -104,6 +107,7 @@ our novel modifications to make them update resilient.
 
 Finally, we also compare the efficacy of our quasi-linear algorithm to compute scalar coefficients in
 Lemma ~\ref{lem:sum-computation}, required to assemble the encoded quotients from pre-computed quotients.
+This algorithm is implemented and tested in the {\tt fastupdate} module of the referenced repository.
 In Table ~\ref{tbl:sum-computation-compare}, we compare it against the naive computation of the quotients.
 In the table, we vary the sizes of set $I$ in Lemma ~\ref{lem:sum-computation} in the set $\{2^i:7\leq i\leq 10\}$
 and set $K=2^7|I|$, i.e, we compare the two methods to sustain $\approx 100$ online proofs. We clearly see
@@ -124,6 +128,7 @@ $5\times-20\times$ advantage over the naive computation.
     scalar coefficients for encoded quotients.}
     \label{tbl:sum-computation-compare}
 \end{table}
+
 
 
 
