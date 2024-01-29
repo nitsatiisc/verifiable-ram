@@ -47,15 +47,16 @@ This modification described in ~\ref{sec:update-protocol} applies to all the afo
 \end{comment}
 
 \noindent{\bf Additional Notation}:
-Before proceeding, we introduce the subgroup $\setN=\{\xi,\ldots,\xi^N\}$ consisting of $N^{th}$ roots of unity,
-over which we encode vectors in $\F^N$ as polynomials of degree less than $N$. Let $\{\mu_i(X)\}_{i=1}^N$ be the associated
-lagrange basis polynomials over the set $\setN$. We also recall the set $\setV$ consisting of $m^{th}$ roots of unity
+%Before proceeding, we introduce the subgroup $\setN=\{\xi,\ldots,\xi^N\}$ consisting of $N^{th}$ roots of unity,
+%over which we encode vectors in $\F^N$ as polynomials of degree less than $N$. Let $\{\mu_i(X)\}_{i=1}^N$ be the associated
+%lagrange basis polynomials over the set $\setN$. 
+We introduce the set $\setV$ consisting of $m^{th}$ roots of unity
 $\nu,\ldots,\nu^m$ with associated lagrange polynomials as $\{\tau_i(X)\}_{i=1}^m$. For $\vec{f}\in \F^N$, let
 $\enc{f}{\setN}$ denote the polynomial encoding of $\vec{f}$ over $\setN$ given by $\sum_{i=1}^N f_i\mu_i(X)$. Similarly,
-for $\vec{g}\in \F^m$, let $\enc{g}{\setV}$ denote its polynomial encoding over $\setV$ given by $\sum_{i=1}^m g_i\tau_i(X)$. For
-vectors $\vec{t}$, we sometimes use the index notation $\vec{t}[a_i]$ to denote $a_i^{th}$ element of the vector. For vectors
+for $\vec{g}\in \F^m$, let $\enc{g}{\setV}$ denote its polynomial encoding over $\setV$ given by $\sum_{i=1}^m g_i\tau_i(X)$. 
+For vectors $\vec{t}$, we sometimes use the index notation $\vec{t}[a_i]$ to denote $a_i^{th}$ element of the vector. For vectors
 $\vec{t}$ and $\vec{a}$ we use the notation $\vec{t}[\,\vec{a}\,]$ to denote the vector $\vec{v}$ such that $v_i=\vec{t}[\,a_i\,]$ for all $i$.
-\chaya{above can be pruned. some of it is already in prelims.}
+%\chaya{above can be pruned. some of it is already in prelims.}
 
 
 \subsection{Committed Index Lookup}\label{subsec:committed-index-lookup}
