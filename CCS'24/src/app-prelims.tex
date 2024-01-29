@@ -60,7 +60,7 @@ A polynomial commitment scheme $\pc$ is binding if for all PPT $\Adv$, the follo
  \]
 \end{definition}
 
-\begin{definition}[Extractability]
+\begin{definition}[Knowledge Soundness]
 \label{def:pcs-ext-app}
 For any PPT adversary $\Adv = (\Adv_{1},\Adv_{2})$, there exists a PPT algorithm $\ext$ such that the following probability is negligible in $\secp$:
 	 \[
@@ -126,24 +126,24 @@ Let $\R$ be a NP-relation and $\L$ be the corresponding NP-language, where $\L=\
 \begin{definition}[Knowledge Soundness]
 	\label{def:aok-ks}
 	%An interactive argument of knowledge  $\langle\prover,\verifier\rangle$ satisfies knowledge soundness with error $\kappa$, if for
-	For any PPT malicious prover $\prover^*$, there exists a PPT algorithm $\ext$ with an oracle access to the prover $\prover^*$ such that the following probability is negligible
+	For any PPT malicious prover $\prover^* = (\prover_1^*,\prover_2*)$, there exists a PPT algorithm $\ext$ such that the following probability is negligible:
 	\[
 		\Pr \left( 
 		\begin{matrix}
-			%\pccheck(\pp,C,d,z,v,\pi) = 1 
 			b=1 \wedge \\
-			(x,w)\in \R
+			(x,w)\not\in \R
 		\end{matrix}
 		\,:\,
 		\begin{matrix}
 			\pp \leftarrow \setup(1^\secp) \\
-			b \leftarrow \langle\prover (w) ,\verifier\rangle (\pp,x) \\
-			w \leftarrow \ext^{\prover^*} (\pp,x)
+			(x,\mathsf{st}) \leftarrow \prover_1^*(1^\secp,\pp) \\
+			b \leftarrow \langle\prover_2^* (\mathsf{st}) ,\verifier\rangle (\pp,x) \\
+			w \leftarrow \ext^{\prover_2^*} (\pp,x)
 		\end{matrix}
-		\right) = 1.
+		\right) .
 		\]	
 \end{definition}
 
-A succinct argument of knowledge $\langle\prover,\verifier\rangle$ for a relation $\R$, must satisfy completeness and knowledge soundness and additionally ensure that the communication complexity between prover and verifier, as well as the verification complexity is bounded by $O(\log |w|)$, where $w$ is the witness for the relation.
+A \emph{succinct} argument of knowledge $\langle\prover,\verifier\rangle$ for a relation $\R$, must satisfy completeness and knowledge soundness and additionally ensure that the communication complexity between prover and verifier, as well as the verification complexity is bounded by $\mathsf{poly}(\secp,\log |w|)$, where $w$ is the witness for the relation.
 
 
