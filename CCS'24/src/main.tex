@@ -143,7 +143,7 @@
 	%%
 	%% The "title" command has an optional parameter,
 	%% allowing the author to define a "short title" to be used in page headers.
-	\title{Batching-Efficient RAM using lookup arguments}
+	\title{Batching efficient RAM using lookup arguments}
 	
 	%%
 	%% The "author" command and its associated commands are used to define
@@ -341,7 +341,7 @@ modelling RAM in verifiable computation. Often we demand additional properties o
 where verifiable update of the RAM state is required for small batches of updates. These properties are also
 the focus of this work.
 
-Batching-efficient RAM primitive is especially relevant in the context of blockchain {\em rollups} ~\cite{rollup},
+Batching efficient RAM primitive is especially relevant in the context of blockchain {\em rollups} ~\cite{rollup},
 an umbrella term for recent efforts to scale blockchains
 by moving expensive computation off the blockchain to the so-called {\em layer two} or L2 chains. The blockchain
 only needs to verify the succinct proofs attesting to the correctness of the off-chain computation. This approach
@@ -354,7 +354,7 @@ motivation for our work, though in this work we do not go into precise details o
 instantiation of our solution.
 
 \subsection{Our work}\label{subsec:ourwork}
-We present batching-efficient RAM construction, which advances the efforts
+We present batching efficient RAM construction, which advances the efforts
 towards achieving {\em verifiable outsourcing of state update} such as in ~\cite{EPRINT:BFRSBW13}
 and more recently in ~\cite{USENIX:OWWB20, CCS:CFHKKO22}.
 The most popular approaches to succinctly represent
@@ -406,10 +406,10 @@ sub-vector arguments that use homomorphic commitments. A committed index lookup 
 three committed vectors $\vec{t},\vec{a}$ and $\vec{v}$ satisfying $v_i=t_{a_i}$ for all $i$. Similar
 definition is also used in recent multi-variate lookup arguments in ~\cite{lasso}, where a similar reduction
 to sub-vector arguments is obtained under a more restrictive assumption about the elements of the table.
-\item We cruicially employ above two contributions to construct a {\em batching-efficient} RAM, which
+\item We cruicially employ above two contributions to construct a {\em batching efficient} RAM, which
 can verifiably prove a batch of $m$ updates with an amortized prover complexity of $O(m\log m + \sqrt{mN})$,
 with $N$ being the size of the RAM. Our dependence on the RAM size is sub-linear, in contrast to linear complexity
-inherent in recent works on batching-efficient RAM using RSA accumulators ~\cite{}.
+inherent in recent works on batching efficient RAM using RSA accumulators ~\cite{}.
 \item We implement our scheme in Rust\footnote{\url{https://anonymous.4open.science/r/updatableRAM/}}.
 Experimentally, we show that our scheme performs significantly better than the aforementioned prior works,
 and is eminently deployable on a commodity hardware.
@@ -468,7 +468,7 @@ Section ~\ref{subsec:committed-index-lookup} that incurs costs comparable to sin
 protocol.\smallskip
 
 
-\noindent{\bf Batching-Efficient RAM from Lookup Arguments}:
+\noindent{\bf Batching Efficient RAM from Lookup Arguments}:
 Memory checking methods based on {\em address ordered transcripts}
 ~\cite{NDSS:WSRBW15,USENIX:BCTV14,C:BCGTV13,SP:ZGKPP18} which are popularly used in
 efficient RAM abstractions incur a cost linear in the size of the RAM, which is prohibitive when
@@ -565,7 +565,7 @@ of the vectors $\vecT_0,\vecT_1$ and $\vec{\op}$ are represented via polynomials
 \section{Model for RAM}\label{sec:model-for-ram}
 \input{poly-proto-ram}
 
-\section{Improved Batching-Efficient RAM}\label{sec:batch-efficient-ram}
+\section{Improved Batching Efficient RAM}\label{sec:batch-efficient-ram}
 \input{batching-efficient-ram}
 
 \section{Experiments}\label{sec:experiments}
