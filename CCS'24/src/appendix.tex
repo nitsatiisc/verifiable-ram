@@ -163,13 +163,14 @@ such that the following hold:
                 \item $\KZGverify(\srs, \gone{\Phi_{s}}, V_{s}, s, \Pi_{s})$
             \end{itemize}
 
-            \item $\left<\prover, \verifier\right>$ run 4 instances of subvector lookup protocol $L(\cdot, \cdot)$, namely $L([N], A), L([N], t), L([N], \delta_A), L([N], \delta_t)$, using say, CQ
+            \item $\left<\prover, \verifier\right>$ run 4 instances of subvector lookup protocol $L(\cdot, \cdot)$, namely $L([N], A), L([N], t), L([N], \delta_A), L([N], \delta_t)$ \\
+            (eg. using \cite{EPRINT:EagFioGab22})
             \item $\verifier$ accepts if all checks succeed and the lookups succeed, rejects otherwise
         \end{enumerate}
     }
     \end{mdframed}
 
-    \caption{Protocol: Check relations over polynomial encodings}
+    \caption{Protocol: Check transcript is address ordered}
     \label{fig:encoded-relations}
 \end{figure}
 
@@ -878,7 +879,7 @@ This completes a brief summary of the proof.
 \section{Reducing indexed lookups to subvector lookups}\label{sec:generic-transformation-app}
 We give the proof of Lemma ~\ref{lem:generic-transformation} here.
 \begin{proof}[Proof of Lemma ~\ref{lem:generic-transformation}]
-Assume that there exists $i\in [n]$ such that $v_i\neq \vec{t}[\,a_i\,]$.
+Assume that there exists $i\in [m]$ such that $v_i\neq \vec{t}[\,a_i\,]$.
  We bound the probability
 that the check $\vec{v} + \gamma \vec{a}\leq \vec{t}+\gamma \vec{I}_n$ succeeds for
 $\gamma\gets \F$ chosen uniformly. The probability is clearly upper bound by the probability

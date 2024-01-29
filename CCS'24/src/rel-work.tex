@@ -19,14 +19,14 @@ based accumulators realized using collision resistant hash functions suffer from
 ability to batch proofs, those based on checking consistency using transcripts incur a linear overhead in the
 size of the RAM.
 
-\subsection{Batching Efficient RAM}\label{subsec:batching-efficient-ram}
-There have been several recent efforts~\cite{USENIX:OWWB20,CCS:CFHKKO22} on batching efficient
+\subsection{Batching-Efficient RAM}\label{subsec:batching-efficient-ram}
+There have been several recent efforts~\cite{USENIX:OWWB20,CCS:CFHKKO22} on batching-efficient
 realization of the RAM primitive. This is a natural setting in applications of verifiable
 computation, most notably in the context of blockchain {\em rollups}. Here, one is required
 to show that a batch of $m$ transactions correctly updates the state of a table of account balances, which
 is maintained off-chain by the rollup provider. Here the batch-size $m$ ranges from few hundreds to few
 thousands, whereas the table itself could contain several million accounts.
-Like prior work on batching efficient
+Like prior work on batching-efficient
 RAMs~\cite{USENIX:OWWB20,CCS:CFHKKO22} our work is also motivated by the problem of enabling more efficient rollup for tables, which are
 naturally modelled as RAMs. While the aforementioned works substantially mitigate disadvantages of both the
 Merkle-tree based approaches and transcript-based approaches by using RSA accumulators to model the state,
