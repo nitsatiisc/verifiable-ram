@@ -1,6 +1,6 @@
 Efficient modelling of the random access memory (RAM) primitive is a widely studied problem in
 verifiable computation (VC), due to its inherent usefulness in modelling several computations of interest.
-Encapsulating RAM semantics in VC circuits is also challenging; (i) arithmetic/boolean circuits do not
+Encapsulating RAM semantics in VC circuits is also challenging; \moumita{since} (i) arithmetic/boolean circuits do not
 adequately model random access, and (ii) incorporating entire memory as gates in a circuit is prohibitive.
 Several novel techniques have been proposed to work around the above limitations of circuit based representation
 of RAM. Among them, merkle tree based accumulators to model the RAM state are popular
@@ -12,7 +12,7 @@ are then checked to satisfy consistency of {\em loads} and {\em stores}.
 Several works such as \cite{NDSS:WSRBW15,USENIX:BCTV14,C:BCGTV13,SP:ZGKPP18} implement and improve variants
 of the aforementioned approach. Most transcript based realizations of RAM only consider it to be transient,
 i.e, its state is useful only during the execution of a program, and do not consider {\em persistence} of the
-RAM state across several executions. Another feature, which has only been consisdered in recent works
+RAM state across several executions. Another feature, which has only been considered in recent works
 \cite{USENIX:OWWB20,CCS:CFHKKO22} is {\em batching}, where a verifiable update of RAM state is required
 for a batch of $m$ updates, with $m$ being much smaller than the RAM size. While the approaches based on tree
 based accumulators realized using collision resistant hash functions suffer from high concrete costs and poor

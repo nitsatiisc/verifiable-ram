@@ -486,7 +486,7 @@ efficient RAM abstractions incur a cost linear in the size of the RAM, which is 
 aiming for efficient batching. As a key idea in this work, we invoke ``committed index lookup'' on
 the large RAMs, to verifiably extract smaller RAMs, which correspond to indices actually involved in
 the batch update. Then we can use the linear time memory-checking techniques to argue the consistency of these
-smaller RAMs. The idea needs to work through some more issues; such as showing the the larger RAMs are identical
+smaller RAMs. The idea needs to work through some more issues; such as showing that the larger RAMs are identical
 on positions not referenced by the batch of updates (considered in Section ~\ref{subsec:proximity-ram}).
 The overall idea is illustrated in Figure ~\ref{fig:blueprint}. We also note that the extracted sub-RAMs can
 have duplicate records, corresponding to multiple updates referencing the same RAM index, however, memory
@@ -513,7 +513,8 @@ memory consistency check on the smaller $O(m)$-sized RAMs, for example by expres
 circuit. However, for completeness we also present an argument for RAM using the above techniques as an
 interactive {\em polynomial protocol} ~\cite{Gabizon2019PLONKPO}, which is then compiled into an argument of knowledge using $\kzg$ ~\cite{AC:KatZavGol10}
 commitment scheme in the algebraic group model (AGM) ~\cite{C:FucKilLos18}. This construction appears in
-Section ~\ref{sec:poly-proto-ram-app}.
+Appendix ~\ref{sec:poly-proto-ram-app}.
+\moumita{Making all references to Sections in Appendix, as Appendix B instead of Section B.}
 
 \begin{comment}
 Most of the efficient implementations of RAM in verifiable computation ~\cite{C:BCGTV13, NDSS:WSRBW15, SP:ZGKPP18}
