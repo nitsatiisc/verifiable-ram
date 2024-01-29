@@ -314,6 +314,10 @@
 	%% information and builds the first part of the formatted document.
 	\maketitle
 	
+	\thispagestyle{plain}
+	
+	\pagestyle{plain}
+	
 \section{Introduction}\label{sec:introduction}
 General purpose {\em Succinct Non-interactive Arguments of Knowledge} (SNARKs) enable one to generate succinct
 proofs of membership of a statement in an $\npol$ relation expressed as an arithmetic circuit. These proofs are
@@ -368,7 +372,8 @@ values $v_i\in \F$ for some finite field $\F$. In our construction, we represent
 as polynomials, and use appropriate polynomial commitment schemes to obtain succinct commitments (digests) to them.
 In this paper, we do not require commitments to be {\em hiding}, as our focus is on succinctness.
 We consider privacy as an orthogonal goal, one we believe is easily achievable
-via small adaptations to our construction.
+via small adaptations to our construction.\smallskip
+
 
 \begin{comment}
 \noindent{\bf Application to Blockchain Rollups}: We consider the application of persistent RAM primitive to a common rollup scenario.
@@ -389,6 +394,28 @@ each batch of transactions. Only the succinct digest of the state (polynomial co
 validity of the state update is verified by a main-chain transaction. In later sections, we provide more details on the application and the
 performance achieved when instantiated using our primitive.
 \end{comment}
+
+\noindent{\bf Our Contributions}:
+\begin{itemize}[leftmargin=2em]
+\item As our first contribution, we propose {\em update friendly lookup arguments}, which addresses
+the strict dependence of recent constructions on table-specific pre-computed parameters. Our
+innovation extends the utility of table-specific parameters to enable efficient lookups from tables,
+which are within certain hamming distance of the pre-processed table.
+\item We construct {\em committed index lookup} arguments via black-box reduction to
+sub-vector arguments that use homomorphic commitments. A committed index lookup involves
+three committed vectors $\vec{t},\vec{a}$ and $\vec{v}$ satisfying $v_i=t_{a_i}$ for all $i$. Similar
+definition is also used in recent multi-variate lookup arguments in ~\cite{lasso}, where a similar reduction
+to sub-vector arguments is obtained under a more restrictive assumption about the elements of the table.
+\item We cruicially employ above two contributions to construct a {\em batching efficient} RAM, which
+can verifiably prove a batch of $m$ updates with an amortized prover complexity of $O(m\log m + \sqrt{mN})$,
+with $N$ being the size of the RAM. Our dependence on the RAM size is sub-linear, in contrast to linear complexity
+inherent in recent works on batching efficient RAM using RSA accumulators ~\cite{}.
+\item We implement our scheme in Rust\footnote{\url{https://anonymous.4open.science/r/updatableRAM/}}.
+Experimentally, we show that our scheme performs significantly better than the aforementioned prior works,
+and is eminently deployable on a commodity hardware.
+\end{itemize}
+
+
 \subsection{Techniques}\label{subsec:techniques}
 \noindent{\bf Update friendly lookup arguments}: Starting point for our work are the recent lookup arguments which prove
 that a vector of size $m$ appears as
@@ -430,7 +457,7 @@ considers whether each entry of a given vector appears in the target vector to o
 the precise positions where the given vector appears in the target vector. When this relation is checked
 over commitments of the respective vectors; given vector, the target vector and the position vector, we call
 it {\em committed index lookup}. The relation we consider is similar to the one considered in ~\cite{lasso}.
-For lookup arguments with homo-morphic commitment scheme, we show that committed index lookup can be obtained
+For lookup arguments with homomorphic commitment scheme, we show that committed index lookup can be obtained
 using three instantiations of sub-vector lookup (Lemma ~\ref{lem:generic-transformation}). Such reduction was
 also considered in ~\cite{lasso}, but under a more restrictive assumption on the elements in the table being
 within a certain bound. The reduction readily implies
@@ -456,7 +483,7 @@ checking methods can easily handle such cases. Finally, we would still hit the `
 in realizing this plan; once the table has changed, lookups are no longer efficient from it. Fortunately,
 we can use our first contribution on extending the utility of table-specific parameters to defer parameter
 re-computation optimally while still availing efficient lookups. More specifically, if we choose to
-re-compute the full talbe-specific parameters after $k$batches (of $m$ updates each),
+re-compute the full table-specific parameters after $k$ batches (of $m$ updates each),
 the average cost per batch is $O(N\log N/k + mk\log^2(mk) + f(m))$. Here, $f(m)$ as earlier denotes complexity
 of the non-updatable base protocol. Setting $k\approx \sqrt{N/m}$ yields the average cost of $m$ updates as $O(f(m)+\sqrt{mN})$,
 which scales sub-linearly with the size of the RAM.
@@ -527,7 +554,7 @@ of the vectors $\vecT_0,\vecT_1$ and $\vec{\op}$ are represented via polynomials
 \end{comment}
 %\input{figure-subtable-consistency}
 
-\noindent{\bf Our Contributions}: (Summarise)
+
 
 \section{Related Work}\label{sec:rel-work}
 	\input{rel-work}

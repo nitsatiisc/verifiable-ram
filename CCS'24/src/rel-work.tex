@@ -53,7 +53,10 @@ compare our work with the prior approaches more elaborately in Section ~\ref{sec
 
 
 \subsection{Lookup arguments}
-\chaya{Moumita: compare with Caulk+, CQ}
+
+Caulk~\cite{CCS:ZBKMNS22} provides with lookup arguments where a vector of size $m$ is proved to be a subvector of a large vector of size $N$, while maintaining privacy regarding the positions of the subvector (called \emph{position-hiding linkability}) where the prover complexity is $O(m^2+m\log N)$ with $O(N\log N)$ preprocessing and $O(N)$ storage. Caulk+~\cite{EPRINT:PosKat22} improves over Caulk to $O(m^2)$ prover complexity by removing the dependency on the size of the large vector $N$, and CQ~\cite{EPRINT:EagFioGab22} further improves it to $O(m\log m)$, while retaining the same $O(N\log N)$ preprocessing. 
+However, we aim to provide committed index lookup arguments that can `link' a set of indices in the vector of size $N$ to the `claimed' subvector of size $m$, that helps in ensuring that we can always `lookup' relevant indices from a committed vector. Additionally, note that any updates to the large table requires $O(N\log N)$ recomputation each time in the prior works. Our work ensures a batching friendly preprocessing can be done whenever there are incremental changes to the vector of size $N$, and avoid performing the $O(N\log N)$ recomputation per update. This modification extends to the other works as well. We also present techniques to extend lookup argument \cite{EPRINT:EagFioGab22}, which uses homomorphic commitments, to provide a committed index lookup argument.
+
 Lasso~\cite{lasso} gives a new family of lookup arguments where the prover's cost only grows with table entries that are
 accessed by the lookup operations, for tables that are structured. Our work applies to tables without any structure (as is the case with rollup application), and additionally we can handle \emph{updatable}\chaya{agree on spelling of updatable throughout} tables.
 Lasso also defines a committed index lookup relation like us and gives a reduction between indexed and unindexed lookups (subvector relation); however, their reduction needs an upper bound on the elements of the table. We provide a different reduction without this restriction. 
