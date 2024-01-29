@@ -416,10 +416,11 @@ sub-vector arguments that use homomorphic commitments. A committed index lookup 
 three committed vectors $\vec{t},\vec{a}$ and $\vec{v}$ satisfying $v_i=t_{a_i}$ for all $i$. Similar
 definition is also used in recent multi-variate lookup arguments in ~\cite{lasso}, where a similar reduction
 to sub-vector arguments is obtained under a more restrictive assumption about the elements of the table.
-\item We cruicially employ above two contributions to construct a {\em batching-efficient} RAM, which
+\item We crucially employ above two contributions to construct a {\em batching-efficient} RAM, which
 can verifiably prove a batch of $m$ updates with an amortized prover complexity of $O(m\log m + \sqrt{mN})$,
 with $N$ being the size of the RAM. Our dependence on the RAM size is sub-linear, in contrast to linear complexity
-inherent in recent works on batching-efficient RAM using RSA accumulators ~\cite{USENIX:OWWB20,CCS:CFHKKO22}.
+inherent in recent works on batching-efficient RAM using RSA accumulators ~\cite{USENIX:OWWB20,CCS:CFHKKO22}. All of our protocols are public-coin, and can be made non-interactive using standard techniques~\cite{C:FiaSha86}. 
+
 \item We implement our scheme in Rust\footnote{\url{https://anonymous.4open.science/r/updatableRAM/}}.
 Experimentally, we show that our scheme performs significantly better than the aforementioned prior works,
 and is eminently deployable on a commodity hardware.
