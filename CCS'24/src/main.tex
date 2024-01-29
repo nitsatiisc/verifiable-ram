@@ -330,34 +330,44 @@ In aforementioned examples, database tables, decision trees and accounts table a
 modelled as addressable memory and one needs to prove that it is accessed/updated in accordance with the correct execution
 of the computation. Accordingly, there is a rich and expanding body of work to efficiently model the abstraction of
 addressable memory in verifiable computations. While complete acknowledgement of this vast body of work is beyond
-the scope of this paper (a fairly recent survey in \cite{WB15} is a good starting point) we summarise key approaches towards modelling RAM, and more pertinently persistent RAM
-in verifiable computations in the next section.
+the scope of this paper (a fairly recent survey in \cite{WB15} is a good starting point) we summarise key approaches towards
+modelling RAM in verifiable computation. Often we demand additional properties of the RAM primitive, such as
+{\em persistence} - which is the ability to persist the RAM state across several computations, and {\em batching} -
+where verifiable update of the RAM state is required for small batches of updates. These properties are also
+the focus of this work.
 
-
-The final example above is especially relevant in the context of recent efforts to scale blockchains
+Batching efficient RAM primitive is especially relevant in the context of blockchain {\em rollups} ~\cite{rollup},
+an umbrella term for recent efforts to scale blockchains
 by moving expensive computation off the blockchain to the so-called {\em layer two} or L2 chains. The blockchain
 only needs to verify the succinct proofs attesting to the correctness of the off-chain computation. This approach
-is popularly called {\em rollup}, as it allows verifying the result of several transactions modifying the L2 state (
-rolled up transactions), as part of one transaction verified on the main chain. This simultaneously helps the scalability
-and lowers the cost (e.g. gas fees) per transaction (due to succinct verification). The specific rollup scenario
-is discussed later in the paper, to illustrate the efficacy of our approach to achieving much more efficient rollups.
+is popularly called rollup as it allows verifying the result of several (rolled-up) transactions
+modifying the L2 state, as part of one transaction verified on the main chain.
+This simultaneously helps the scalability and lowers the cost (e.g. gas fees)
+per transaction due to succinct verification.
+We consider improving efficiency of rollups an important
+motivation for our work, though in this work we do not go into precise details of a smart-contract based
+instantiation of our solution.
 
 \subsection{Our work}\label{subsec:ourwork}
-We present a persistent RAM construction, which advances the efforts
+We present batching efficient RAM construction, which advances the efforts
 towards achieving {\em verifiable outsourcing of state update} such as in ~\cite{EPRINT:BFRSBW13}
-and more recently in ~\cite{USENIX:OWWB20, CCS:CFHKKO22}. The most popular approaches to succinctly represent
+and more recently in ~\cite{USENIX:OWWB20, CCS:CFHKKO22}.
+The most popular approaches to succinctly represent
 state involve accumulators based on Merkle-trees ~\cite{C:Merkle87}, or ones based on groups of unknown order
 (e.g. RSA, class-groups) ~\cite{C:CamLys02,C:BonBunFis19,USENIX:OWWB20, CCS:CFHKKO22}.
 The updates to the state are effected by insertions or deletions in the  accumulated set.
 By contrast, in this work we
-model the state as an addressable memory (RAM) described by vector $\vecT$, which stores a values $v_i$ at addresses $i$.
-We denote this as $\vecT[\,i\,]=v_i$. The RAM supports two operations (i) {\em indexed lookups} ($v_i := \vecT[\,i\,]$),
-denoted by the tuple $(\load, i, v_i)$ and (ii) {\em indexed update} ($\vecT[\,i\,] := v_i$), denoted
-by the tuple $(\store, i, v_i)$. We think of addresses $i\in [0,N]$ for $N\in \mathbb{Z}$ while the
-values $v_i\in \F$ for some finite field $\F$. We encode both the RAM and operations as polynomials, and
-use appropriate polynomial commitment schemes to obtain succinct commitments (digests) to them.
+model the state as an addressable memory (RAM) described by vector $\vecT$, which stores a value $v_i$ at address $i$.
+We denote this as $\vecT[\,i\,]=v_i$. The RAM supports two operations, viz, {\em loads} expressed
+as $v_i := \vecT[\,i\,]$, and {\em stores} expressed as $\vecT[\,i\,]=v_i$.
+%denoted by the tuple $(\load, i, v_i)$ and (ii) {\em indexed update} ($\vecT[\,i\,] := v_i$), denoted
+%by the tuple $(\store, i, v_i)$.
+We think of addresses $i\in [0,N]$ for some $N\in \mathbb{Z}$ while the
+values $v_i\in \F$ for some finite field $\F$. In our construction, we represent both the RAM and operations on it
+as polynomials, and use appropriate polynomial commitment schemes to obtain succinct commitments (digests) to them.
 In this paper, we do not require commitments to be {\em hiding}, as our focus is on succinctness.
-We consider privacy as an orthogonal goal, one we believe is easily achievable via small adaptations to our construction.
+We consider privacy as an orthogonal goal, one we believe is easily achievable
+via small adaptations to our construction.
 
 \noindent{\bf Application to Blockchain Rollups}: We consider the application of persistent RAM primitive to a common rollup scenario.
 Our application is a simplified adaptation of rollup protocols such as ZkSync ~\cite{ZkSync}.
