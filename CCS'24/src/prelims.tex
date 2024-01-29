@@ -26,13 +26,17 @@ A \emph{succinct argument of knowledge} consists of a pair of PPT algorithms $(\
 Given a public instance $x$, the prover $\prover$, convinces the verifier $\verifier$, that $x\in \L$, where the prover additionally has as a witness $w$, and $\verifier$.
 The \emph{knowledge-soundness} property says that if the verifier is convinced, then an efficient extractor algorithm given oracle access to the prover outputs a witness $w$ such that $(x,w)\in \R$. An argument system is \emph{succinct} if the communication complexity and the complexity of $\verifier$ is polylogarithmic in the size of the witness. We provide formal definitions in Appendix~\ref{sec:aok}.
 
-\noindent\textbf{Fiat-Shamir.} An interactive protocol is said to be \emph{public-coin} if the verifier's messages are uniformly random strings. Public-coin protocols can be transformed into non-interactive arguments in the Random Oracle Model (ROM) by using the Fiat-Shamir~\cite{C:FiaSha86} heuristic to derive the verifier's messages as the output of a Random Oracle. 
+\medskip
+
+\noindent\textbf{Fiat-Shamir.} An interactive protocol is \emph{public-coin} if the verifier's messages are uniformly random strings. Public-coin protocols can be transformed into non-interactive arguments in the Random Oracle Model (ROM) by using the Fiat-Shamir~\cite{C:FiaSha86} heuristic to derive the verifier's messages as the output of a Random Oracle. 
+
+\medskip
 
 \noindent{\bf Modular Approach.}
 A modular approach for designing efficient succinct arguments consists of two steps; constructing an information theoretic protocol in an idealized model, and then compiling the information-theoretic protocol via a cryptographic compiler to obtain an argument system. 
 Informally, the prover and the verifier interact where the prover provides oracle access to a set of polynomials, and the verifier accepts or rejects by checking certain identities over the polynomials output by the prover and possibly public polynomials known to the verifier. Such a protocol can be compiled into a succinct argument of knowledge by realizing the polynomial oracles using a \emph{polynomial commitment scheme}. A polynomial commitment scheme allows a prover to commit to polynomials, and later verifiably open evaluations at chosen points by giving evaluation proofs. This enables the verifier to probabilistically
 check polynomial identities at random points of $\F$. %We refer the reader to ~\cite[Section 4.2]{Gabizon2019PLONKPO} for details on polynomial protocols and their compilation to SNARKs. 
-Many recent constructions of zkSNARKs~\cite{EC:BunFisSze20,EC:CHMMVW20,Gabizon2019PLONKPO} follow this approach where the information theoretic object is a polynomial interactive oracle proof (PIOP) (or a polynomial protocol), and the cryptographic primitive in the compiler is a polynomial commitment scheme.
+Many recent constructions of zkSNARKs~\cite{EC:BunFisSze20,EC:CHMMVW20,Gabizon2019PLONKPO} follow this approach where the information theoretic object is a polynomial interactive oracle proof (PIOP) (or a polynomial protocol), and the cryptoprimitive in the compiler is a polynomial commitment scheme.
 
 \subsection{Security Model} We describe public-coin interactive protocols in the structured reference string (SRS) model where
 where both the parties have access to a SRS. The SRS in our protocols consists of
