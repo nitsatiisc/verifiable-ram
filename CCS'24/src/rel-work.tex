@@ -54,7 +54,7 @@ compare our work with the prior approaches more elaborately in Section ~\ref{sec
 
 \subsection{Lookup arguments}
 \chaya{Moumita: compare with Caulk+, CQ}
-Lasso~\cite{lasso} new family of lookup arguments where the prover's cost only grows with table entries that are
+Lasso~\cite{lasso} gives a new family of lookup arguments where the prover's cost only grows with table entries that are
 accessed by the lookup operations, for tables that are structured. Our work applies to tables without any structure (as is the case with rollup application), and additionally we can handle \emph{updatable}\chaya{agree on spelling of updatable throughout} tables.
 Lasso also defines a committed index lookup relation like us and gives a reduction between indexed and unindexed lookups (subvector relation); however, their reduction needs an upper bound on the elements of the table. We provide a different reduction without this restriction. 
 A recent work called Jolt~\cite{jolt} expresses all constraints of a computation as lookups by creating a lookup table that contains the entire evaluation table of each instruction $f$ in an instruction set.
