@@ -45,7 +45,7 @@ Combining our novel update protocol with highly efficient
 lookup arguments such as~\cite{CCS:CFHKKO22}, our online proof generation can prove around $0.5$ million
 updates at an average of just $120$ seconds per batch of $1000$ updates on a commodity laptop. Even
 this performance is under worst-case assumption that each update is to a different position in the table.
-The expensive off-line computation, mainly consisting of highly parallelize FFTs over groups requires around $3$ hours for a
+The expensive offline computation, mainly consisting of highly parallelized FFTs over groups requires around $3$ hours for a
 table of size 1 million, with a single-threaded implementation. Clearly, with more potent hardware and
 parallelization, one can process a table of size upto $10$ million in a few hours. 
 Our approach is also in the updatable SRS setting in constrast to trusted setup required for RSA parameter generation. We
