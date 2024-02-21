@@ -114,10 +114,10 @@ instantiation of our solution.
 \subsection{Our Contribution}\label{subsec:ourwork} 
 We present batching-efficient RAM construction, which advances the efforts
 towards achieving {\em verifiable outsourcing of state update} such as in ~\cite{EPRINT:BFRSBW13}
-and more recently in ~\cite{USENIX:OWWB20, CCS:CFHKKO22}.
+and more recently in ~\cite{USENIX:OWWB20,CCS:CFHKKO22}.
 The most popular approaches to succinctly represent
 state involve accumulators based on Merkle-trees ~\cite{C:Merkle87}, or ones based on groups of unknown order
-(e.g. RSA, class-groups) ~\cite{C:CamLys02,C:BonBunFis19,USENIX:OWWB20, CCS:CFHKKO22}.
+(e.g. RSA, class-groups) ~\cite{C:CamLys02,C:BonBunFis19,USENIX:OWWB20,CCS:CFHKKO22}.
 The updates to the state are effected by insertions or deletions in the  accumulated set.
 By contrast, in this work we
 model the state as an addressable memory (RAM) described by vector $\vecT$, which stores a value $v_i$ at address $i$.
@@ -222,9 +222,7 @@ also considered in ~\cite{lasso}, but under a more restrictive assumption on the
 within a certain bound. The reduction readily implies
 efficient constructions of arguments for committed index lookups from
 ~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:ZGKMR22,EPRINT:EagFioGab22}.
-In the case of ~\cite{EPRINT:PosKat22}, we give an explicit adaptation in
-Section ~\ref{subsec:committed-index-lookup} that incurs costs comparable to single instance of the underlying sub-vector
-protocol.\smallskip
+In the case of ~\cite{EPRINT:PosKat22}, we give an explicit adaptation in Section~\ref{subsec:committed-index-lookup} that incurs costs comparable to single instance of the underlying sub-vector protocol.\smallskip
 
 
 \noindent{\bf Batching-Efficient RAM from Lookup Arguments}:
@@ -261,7 +259,7 @@ memory consistency check on the smaller $O(m)$-sized RAMs, for example by expres
 circuit. However, for completeness we also present an argument for RAM using the above techniques as an
 interactive {\em polynomial protocol} ~\cite{Gabizon2019PLONKPO}, which is then compiled into an argument of knowledge using $\kzg$ ~\cite{AC:KatZavGol10}
 commitment scheme in the algebraic group model (AGM) ~\cite{C:FucKilLos18}. This construction appears in
-Appendix ~\ref{sec:poly-proto-ram-app}.
+Appendix~\ref{sec:poly-proto-ram-app}.
 \moumita{Making all references to Sections in Appendix, as Appendix B instead of Section B.}
 
 \begin{comment}
