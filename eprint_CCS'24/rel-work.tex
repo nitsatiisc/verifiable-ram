@@ -69,7 +69,5 @@ This approach of using table lookups requires memory checking arguments as well.
 
 Bilinear pairing based accumulators, introduced by \cite{Nguyen05}, also provides constant-size membership proofs with succinct verification, which is essentially a lookup argument. Although the requirement for an updatable SRS (similar to KZG setup) is same for us, the prover complexity of their lookup argument \cite{CCS:TBPPTD19} incurs linear overhead with respect to the large table size $N$, whereas we provide (large) table size independent lookup arguments. Additionally, repetitions in the smaller table and committed index lookups are currently not supported by direct extension of such accumulators.
 
-\moumita{\textbf{What happens when the large table is updated?} Lookup relies on $p\subset q \implies p(X)|q(X)$, where $p(X)=\prod_{i\in m} (X-p_i), q(X)=\prod_{i\in n} (X-q_i)$. If $p$ and $q$ are both changed wrt same entries, the witness $[q(X)/p(X)]_2$ remains same. If $q$ changed but not $p$, then we need to recompute the $n-m$ size witness. So when the larger table changes, the change reflected in the prover complexity is different.}
-
 
 
