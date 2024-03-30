@@ -13,7 +13,7 @@ of the aforementioned approach. Most transcript based realizations of RAM only c
 i.e, its state is useful only during the execution of a program, and do not consider {\em persistence} of the
 RAM state across several executions. Another feature, which has only been considered in recent works
 \cite{USENIX:OWWB20,CCS:CFHKKO22} is {\em batching}, where a verifiable update of RAM state is required
-for a batch of $m$ updates, with $m$ being much smaller than the RAM size. While the approaches based on tree
+for a batch of $m$ updates, with $m$ being much smaller than the RAM size. While the approaches based on merkle tree
 based accumulators realized using collision resistant hash functions suffer from high concrete costs and poor
 ability to batch proofs, those based on checking consistency using transcripts incur a linear overhead in the
 size of the RAM.
@@ -41,7 +41,7 @@ knowledge using a polynomial commitment scheme. In an application such as rollup
 that is expressed as a circuit is the verification of EDDSA digital signatures on transactions,
 which for is around 500 constraints per verification.
 Combining our novel update protocol with highly efficient
-lookup arguments such as~\cite{CCS:CFHKKO22}, our online proof generation can prove around $0.5$ million
+lookup arguments such as~\cite{EPRINT:EagFioGab22}, our online proof generation can prove around $0.5$ million
 updates at an average of just $120$ seconds per batch of $1000$ updates on a commodity laptop. Even
 this performance is under worst-case assumption that each update is to a different position in the table.
 The expensive offline computation, mainly consisting of highly parallelized FFTs over groups, with a single-threaded implementation requires around $3$ hours for a

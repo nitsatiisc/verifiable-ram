@@ -68,7 +68,7 @@ For an algebraic adversary $\Adv$ interacting in a protocol with a degree $Q$ SR
 can use the pairing $e:\Gone\times \Gtwo\rightarrow \GT$ to perform ``ideal check'' of the form $(R_1\cdot T_1)\cdot (R_2\cdot T_2)\equiv 0$, where $R_1,R_2$ are
 vectors of polynomials over $\F$ and $T_1, T_2$ are public matrices over $\F$.
 Under the $Q$-DLOG assumption stated below, the aforementioned ideal check
-is equivalent (except with a negligible probability) to a real pairing check $(a\cdot T_1)\cdot (T_2\cdot b)=0$ with $a$ and $b$ denoting vectors in $\F$ encoding polynomials in $R_1$ and $R_2$ in
+is equivalent (except with a negligible probability) to a real pairing check $(a\cdot T_1)\cdot (T_2\cdot b)=0$ where $a$ and $b$ denoting vectors in $\F$ encoding polynomials in $R_1$ and $R_2$ in
 groups $\Gone$ and $\Gtwo$ respectively (see~\cite[Lemma 2.2]{Gabizon2019PLONKPO}).
 \begin{definition}[Q-DLOG Assumption \cite{C:FucKilLos18}]\label{defn:q-dlog}
 Fix an integer $Q$. The $Q$-DLOG assumption for $(\Gone,\Gtwo)$ states that given $\gone{1}$,$\gone{x}$,$\ldots$,
@@ -155,7 +155,7 @@ Now, for vectors of length $n$, we consider the basis $\{\lambda_i(X)\}$ to be t
 
 
 \subsection{Lookup Arguments}
-Works on lookup arguments~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:ZGKMR22,EPRINT:EagFioGab22}
+Prior works on lookup arguments~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:ZGKMR22,EPRINT:EagFioGab22}
 consider proving sub-vector relation over committed vectors, i.e, given commitments $c_t$ and $c_v$ to vectors $\vec{t}\in \F^N$
 and $\vec{v}\in \F^m$, one proves that for all $i\in [m]$, there exists $j\in [N]$ such that $v_i=t_j$ .
 We consider a slightly modified relation that we call {\em committed index lookup} (called indexed lookup in~\cite{lasso})  where there is a commitment to the indices where $\vec{v}$ appears in $\vec{t}$.

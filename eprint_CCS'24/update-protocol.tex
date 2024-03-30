@@ -1,8 +1,8 @@
 
 The recent progress and interest in lookup arguments has been stellar, as exemplified by the series of works
-both in uni-variate setting ~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:ZGKMR22,EPRINT:EagFioGab22} and multi-variate
-setting ~\cite{lasso}. However, the excellent online efficiency of current constructions relies on expensive
-$\wt{O}(|T|)$ table-specific  pre-computation for a table $T$, or on tables exhibiting tensor structure as in ~\cite{lasso}.
+both in uni-variate setting~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:ZGKMR22,EPRINT:EagFioGab22} and multi-variate
+setting~\cite{lasso}. However, the excellent online efficiency of current constructions relies on expensive
+$\wt{O}(|T|)$ table-specific  pre-computation for a table $T$, or on tables exhibiting tensor structure as in~\cite{lasso}.
 This limits their application in settings where such assumptions are not viable, for example when tables model account balances in
 a layer 2 (L2) blockchain network. We make the first attempt in this direction. Our key idea is to extend the utiltiy of pre-computed
 parameters for a table $\vecT$, to proving lookups from tables $\vecT'\neq \vecT$. Essentially, we show that for $\delta=\Delta(\vecT, \vecT')$,
@@ -11,8 +11,8 @@ in $\delta$ and that too only {\em quasi} linear. Our competitive overhead rests
 algorithms, which are summarised in Section ~\ref{subsec:comp-algebra-app}.
 
 \noindent{\bf Naive approaches are inadequate}: We note that the aforementioned constructions of lookup arguments require encoded quotients
-of the form $\gany{(T(X)-T(\xi^i))/(X-\xi^i)}$ for upto $m$ values of $i$ during the proof generation. While constructions ~\cite{CCS:ZBKMNS22,EPRINT:PosKat22}
-consider quotients encoded in the group $\Gtwo$, the protocol in ~\cite{EPRINT:EagFioGab22} encodes them in $\Gone$. We use a generic $[\,\cdot\,]_g$ to
+of the form $\gany{(T(X)-T(\xi^i))/(X-\xi^i)}$ for upto $m$ values of $i$ during the proof generation. While constructions~\cite{CCS:ZBKMNS22,EPRINT:PosKat22}
+consider quotients encoded in the group $\Gtwo$, the protocol in~\cite{EPRINT:EagFioGab22} encodes them in $\Gone$. We use a generic $[\,\cdot\,]_g$ to
 account for protocol-specific choices. We also see that even a small change to the table requires one to update all the quotients (the polynomial $T(X)$ is
 common to all quotients). Updating the $|\vecT|$ quotients for each batch is clearly infeasible. One could consider delaying the updation of the quotients, till
 the time they are actually required in a proof, which happens when the corresponding index in the table is involved in lookup. However, each of the $m$ quotients
@@ -227,7 +227,7 @@ between vectors $\vecTbase$ and $\vecT$.
 We now return to the question of how frequently should we run the offline phase to compute full parameters.
 For concrete analysis, let $s$ be the period after which the rebasing takes place; i.e., after $s$ batches of $m$ operations
 each, we set the base table $\vecTbase$ to the current table, setting $\vecTcache=\vec{0}$. At this point we also compute all
-encoded quotients for $\vecTbase$ using the $O(N\log N)$ algorithm of ~\cite{EPRINT:FeiKho23}. Consider $\delta\leq ms$ as
+encoded quotients for $\vecTbase$ using the $O(N\log N)$ algorithm of~\cite{EPRINT:FeiKho23}. Consider $\delta\leq ms$ as
 the upper-bound on $\delta$, and distributing the cost of re-basing, the amortized overhead for the batch of $m$ operations is:
 $O(ms \log^2(ms)+\frac{N\log N}{s})$ $\mathbb{F}$-operations and $O(ms +\frac{N\log N}{s})$ $\mathbb{G}$-operations. Ignoring
 the logarithmic factors, the cost is minimized by setting $s\approx \sqrt{N/m}$, resulting in amortized prover overhead of

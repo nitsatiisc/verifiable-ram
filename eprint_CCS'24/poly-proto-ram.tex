@@ -36,10 +36,10 @@ updates the value in the RAM associated with the referenced index. We model the 
 $\Rupd{I}$ which takes RAM $T\in \RAM{I}{n}$, operation
 $o=(\op,a,v)\in \RAMOp{I}$ as inputs and returns an updated RAM $T'\in \RAM{I}{n}$.
 The updated RAM $T'=\Rupd{I}(T,o)$ satisfies
-$T'=T$ if $\op=0$ while for $\op=1$ it satisfies $T'[\,a\,]=v$  and $T'[\,x\,]=T[\,x\,]$ for $x\neq a$. The central problem
+$T'=T$ if $\op=0$, while for $\op=1$ it satisfies $T'[\,a\,]=v$  and $T'[\,x\,]=T[\,x\,]$ for $x\neq a$. The central problem
 in verifiable RAM protocols is to establish that a sequence of operations $\vec{o}=(o_1,\ldots,o_m)$ are correct with
 respect to the initial RAM state $T$ and the final RAM state $T'$. This involves ensuring
-that all load operations read the value which is consistent with updates to the RAM as a result of preceding
+that all load operations read the value which is consistent with updates to the RAM with respect to the preceding
 store operations, and that $T'$ is the final state. We say that an operation $o=(\op,a,v)$ is {\em load-consistent}
 with respect to RAM $T$ if $v=T[a]$ whenever $o$ is a load operation (store operations are vacuously defined to be load-consistent).
 We formally define the notion of consistency below:
@@ -75,8 +75,8 @@ $t_i < t_{i+1}$ whenever $A_i=A_{i+1}$. For a transcript $\tr=(\vec{t},\vec{\op}
 permutation $\sigma:[k]\rightarrow [k]$, we use $\sigma(\tr)$ to denote the transcript
 $(\sigma(\vec{t}),\sigma(\vec{\op}),\sigma(\vec{A}),\sigma(\vec{V}))$
 obtained by permuting the records of $\tr$ according to the permutation $\sigma$.
-An address ordered transcript for tuple $(T,\vec{o},T')$ is defined as $\tr^\ast=\sigma(\tr)$ where $\tr=\TOT(T,\vec{o},T')$ and $\sigma$ is
-a permutation such that $\tr^\ast$ is address ordered. We denote it by $\tr^\ast=\AOT(T,\vec{o},T')$.
+An address ordered transcript for tuple $(T,\vec{o},T')$ is defined as $\tr^\ast=\sigma(\tr)$, where $\tr=\TOT(T,\vec{o},T')$ and $\sigma$ is
+a permutation, such that $\tr^\ast$ is address ordered. We denote it by $\tr^\ast=\AOT(T,\vec{o},T')$.
 We say that an address ordered transcript $\tr=(\vec{t},\vec{\op},\vec{A},\vec{V})$ satisfies {\em load-store correctness}
 if for all pairs of consecutive records $(t_i,\op_i,A_i,V_i)$ and $(t_{i+1},\op_{i+1},A_{i+1},V_{i+1})$ we have $V_{i+1}=V_i$
 whenever $\op_{i+1}=0$ (load operation) and
