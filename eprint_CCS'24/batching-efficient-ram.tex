@@ -262,15 +262,20 @@ the AGM, under the $Q$-DLOG assumption for the bilinear group $(\F,\Gone,\Gtwo,\
 				\item $W_2^i=\gtwo{(\ell(X) - i)/(X-\xi^i)}$, $i\in [N]$
 				\item $W_3^i=\gtwo{\vpolyN(X)/(X-\xi^i)}$, $i\in [N]$
 			\end{itemize}
+			\item $\prover$ precomutes the following (with respect to $(\vecT, \vecT')$):
+			\begin{itemize}[leftmargin=1em]
+				\item $W_1^i=\gtwo{(T(X)-T(\xi^i))/(X-\xi^i)}$, $i\in [N]$,
+				\item ${W_1^i}'=\gtwo{(T'(X) - T'(\xi^i))/(X-\xi^i)}$, $i\in [N]$.
+			\end{itemize}
 		\end{itemize}
 		
-		
+		\moumita{ Removing this makes this more streamlined.\\
 		\underline{Precompute $(\vecT, \vecT')$}: $\prover$ precomutes the following:
 		\begin{itemize}[leftmargin=1em]
 				\item $W_1^i=\gtwo{(T(X)-T(\xi^i))/(X-\xi^i)}$, $i\in [N]$,
 				\item ${W_1^i}'=\gtwo{(T'(X) - T'(\xi^i))/(X-\xi^i)}$, $i\in [N]$.
 		\end{itemize}
-		
+		}
 		
 		
 %        \underline{Setup $(1^\secp,N,m, \vecT, \vecT')$}:
@@ -294,8 +299,8 @@ the AGM, under the $Q$-DLOG assumption for the bilinear group $(\F,\Gone,\Gtwo,\
         \begin{enumerate}[leftmargin=1em, label=\arabic*.]
             \item $\prover$ computes $\vec{v}=\vecT[\,\vec{a}\,]$, $\vec{v}'=\vecT'[\,\vec{a}\,]$ and the encoding
             polynomials $v(X)$ and $v'(X)$.
-            \item $\prover$ sends $c_v = \gone{v(X)}$, $c_v'=\gone{v'(X)}$.
-            \item $\verifier$ sends $\chi\gets \F$.
+            \item $\prover$ computes $c_v = \gone{v(X)}$, $c_v'=\gone{v'(X)}$ and send $c_v,c_v'$ to $\verifier$.
+            \item $\verifier$ samples $\chi\gets \F$ and sends $\chi$ to $\prover$.
         \end{enumerate}
 
         {\bf Round 2}: Execute committed index lookup.
@@ -303,33 +308,38 @@ the AGM, under the $Q$-DLOG assumption for the bilinear group $(\F,\Gone,\Gtwo,\
             \item $\prover$ and $\verifier$ compute $C_T=c_T + \chi c_T'$, $C_V=c_v + \chi c_v'$.
             \item $\prover$ computes $P(X) = T(X) + \chi T'(X)$, $V(X)=v(X) + \chi v'(X)$.
             \item $\prover$ computes $I=\{a_i: i\in [m]\}$, $\setN_I=\{\xi^i: i\in I\}$.
-            \item $\prover$ computes polynomials:
+            \item $\prover$ computes the following polynomials:
             \begin{itemize}[leftmargin=1em, label=-]
                 \item Vanishing polynomial $Z_I(X)$ of $\setN_I$.
-                \item Polynomial $h(X)=\sum_{i\in [m]}\xi^{a_i}\tau_i(X)$.
-                \item Restrictions $P_I(X),\ell_I(X)$ of $P(X),\ell(X)$ on set $I$.
+                \item  $h(X)=\sum_{i\in [m]}\xi^{a_i}\tau_i(X)$.
+                \item Restrictions on set $I$: $P_I(X),\ell_I(X)$ of $P(X),\ell(X)$.
                 \item $K(X)=\prod_{i\in [m]}(X-\xi^{a_i})$, $q(X)=K(X)/Z_I(X)$
                 \item $D(X)= \sum_{i\in I}\frac{\Delta_i Z_I'(\xi^i)}{Z_\setN'(\xi^i)}\kappa_i(X)$ %by interpolation as described in section 5.2
                 		\footnote{This is done as per the interpolation described in Section 5.2.}
-                		\moumita{Footnote is showing an alphabet instead of a number. Not sure how to fix.}
+                		\moumita{Footnote is showing an alphabet instead of a number. Not sure how to fix. using : \ renewcommand*\ thefootnote{\ arabic{footnote}} is not working as well.}
             \end{itemize}
 
-            \item $\prover$ sends $c_p = \gone{P_I(X)}$, $c_z=\gone{Z_I(X)}$, $c_{z2}=\gtwo{Z_I(X)}$, $c_h=\gone{h(X)}$, $c_l = \gone{\ell_I(X)}$,
-            $c_k = \gone{K(X)}$, $c_q = \gone{q(X)}$, $c_d=\gone{D(X)}$
-            \item $\verifier$ sends $\gamma\gets \F$.
+            \item $\prover$ computes $c_p = \gone{P_I(X)}$, $c_z=\gone{Z_I(X)}$, $c_{z2}=\gtwo{Z_I(X)}$, $c_h=\gone{h(X)}$, $c_l = \gone{\ell_I(X)}$,
+            $c_k = \gone{K(X)}$, $c_q = \gone{q(X)}$, $c_d=\gone{D(X)}$, and sends $c_p,c_z,c_{z2},c_h,c_k,c_q,c_d$ to $\verifier$.
+            \item $\verifier$ samples $\gamma\gets \F$ and sends $\gamma$ to $\prover$.
         \end{enumerate}
 
         {\bf Round 3}: Prover send aggregated quotients.
         \begin{enumerate}[leftmargin=1em, label=\arabic*.]
-            \item $\prover$ computes $g(X)=P_I(X) + \gamma \ell_I(X) + \gamma^2 Z_I(X)$.
-            \item $\prover$ computes $Q(X) = (g(h(X)) - v(X) -\gamma a(X))/Z_\setV(X)$.
-            \item $\prover$ computes: $W = \sum_{i\in [m]} \frac{1}{Z_I'(\xi^i)} (W_1^i + \chi {W_1^i}' + \gamma W_2^i + \gamma^2 W_3^i)$.
-            \item $\prover$ sends $W\in \Gtwo$, $c_Q=\gone{Q(X)}$.
+            \item $\prover$ computes the following polynomials:
+            \begin{enumerate}
+            	\item $g(X)=P_I(X) + \gamma \ell_I(X) + \gamma^2 Z_I(X)$.
+            	\item $Q(X) = (g(h(X)) - v(X) -\gamma a(X))/Z_\setV(X)$.
+            \end{enumerate} 
+            \item $\prover$ computes $W = \sum_{i\in [m]} \frac{1}{Z_I'(\xi^i)} (W_1^i + \chi {W_1^i}' + \gamma W_2^i + \gamma^2 W_3^i)$ and $c_Q=\gone{Q(X)}$ and sends $W,c_Q$ to $\verifier$.
             \item $\verifier$ computes $c_g = c_p + \gamma c_l + \gamma^2 c_z$, $C_G = C_T + \gamma\gone{\ell(X)}+\gamma^2\gone{\vpolyN(X)}$.
-            \item $\verifier$ checks: $e(C_G - c_g, \gtwo{1})=e(c_z, W)$.
-            \item $\verifier$ checks: $e(c_T-c_{T'}, c_{z2})=e(c_d, \gtwo{\vpolyN(X)})$
-            \item $\verifier$ checks: $e(c_z, [1]_2)=e([1]_1, c_{z2})$
-            \item $\verifier$ sends $\alpha\gets \F$.
+            \item $\verifier$ checks the following:
+            \begin{enumerate}
+            	\item $e(C_G - c_g, \gtwo{1})=e(c_z, W)$.
+            	\item $e(c_T-c_{T'}, c_{z2})=e(c_d, \gtwo{\vpolyN(X)})$
+            	\item $e(c_z, [1]_2)=e([1]_1, c_{z2})$
+            \end{enumerate} 
+            \item $\verifier$ samples $\alpha\gets \F$ and sends $\alpha$ to $\prover$.
         \end{enumerate}
 
         Continued in Figure~\ref{fig:complete-listing-2}
@@ -337,6 +347,101 @@ the AGM, under the $Q$-DLOG assumption for the bilinear group $(\F,\Gone,\Gtwo,\
     \caption{Batching-Efficient RAM Protocol}
     \label{fig:complete-listing}
 \end{figure}
+
+
+
+%\begin{figure}[t!]
+%	\begin{mdframed}
+%		
+%		\underline{Setup $(1^\secp,N,m, \vecT, \vecT')$}: 
+%		\begin{itemize}[leftmargin=1em]
+%			\item $\srs = (\{\gone{\tau^i}\}_{i=0}^N, \{\gtwo{\tau^i}\}_{i=0}^N)$ for $\tau\gets \F$
+%			\item Both $\prover$ and $\verifier$ precomputes $\gone{\ell(X)}, \gone{\vpolyN(X)}, \gtwo{\vpolyN(X)}$
+%			\item $\prover$ precomputes the following:
+%			\begin{itemize}[leftmargin=1em]
+%				\item $W_2^i=\gtwo{(\ell(X) - i)/(X-\xi^i)}$, $i\in [N]$
+%				\item $W_3^i=\gtwo{\vpolyN(X)/(X-\xi^i)}$, $i\in [N]$
+%			\end{itemize}
+%			\item $\prover$ precomutes the following (with respect to $(\vecT, \vecT')$):
+%			\begin{itemize}[leftmargin=1em]
+%				\item $W_1^i=\gtwo{(T(X)-T(\xi^i))/(X-\xi^i)}$, $i\in [N]$,
+%				\item ${W_1^i}'=\gtwo{(T'(X) - T'(\xi^i))/(X-\xi^i)}$, $i\in [N]$.
+%			\end{itemize}
+%		\end{itemize}
+%		
+%		\moumita{ Removing this makes this more streamlined.\\
+%			\underline{Precompute $(\vecT, \vecT')$}: $\prover$ precomutes the following:
+%			\begin{itemize}[leftmargin=1em]
+%				\item $W_1^i=\gtwo{(T(X)-T(\xi^i))/(X-\xi^i)}$, $i\in [N]$,
+%				\item ${W_1^i}'=\gtwo{(T'(X) - T'(\xi^i))/(X-\xi^i)}$, $i\in [N]$.
+%			\end{itemize}
+%		}
+%		
+%		
+%		%        \underline{Setup $(1^\secp,N,m, \vecT, \vecT')$}:
+%		%        \begin{itemize}[leftmargin=1em]
+%			%            \item $\srs = (\{\gone{\tau^i}\}_{i=0}^N, \{\gtwo{\tau^i}\}_{i=0}^N)$ for $\tau\gets \F$.
+%			%            \item $W_2^i=\gtwo{(\ell(X) - i)/(X-\xi^i)}$, $i\in [N]$(needed by prover)
+%			%            \item $W_3^i=\gtwo{\vpolyN(X)/(X-\xi^i)}$, $i\in [N]$(needed by prover)
+%			%            \item $\gone{\ell(X)}, \gone{\vpolyN(X)}, \gtwo{\vpolyN(X)}$(known by both)
+%			%        \end{itemize}
+%		%
+%		%        \underline{Precompute $(\vecT, \vecT')$}:
+%		%        \begin{itemize}[leftmargin=1em]
+%			%            \item $W_1^i=\gtwo{(T(X)-T(\xi^i))/(X-\xi^i)}$, $i\in [N]$,
+%			%            \item ${W_1^i}'=\gtwo{(T'(X) - T'(\xi^i))/(X-\xi^i)}$, $i\in [N]$.
+%			%        \end{itemize}
+%		
+%		{\bf Common Input}: $\srs$, $c_T, c_T', c_\op, c_a, c_w\in \Gone$.\\
+%		{\bf Prover's Input}: Vectors $\vecT,\vecT',\vec{\op},\vec{a},\vec{w}$ and their encoding polynomials.\\
+%		
+%		{\bf Round 1}: Commit to sub RAMs.
+%		\begin{enumerate}[leftmargin=1em, label=\arabic*.]
+%			\item $\prover$ computes $\vec{v}=\vecT[\,\vec{a}\,]$, $\vec{v}'=\vecT'[\,\vec{a}\,]$ and the encoding
+%			polynomials $v(X)$ and $v'(X)$.
+%			\item $\prover$ sends $c_v = \gone{v(X)}$, $c_v'=\gone{v'(X)}$.
+%			\item $\verifier$ sends $\chi\gets \F$.
+%		\end{enumerate}
+%		
+%		{\bf Round 2}: Execute committed index lookup.
+%		\begin{enumerate}[leftmargin=1em, label=\arabic*.]
+%			\item $\prover$ and $\verifier$ compute $C_T=c_T + \chi c_T'$, $C_V=c_v + \chi c_v'$.
+%			\item $\prover$ computes $P(X) = T(X) + \chi T'(X)$, $V(X)=v(X) + \chi v'(X)$.
+%			\item $\prover$ computes $I=\{a_i: i\in [m]\}$, $\setN_I=\{\xi^i: i\in I\}$.
+%			\item $\prover$ computes polynomials:
+%			\begin{itemize}[leftmargin=1em, label=-]
+%				\item Vanishing polynomial $Z_I(X)$ of $\setN_I$.
+%				\item Polynomial $h(X)=\sum_{i\in [m]}\xi^{a_i}\tau_i(X)$.
+%				\item Restrictions $P_I(X),\ell_I(X)$ of $P(X),\ell(X)$ on set $I$.
+%				\item $K(X)=\prod_{i\in [m]}(X-\xi^{a_i})$, $q(X)=K(X)/Z_I(X)$
+%				\item $D(X)= \sum_{i\in I}\frac{\Delta_i Z_I'(\xi^i)}{Z_\setN'(\xi^i)}\kappa_i(X)$ %by interpolation as described in section 5.2
+%				\footnote{This is done as per the interpolation described in Section 5.2.}
+%				\moumita{Footnote is showing an alphabet instead of a number. Not sure how to fix.}
+%			\end{itemize}
+%			
+%			\item $\prover$ sends $c_p = \gone{P_I(X)}$, $c_z=\gone{Z_I(X)}$, $c_{z2}=\gtwo{Z_I(X)}$, $c_h=\gone{h(X)}$, $c_l = \gone{\ell_I(X)}$,
+%			$c_k = \gone{K(X)}$, $c_q = \gone{q(X)}$, $c_d=\gone{D(X)}$
+%			\item $\verifier$ sends $\gamma\gets \F$.
+%		\end{enumerate}
+%		
+%		{\bf Round 3}: Prover send aggregated quotients.
+%		\begin{enumerate}[leftmargin=1em, label=\arabic*.]
+%			\item $\prover$ computes $g(X)=P_I(X) + \gamma \ell_I(X) + \gamma^2 Z_I(X)$.
+%			\item $\prover$ computes $Q(X) = (g(h(X)) - v(X) -\gamma a(X))/Z_\setV(X)$.
+%			\item $\prover$ computes: $W = \sum_{i\in [m]} \frac{1}{Z_I'(\xi^i)} (W_1^i + \chi {W_1^i}' + \gamma W_2^i + \gamma^2 W_3^i)$.
+%			\item $\prover$ sends $W\in \Gtwo$, $c_Q=\gone{Q(X)}$.
+%			\item $\verifier$ computes $c_g = c_p + \gamma c_l + \gamma^2 c_z$, $C_G = C_T + \gamma\gone{\ell(X)}+\gamma^2\gone{\vpolyN(X)}$.
+%			\item $\verifier$ checks: $e(C_G - c_g, \gtwo{1})=e(c_z, W)$.
+%			\item $\verifier$ checks: $e(c_T-c_{T'}, c_{z2})=e(c_d, \gtwo{\vpolyN(X)})$
+%			\item $\verifier$ checks: $e(c_z, [1]_2)=e([1]_1, c_{z2})$
+%			\item $\verifier$ sends $\alpha\gets \F$.
+%		\end{enumerate}
+%		
+%		Continued in Figure~\ref{fig:complete-listing-2}
+%	\end{mdframed}
+%	\caption{Batching-Efficient RAM Protocol}
+%	\label{fig:complete-listing}
+%\end{figure}
 
 
 

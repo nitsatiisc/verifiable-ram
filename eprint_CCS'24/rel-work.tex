@@ -32,7 +32,7 @@ Merkle-tree based approaches and transcript-based approaches by using RSA accumu
 they still incur large prover costs and memory requirements even for modest sized batches. The approach
 in~\cite{USENIX:OWWB20,CCS:CFHKKO22} of encoding complex modular arithmetic over RSA groups and {\em hash
 to prime} functions as arithmetic circuits results in a fixed overhead of around $10$ million R1CS constraints
-at batch sizes of $m=1000$ (this overhead is significantly larger for ~\cite{USENIX:OWWB20}), which already
+at batch sizes of $m=1000$ (this overhead is significantly larger for~\cite{USENIX:OWWB20}), which already
 is prohibitive on a modest hardware. In addition, the witness computation for each update incurs cost
 linear in the size of accumulated set, which authors seek to mitigate through pre-computation and
 parallel/distributed processing. Our solution, by contrast is almost ``circuit-free''. Our entire

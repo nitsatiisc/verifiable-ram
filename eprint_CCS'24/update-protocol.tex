@@ -8,14 +8,11 @@ a layer 2 (L2) blockchain network. We make the first attempt in this direction. 
 parameters for a table $\vecT$, to proving lookups from tables $\vecT'\neq \vecT$. Essentially, we show that for $\delta=\Delta(\vecT, \vecT')$,
 an argument for $m$ lookups from $\vecT'$ incurs an additional prover overhead of $(m+\delta)\log^2(m+\delta)$. We note that overhead is additive
 in $\delta$ and that too only {\em quasi} linear. Our competitive overhead rests on several innovative applications of algebraic
-algorithms, which are summarised in Section ~\ref{subsec:comp-algebra-app}.
+algorithms, which are summarised in Section~\ref{subsec:comp-algebra-app}.
 
 \noindent{\bf Naive approaches are inadequate}: We note that the aforementioned constructions of lookup arguments require encoded quotients
-of the form $\gany{(T(X)-T(\xi^i))/(X-\xi^i)}$ for upto $m$ values of $i$ during the proof generation. While constructions~\cite{CCS:ZBKMNS22,EPRINT:PosKat22}
-consider quotients encoded in the group $\Gtwo$, the protocol in~\cite{EPRINT:EagFioGab22} encodes them in $\Gone$. We use a generic $[\,\cdot\,]_g$ to
-account for protocol-specific choices. We also see that even a small change to the table requires one to update all the quotients (the polynomial $T(X)$ is
-common to all quotients). Updating the $|\vecT|$ quotients for each batch is clearly infeasible. One could consider delaying the updation of the quotients, till
-the time they are actually required in a proof, which happens when the corresponding index in the table is involved in lookup. However, each of the $m$ quotients
+of the form $\gany{(T(X)-T(\xi^i))/(X-\xi^i)}$ for upto $m$ values of $i$ during the proof generation. We use a generic $[\,\cdot\,]_g$ to
+account for protocol-specific choices. While constructions~\cite{CCS:ZBKMNS22,EPRINT:PosKat22} consider quotients encoded in the group $\Gtwo$, the protocol in~\cite{EPRINT:EagFioGab22} encodes them in $\Gone$. We also see that even a small change to the table requires update of all the quotients (since the polynomial $T(X)$ is present in the numerator in all quotients). However, updating the $|\vecT|$ quotients for each batch is clearly infeasible. One could consider delaying the updation of the quotients, till the time they are actually required in a proof, which happens when the corresponding index in the table is involved in lookup. However, each of the $m$ quotients
 is now potentially ``lagging'' by $\delta$ updates, so we would need $\Omega(m\delta)$ group operations to refresh all of them. This gives us multiplicative degradation
 with $\delta$, and is clearly unsustainable for reasonable values of $\delta$. We abandon the idea of computing individual encoded quotients, and instead attempt
 to directly compute the aggregate encoding $\gany{(T(X)-T_I(X))/Z_I(X)}$, which as seen earlier is given by the summation below:
@@ -174,15 +171,15 @@ between vectors $\vecTbase$ and $\vecT$.
     Above implies that to compute $a_i, i\in I$ efficiently, it is sufficient to efficiently
     compute $e_i=\sum_{j\in K\setminus\{i\}}\frac{\Delta t_j}{\xi^i-\xi^j}$ for all $i \in I$. Our next lemma claims that
     such {\em reciprocal sums} can be computed efficiently. The computation of $b_j,j\in K$ can also be reduced a similar computation.
-    We defer this reduction and the full proof of Lemma ~\ref{lem:sum-computation} to the Appendix, but illustrate the key ideas in the proof.
+    We defer this reduction and the full proof of Lemma~\ref{lem:sum-computation} to the Appendix, but illustrate the key ideas in the proof here.
     %Our requirement is now to bound the number of field operations for $e_i$ and for $b_j$. For this, we invoke the following lemma with the proof in the appendix.
     \begin{lemma}\label{lem:sum-computation}
     Let $I\subset K\subset [N]$ and let $e_i$ for all $i \in \setind$ and $b_j$ for all $j \in K$ be as described above.
-    Then, $e_i$ for all $i \in I$ and $b_j$ for all $j \in K$ can be computed in $O(|K|\log^2|K|)\, \mathbb{F}$ operations
+    Then, $e_i$ for all $i \in I$ and $b_j$ for all $j \in K$ can be computed in $O(|K|\log^2|K|)\, \mathbb{F}$ operations.
     \end{lemma}
     \begin{proof}[Proof-Sketch]
         First, we mention that the special case of the lemma when $\Delta t_j=1$ for all $j\in K$ admits an efficient computation due to the following identity
-        proved in Lemma ~\ref{lem:sumtoder}.
+        proved in Lemma~\ref{lem:sumtoder}.
         \begin{equation*}
             \frac{Z_K''(\xi^i)}{Z_K'(\xi^i)} = 2\sum_{j\in K\setminus \{i\}}\frac{1}{\xi^i-\xi^j}
         \end{equation*}
@@ -208,16 +205,16 @@ between vectors $\vecTbase$ and $\vecT$.
         concluding the proof-sketch, we briefly highlight the structure of the polynomial $p(X)$. Since $p(X)$
         vanishes for $p(\xi^i)$ for $i\not\in K$, it can we written as the product $\widehat{Z}_K(X)q(X)$ where
         $\widehat{Z}_K$ is the vanishing polynomial of ``complementary'' roots of unity $\{\xi^i: i\not\in K\}$
-        and $q$ is a low-degree ($<K$) polynomial. Assuming we can interpolate $q(X)$, we can write:
+        and $q$ is a low-degree (degree $<K$) polynomial. Assuming we can interpolate $q(X)$, we can write:
         \[ p'(\xi^i) = \widehat{Z}_K(\xi^i)q'(\xi^i) + \widehat{Z}_K'(\xi^i)q(\xi^i). \]
         In the above expression, we require evaluations of high-degree polynomials $\widehat{Z}_K(X)$ and $\widehat{Z}_K'(X)$
-        at $\xi^i$, $i\in I$. This is discussed in Lemma ~\ref{lem:zk-hat} and other related lemmas in Section ~\ref{subsec:sub-results},
+        at $\xi^i$, $i\in I$. This is discussed in Lemma~\ref{lem:zk-hat} and other related lemmas in Section~\ref{subsec:sub-results},
         and motivates the at times tedious algebra there. We conclude the proof-sketch, deferring the missing details to the full
-        proof in Section ~\ref{subsec:sum-computation}.
+        proof in Section~\ref{subsec:sum-computation}.
     \end{proof}
 
-    From the Lemma ~\ref{lem:sum-computation}, we conclude that the scalars $a_i,i\in I$ and $b_j, j\in K$ can be computed in
-    time $O(|K|\log^2 |K|)$, which proves the bound in Theorem ~\ref{thm:approx-setup}.
+    From the Lemma~\ref{lem:sum-computation}, we conclude that the scalars $a_i,i\in I$ and $b_j, j\in K$ can be computed in
+    time $O(|K|\log^2 |K|)$, which proves the bound in Theorem~\ref{thm:approx-setup}.
     %have shown that the field operations needed to get $e_i$ and $b_j$ and thus $\elttwo{\Qcachepolytwo{X}}$ is $O(|K|\log^2|K|)$. \\
 
     %This completes the proof of Lemma \ref{lem:approx-setup}.
