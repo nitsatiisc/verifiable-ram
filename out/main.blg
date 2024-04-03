@@ -1,0 +1,54 @@
+This is BibTeX, Version 0.99d (TeX Live 2021)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main.aux
+The style file: alpha.bst
+Database file #1: cryptobib/abbrev3.bib
+Reallocated str_pool (elt_size=1) to 130000 items from 65000.
+Reallocated str_pool (elt_size=1) to 195000 items from 130000.
+Database file #2: cryptobib/crypto.bib
+Database file #3: main.bib
+Warning--to sort, need author or key in caulk-implementation
+Warning--empty booktitle in compwithstate
+Warning--empty year in benes
+You've used 34 entries,
+            2543 wiz_defined-function locations,
+            14983 strings with 178728 characters,
+and the built_in function-call counts, 17924 in all, are:
+= -- 1776
+> -- 1020
+< -- 34
++ -- 359
+- -- 354
+* -- 1330
+:= -- 2823
+add.period$ -- 129
+call.type$ -- 34
+change.case$ -- 253
+chr.to.int$ -- 31
+cite$ -- 38
+duplicate$ -- 682
+empty$ -- 1230
+format.name$ -- 380
+if$ -- 3808
+int.to.chr$ -- 4
+int.to.str$ -- 0
+missing$ -- 23
+newline$ -- 182
+num.names$ -- 133
+pop$ -- 306
+preamble$ -- 1
+purify$ -- 287
+quote$ -- 0
+skip$ -- 620
+stack$ -- 0
+substring$ -- 843
+swap$ -- 250
+text.length$ -- 34
+text.prefix$ -- 4
+top$ -- 0
+type$ -- 272
+warning$ -- 3
+while$ -- 168
+width$ -- 37
+write$ -- 476
+(There were 3 warnings)
