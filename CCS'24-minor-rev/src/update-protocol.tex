@@ -1,28 +1,15 @@
 
-The recent progress and interest in lookup arguments has been stellar, as exemplified by the series of works
-both in uni-variate setting ~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:ZGKMR22,EPRINT:EagFioGab22} and multi-variate
-setting ~\cite{lasso}. However, the excellent online efficiency of current constructions relies on expensive
-$\wt{O}(|T|)$ table-specific  pre-computation for a table $T$, or on tables exhibiting tensor structure as in ~\cite{lasso}.
-This limits their application in settings where such assumptions are not viable, for example when tables model account balances in
-a layer 2 (L2) blockchain network. We make the first attempt in this direction. Our key idea is to extend the utiltiy of pre-computed
-parameters for a table $\vecT$, to proving lookups from tables $\vecT'\neq \vecT$. Essentially, we show that for $\delta=\Delta(\vecT, \vecT')$,
-an argument for $m$ lookups from $\vecT'$ incurs an additional prover overhead of $(m+\delta)\log^2(m+\delta)$. We note that overhead is additive
-in $\delta$ and that too only {\em quasi} linear. Our competitive overhead rests on several innovative applications of algebraic
-algorithms, which are summarised in Section ~\ref{subsec:comp-algebra-app}.
-
-\noindent{\bf Naive approaches are inadequate}: We note that the aforementioned constructions of lookup arguments require encoded quotients
-of the form $\gany{(T(X)-T(\xi^i))/(X-\xi^i)}$ for upto $m$ values of $i$ during the proof generation. While constructions ~\cite{CCS:ZBKMNS22,EPRINT:PosKat22}
-consider quotients encoded in the group $\Gtwo$, the protocol in ~\cite{EPRINT:EagFioGab22} encodes them in $\Gone$. We use a generic $[\,\cdot\,]_g$ to
-account for protocol-specific choices. We also see that even a small change to the table requires one to update all the quotients (the polynomial $T(X)$ is
-common to all quotients). Updating the $|\vecT|$ quotients for each batch is clearly infeasible. One could consider delaying the updation of the quotients, till
-the time they are actually required in a proof, which happens when the corresponding index in the table is involved in lookup. However, each of the $m$ quotients
-is now potentially ``lagging'' by $\delta$ updates, so we would need $\Omega(m\delta)$ group operations to refresh all of them. This gives us multiplicative degradation
-with $\delta$, and is clearly unsustainable for reasonable values of $\delta$. We abandon the idea of computing individual encoded quotients, and instead attempt
-to directly compute the aggregate encoding $\gany{(T(X)-T_I(X))/Z_I(X)}$, which as seen earlier is given by the summation below:
-\begin{equation}\label{eq:encoded-quotient}
-\gany{\frac{T(X)-T_I(X)}{Z_I(X)}} = \sum_{i\in I}\frac{1}{Z_I'(\xi^i)}\gany{\frac{T(X)-T(\xi^i)}{X-\xi^i}}
+In this section, we provide details of the algorithm to construct lookup argument for a table $\vecT$,
+using pre-computed parameters of a table  which is a small hamming distance away. The dependence on
+pre-computed parameters in several recent lookup arguments such as ~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:ZGKMR22,EPRINT:EagFioGab22}
+stems from the need to compute an encoded quotient of the form:
+\begin{equation}\label{eq:enc-quotient}
+\gany{Q} = \sum_{i\in I}A_i\gany{\frac{T(X) - T(\xi^i)}{X-\xi^i}}
 \end{equation}
-We now describe our approach.
+for some $O(m)$ sized set $I$. The quotient in Equation ~\eqref{eq:enc-quotient} can be computed in $O(m)$ cost
+when the quotients $\gany{(T(X)-T(\xi^i))/(X-\xi^i)}$ are available for all $i\in [N]$. In this Section
+we exhibit an algorithm which computes the above with $O((m+\delta)\log^2(m+\delta))$ cost, given access to
+similar quotients for a table at hamming distance $\delta$ from $\vecT$. We now describe our approach.
 %Recall that our lookup protocol in section 5.1 involves certain precomputations by the prover namely $W_1^i, W_2^i, W_3^i$. $W_2^i$ and $W_3^i$ do not depend on the table. However, $W_1^i$ depends on the lookup table and their values will change even if the table changes by a small amount. It is expensive to recompute all the $W_1^i$ for every small change in the table and this will affect the efficiency of our lookup protocol in the long run.\\\\
 %In this section, we show how to achieve efficient lookups even when the table is changing frequently, as long as the cumulative change in the table is small. \\
 %In particular, we show how the prover can compute $[Q(X)]_2=\gtwo{\frac{T(X)-T_I(X)}{Z_I(X)}}$ without computing all the $W_1^i$(thus minimizing the overhead).\\

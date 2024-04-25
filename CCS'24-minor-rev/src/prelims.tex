@@ -23,7 +23,9 @@ We denote by $Z_{\setN}$ the vanishing polynomial of $\setN$;  $Z_{\setN}(X)=X^N
 \subsection{Succinct Arguments of Knowledge}
 Let $\R$ be a NP-relation and $\L$ be the corresponding NP-language, where $\L=\{x : \exists$ $w$ such that $(x,w) \in \R\}$. 
 A \emph{succinct argument of knowledge} consists of a pair of PPT algorithms $(\prover,\verifier)$.
-Given a public instance $x$, the prover $\prover$, convinces the verifier $\verifier$, that $x\in \L$, where the prover additionally has as a witness $w$, and $\verifier$.
+Given a public instance $x$, the prover $\prover$, convinces the verifier $\verifier$, that $x\in \L$, where the prover additionally has as a witness $w$.
+We use the notation $b\gets \argoutput{\prover}{\verifier}{w}{x}$ to denote $\verifier$'s output in the interactive
+protocol involving $\prover$ and $\verifier$ with $w$ as $\prover$'s input and $x$ as the common input.
 The \emph{knowledge-soundness} property says that if the verifier is convinced, then an efficient extractor algorithm given oracle access to the prover outputs a witness $w$ such that $(x,w)\in \R$. An argument system is \emph{succinct} if the communication complexity and the complexity of $\verifier$ is polylogarithmic in the size of the witness. We provide formal definitions in Appendix~\ref{sec:aok}.
 
 \medskip
@@ -154,8 +156,18 @@ Now, for vectors of length $n$, we consider the basis $\{\lambda_i(X)\}$ to be t
 \subsection{Lookup Arguments}
 Works on lookup arguments~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:ZGKMR22,EPRINT:EagFioGab22}
 consider proving sub-vector relation over committed vectors, i.e, given commitments $c_t$ and $c_v$ to vectors $\vec{t}\in \F^N$
-and $\vec{v}\in \F^m$, one proves that for all $i\in [m]$, there exists $j\in [N]$ such that $v_i=t_j$ .
-We consider a slightly modified relation that we call {\em committed index lookup} (called indexed lookup in~\cite{lasso})  where there is a commitment to the indices where $\vec{v}$ appears in $\vec{t}$.
+and $\vec{v}\in \F^m$, one proves that for all $i\in [m]$, there exists $j\in [N]$ such that $v_i=t_j$ . We will use
+$\vec{v}\preceq \vec{t}$ to denote that $\vec{v}$ is a sub-vector of $\vec{t}$.
+The definition below summarizes the sub-vector relation as defined in prior works.
+\begin{definition}
+\label{defn:comm-subvec}
+We define the {\em committed sub-vector} relation $\RSVEC$ to consist of tuples
+$((c_t, c_v), (\vec{t}, \vec{v}))$ where $c_t,c_a\in \Gone$, $\vec{t}\in \F^N$, $\vec{v}\in \F^m$ such that
+$\vec{v}\preceq \vec{t}$ and $c_t=\kzgcommit(\srs,\enc{t}{\setN})$ and $c_v=\kzgcommit(\srs,\enc{v}{\setV})$.
+\end{definition}
+A committed sub-vector argument is an argument of knowledge for the relation $\RSVEC$.
+Next, we consider a slightly modified relation that we call {\em committed index lookup} (called indexed lookup in~\cite{lasso})
+where there is a commitment to the indices where $\vec{v}$ appears in $\vec{t}$. Formally, we define it as below:
 
 \begin{definition}
 \label{defn:comm-index-lookup}
@@ -165,4 +177,4 @@ that $v_i = \vec{t}[a_i]=t_{a_i}$ for all $i\in [m]$ and $c_t = \kzgcommit(\srs,
 and $c_v=\kzgcommit(\srs,\enc{v}{\setV})$.
 \end{definition}
 
-A lookup argument is a succinct argument of knowledge for the relation $\RLOOK$. \chaya{by defn, in the NI case, the prover is allowed to come up with an adversarial instance, in this case all commitments.}
+A committed lookup argument is a succinct argument of knowledge for the relation $\RLOOK$. \chaya{by defn, in the NI case, the prover is allowed to come up with an adversarial instance, in this case all commitments.}

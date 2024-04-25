@@ -1,26 +1,21 @@
-\newcommand{\etalchar}[1]{$^{#1}$}
-\begin{thebibliography}{OWWB20}
+\begin{thebibliography}{10}
 
-\bibitem[AST23]{jolt}
+\bibitem{caulk-implementation}
+Caulk.
+\newblock https://github.com/caulk-crypto/caulk.
+
+\bibitem{jolt}
 Arasu Arun, Srinath Setty, and Justin Thaler.
 \newblock Jolt: Snarks for virtual machines via lookups.
 \newblock Cryptology ePrint Archive, Paper 2023/1217, 2023.
 \newblock \url{https://eprint.iacr.org/2023/1217}.
 
-\bibitem[bar]{rollup}
+\bibitem{rollup}
 barryWhiteHat.
 \newblock rollup.
 \newblock https://github.com/barryWhiteHat/roll\_up.
 
-\bibitem[BBF19]{C:BonBunFis19}
-Dan Boneh, Benedikt B{\"u}nz, and Ben Fisch.
-\newblock Batching techniques for accumulators with applications to {IOPs} and
-  stateless blockchains.
-\newblock In Alexandra Boldyreva and Daniele Micciancio, editors, {\em
-  CRYPTO~2019, Part~I}, volume 11692 of {\em {LNCS}}, pages 561--586. Springer,
-  Heidelberg, August 2019.
-
-\bibitem[BCG{\etalchar{+}}13]{C:BCGTV13}
+\bibitem{C:BCGTV13}
 Eli {Ben-Sasson}, Alessandro Chiesa, Daniel Genkin, Eran Tromer, and Madars
   Virza.
 \newblock {SNARKs} for {C}: Verifying program executions succinctly and in zero
@@ -29,59 +24,70 @@ Eli {Ben-Sasson}, Alessandro Chiesa, Daniel Genkin, Eran Tromer, and Madars
   Part~II}, volume 8043 of {\em {LNCS}}, pages 90--108. Springer, Heidelberg,
   August 2013.
 
-\bibitem[BCTV14a]{C:BCTV14}
+\bibitem{C:BCTV14}
 Eli {Ben-Sasson}, Alessandro Chiesa, Eran Tromer, and Madars Virza.
 \newblock Scalable zero knowledge via cycles of elliptic curves.
 \newblock In Juan~A. Garay and Rosario Gennaro, editors, {\em CRYPTO~2014,
   Part~II}, volume 8617 of {\em {LNCS}}, pages 276--294. Springer, Heidelberg,
   August 2014.
 
-\bibitem[BCTV14b]{USENIX:BCTV14}
+\bibitem{USENIX:BCTV14}
 Eli {Ben-Sasson}, Alessandro Chiesa, Eran Tromer, and Madars Virza.
 \newblock Succinct non-interactive zero knowledge for a von neumann
   architecture.
 \newblock In Kevin Fu and Jaeyeon Jung, editors, {\em USENIX Security 2014},
   pages 781--796. {USENIX} Association, August 2014.
 
-\bibitem[BFR{\etalchar{+}}13a]{compwithstate}
-Benjamin Braun, Ariel~J. Feldman, Zuocheng Ren, Srinath Setty, Andrew~J.
-  Blumberg, and Michael Walfish.
-\newblock Verifying computations with state.
-\newblock SOSP '13, New York, NY, USA, 2013.
+\bibitem{C:BonBunFis19}
+Dan Boneh, Benedikt B{\"u}nz, and Ben Fisch.
+\newblock Batching techniques for accumulators with applications to {IOPs} and
+  stateless blockchains.
+\newblock In Alexandra Boldyreva and Daniele Micciancio, editors, {\em
+  CRYPTO~2019, Part~I}, volume 11692 of {\em {LNCS}}, pages 561--586. Springer,
+  Heidelberg, August 2019.
 
-\bibitem[BFR{\etalchar{+}}13b]{EPRINT:BFRSBW13}
-Benjamin Braun, Ariel~J. Feldman, Zuocheng Ren, Srinath Setty, Andrew~J.
-  Blumberg, and Michael Walfish.
-\newblock Verifying computations with state (extended version).
-\newblock Cryptology ePrint Archive, Report 2013/356, 2013.
-\newblock \url{https://eprint.iacr.org/2013/356}.
-
-\bibitem[BFS20]{EC:BunFisSze20}
-Benedikt B{\"u}nz, Ben Fisch, and Alan Szepieniec.
-\newblock Transparent {SNARKs} from {DARK} compilers.
-\newblock In Anne Canteaut and Yuval Ishai, editors, {\em EUROCRYPT~2020,
-  Part~I}, volume 12105 of {\em {LNCS}}, pages 677--706. Springer, Heidelberg,
-  May 2020.
-
-\bibitem[BGM17]{EPRINT:BowGabMie17}
+\bibitem{EPRINT:BowGabMie17}
 Sean Bowe, Ariel Gabizon, and Ian Miers.
 \newblock Scalable multi-party computation for zk-{SNARK} parameters in the
   random beacon model.
 \newblock Cryptology ePrint Archive, Report 2017/1050, 2017.
 \newblock \url{https://eprint.iacr.org/2017/1050}.
 
-\bibitem[cau]{caulk-implementation}
-Caulk.
-\newblock https://github.com/caulk-crypto/caulk.
+\bibitem{compwithstate}
+Benjamin Braun, Ariel~J. Feldman, Zuocheng Ren, Srinath Setty, Andrew~J.
+  Blumberg, and Michael Walfish.
+\newblock Verifying computations with state.
+\newblock SOSP '13, New York, NY, USA, 2013.
 
-\bibitem[CFH{\etalchar{+}}22]{CCS:CFHKKO22}
+\bibitem{EPRINT:BFRSBW13}
+Benjamin Braun, Ariel~J. Feldman, Zuocheng Ren, Srinath Setty, Andrew~J.
+  Blumberg, and Michael Walfish.
+\newblock Verifying computations with state (extended version).
+\newblock Cryptology ePrint Archive, Report 2013/356, 2013.
+\newblock \url{https://eprint.iacr.org/2013/356}.
+
+\bibitem{EC:BunFisSze20}
+Benedikt B{\"u}nz, Ben Fisch, and Alan Szepieniec.
+\newblock Transparent {SNARKs} from {DARK} compilers.
+\newblock In Anne Canteaut and Yuval Ishai, editors, {\em EUROCRYPT~2020,
+  Part~I}, volume 12105 of {\em {LNCS}}, pages 677--706. Springer, Heidelberg,
+  May 2020.
+
+\bibitem{C:CamLys02}
+Jan Camenisch and Anna Lysyanskaya.
+\newblock Dynamic accumulators and application to efficient revocation of
+  anonymous credentials.
+\newblock In Moti Yung, editor, {\em CRYPTO~2002}, volume 2442 of {\em {LNCS}},
+  pages 61--76. Springer, Heidelberg, August 2002.
+
+\bibitem{CCS:CFHKKO22}
 Matteo Campanelli, Dario Fiore, Semin Han, Jihye Kim, Dimitris Kolonelos, and
   Hyunok Oh.
 \newblock Succinct zero-knowledge batch proofs for set accumulators.
 \newblock In Heng Yin, Angelos Stavrou, Cas Cremers, and Elaine Shi, editors,
   {\em ACM CCS 2022}, pages 455--469. {ACM} Press, November 2022.
 
-\bibitem[CHM{\etalchar{+}}20]{EC:CHMMVW20}
+\bibitem{EC:CHMMVW20}
 Alessandro Chiesa, Yuncong Hu, Mary Maller, Pratyush Mishra, Psi Vesely, and
   Nicholas~P. Ward.
 \newblock Marlin: Preprocessing {zkSNARKs} with universal and updatable {SRS}.
@@ -89,40 +95,46 @@ Alessandro Chiesa, Yuncong Hu, Mary Maller, Pratyush Mishra, Psi Vesely, and
   Part~I}, volume 12105 of {\em {LNCS}}, pages 738--768. Springer, Heidelberg,
   May 2020.
 
-\bibitem[CL02]{C:CamLys02}
-Jan Camenisch and Anna Lysyanskaya.
-\newblock Dynamic accumulators and application to efficient revocation of
-  anonymous credentials.
-\newblock In Moti Yung, editor, {\em CRYPTO~2002}, volume 2442 of {\em {LNCS}},
-  pages 61--76. Springer, Heidelberg, August 2002.
-
-\bibitem[EFG22]{EPRINT:EagFioGab22}
+\bibitem{EPRINT:EagFioGab22}
 Liam Eagen, Dario Fiore, and Ariel Gabizon.
 \newblock cq: Cached quotients for fast lookups.
 \newblock Cryptology ePrint Archive, Report 2022/1763, 2022.
 \newblock \url{https://eprint.iacr.org/2022/1763}.
 
-\bibitem[FK23]{EPRINT:FeiKho23}
+\bibitem{EPRINT:FeiKho23}
 Dankrad Feist and Dmitry Khovratovich.
 \newblock Fast amortized {KZG} proofs.
 \newblock Cryptology ePrint Archive, Report 2023/033, 2023.
 \newblock \url{https://eprint.iacr.org/2023/033}.
 
-\bibitem[FKL18]{C:FucKilLos18}
-Georg Fuchsbauer, Eike Kiltz, and Julian Loss.
-\newblock The algebraic group model and its applications.
-\newblock In Hovav Shacham and Alexandra Boldyreva, editors, {\em CRYPTO~2018,
-  Part~II}, volume 10992 of {\em {LNCS}}, pages 33--62. Springer, Heidelberg,
-  August 2018.
-
-\bibitem[FS87]{C:FiaSha86}
+\bibitem{C:FiaSha86}
 Amos Fiat and Adi Shamir.
 \newblock How to prove yourself: {Practical} solutions to identification and
   signature problems.
 \newblock In Andrew~M. Odlyzko, editor, {\em CRYPTO'86}, volume 263 of {\em
   {LNCS}}, pages 186--194. Springer, Heidelberg, August 1987.
 
-\bibitem[GKM{\etalchar{+}}18]{C:GKMMM18}
+\bibitem{C:FucKilLos18}
+Georg Fuchsbauer, Eike Kiltz, and Julian Loss.
+\newblock The algebraic group model and its applications.
+\newblock In Hovav Shacham and Alexandra Boldyreva, editors, {\em CRYPTO~2018,
+  Part~II}, volume 10992 of {\em {LNCS}}, pages 33--62. Springer, Heidelberg,
+  August 2018.
+
+\bibitem{EPRINT:GabWilCio19}
+Ariel Gabizon, Zachary~J. Williamson, and Oana Ciobotaru.
+\newblock {PLONK}: Permutations over lagrange-bases for oecumenical
+  noninteractive arguments of knowledge.
+\newblock Cryptology ePrint Archive, Report 2019/953, 2019.
+\newblock \url{https://eprint.iacr.org/2019/953}.
+
+\bibitem{Gabizon2019PLONKPO}
+Ariel Gabizon, Zachary~J. Williamson, and Oana-Madalina Ciobotaru.
+\newblock Plonk: Permutations over lagrange-bases for oecumenical
+  noninteractive arguments of knowledge.
+\newblock {\em IACR Cryptol. ePrint Arch.}, 2019:953, 2019.
+
+\bibitem{C:GKMMM18}
 Jens Groth, Markulf Kohlweiss, Mary Maller, Sarah Meiklejohn, and Ian Miers.
 \newblock Updatable and universal common reference strings with applications to
   zk-{SNARKs}.
@@ -130,100 +142,73 @@ Jens Groth, Markulf Kohlweiss, Mary Maller, Sarah Meiklejohn, and Ian Miers.
   Part~III}, volume 10993 of {\em {LNCS}}, pages 698--728. Springer,
   Heidelberg, August 2018.
 
-\bibitem[GWC19a]{EPRINT:GabWilCio19}
-Ariel Gabizon, Zachary~J. Williamson, and Oana Ciobotaru.
-\newblock {PLONK}: Permutations over lagrange-bases for oecumenical
-  noninteractive arguments of knowledge.
-\newblock Cryptology ePrint Archive, Report 2019/953, 2019.
-\newblock \url{https://eprint.iacr.org/2019/953}.
-
-\bibitem[GWC19b]{Gabizon2019PLONKPO}
-Ariel Gabizon, Zachary~J. Williamson, and Oana-Madalina Ciobotaru.
-\newblock Plonk: Permutations over lagrange-bases for oecumenical
-  noninteractive arguments of knowledge.
-\newblock {\em IACR Cryptol. ePrint Arch.}, 2019:953, 2019.
-
-\bibitem[Kin]{benes}
-J.~F.~C. Kingman.
-\newblock {Mathematical Theory of Connecting Networks and Telephone Traffic}.
-\newblock {\em Royal Statistical Society. Journal. Series A: General}.
-
-\bibitem[KZG10]{AC:KatZavGol10}
+\bibitem{AC:KatZavGol10}
 Aniket Kate, Gregory~M. Zaverucha, and Ian Goldberg.
 \newblock Constant-size commitments to polynomials and their applications.
 \newblock In Masayuki Abe, editor, {\em ASIACRYPT~2010}, volume 6477 of {\em
   {LNCS}}, pages 177--194. Springer, Heidelberg, December 2010.
 
-\bibitem[Mer88]{C:Merkle87}
+\bibitem{benes}
+J.~F.~C. Kingman.
+\newblock {Mathematical Theory of Connecting Networks and Telephone Traffic}.
+\newblock {\em Royal Statistical Society. Journal. Series A: General}.
+
+\bibitem{C:Merkle87}
 Ralph~C. Merkle.
 \newblock A digital signature based on a conventional encryption function.
 \newblock In Carl Pomerance, editor, {\em CRYPTO'87}, volume 293 of {\em
   {LNCS}}, pages 369--378. Springer, Heidelberg, August 1988.
 
-\bibitem[Ngu05]{Nguyen05}
-Lan Nguyen.
-\newblock Accumulators from bilinear pairings and applications.
-\newblock In Alfred Menezes, editor, {\em Topics in Cryptology -- CT-RSA 2005},
-  pages 275--292, Berlin, Heidelberg, 2005. Springer Berlin Heidelberg.
-
-\bibitem[OWWB20]{USENIX:OWWB20}
+\bibitem{USENIX:OWWB20}
 Alex Ozdemir, Riad~S. Wahby, Barry Whitehat, and Dan Boneh.
 \newblock Scaling verifiable computation using efficient set accumulators.
 \newblock In Srdjan Capkun and Franziska Roesner, editors, {\em USENIX Security
   2020}, pages 2075--2092. {USENIX} Association, August 2020.
 
-\bibitem[PK22]{EPRINT:PosKat22}
+\bibitem{EPRINT:PosKat22}
 Jim Posen and Assimakis~A. Kattis.
 \newblock Caulk+: Table-independent lookup arguments.
 \newblock Cryptology ePrint Archive, Report 2022/957, 2022.
 \newblock \url{https://eprint.iacr.org/2022/957}.
 
-\bibitem[STW23]{lasso}
+\bibitem{lasso}
 Srinath Setty, Justin Thaler, and Riad Wahby.
 \newblock Unlocking the lookup singularity with lasso.
 \newblock Cryptology ePrint Archive, Paper 2023/1216, 2023.
 \newblock \url{https://eprint.iacr.org/2023/1216}.
 
-\bibitem[TBP{\etalchar{+}}19]{CCS:TBPPTD19}
-Alin Tomescu, Vivek Bhupatiraju, Dimitrios Papadopoulos, Charalampos
-  Papamanthou, Nikos Triandopoulos, and Srinivas Devadas.
-\newblock Transparency logs via append-only authenticated dictionaries.
-\newblock In Lorenzo Cavallaro, Johannes Kinder, XiaoFeng Wang, and Jonathan
-  Katz, editors, {\em ACM CCS 2019}, pages 1299--1316. {ACM} Press, November
-  2019.
-
-\bibitem[WB15]{WB15}
-Michael Walfish and Andrew~J. Blumberg.
-\newblock Verifying computations without reexecuting them.
-\newblock {\em Commun. ACM}, page 74–84, 2015.
-
-\bibitem[WSR{\etalchar{+}}15]{NDSS:WSRBW15}
+\bibitem{NDSS:WSRBW15}
 Riad~S. Wahby, Srinath T.~V. Setty, Zuocheng Ren, Andrew~J. Blumberg, and
   Michael Walfish.
 \newblock Efficient {RAM} and control flow in verifiable outsourced
   computation.
 \newblock In {\em NDSS~2015}. The Internet Society, February 2015.
 
-\bibitem[ZBK{\etalchar{+}}22]{CCS:ZBKMNS22}
+\bibitem{WB15}
+Michael Walfish and Andrew~J. Blumberg.
+\newblock Verifying computations without reexecuting them.
+\newblock {\em Commun. ACM}, page 74–84, 2015.
+
+\bibitem{CCS:ZBKMNS22}
 Arantxa Zapico, Vitalik Buterin, Dmitry Khovratovich, Mary Maller, Anca
   Nitulescu, and Mark Simkin.
 \newblock Caulk: Lookup arguments in sublinear time.
 \newblock In Heng Yin, Angelos Stavrou, Cas Cremers, and Elaine Shi, editors,
   {\em ACM CCS 2022}, pages 3121--3134. {ACM} Press, November 2022.
 
-\bibitem[ZGK{\etalchar{+}}18]{SP:ZGKPP18}
+\bibitem{EPRINT:ZGKMR22}
+Arantxa Zapico, Ariel Gabizon, Dmitry Khovratovich, Mary Maller, and Carla
+  R{\`a}fols.
+\newblock Baloo: Nearly optimal lookup arguments.
+\newblock Cryptology ePrint Archive, Report 2022/1565, 2022.
+\newblock \url{https://eprint.iacr.org/2022/1565}.
+
+\bibitem{SP:ZGKPP18}
 Yupeng Zhang, Daniel Genkin, Jonathan Katz, Dimitrios Papadopoulos, and
   Charalampos Papamanthou.
 \newblock {vRAM}: Faster verifiable {RAM} with program-independent
   preprocessing.
 \newblock In {\em 2018 {IEEE} Symposium on Security and Privacy}, pages
   908--925. {IEEE} Computer Society Press, May 2018.
-
-\bibitem[ZGK{\etalchar{+}}22]{EPRINT:ZGKMR22}
-Arantxa Zapico, Ariel Gabizon, Dmitry Khovratovich, Mary Maller, and Carla
-  R{\`a}fols.
-\newblock Baloo: Nearly optimal lookup arguments.
-\newblock Cryptology ePrint Archive, Report 2022/1565, 2022.
-\newblock \url{https://eprint.iacr.org/2022/1565}.
 
 \end{thebibliography}

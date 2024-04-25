@@ -122,7 +122,9 @@
 \usepackage{hyperref}
 \usepackage{pgfplots}
 \usepackage{booktabs, tabularx}
+\usepackage{colortbl}
 \usepackage{url}
+\usepackage{amssymb}
 \usetikzlibrary{arrows,arrows.meta,shapes.arrows, calc, positioning,matrix}
 
 
@@ -564,6 +566,9 @@ of the vectors $\vecT_0,\vecT_1$ and $\vec{\op}$ are represented via polynomials
 	\end{subfigure}
 \end{figure}
 \end{comment}
+
+
+
 %\input{figure-subtable-consistency}
 
 
@@ -574,11 +579,13 @@ of the vectors $\vecT_0,\vecT_1$ and $\vec{\op}$ are represented via polynomials
 \section{Preliminaries}\label{sec:prelims}
     \input{prelims}
 
-\section{Model for RAM}\label{sec:model-for-ram}
+	\input{tech-overview}
+
+\section{Memory Consistency for RAM}\label{sec:model-for-ram}
 \input{poly-proto-ram}
 
 \section{Improved Batching-Efficient RAM}\label{sec:batch-efficient-ram}
-\input{batching-efficient-ram}
+\input{batching-efficient-ram-revised}
 
 \section{Experiments}\label{sec:experiments}
 \input{experiments}

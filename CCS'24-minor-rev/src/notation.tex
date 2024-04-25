@@ -1,6 +1,6 @@
 %! Author = nitin
 %! Date = 03/11/23
-
+\renewcommand{\vec}{\mathbf}
 \newcommand{\npol}{\mathsf{NP}}
 \newcommand{\enc}[2]{\mathsf{Enc}_{{}_{#2}}(\vec{#1})}
 \newcommand{\vecA}{\vec{a}}
@@ -22,7 +22,7 @@
 \newcommand{\setind}{I}
 \newcommand{\ins}{\mathsf{ins}}
 \newcommand{\ind}{\mathsf{ind}}
-\newcommand{\op}{\mathsf{op}}
+\newcommand{\op}{{op}}
 \newcommand{\vecins}{\overrightarrow{\ins}}
 
 %%% Base table and cache table
@@ -74,15 +74,17 @@
 \newcommand{\tr}{\ensuremath{\mathsf{tr}}}
 \newcommand{\TOT}{\ensuremath{\mathsf{TimeTr}}}
 \newcommand{\AOT}{\ensuremath{\mathsf{AddrTr}}}
-\newcommand{\evalH}[1]{\ensuremath{\vec{#1}_{|_\setH}}}
-\newcommand{\evalV}[1]{\ensuremath{\vec{#1}_{|_\setV}}}
+\newcommand{\evalH}[1]{\ensuremath{{#1}_{|_\setH}}}
+\newcommand{\evalV}[1]{\ensuremath{{#1}_{|_\setV}}}
+\newcommand{\evalN}[1]{\ensuremath{{#1}_{|_\setN}}}
 \newcommand{\LLconcat}{\ensuremath{\tilde{\mathcal{L}}_{\mathsf{concat}}}}
 \newcommand{\Lperm}{\ensuremath{\mathcal{L}_{\mathsf{perm}}}}
 \newcommand{\RRAM}[1]{\ensuremath{R}_{\mathsf{ram},#1}}
 \newcommand{\RLOOK}{\ensuremath{\mathcal{R}^{\mathsf{lookup}}_{\srs,N,m}}}
+\newcommand{\RSVEC}{\ensuremath{\mathcal{R}^{\mathsf{subvec}}_{\srs,N,m}}}
 \newcommand{\CRAM}{\ensuremath{\mathcal{R}^{\mathsf{ram}}_{\srs,N,m}}}
 \newcommand{\CLRAM}{\ensuremath{\mathcal{R}^{\mathsf{LRAM}}_{\srs,m}}}
-\newcommand{\val}[2]{\ensuremath{\mathsf{V}_{{#2},{#1}}}}
+\newcommand{\val}[2]{\ensuremath{\langle {#2}\rangle_{#1}}}
 \newcommand{\uniq}[1]{\ensuremath{\mathsf{uniq}(\vec{{#1}})}}
 % group encodings
 \newcommand{\gone}[1]{\ensuremath{\left[{#1}\right]_1}}
@@ -92,6 +94,9 @@
 % provers, verifiers, adversaries
 \newcommand{\prover}{\ensuremath{\mathcal{P}}}
 \newcommand{\verifier}{\ensuremath{\mathcal{V}}}
+\newcommand{\subvecprover}{\prover_{\mathsf{sv}}}
+\newcommand{\subvecverifier}{\verifier_{\mathsf{sv}}}
+\newcommand{\argoutput}[4]{\langle {#1}({#3}), {#2}\rangle({#4})}
 \newcommand{\Adv}{\ensuremath{\mathcal{A}}}
 \newcommand{\kzg}{\ensuremath{\mathsf{KZG}}}
 \newcommand{\kzgprove}{\ensuremath{\mathsf{KZG.Prove}}}

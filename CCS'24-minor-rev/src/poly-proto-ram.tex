@@ -1,34 +1,6 @@
-In this section, we formally define RAM, operations on RAM and associated objects such as
-execution transcripts. We have earlier used a vector $\vecT\in \F^n$ to model a RAM of size $n$, where the $i^{th}$ entry $\vecT[\,i\,]$
-implicitly corresponds to index (address) $i$.
-Here, we consider a generalisation that will be useful later.
-We will allow a RAM to explicitly associate a value $v\in \F$ to an index $a$ from an {\em index space}
-$\mathcal{I}\subseteq \F$, such that the association is unambiguous. We make this explicit in the following definition.
-\begin{definition}[RAM]\label{defn:RAM}
-    Given $n\in \N$, finite field $\F$ and a set $\mathcal{I}\subseteq \F$, a RAM of size $n$ over indices $\mathcal{I}$
-    is a tuple $T=(\vec{a},\vec{v})\in \mathcal{I}^n\times \F^n$ such that $\forall\, i,j\in [n]$  $v_i=v_j$ whenever $a_i=a_j$.
-    We think of $T$ as a table with vectors $\vec{a}$ and $\vec{v}$ denoting its columns. The set of all such
-    tables will be denoted by $\RAM{I}{n}$.
-    %\begin{align*}
-    %        T[\,a\,] = \begin{cases}
-    %                   v \text{ if } \, \exists i\in [n] \text{ s.t. } (a,v) = (a_i,v_i), \\
-     %                  \bot \text{ otherwise }
-    %                \end{cases}
-    %\end{align*}
-\end{definition}
-
-For a table $T=(\vec{a},\vec{v})\in \RAM{I}{n}$, we refer to tuples $(a_i,v_i)$, $i\in [n]$ as records of the table $T$.
-We use the access notation $v=T[a]$ to mean that $(a,v)$ is a record of $T$ (note there can be multiple such records
-according to our definition). When we refer to a vector $\vecT\in \F^n$ as a RAM, we implicitly
-assume $T=(\setind_n,\vecT)$ with $\setind_n=(1,2,\ldots,n)$. In this case we have $T[i]=\vecT[i]$.
-For a RAM $T\in \RAM{I}{n}$, a RAM operation is a three tuple $(\op,a,v)$ with $\op\in \{0,1\}$,
-$a\in \setind$ and $v\in \F$. An operation with $\op=0$ is called a {\em load} operation which denotes reading a value $v$
-mapped to index $a$ in the RAM. Similarly, an operation with $\op=1$ is called a {\em store} operation,
-which denotes associating the value $v$ with index $a$ in the RAM.
-We use $\RAMOp{I}$ to denote the set of all RAM operations with index set $\setind$.
-%We say than an operation
-%$(\op,a,v)\in \{0,1\}\times \setind\times \F$ is {\em admissible} with respect to RAM $T\in \RAM{I}{n}$ if
-%$T[\,a\,]=v$ whenever $\op=0$ (i.e, the operation loads a value which agrees with the value in the RAM at the specified index).
+In this section, we briefly review and formalize existing memory-checking techniques to ensure
+correctness of RAM operations. The formal definitions for various relations involved in memory checking
+will be used to describe polynomial protocol for RAM in Section ~\ref{sec:poly-proto-ram-app}.
 
 \subsection{Correctness of RAM Update}\label{subsec:ram-update}
 The versatility of the RAM primitive stems from its updatability. While a load operation leaves the RAM unchanged, the store operation
