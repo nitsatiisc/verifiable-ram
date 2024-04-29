@@ -58,22 +58,22 @@
 %% values in them; it is your responsibility as an author to replace
 %% the commands and values with those provided to you when you
 %% complete the rights form.
-\setcopyright{acmlicensed}
-\copyrightyear{2018}
-\acmYear{2018}
-\acmDOI{XXXXXXX.XXXXXXX}
-
-%% These commands are for a PROCEEDINGS abstract or paper.
-\acmConference[Conference acronym 'XX]{Make sure to enter the correct
-	conference title from your rights confirmation emai}{June 03--05,
-	2018}{Woodstock, NY}
-%%
+%\setcopyright{acmlicensed}
+%\copyrightyear{2018}
+%\acmYear{2018}
+%\acmDOI{XXXXXXX.XXXXXXX}
+%
+%%% These commands are for a PROCEEDINGS abstract or paper.
+%\acmConference[Conference acronym 'XX]{Make sure to enter the correct
+%	conference title from your rights confirmation emai}{June 03--05,
+%	2018}{Woodstock, NY}
+%%%
 %%  Uncomment \acmBooktitle if the title of the proceedings is different
 %%  from ``Proceedings of ...''!
 %%
 %%\acmBooktitle{Woodstock '18: ACM Symposium on Neural Gaze Detection,
 	%%  June 03--05, 2018, Woodstock, NY}
-\acmISBN{978-1-4503-XXXX-X/18/06}
+%\acmISBN{978-1-4503-XXXX-X/18/06}
 
 
 %%
@@ -256,7 +256,7 @@
 		they incur linear overhead in the size of the
 		accumulated set to compute witnesses, as well as prohibitive constant overheads.
 		
-		In this paper, we realize a batching-efficient RAM with superior asymptotic and concrete
+		We realize a batching-efficient RAM with superior asymptotic and concrete
 		costs as compared to existing approaches. Towards this: (i) we build on recent constructions of lookup arguments to allow efficient
 		lookups even in presence of table \textit{updates}, and (ii) we realize a variant of sub-vector relation
 		addressed in prior works, which we call {\em committed index lookup}. We combine the two
@@ -331,38 +331,32 @@
 	\pagestyle{plain}
 	
 \section{Introduction}\label{sec:introduction}
+
 General purpose {\em Succinct Non-interactive Arguments of Knowledge} (SNARKs) enable one to generate succinct
 proofs of membership of a statement in an $\npol$ relation expressed as an arithmetic circuit. These proofs are
-extremely cheap to verify, which makes them useful for {\em Verifiable Computation} (VC), where a low-powered
-client (e.g. mobile phone), can outsource an expensive computation to an untrusted server, and later
-verify the correctness of the results at a minimal cost.
-However,
-arithmetic circuit based representations are inefficient in expressing relations involving the result of
-a program execution on memory/state, which frequently arise in the context of verifiable computation.
-These include scenarios such as proving the correctness of a query execution against a database,
-proving the correctness of inference
-from a decision tree, or proving correct update of table of account balances when a batch of transactions (e.g. transfers)
-are applied to it.
-In aforementioned examples, database tables, decision trees and accounts table are naturally
-modelled as addressable memory and one needs to prove that it is accessed/updated in accordance with the correct execution
-of the computation. Accordingly, there is a rich and expanding body of work to efficiently model the abstraction of
-addressable memory in verifiable computations. While complete acknowledgement of this vast body of work is beyond
-the scope of this paper (a fairly recent survey in \cite{WB15} is a good starting point) we summarise key approaches towards
-modelling RAM in verifiable computation. Often we demand additional properties of the RAM primitive, such as
-{\em persistence} - which is the ability to persist the RAM state across several computations, and {\em batching} -
-where verifiable update of the RAM state is required for small batches of updates. These properties are also
-the focus of this work.
+extremely cheap to verify, which makes them useful for {\em Verifiable Computation} (VC), where a resource-constrained
+client (e.g., a mobile phone), can outsource an expensive computation to an untrusted server, and later
+verify the correctness of the computation at a minimal cost.
 
-Batching-efficient RAM primitive is especially relevant in the context of blockchain {\em rollups} ~\cite{rollup},
-an umbrella term for recent efforts to scale blockchains
-by moving expensive computation off the blockchain to the so-called {\em layer two} or L2 chains. The blockchain
-only needs to verify the succinct proofs attesting to the correctness of the off-chain computation. This approach
-is popularly called rollup as it allows verifying the result of several (rolled-up) transactions
-modifying the L2 state, as part of one transaction verified on the main chain.
-This simultaneously helps the scalability and lowers the cost (e.g. gas fees)
-per transaction due to succinct verification.
-We consider improving efficiency of rollups an important
-motivation for our work, though in this work we do not go into precise details of a smart-contract based
+\smallskip
+
+\noindent{\bf Modeling RAM in Verifiable Computation.} It turns out that arithmetic circuit-based representations are inefficient in expressing relations involving the result of a program execution on memory/state. Such relations frequently arise in the context of verifiable computation, in scenarios that require proving the correctness of query execution against a database, inference from a decision tree, or updates on a table of account balances~(e.g., when a batch of transactions, such as account transfers, is applied to the table).
+
+In the aforementioned examples, objects such as database tables, decision trees, and accounts tables can be naturally
+modelled as instances of addressable memory, or more generally, random access memory~(RAM), where one needs to prove that the RAM has been accessed/updated in accordance with the correct execution of the computation. There exists a rich and expanding body of work on efficiently modeling abstractions of RAM in in verifiable computation. While a complete treatment of this vast body of work is beyond
+the scope of this paper (a fairly recent survey in \cite{WB15} is a good starting point), we mention two additional properties that are often demanded of the RAM primitive: {\em persistence} -- the ability to persist the RAM state across several computations, and {\em batching} --
+where verifiable update of the RAM state is required for small batches of updates. These properties are also the focus of this work.
+
+%summarise key approaches towards
+%modelling RAM in verifiable computation. Often we demand additional properties of the RAM primitive, such as
+%{\em persistence} - which is the ability to persist the RAM state across several computations, and {\em batching} -
+%where verifiable update of the RAM state is required for small batches of updates. 
+
+\smallskip
+
+\noindent{\bf Application to Blockchain Rollups.} Batching-efficient RAM is especially relevant in the context of blockchain {\em rollups} ~\cite{rollup},
+an umbrella term for recent efforts to scale blockchains by moving expensive computation off the blockchain to the so-called {\em layer two}~(or L2) chains. The blockchain only needs to verify succinct proofs attesting to the correctness of the off-chain computation. This approach is popularly called \textit{rollup} as it allows verifying the result of several (rolled-up) transactions modifying the L2 state, as part of one transaction verified on the main chain.
+This simultaneously improves scalability and lowers the cost (e.g., gas fees) per transaction due to succinct verification. We consider improving efficiency of rollups an important motivation for our work, but avoid precise details of a smart-contract based
 instantiation of our solution.
 
 \subsection{Our Contribution}\label{subsec:ourwork} 
@@ -430,7 +424,12 @@ and is eminently deployable on a commodity hardware.
 
 
 \subsection{Techniques}\label{subsec:techniques}
-\noindent{\bf Update-friendly Lookup Arguments}: Starting point for our work are the recent lookup arguments which prove
+
+We present a brief summary of our techniques below.
+
+\smallskip
+
+\noindent{\bf Update-friendly Lookup Arguments}: Our starting point is the recent line of works on lookup arguments which prove
 that a vector of size $m$ appears as
 a sub-vector in a large fixed vector (table) of size $N$ with succinct proof sizes and verification, but most notably
 ensuring that prover runs in time sub-linear in the size of the table ($N$). The pioneering work ~\cite{CCS:ZBKMNS22}

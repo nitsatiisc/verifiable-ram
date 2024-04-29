@@ -44,18 +44,18 @@ We use $\RAMOp{I}$ to denote the set of all RAM operations with index set $\seti
         %	Permutation of transcripts                                                                      & Fig 9    & $O(m \log m)$       & 2P            & 4G1, 5F         \\ \hline
         %	\begin{tabular}[c]{@{}l@{}}Memory consistency \& \\ address ordering of transcript\end{tabular} & Fig 7    & $O(m \log m)$       & 5P            & 20G1,19F        \\ \hline
         \rowcolor{gray}
-        Batching Efficient RAM                                                                          & Fig  ~\ref{fig:complete-listing}    & $\widetilde{O}(\sqrt{mN})\,\F,\G$            & 8P            & $65\Gone$, $1\Gtwo$, $43\F$  \\ \hline
+        Batching-Efficient RAM                                                                          & Fig  ~\ref{fig:complete-listing}    & $\widetilde{O}(\sqrt{mN})\,\F,\G$            & 8P            & $65\Gone$, $1\Gtwo$, $43\F$  \\ \hline
     \end{tabular}
     \caption{Asymptotic Efficiency of Component Protocols. Here $N$ = size of the RAM, $m$ = number of operations
     , $\delta$ = hamming distance of table for which pre-computed parameters are available from the current table.
-    $P$ denotes a pairing evaluation. The performance corresponds to CQ based realization of batching efficient
+    $P$ denotes a pairing evaluation. The performance corresponds to CQ based realization of batching-efficient
     RAM.}
     \label{tbl:efficiency-components}
 \end{table*}
 
 
 
-\subsection{Batching Efficient RAM: Blueprint}\label{subsec:batching-efficient-ram-blueprint}
+\subsection{Batching-Efficient RAM: Blueprint}\label{subsec:batching-efficient-ram-blueprint}
 We will use a vectors in $\F^N$ to denote the ``large'' RAMs, where index column is implicitly
 assumed to be $(1,\ldots,N)$.
 Let $\vec{T},\vec{T'}\in \F^N$ denote the initial and final RAM states, and let $\vec{o}$ be
@@ -83,11 +83,13 @@ To prove the transformation of $\vec{T}$ to $\vec{T}'$ via operation sequence $\
 \end{figure}
 
 The blueprint for the above approach is illustrated in Figure ~\ref{fig:blueprint}.
-\subsection{Batching Efficient RAM: Components}\label{subsec:batching-efficient-ram-components}
+
+\subsection{Batching-Efficient RAM: Components}\label{subsec:batching-efficient-ram-components}
 We now elaborate on the key technical components in realizing the above blueprint.
 
-\subsubsection{Committed Index Lookup}
-To limit the size of the RAM on which we use memory-checking techniques,
+\smallskip
+
+\noindent{\bf Committed Index Lookup.} To limit the size of the RAM on which we use memory-checking techniques,
 our first step is to isolate sub-tables of RAMs $\vecT$ and
 $\vecT'$ which are actually referenced by operations. This is accomplished by looking up RAMs $\vecT$ and
 $\vecT'$ at indices in the committed vector $\vec{a}$. Here, we leverage the recent work on efficient lookup
@@ -102,11 +104,11 @@ depends on {\em expensive} table-specific pre-processing. This is acceptable whe
 static, but is infeasible in our setting requiring updatable tables. This motivates our next technical
 component.
 
-\subsubsection{Fast Lookup from Approximate Setup}
-We build upon the rich body of work on polynomial protocols enabling efficient lookups from static tables
-~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:ZGKMR22,EPRINT:EagFioGab22}, which rely on expensive table-dependent pre-computation
+\smallskip
+
+\noindent{\bf Fast Lookup from Approximate Setup.} We build upon the rich body of work on polynomial protocols enabling efficient lookups from static tables~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:ZGKMR22,EPRINT:EagFioGab22}, which rely on expensive table-dependent pre-computation
 to optimise online proving performance. We make the first attempt towards breaking this rigid dependence.
-Our key idea is to extend the utiltiy of pre-computed
+Our key idea is to extend the utility of pre-computed
 parameters for a table $\vecT$, to proving lookups from tables $\vecT'\neq \vecT$.
 We show that for $\delta=\Delta(\vecT, \vecT')$,
 an argument for $m$ lookups from $\vecT'$ incurs an additional prover overhead of $(m+\delta)\log^2(m+\delta)$ over the
@@ -119,7 +121,9 @@ prover effort on average by using parameters for $\vecTbase$ till the current ta
 at most $\sqrt{mN}$ from $\vecTbase$, beyond which we recompute full parameters for the current table with
 $O(N\log N)$ prover effort. The cycle then repeats with current table as the base table.
 
-\noindent{\bf Naive approaches are inadequate}: We notice that the aforementioned constructions of lookup arguments require linear combination of
+\smallskip
+
+\noindent{\bf Naive Approaches are Inadequate.} We notice that the aforementioned constructions of lookup arguments require linear combination of
 encoded quotients of the form $\gany{(T(X)-T(\xi^i))/(X-\xi^i)}$ for upto $m$ values of $i$ during the proof generation.
 While constructions ~\cite{CCS:ZBKMNS22,EPRINT:PosKat22}
 consider quotients encoded in the group $\Gtwo$, the protocol in ~\cite{EPRINT:EagFioGab22} encodes them in $\Gone$.
@@ -131,7 +135,9 @@ is now potentially ``lagging'' by $\delta$ updates, so we would need $\Omega(m\d
 with $\delta$, and is clearly unsustainable for reasonable values of $\delta$. In Section ~\ref{sec:update-protocol}, we present an efficient method
 to directly compute linear combination of upto $O(m)$ encoded quotients of the form $\gany{(T(X)-T(\xi^i))/(X-\xi^i)}$.
 
-\subsubsection{Localizing changes in RAMs} While the above two components allow us to reliably extract sub-RAMs
+\smallskip
+
+\noindent{\bf Localizing changes in RAMs.} While the above two components allow us to reliably extract sub-RAMs
 corresponding to indices in vector $\vec{a}$, we still need to prove that RAMs are identical outside indices in
 $\vec{a}$. Looking ahead, in terms of polynomials this requires proving that $T(\xi^i)=T'(\xi^i)$ for $i\not\in
 \{a_i:i\in [m]\}$. Assuming $Z_I(X)$ to be the vanishing polynomial of the set $\{\xi^{a_i}:i\in [m]\}$,
@@ -140,7 +146,9 @@ this involves working with polynomials with degree $O(N)$, which is expensive.
 In Section ~\ref{subsec:proximity-ram} we show a polynomial protocol for the above relation which requires only $O(m\log^2 m)$ prover effort. The protocol
 appears in Figure ~\ref{fig:a-identical}.
 
-\subsubsection{Polynomial Protocol for Memory Checking} To complete the verification, we need to show that
+\smallskip
+
+\noindent{\bf Polynomial Protocol for Memory Checking.} To complete the verification, we need to show that
 the smaller RAMs, $S=(\vec{a},\vec{v})$ and $S'=(\vec{a},\vec{v}')$ extracted from larger RAMs $\vecT,\vecT'$
 are consistent with respect to the operations. This can be accomplished using standard memory checking techniques
 based on address ordered transcripts, which we formalize in Section ~\ref{sec:poly-proto-ram}. Later in
@@ -152,7 +160,9 @@ simple and implementation friendly, and helps in realizing a ``circuit-free'' ov
 polynomial protocol for memory checking appears in Figure ~\ref{fig:covering-protocol}, while constituent protocols
 appear in Figures ~\ref{fig:time-ordered-transcript}, ~\ref{fig:encoded-relations} and ~\ref{fig:permutated-transcripts}.
 
-\subsubsection{Efficiency} We conclude the overview with a discussion of efficiency achieved by our scheme, and
+\smallskip
+
+\noindent{\bf Efficiency.} We conclude the overview with a discussion of efficiency achieved by our scheme, and
 how different components discussed in this section contribute to the overall efficiency. The asymptotic performance
 of our scheme using CQ ~\cite{EPRINT:EagFioGab22} is summarized in Table ~\ref{tbl:efficiency-components}, with
 efficiency of the overall scheme highlighted in gray. The table also serves as a ready-reckoner for component protocols
@@ -177,7 +187,9 @@ Clearly, the (offline) parameter re-computation is the most expensive operation.
 substantially speed up parameter re-computation as their cost is dominated by FFTs over group polynomials, which
 are highly parallelizable.
 
-\subsubsection{Liveliness} To maintain {\em liveliness} of the system in scenarios such as rollups, we must carefully
+\smallskip
+
+\noindent{\bf Liveliness.} To maintain {\em liveliness} of the system in scenarios such as rollups, we must carefully
 align the online prover performance curve with the cost of offline computation. As an example, suppose $\vec{T}_0$
 is the initial pre-processed table at time $t=0$. We generate proofs using pre-computed parameters for $\vec{T}_0$
 till the time $t=t_1$, when the table state $\vec{T}_1$ is at hamming distance $2^{17}$ from $\vec{T}_0$. At this point,
@@ -188,7 +200,7 @@ approximately $12000/128\approx 94s$ each, thus finishing with a table state $\v
 $2^{18}$ from $\vec{T}_0$ at $t_2=t_1+12000$. At this point, we should have the pre-computed parameters for $\vec{T}_1$,
 which is at update distance of $2^{17}$ from $\vec{T}_2$, and thus online proof generation can switch to parameters
 for the table $\vec{T}_1$. This alignment gives us a proving time of $94s$ per batch of $1000$, while ensuring system
-is live at all times. Clearly, a faster offline pre-computation using parallel implemenation would allow us to stay
+is live at all times. Clearly, a faster offline pre-computation using parallel implementation would allow us to stay
 at the cheaper end of online proving performance.
 
 
