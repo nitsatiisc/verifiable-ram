@@ -70,3 +70,57 @@
       note = {\url{https://eprint.iacr.org/2023/1217}},
       url = {https://eprint.iacr.org/2023/1217}
 }
+
+
+@InProceedings{pkc-lookup-mat,
+	author="Campanelli, Matteo
+	and Faonio, Antonio
+	and Fiore, Dario
+	and Li, Tianyu
+	and Lipmaa, Helger",
+	editor="Tang, Qiang
+	and Teague, Vanessa",
+	title="Lookup Arguments: Improvements, Extensions and Applications to Zero-Knowledge Decision Trees",
+	booktitle="Public-Key Cryptography -- PKC 2024",
+	year="2024",
+	publisher="Springer Nature Switzerland",
+	address="Cham",
+	pages="337--369",
+	abstract="Lookup arguments allow to prove that the elements of a committed vector come from a (bigger) committed table. They enable novel approaches to reduce the prover complexity of general-purpose zkSNARKs, implementing ``non-arithmetic operations`` such as range checks, XOR and AND more efficiently. We extend the notion of lookup arguments along two directions and improve their efficiency: (1) we extend vector lookups to matrix lookups (where we can prove that a committed matrix is a submatrix of a committed table). (2) We consider the notion of zero-knowledge lookup argument that keeps the privacy of both the sub-vector/sub-matrix and the table. (3) We present new zero-knowledge lookup arguments, dubbed cq+, zkcq+ and cq++, more efficient than the state of the art, namely the recent work by Eagen, Fiore and Gabizon named cq. Finally, we give a novel application of zero-knowledge matrix lookup argument to the domain of zero-knowledge decision tree where the model provider releases a commitment to a decision tree and can prove zero-knowledge statistics over the committed data structure. Our scheme based on lookup arguments has succinct verification, prover's time complexity asymptotically better than the state of the art, and is secure in a strong security model where the commitment to the decision tree can be malicious.",
+	isbn="978-3-031-57722-2"
+}
+
+
+@InProceedings{pkc-lookup-2,
+	author="Zhang, Yuncong
+	and Sun, Shi-Feng
+	and Gu, Dawu",
+	editor="Tang, Qiang
+	and Teague, Vanessa",
+	title="Efficient KZG-Based Univariate Sum-Check and Lookup Argument",
+	booktitle="Public-Key Cryptography -- PKC 2024",
+	year="2024",
+	publisher="Springer Nature Switzerland",
+	address="Cham",
+	pages="400--425",
+	abstract="We propose a novel KZG-based sum-check scheme, dubbed {\$}{\$}{\backslash}textsf{\{}Losum{\}}{\$}{\$}Losum, with optimal efficiency. Particularly, its proving cost is one multi-scalar-multiplication of size k---the number of non-zero entries in the vector, its verification cost is one pairing plus one group scalar multiplication, and the proof consists of only one group element.",
+	isbn="978-3-031-57722-2"
+}
+
+@misc{Hab22,
+	author = {Ulrich Haböck},
+	title = {Multivariate lookups based on logarithmic derivatives},
+	howpublished = {Cryptology ePrint Archive, Paper 2022/1530},
+	year = {2022},
+	note = {\url{https://eprint.iacr.org/2022/1530}},
+	url = {https://eprint.iacr.org/2022/1530}
+}
+
+@misc{Eag22,
+	author = {Liam Eagen and Sanket Kanjalkar and Tim Ruffing and Jonas Nick},
+	title = {Bulletproofs++: Next Generation Confidential Transactions via Reciprocal Set Membership Arguments},
+	howpublished = {Cryptology ePrint Archive, Paper 2022/510},
+	year = {2022},
+	note = {\url{https://eprint.iacr.org/2022/510}},
+	url = {https://eprint.iacr.org/2022/510}
+}

@@ -1,6 +1,6 @@
 Efficient modelling of the random access memory (RAM) primitive is a widely studied problem in
 verifiable computation (VC), due to its inherent usefulness in modelling several computations of interest.
-Encapsulating RAM semantics in VC circuits is also challenging; \moumita{since} (i) arithmetic/boolean circuits do not
+Encapsulating RAM semantics in VC circuits is also challenging; since (i) arithmetic/boolean circuits do not
 adequately model random access, and (ii) incorporating entire memory as gates in a circuit is prohibitive.
 Several novel techniques have been proposed to work around the above limitations of circuit based representation
 of RAM. Among them, merkle tree based accumulators to model the RAM state are popular
@@ -26,8 +26,8 @@ computation, most notably in the context of blockchain {\em rollups}. Here, one 
 to show that a batch of $m$ transactions correctly updates the state of a table of account balances, which
 is maintained off-chain by the rollup provider. Here the batch-size $m$ ranges from few hundreds to few
 thousands, whereas the table itself could contain several million accounts.
-Like prior work on batching-efficient
-RAMs~\cite{USENIX:OWWB20,CCS:CFHKKO22} our work is also motivated by the problem of enabling more efficient rollup for tables, which are
+Like prior work on batching-efficient RAMs~\cite{USENIX:OWWB20,CCS:CFHKKO22} our work is also motivated
+ by the problem of enabling more efficient rollup for tables, which are
 naturally modelled as RAMs. While the aforementioned works substantially mitigate disadvantages of both the
 Merkle-tree based approaches and transcript-based approaches by using RSA accumulators to model the state,
 they still incur large prover costs and memory requirements even for modest sized batches. The approaches
@@ -54,14 +54,18 @@ compare our work with the prior approaches more elaborately in Section ~\ref{sec
 
 \subsection{Lookup arguments}
 
-Caulk~\cite{CCS:ZBKMNS22} provides with lookup arguments where a vector of size $m$ is proved to be a subvector of a large vector of size $N$, while maintaining privacy regarding the positions of the subvector (called \emph{position-hiding linkability}) where the prover complexity is $O(m^2+m\log N)$ with $O(N\log N)$ preprocessing and $O(N)$ storage. Caulk+~\cite{EPRINT:PosKat22} improves over Caulk to $O(m^2)$ prover complexity by removing the dependency on the size of the large vector $N$, and CQ~\cite{EPRINT:EagFioGab22} further improves it to $O(m\log m)$, while retaining the same $O(N\log N)$ preprocessing. 
-However, we aim to provide committed index lookup arguments that can `link' a set of indices in the vector of size $N$ to the `claimed' subvector of size $m$, that helps in ensuring that we can always `lookup' relevant indices from a committed vector. Additionally, note that any updates to the large table requires $O(N\log N)$ recomputation each time in the prior works. Our work ensures a batching friendly preprocessing can be done whenever there are incremental changes to the vector of size $N$, and avoid performing the $O(N\log N)$ recomputation per update. This modification extends to the other works as well. We also present techniques to extend lookup argument \cite{EPRINT:EagFioGab22}, which uses homomorphic commitments, to provide a committed index lookup argument.
+Caulk~\cite{CCS:ZBKMNS22} provides with lookup arguments where a vector of size $m$ is proved to be a subvector of a large vector of size $N$, while maintaining privacy regarding the positions of the subvector (called \emph{position-hiding linkability}) where the prover complexity is $O(m^2+m\log N)$ with $O(N\log N)$ preprocessing and $O(N)$ storage. Caulk+~\cite{EPRINT:PosKat22} improves over Caulk to $O(m^2)$ prover complexity by removing the dependency on the size of the large vector $N$, and CQ~\cite{EPRINT:EagFioGab22}, using the ``logarithmic derivative based lookup" of \cite{Eag22,Hab22}, further improves it to $O(m\log m)$, while retaining the same $O(N\log N)$ preprocessing. Additional lookup arguments, namely cq+, cq++, zkcq+~\cite{pkc-lookup-mat} and locq~\cite{pkc-lookup-2} provides further improvements over CQ.
+However, we aim to provide committed index lookup arguments that can `link' a set of indices in the vector of size $N$ to the `claimed' subvector of size $m$, that helps in ensuring that we can always `lookup' relevant indices from a committed vector. Additionally, note that the prior works provides lookup arguments for `static' tables, i.e. any `updates' to the large table requires $O(N\log N)$ recomputation each time in the prior works. Our work ensures a batching friendly preprocessing can be done whenever there are incremental changes to the vector of size $N$, and avoid performing the $O(N\log N)$ recomputation per update. This modification extends to the other works as well. We also present techniques to extend lookup argument \cite{EPRINT:EagFioGab22}, which uses homomorphic commitments, to provide a committed index lookup argument.
 
-Lasso~\cite{lasso} gives a new family of lookup arguments where the prover's cost only grows with table entries that are accessed by the lookup operations, for tables that are structured. Our work applies to tables without any structure (as is the case with rollup application), and additionally we can handle \emph{updatable}\chaya{agree on spelling of updatable throughout} tables. 
-Note that lasso crucially leverages the tensor-structure of static tables, and uses techniques that are inherently incompatible with arbitrary updates which is essential for handling arbitrary state updates in our considered application. Therefore, to support arbitrary updates, our work relies on optimally using and updating the pre-computed parameters instead.
+In the literature, to provide sublinear lookups for large tables, either one cleverly uses preprocessing to ensure optimal online cost or one leverages a predefined structure in the tables in consideration.
+Lasso~\cite{lasso} gives a new family of lookup arguments for the second category, where the prover's cost only grows with table entries that are accessed by the lookup operations, for tables that are structured. Lasso provides efficient lookups by leveraging a predefined relation between the large table and the `looked-up' small table, where the large table has tensor-structure and is efficiently `decomposable'. This structure  helps to reduce number of elements which need to be committed, in turn reducing the prover time as well.
+On the contrary, our work applies to tables without any structure (as is the case with rollup application), and additionally we can handle \emph{updatable} %\chaya{agree on spelling of updatable throughout} 
+tables. Note that lasso crucially leverages the tensor-structure of static tables, and uses techniques that are inherently incompatible with arbitrary updates which is essential for handling arbitrary state updates in our considered application and the prover complexity would still be linear in the large table for arbitrary tables which lacks the tensor-structure. 
+Therefore, to support arbitrary updates, our work relies on optimally using and updating the pre-computed parameters instead.
 Lasso also defines a committed index lookup relation like us and gives a reduction between indexed and unindexed lookups (subvector relation); however, their reduction needs an upper bound on the elements of the table. We provide a different reduction without this restriction. 
 A recent work called Jolt~\cite{jolt} expresses all constraints of a computation as lookups by creating a lookup table that contains the entire evaluation table of each instruction $f$ in an instruction set.
 This approach of using table lookups requires memory checking arguments as well. However Jolt uses lookup arguments to \emph{model} CPU operations, whereas our work uses lookup arguments to reduce the size of memory in memory-checking methods. \chaya{could add a line here or in conclusion that our techniques could be used to improve Jolt's mem consistency approach.}
+
 
 
 
