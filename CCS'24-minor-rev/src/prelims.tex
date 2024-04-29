@@ -1,5 +1,8 @@
+This section presents notations and preliminary background material used in the rest of the paper.
 
-\noindent\textbf{Notation.}Throughout the paper, we assume a bilinear group generator $\bg$ which on input $\lambda$ outputs
+\smallskip
+
+\noindent\textbf{Notation.} Throughout the paper, we assume a bilinear group generator $\bg$ which on input $\lambda$ outputs
 parameters for the protocols. Specifically $\bg(1^\secp)$ outputs $(\F,\Gone,\Gtwo,\GT, e, g_1, g_2,g_t)$
 where:
 \begin{itemize}[leftmargin=2em, label=-]
@@ -22,6 +25,11 @@ Let $\{\mu_i(X)\}_{i=1}^N$ be the associated
 Lagrange basis polynomials over the set $\setN$; that is, $\mu_i(X) = \prod_{j\neq i} \frac{X-\xi^j}{\xi^{i}-\xi^j}$.
 We denote by $Z_{\setN}$ the vanishing polynomial of $\setN$;  $Z_{\setN}(X)=X^N-1$.
 
+\smallskip
+
+\noindent{\bf Formal Derivatives of Polynomials.} For a polynomial $f(X) = \sum_{i=0}^{d}a_iX^i \in \F[X]$, we define its formal derivative  to be the polynomial $f'(X) = \sum_{i=1}^{d}ia_iX^{i-1}$.
+%\[f'(X) = \sum_{i=1}^{d}ia_iX^{i-1}\]
+
 \subsection{Succinct Arguments of Knowledge}
 Let $\R$ be a NP-relation and $\L$ be the corresponding NP-language, where $\L=\{x : \exists$ $w$ such that $(x,w) \in \R\}$. 
 A \emph{succinct argument of knowledge} consists of a pair of PPT algorithms $(\prover,\verifier)$.
@@ -30,11 +38,11 @@ We use the notation $b\gets \argoutput{\prover}{\verifier}{w}{x}$ to denote $\ve
 protocol involving $\prover$ and $\verifier$ with $w$ as $\prover$'s input and $x$ as the common input.
 The \emph{knowledge-soundness} property says that if the verifier is convinced, then an efficient extractor algorithm given oracle access to the prover outputs a witness $w$ such that $(x,w)\in \R$. An argument system is \emph{succinct} if the communication complexity and the complexity of $\verifier$ is polylogarithmic in the size of the witness. We provide formal definitions in Appendix~\ref{sec:aok}.
 
-\medskip
+\smallskip
 
 \noindent\textbf{Fiat-Shamir.} An interactive protocol is \emph{public-coin} if the verifier's messages are uniformly random strings. Public-coin protocols can be transformed into non-interactive arguments in the Random Oracle Model (ROM) by using the Fiat-Shamir~\cite{C:FiaSha86} heuristic to derive the verifier's messages as the output of a Random Oracle. 
 
-\medskip
+\smallskip
 
 \noindent{\bf Modular Approach.}
 A modular approach for designing efficient succinct arguments consists of two steps; constructing an information theoretic protocol in an idealized model, and then compiling the information-theoretic protocol via a cryptographic compiler to obtain an argument system. 
