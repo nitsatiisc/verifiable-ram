@@ -100,7 +100,7 @@ that a vector of size $m$ appears as
 a sub-vector in a large fixed vector (table) of size $N$ with succinct proof sizes and verification, but most notably
 ensuring that prover runs in time sub-linear in the size of the table ($N$). The pioneering work ~\cite{CCS:ZBKMNS22}
 obtained prover complexity of $O(m^2+m\log N)$, which was improved in subsequent works to $O(m^2)$ ~\cite{EPRINT:PosKat22},
-$O(m\log^2 m)$ ~\cite{EPRINT:ZGKMR22}, and $O(m\log m)$ ~\cite{EPRINT:EagFioGab22,}. However, the sub-linear prover
+$O(m\log^2 m)$ ~\cite{EPRINT:ZGKMR22}, and $O(m\log m)$ ~\cite{EPRINT:EagFioGab22,PKC:CFFLL24}. However, the sub-linear prover
 complexity requires table-dependent $O(N\log N)$ pre-processing and $O(N)$ storage. This table-dependent
 pre-processing implies that while
 the aforementioned lookup arguments can be used to obtain efficient ROM (read only memory) semantics
@@ -115,9 +115,8 @@ recent lookup constructions such as~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:Ea
 Our approach for computing these quotients from pre-computed parameters remains efficient even when
 the table is updated, and it directly applies to all the aforementioned constructions.
 For a table $\delta$-hamming distance away from the pre-processed one, we incur
-$(m+\delta)\log^2(m+\delta)$ additional overhead for proving $m$ lookups. This additive and quasi-linear
-overhead in $\delta$ rests on novel algebraic algorithms described in Section ~\ref{sec:update-protocol}.
-We informally summarise our contribution in this regard below, whereas Theorem ~\ref{thm:approx-setup}
+$(m+\delta)\log^2(m+\delta)$ additional overhead for proving $m$ lookups. To achieve such a quasi-linear overhead in both $m$ and $\delta$, we rely on novel algebraic algorithms described in Section~\ref{sec:update-protocol}.
+We informally summarize our contribution in this regard below, whereas Theorem~\ref{thm:approx-setup}
 states the precise result.
 \begin{theorem}[Informal]\label{thm:pre-process}
 	There exists a deterministic $O(N\log N)$ time algorithm $\textsf{Preprocess}(\vecT)\outp \pp_T$
@@ -127,43 +126,45 @@ states the precise result.
 	$O((m+\delta)\log^2 (m+\delta) + f(m))$ where $\delta=\Delta(\vecT, \vecT')$
 	is the hamming distance of $\vecT$ and $\vecT'$ while $f(m)$ depends on the specific lookup protocol.
 \end{theorem}
-For the constructions  based on~\cite{CCS:ZBKMNS22,EPRINT:PosKat22}, we set $f(m)=m^2$ in the above,
-while for ~\cite{EPRINT:EagFioGab22}, we have $f(m)=m\log m$.\smallskip
+For the constructions based on~\cite{CCS:ZBKMNS22,EPRINT:PosKat22}, we set $f(m)=m^2$ in the above,
+while for~\cite{EPRINT:EagFioGab22,PKC:CFFLL24}, we have $f(m)=m\log m$.
+
+\smallskip
 
 \noindent{\bf Committed Index Lookup}: We augment the sub-vector relation in prior lookup arguments which
 considers whether each entry of a given vector appears in the target vector to one that also identifies
 the precise positions where the given vector appears in the target vector. When this relation is checked
 over commitments of the respective vectors; given vector, the target vector and the position vector, we call
 it {\em committed index lookup}. The relation we consider is similar to the one considered in ~\cite{lasso}.
-For lookup arguments with homomorphic commitment scheme, we show that committed index lookup can be obtained
-using three instantiations of sub-vector lookup (Lemma ~\ref{lem:generic-transformation}). Such reduction was
-also considered in ~\cite{lasso}, but under a more restrictive assumption on the elements in the table being
-within a certain bound. The reduction readily implies
+For lookup arguments with homomorphic commitment schemes, we show that committed index lookup can be obtained
+using a sub-vector lookup argument (Lemma~\ref{lem:generic-transformation}, Section~\ref{subsec:committed-index-lookup}). Such a construction was
+also considered in~\cite{lasso}, but under a more restrictive assumption on the size of the elements in the table being
+within a certain bound. Lemma~\ref{lem:generic-transformation} yields a construction of committed index lookup that uses (a single instance of) the underlying sub-vector protocol in a black-box manner. This immediately implies
 efficient constructions of arguments for committed index lookups from
-~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:ZGKMR22,EPRINT:EagFioGab22}.
-In the case of ~\cite{EPRINT:PosKat22}, we give an explicit adaptation in
-Section ~\ref{subsec:committed-index-lookup} that incurs costs comparable to single instance of the underlying sub-vector
-protocol.\smallskip
+~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:ZGKMR22,EPRINT:EagFioGab22,PKC:CFFLL24}. In Appendix~\ref{app:committed-index-lookup}, we also present an explicit (non-black-box) adaptation of~\cite{EPRINT:PosKat22} to obtain a committed index lookup, which again incurs costs comparable to a single instance of the underlying sub-vector protocol.
+
+\smallskip
 
 
-\noindent{\bf Batching-Efficient RAM from Lookup Arguments}:
+\noindent{\bf Batching-Efficient RAM from Lookup Arguments.}
 Memory checking methods based on {\em address ordered transcripts}
-~\cite{NDSS:WSRBW15,USENIX:BCTV14,C:BCGTV13,SP:ZGKPP18} which are popularly used in
-efficient RAM abstractions incur a cost linear in the size of the RAM, which is prohibitive when
-aiming for efficient batching. As a key idea in this work, we invoke ``committed index lookup'' on
-the large RAMs, to verifiably extract smaller RAMs, which correspond to indices actually involved in
-the batch update. Then we can use the linear time memory-checking techniques to argue the consistency of these
-smaller RAMs. The idea needs to work through some more issues; such as showing that the larger RAMs are identical
+~\cite{NDSS:WSRBW15,USENIX:BCTV14,C:BCGTV13,SP:ZGKPP18}, which are popularly used in
+efficient RAM abstractions, incur a cost linear in the size of the RAM. This is prohibitive for efficient batching. As a key idea in this work, we invoke committed index lookup on
+the large RAMs, to verifiably extract smaller sub-RAMs, which correspond to indices actually involved in
+the batch update. Then, we use the linear time memory-checking techniques to argue the consistency of these
+smaller sub-RAMs. 
+
+The idea needs to work through some more details, such as showing that the larger RAMs are identical
 on positions not referenced by the batch of updates (considered in Section ~\ref{subsec:proximity-ram}).
 The overall idea is illustrated in Figure ~\ref{fig:blueprint}. We also note that the extracted sub-RAMs can
-have duplicate records, corresponding to multiple updates referencing the same RAM index, however, memory
-checking methods can easily handle such cases. Finally, we would still hit the ``rigidity'' of lookup arguments
-in realizing this plan; once the table has changed, lookups are no longer efficient from it. Fortunately,
-we can use our first contribution on extending the utility of table-specific parameters to defer parameter
+have duplicate records, corresponding to multiple updates referencing the same RAM index; however, memory
+checking methods can be easily adapted to handle such cases. Finally, we would still hit the ``rigidity'' of lookup arguments
+in realizing this plan; once the table has changed, lookups are no longer efficient from it. To circumvent this,
+we use our first contribution on extending the utility of table-specific parameters to defer parameter
 re-computation optimally while still availing efficient lookups. More specifically, if we choose to
 re-compute the full table-specific parameters after $k$ batches (of $m$ updates each),
 the average cost per batch is $O(N\log N/k + mk\log^2(mk) + f(m))$. Here, $f(m)$ as earlier denotes complexity
-of the non-updatable base protocol. Setting $k\approx \sqrt{N/m}$ yields the average cost of $m$ updates as $O(f(m)+\sqrt{mN})$,
+of the non-updatable base protocol. Setting $k\approx \sqrt{N/m}$ yields the average cost of $m$ updates as $\wt{O}(f(m)+\sqrt{mN})$,
 which scales sub-linearly with the size of the RAM.
 While the preceding analysis considers the worst case,
 in specific applications (such as account transactions, where few accounts contribute a large volume of transactions), it may be
@@ -171,14 +172,14 @@ possible to further delay the computation of table-specific parameters.
 Thus we have:
 \begin{theorem}[Informal]\label{thm:inc-ver-ram-informal}
 	Given $m,N\in \mathbb{N}$, there exists an argument for verifiable RAM which proves updates of batch size $m$ on RAM of size $N$
-	with amortized prover complexity of $O(f(m) + \sqrt{mN})$.
+	with amortized prover complexity of $\wt{O}(f(m) + \sqrt{mN})$.
 \end{theorem}
 
 
-\noindent{\bf Polynomial Protocol for RAM}: There are several ways to implement the ordered transcript based
+\noindent{\bf Polynomial Protocol for RAM.} There are several ways to implement the ordered transcript based
 memory consistency check on the smaller $O(m)$-sized RAMs, for example by expressing the same as an arithmetic
-circuit. However, for completeness we also present an argument for RAM using the above techniques as an
-interactive {\em polynomial protocol} ~\cite{Gabizon2019PLONKPO}, which is then compiled into an argument of knowledge using $\kzg$ ~\cite{AC:KatZavGol10}
+circuit. However, for completeness, we also present an argument for RAM as an
+interactive {\em polynomial protocol} ~\cite{Gabizon2019PLONKPO}, which is then compiled into an argument of knowledge using the $\kzg$ ~\cite{AC:KatZavGol10}
 commitment scheme in the algebraic group model (AGM) ~\cite{C:FucKilLos18}. This construction appears in
 Appendix ~\ref{sec:poly-proto-ram-app}.
 %\moumita{Making all references to Sections in Appendix, as Appendix B instead of Section B.}
