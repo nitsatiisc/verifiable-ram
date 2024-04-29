@@ -9,9 +9,11 @@ where:
 	\item Generators $g_1,g_2$ are uniformly chosen from $\Gone$ and $\Gtwo$ respectively and $g_t=e(g_1,g_2)$.
 \end{itemize}
 We write groups $\Gone$ and $\Gtwo$ additively, and use the shorthand notation $\gone{x}$ and $\gtwo{x}$
-to denote group elements $x\cdot g_1$ and $x\cdot g_2$ respectively for $x\in \F$. We implicity assume
+to denote group elements $x\cdot g_1$ and $x\cdot g_2$ respectively for $x\in \F$. We implicitly assume
 that all the setup algorithms for the protocols invoke $\bg$ to generate descriptions of groups and fields
 over which the protocol is instantiated. We use $[n]$ to denote the set of integers $\{1,\ldots,n\}$.
+
+\smallskip
 
 \noindent{\bf Lagrange Polynomials.}
 %\chaya{move to here from sec 6: Lagrange polynomial, vanishing polynomial, roots of unity}
@@ -50,6 +52,8 @@ trusted setup. We use $\srs = (\srs_1,\srs_2)$ to denote the structured referenc
 that the $\srs$ has degree $Q$ if all the elements of $\srs_i$, $i=1,2$ are of the form $[f(x)]_i$ for a
 polynomial $f\in \F_{<Q}[X]$.
 
+\smallskip
+
 \noindent{\bf Algebraic Group Model.} 
 We analyse security of our protocols in the Algebraic Group Model (AGM) introduced
 in ~\cite{C:FucKilLos18}. An adversary $\Adv$ is called \textit{algebraic} if every group element output by $\Adv$ is accompanied by a representation of that group element in terms of all the group elements that $\Adv$ has seen so far (input and output).
@@ -63,12 +67,15 @@ for $i\in \{1,2\}$, whenever $\Adv$ outputs an element $A\in \G_i$, it is accomp
 %\chaya{do we use this in proofs?}Following~\cite{C:FucKilLos18}, we write $[A]$ to denote a group element enhanced with its representation; $[A] = (A,v_1,\ldots,v_k)$.
 %AGM is a useful framework for analyzing security of succinct non-interactive arguments of knowledge (SNARKs) obtained from interactive protocols that are described as {\em polynomial protocols}. 
 
+\smallskip
+
 \noindent{\bf Real and Ideal Pairing Checks}: For an algebraic adversary $\Adv$ interacting in a protocol with a degree $Q$ SRS over a bilinear group, the verifier
 can use the pairing $e:\Gone\times \Gtwo\rightarrow \GT$ to perform ``ideal check'' of the form $(R_1\cdot T_1)\cdot (R_2\cdot T_2)\equiv 0$, where $R_1,R_2$ are
 vectors of polynomials over $\F$ and $T_1, T_2$ are public matrices over $\F$.
 Under the $Q$-DLOG assumption stated below, the aforementioned ideal check
 is equivalent (except with a negligible probability) to a real pairing check $(a\cdot T_1)\cdot (T_2\cdot b)=0$ with $a$ and $b$ denoting vectors in $\F$ encoding polynomials in $R_1$ and $R_2$ in
 groups $\Gone$ and $\Gtwo$ respectively (see ~\cite[Lemma 2.2]{Gabizon2019PLONKPO}).
+
 \begin{definition}[Q-DLOG Assumption ~\cite{C:FucKilLos18}]\label{defn:q-dlog}
 Fix an integer $Q$. The $Q$-DLOG assumption for $(\Gone,\Gtwo)$ states that given $\gone{1}$,$\gone{x}$,$\ldots$, \\
 $\gone{x^Q}$, $\gtwo{1},\gtwo{x},\ldots,\gtwo{x^Q}$ for
