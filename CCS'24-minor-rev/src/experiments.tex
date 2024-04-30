@@ -129,7 +129,21 @@ $5\times-20\times$ advantage over the naive computation.
     \label{tbl:sum-computation-compare}
 \end{table}
 
+\smallskip
 
+\noindent{\bf Continuity.} To maintain {\em continuity} of the system~(this is particularly important for applications such as rollups), we must carefully
+align the online prover performance curve with the cost of offline computation.  As an example, suppose $\vec{T}_0$
+is the initial pre-processed table at time $t=0$. We generate proofs using pre-computed parameters for $\vec{T}_0$
+till the time $t=t_1$, when the table state $\vec{T}_1$ is at hamming distance $2^{17}$ from $\vec{T}_0$. At this point,
+from Figure ~\ref{fig:batch-ram-proving-time}, online proof generation takes around $40s$ for batch of $1000$ updates.
+At $t=t_1$, we also start an offline parameter computation for the table $\vec{T}_1$, while continuing to generate
+online proofs using parameters for $\vec{T}_0$. We can generate the next $2^7$ batches of updates at an average of
+approximately $12000/128\approx 94s$ each, thus finishing with a table state $\vec{T}_2$ at hamming distance at most
+$2^{18}$ from $\vec{T}_0$ at $t_2=t_1+12000$. At this point, we should have the pre-computed parameters for $\vec{T}_1$,
+which is at update distance of $2^{17}$ from $\vec{T}_2$, and thus online proof generation can switch to parameters
+for the table $\vec{T}_1$. This alignment gives us a proving time of $94s$ per batch of $1000$, while ensuring system
+is live at all times. Clearly, a faster offline pre-computation using parallel implementation would allow us to stay
+at the cheaper end of online proving performance.
 
 
 

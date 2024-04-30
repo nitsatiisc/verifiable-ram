@@ -97,8 +97,8 @@ arguments to verifiably extract $m$ indices from a table of size $N$, in time de
 There are two technical challenges here. First, the aforementioned lookup arguments only prove the sub-vector
 relation, without linking the extracted vector to the indices in $\vec{a}$. This is easily solved, as there
 is an efficient realization of a {\em committed index lookup} from a {\em committed sub-vector} argument,
-where commitment scheme is homo-morphic. The details appear in Section ~\ref{subsec:committed-index-lookup},
-with complete protocol presented in Figure ~\ref{fig:committed-index-lookup}. Second challenge is much more
+where commitment scheme is homomorphic. The details appear in Section ~\ref{subsec:committed-index-lookup},
+with the complete protocol presented in Figure ~\ref{fig:committed-index-lookup}. The second challenge is much more
 formidable: the efficiency of sub-vector arguments (and the committed index lookup argument derived from them)
 depends on {\em expensive} table-specific pre-processing. This is acceptable when the table in question is
 static, but is infeasible in our setting requiring updatable tables. This motivates our next technical
@@ -169,9 +169,9 @@ efficiency of the overall scheme highlighted in gray. The table also serves as a
 involved in the overall scheme. We note that the verification complexity of the overall solution is substantially
 less than the aggregate of component protocols; this is due to the fact that several pairing checks required for
 $\kzg$ verification proofs can be batched together. For concrete instantiation using BLS12-381 curve, RAM size
-of 1 million, the online cost of proving an update of 1000 operations on a table as a function of its
+of 1 million, the online cost of proving an update of $1000$ operations on a table as a function of its
 hamming distance from the ``pre-processed'' table is described in Figure ~\ref{fig:batch-ram-proving-time}.
-Other performance metrics for the same setting are summarized below:
+As an illustrative example,the other performance metrics for the same setting are summarized below:
 \begin{table}[htbp]
 \begin{tabularx}{0.45\textwidth}{|X|X|}
 \hline
@@ -182,26 +182,31 @@ Argument Size & $\approx$ 4.4 KB \\
 \hline
 \end{tabularx}
 \end{table}
-
-Clearly, the (offline) parameter re-computation is the most expensive operation. Parallel implementations can
+We refer to Section~\ref{sec:experiments} for a more detailed performance evaluation for different table and batch sizes. As is clear from the illustration above, the (offline) parameter re-computation is the most expensive operation. We reiterate that all of our reported costs throughout the paper are for a single-threaded implementation on a consumer-grade laptop. We believe that parallel implementations can
 substantially speed up parameter re-computation as their cost is dominated by FFTs over group polynomials, which
 are highly parallelizable.
 
 \smallskip
 
-\noindent{\bf Liveliness.} To maintain {\em liveliness} of the system in scenarios such as rollups, we must carefully
-align the online prover performance curve with the cost of offline computation. As an example, suppose $\vec{T}_0$
-is the initial pre-processed table at time $t=0$. We generate proofs using pre-computed parameters for $\vec{T}_0$
-till the time $t=t_1$, when the table state $\vec{T}_1$ is at hamming distance $2^{17}$ from $\vec{T}_0$. At this point,
-from Figure ~\ref{fig:batch-ram-proving-time}, online proof generation takes around $40s$ for batch of $1000$ updates.
-At $t=t_1$, we also start an offline parameter computation for the table $\vec{T}_1$, while continuing to generate
-online proofs using parameters for $\vec{T}_0$. We can generate the next $2^7$ batches of updates at an average of
-approximately $12000/128\approx 94s$ each, thus finishing with a table state $\vec{T}_2$ at hamming distance at most
-$2^{18}$ from $\vec{T}_0$ at $t_2=t_1+12000$. At this point, we should have the pre-computed parameters for $\vec{T}_1$,
-which is at update distance of $2^{17}$ from $\vec{T}_2$, and thus online proof generation can switch to parameters
-for the table $\vec{T}_1$. This alignment gives us a proving time of $94s$ per batch of $1000$, while ensuring system
-is live at all times. Clearly, a faster offline pre-computation using parallel implementation would allow us to stay
-at the cheaper end of online proving performance.
+\noindent{\bf Continuity.} To support applications such as rollups, we also consider it imperative to ensure that online proof generation does not halt during offline parameter re-generation. In other words, offline parameter re-generation should not hinder the operational continuity of the system. In our scheme, we can ensure this by carefully overlapping the offline computation with online proof generation such that the system can \textit{instantly} switch to using the more recently generated parameters before the online proving time becomes prohibitive. We present more concrete discussions around this scheduling at the end of Section~\ref{sec:experiments}. We note that prior works~\cite{USENIX:OWWB20,CCS:CFHKKO22} have not addressed this issue of continuity in detail. To the best of our knowledge, we are the first to highlight the issue and present a discussion on a viable approach.
+
+%aligning the online prover performance curve with the cost of offline computation.  
+%
+%Finally, to maintain {\em liveliness} of the system~(this is particularly important for applications such as rollups), we must carefully align the online prover performance curve with the cost of offline computation. 
+
+
+%As an example, suppose $\vec{T}_0$
+%is the initial pre-processed table at time $t=0$. We generate proofs using pre-computed parameters for $\vec{T}_0$
+%till the time $t=t_1$, when the table state $\vec{T}_1$ is at hamming distance $2^{17}$ from $\vec{T}_0$. At this point,
+%from Figure ~\ref{fig:batch-ram-proving-time}, online proof generation takes around $40s$ for batch of $1000$ updates.
+%At $t=t_1$, we also start an offline parameter computation for the table $\vec{T}_1$, while continuing to generate
+%online proofs using parameters for $\vec{T}_0$. We can generate the next $2^7$ batches of updates at an average of
+%approximately $12000/128\approx 94s$ each, thus finishing with a table state $\vec{T}_2$ at hamming distance at most
+%$2^{18}$ from $\vec{T}_0$ at $t_2=t_1+12000$. At this point, we should have the pre-computed parameters for $\vec{T}_1$,
+%which is at update distance of $2^{17}$ from $\vec{T}_2$, and thus online proof generation can switch to parameters
+%for the table $\vec{T}_1$. This alignment gives us a proving time of $94s$ per batch of $1000$, while ensuring system
+%is live at all times. Clearly, a faster offline pre-computation using parallel implementation would allow us to stay
+%at the cheaper end of online proving performance.
 
 
 
