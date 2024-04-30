@@ -17,7 +17,9 @@ RAM state across several executions.
 
 Another feature, which has only been considered in recent works
 \cite{USENIX:OWWB20,CCS:CFHKKO22} is {\em batching}, where a verifiable update of RAM state is required
-for a batch of $m$ updates, with $m$ being much smaller than the RAM size. While constructions using Merkle tree-based accumulators~(realized from collision-resistant hash functions) suffer from high concrete costs and poor
+for a batch of $m$ updates, with $m$ being much smaller than the RAM size. Both the Merkle tree-based approaches
+and the transcript-based approaches are inefficient with respect to batching.
+While constructions using Merkle tree-based accumulators~(realized from collision-resistant hash functions) suffer from high concrete costs and poor
 ability to batch proofs, those based on checking consistency using transcripts incur a linear overhead in the
 size of the RAM.
 
@@ -77,9 +79,9 @@ that would need to be expressed as a circuit is the verification of digital sign
 		\multicolumn{1}{|l|}{Lasso \cite{lasso}} & \multicolumn{1}{l|}{$O(1) \,\G, ~O(\log m) \,\F$} & \multicolumn{1}{l|}{$o(cm+cN^{1/c}) \,\Gone$, $O(cm) \F$} & $O(\log m) \,\F$, $O(1) \,\G$ \\ \hline
 		\rowcolor{gray}
 		\multicolumn{4}{|c|}{\textcolor{white}{Lookup Arguments for Updatable Tables/Batching-Efficient RAM}} \\ \hline
-		\multicolumn{1}{|l|}{OWWB20~\cite{USENIX:OWWB20}} & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & \\ \hline
-		\multicolumn{1}{|l|}{B-INS-ARISA~\cite{CCS:CFHKKO22}} & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} &  \\ \hline
-		\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}Our work\\ (using CQ)\end{tabular}} & \multicolumn{1}{l|}{$8 \Gone, ~3\F$} & \multicolumn{1}{l|}{$8m \,\G$, $O(m \log m) \,\F$} & $5P$ \\ \hline
+		\multicolumn{1}{|l|}{OWWB20~\cite{USENIX:OWWB20}} & \multicolumn{1}{l|}{$O(1)$} & \multicolumn{1}{l|}{$\wt{O}(m+N)$} & $O(1)$\\ \hline
+		\multicolumn{1}{|l|}{B-INS-ARISA~\cite{CCS:CFHKKO22}} & \multicolumn{1}{l|}{$O(1)$} & \multicolumn{1}{l|}{$\wt{O}(m+N)$} & $O(1)$ \\ \hline
+		\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}Our work\\ (c.f. Table ~\ref{tbl:efficiency-components})\end{tabular}} & \multicolumn{1}{l|}{$65\Gone,\, 1\Gtwo,\, 43\F$} & \multicolumn{1}{l|}{$\wt{O}(\sqrt{mN})\, \F,\Gone$} & $8P$ \\ \hline
 	\end{tabular}
 	\caption{Comparison with state-of-the-art lookup arguments. For comparison against Lasso (reported considering their polynomial commitment scheme Sona and structured tables), $c$ denotes an arbitrary positive integer. Note that our lookup argument inherits the complexity of the underlying lookup argument used in a black-box manner and can be instantiated with any of the non-updatable lookup arguments.}
 	\label{tab:rel-work}

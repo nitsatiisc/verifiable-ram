@@ -171,18 +171,22 @@ less than the aggregate of component protocols; this is due to the fact that sev
 $\kzg$ verification proofs can be batched together. For concrete instantiation using BLS12-381 curve, RAM size
 of 1 million, the online cost of proving an update of $1000$ operations on a table as a function of its
 hamming distance from the ``pre-processed'' table is described in Figure ~\ref{fig:batch-ram-proving-time}.
-As an illustrative example,the other performance metrics for the same setting are summarized below:
-\begin{table}[htbp]
-\begin{tabularx}{0.45\textwidth}{|X|X|}
-\hline
-{\bf Metric} & {\bf Performance} \\ \hline
-Parameter Re-computation & 12000 secs \\ \hline
-Verification Time & $\approx$ 10 ms \\ \hline
-Argument Size & $\approx$ 4.4 KB \\
-\hline
-\end{tabularx}
-\end{table}
-We refer to Section~\ref{sec:experiments} for a more detailed performance evaluation for different table and batch sizes. As is clear from the illustration above, the (offline) parameter re-computation is the most expensive operation. We reiterate that all of our reported costs throughout the paper are for a single-threaded implementation on a consumer-grade laptop. We believe that parallel implementations can
+Other performance metrics are summarised in tables ~\ref{tbl:performance-comparison} and ~\ref{tbl:offline-proving-time}.
+%As an illustrative example,the other performance metrics for the same setting are summarized below:
+%\begin{table}[htbp]
+%\begin{tabularx}{0.45\textwidth}{|X|X|}
+%\hline
+%{\bf Metric} & {\bf Performance} \\ \hline
+%Parameter Re-computation & 12000 secs \\ \hline
+%Verification Time & $\approx$ 10 ms \\ \hline
+%Argument Size & $\approx$ 4.4 KB \\
+%\hline
+%\end{tabularx}
+%\end{table}
+We refer to Section~\ref{sec:experiments} for a more detailed performance evaluation and comparison with prior work.
+As is clear from the tables above, the (offline) parameter re-computation is the most expensive operation.
+We reiterate that all of our reported costs throughout the paper are for a single-threaded implementation on a consumer-grade laptop.
+We believe that parallel implementations can
 substantially speed up parameter re-computation as their cost is dominated by FFTs over group polynomials, which
 are highly parallelizable.
 

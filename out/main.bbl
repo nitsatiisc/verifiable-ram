@@ -53,6 +53,17 @@ Sean Bowe, Ariel Gabizon, and Ian Miers.
 \newblock Cryptology ePrint Archive, Report 2017/1050, 2017.
 \newblock \url{https://eprint.iacr.org/2017/1050}.
 
+\bibitem{EPRINT:BowGriHop19}
+Sean Bowe, Jack Grigg, and Daira Hopwood.
+\newblock Halo: Recursive proof composition without a trusted setup.
+\newblock Cryptology ePrint Archive, Report 2019/1021, 2019.
+\newblock \url{https://eprint.iacr.org/2019/1021}.
+
+\bibitem{Halo2}
+Sean Bowe, Jack Grigg, and Daira Hopwood.
+\newblock Halo2, 2020.
+\newblock \url{https://github.com/zcash/halo2}.
+
 \bibitem{compwithstate}
 Benjamin Braun, Ariel~J. Feldman, Zuocheng Ren, Srinath Setty, Andrew~J.
   Blumberg, and Michael Walfish.
@@ -79,6 +90,12 @@ Jan Camenisch and Anna Lysyanskaya.
   anonymous credentials.
 \newblock In Moti Yung, editor, {\em CRYPTO~2002}, volume 2442 of {\em {LNCS}},
   pages 61--76. Springer, Heidelberg, August 2002.
+
+\bibitem{PKC:CFFLL24}
+Matteo Campanelli, Antonio Faonio, Dario Fiore, Tianyu Li, and Helger Lipmaa.
+\newblock Lookup arguments: Improvements, extensions and applications to
+  zero-knowledge decision trees.
+\newblock In {\em {PKC} 2024}, volume 14602, pages 337--369, 2024.
 
 \bibitem{CCS:CFHKKO22}
 Matteo Campanelli, Dario Fiore, Semin Han, Jihye Kim, Dimitris Kolonelos, and
@@ -120,6 +137,19 @@ Georg Fuchsbauer, Eike Kiltz, and Julian Loss.
 \newblock In Hovav Shacham and Alexandra Boldyreva, editors, {\em CRYPTO~2018,
   Part~II}, volume 10992 of {\em {LNCS}}, pages 33--62. Springer, Heidelberg,
   August 2018.
+
+\bibitem{EPRINT:GabKho22}
+Ariel Gabizon and Dmitry Khovratovich.
+\newblock flookup: Fractional decomposition-based lookups in quasi-linear time
+  independent of table size.
+\newblock Cryptology ePrint Archive, Report 2022/1447, 2022.
+\newblock \url{https://eprint.iacr.org/2022/1447}.
+
+\bibitem{EPRINT:GabWil20}
+Ariel Gabizon and Zachary~J. Williamson.
+\newblock plookup: {A} simplified polynomial protocol for lookup tables.
+\newblock Cryptology ePrint Archive, Report 2020/315, 2020.
+\newblock \url{https://eprint.iacr.org/2020/315}.
 
 \bibitem{EPRINT:GabWilCio19}
 Ariel Gabizon, Zachary~J. Williamson, and Oana Ciobotaru.
@@ -189,6 +219,10 @@ Michael Walfish and Andrew~J. Blumberg.
 \newblock Verifying computations without reexecuting them.
 \newblock {\em Commun. ACM}, page 74–84, 2015.
 
+\bibitem{ark-groth-16}
+www.arkworks.com.
+\newblock ark-groth16.
+
 \bibitem{CCS:ZBKMNS22}
 Arantxa Zapico, Vitalik Buterin, Dmitry Khovratovich, Mary Maller, Anca
   Nitulescu, and Mark Simkin.
@@ -202,6 +236,11 @@ Arantxa Zapico, Ariel Gabizon, Dmitry Khovratovich, Mary Maller, and Carla
 \newblock Baloo: Nearly optimal lookup arguments.
 \newblock Cryptology ePrint Archive, Report 2022/1565, 2022.
 \newblock \url{https://eprint.iacr.org/2022/1565}.
+
+\bibitem{PKC:ZSG24}
+Yuncong Zhang, Shifeng Sun, and Dawu Gu.
+\newblock Efficient kzg-based univariate sum-check and lookup argument.
+\newblock In {\em {PKC} 2024}, volume 14602, pages 400--425, 2024.
 
 \bibitem{SP:ZGKPP18}
 Yupeng Zhang, Daniel Genkin, Jonathan Katz, Dimitrios Papadopoulos, and

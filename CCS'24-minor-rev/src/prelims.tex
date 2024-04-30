@@ -108,10 +108,12 @@ in the algebraic group model, while additionally featuring a universal and updat
 		\item $\KZGopen$ on input $(\srs,p(X),\alpha)$, where $p(X) \in \F_{\leq d}[X]$ and $\alpha\in \F$, outputs $(v, \pi)$ such that $v=p(\alpha)$ and $\pi=\eltone{q(\tau)}$, for
 		\[ q(X)=\frac{p(X)-p(\alpha)}{X-\alpha} \]
 		\item $\KZGverify$ on input $(\srs,C,v, \alpha,\pi)$, outputs $1$ if the following equation holds, and $0$ otherwise.
-		\[ e(C-v\eltone{1}, \elttwo{1}) = e(\pi, \elttwo{\tau-\alpha}) \]
+		\[ e(C-v\eltone{1} + \alpha\pi, \elttwo{1}) = e(\pi, \elttwo{\tau}) \]
+
 	\end{itemize}
 \end{definition}
-
+Note that both sides of the verification equation involve a fixed generator, and hence several proof verifications
+can be batched together to reduce the number of pairing computations.
 We also assume (w.l.o.g) analogues of $\KZGcommit$, $\KZGopen$ and $\KZGverify$ defined over the group $\Gtwo$.
 We shall use the (non-standard) notation $[p(X)]_i$ to denote $[p(\tau)]_i$ for $i\in \{1,2\}$.
 This allows us a convenient shorthand for referring to ``commitment of the polynomial $p(X)$'' in group $\G_i$.
