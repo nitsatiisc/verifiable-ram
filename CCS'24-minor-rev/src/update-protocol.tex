@@ -116,7 +116,7 @@ between vectors $\vecTbase$ and $\vecT$.
     &\quad = N^{-1}\sum_{i\in\setind}c_i\sum_{j\in K\setminus \{i\}}\frac{\xi^j\Delta t_j}{\xi^i-\xi^j}
     \left(\frac{Z_\nroots(X)}{X-\xi^i} - \frac{Z_\nroots(X)}{X-\xi^j}\right) \nonumber \\
     &\quad = N^{-1}\sum_{i\in\setind}\left(c_i\cdot \sum_{j\in K\setminus \{i\}} \frac{\xi^j\Delta t_j}{\xi^i-\xi^j}\right)\frac{Z_\nroots(X)}{X-\xi^i} \nonumber \\
-    &\qquad + \sum_{j\in K}\left(\xi^j\Delta t_j\cdot \sum_{i\in \setind\setminus \{j\}}\frac{c_i}{\xi^j-\xi^i}\right)\frac{Z_{\nroots}(X)}{X-\xi^j}
+    &\qquad + N^{-1} \sum_{j\in K}\left(\xi^j\Delta t_j\cdot \sum_{i\in \setind\setminus \{j\}}\frac{c_i}{\xi^j-\xi^i}\right)\frac{Z_{\nroots}(X)}{X-\xi^j}
     \end{align}
     In the first step, we substituted $\mu_j(X)$, while in the final step we re-arranged the summation to accumulate the scalar factor for
     each distinct polynomial of the form $\vpolyN(X)/(X-\xi^i)$. Define scalars $a_i$, $i\in I$ and $b_j$, $j\in K$ as below:
