@@ -20,7 +20,7 @@ The key idea we employ is to express the current table $\vecT\in \F^N$ as $\vecT
 the encoded quotients are available (via the $O(N\log N)$ computation), and $\vecTcache$ captures the changes to the table since. We will periodically update (say
 after $s$ batch updates) $\vecTbase$ to current table state, and re-compute all the quotients (we call it the {\em offline} phase).
 We will revisit the question on choosing $s$ optimally later. Let $I\subseteq [N]$ denote the set of indices in the current batch of $m$ lookups. The {\em online}
-phase of our proof generation involves computing the sum in Equation \eqref{eq:encoded-quotient} for the table $\vecT$.
+phase of our proof generation involves computing the sum in Equation \eqref{eq:enc-quotient} for the table $\vecT$.
 %that we do not compute $W_1^i$ after each change of the table. Instead, this expensive computation will be done periodically for all $i \in [N]$ after say $s \in \mathbb{Z}$ batches.
 %Let current table $\vecT$ can be represented as $\vecTbase + \vecTcache$ where the vector
 %$\vecTbase$ denotes the base table (with respect to which $W_1^i$ was last computed for all $i \in [N]$) and the vector $\vecTcache$ corresponds to the changes
@@ -59,10 +59,8 @@ The following Theorem determines the efficiency of the online phase of our prove
 Let $N,\xi$ be as defined previously. Suppose we are given
 $\kzg$ proofs $\{W_i\}_{i=1}^N$ with $W_i=\gany{\Tbasepoly{X} - \Tbasepoly{\xi^i}/(X-\xi^i)}$, where
 $\Tbasepoly{X}=\enc{T_{\mathsf{b}}}{\setN}$ encodes a vector $\vecTbase\in \F^N$.
-Let $I \subset [N]$, $\setN_I=\{\xi^i:i\in I\}$, $Z_I(X)$ denote the vanishing polynomial of $\setN_I$ and
-$T_I(X)$ be the restriction of polynomial $T(X)$ on $\setN_I$.
-Then, there exists an algorithm to compute $\kzg$ multi-opening proof
-$\gany{Q(X)}=\gany{(T(X) - T_I(X)/Z_I(X)}$ for encoding $T(X)=\enc{T}{\setN}$ of vector $\vecT\in \F^N$ using $O((\delta + |I|) \log^2 (\delta + |I|))$ $\F$-operations
+Then, for any $I\subseteq [N]$, there exists an algorithm to compute $\gany{Q}$ as given in Equation ~\eqref{eq:enc-quotient}
+for polynomial $T(X)=\enc{T}{\setN}$ encoding the vector $\vecT\in \F^N$ using $O((\delta + |I|) \log^2 (\delta + |I|))$ $\F$-operations
 and $O(\delta + |I|)$ $\mathbb{G}$-operations. Here, $\delta$ denotes the hamming distance
 between vectors $\vecTbase$ and $\vecT$.
 \end{theorem}

@@ -104,15 +104,15 @@ determines how the offline parameter generation should be scheduled to achieve o
 \noindent{\bf Offline Pre-Processing.} In Table ~\ref{tbl:offline-proving-time} we provide the time to compute
 table-specific parameters as a function of table size. This is the most computationally intensive step in our
 scheme involving FFTs over group polynomials as the main bottle-neck. We believe offline pre-processing can be
-made an order of magnitude more efficient by leveraging parallel implementation for the highly parellelizable FFTs.
+made an order of magnitude more efficient by leveraging parallel implementation for the FFTs.
 
 \begin{table}[htbp]
-    \begin{tabularx}{0.49\textwidth}{X|X|X|X}
-        \toprule
-        Table-Size ($N$) & $2^{10}$ & $2^{16}$ & $2^{20}$ \\ \midrule
-        Time (s) & 30 & 400 & 12000 \\
-        \bottomrule
-    \end{tabularx}
+    \begin{tabular}{|l|c|c|c|c|c|c|}
+        \hline
+        %\rowcolor{gray}
+        \cellcolor{gray} Table-Size ($N$) & $2^{10}$ & $2^{12}$ & $2^{14}$ & $2^{16}$ & $2^{18}$ & $2^{20}$ \\ \hline
+        \cellcolor{gray} Time (s) & $7$ & $29$ & $135$ & $620$ & $2766$ & $12000$ \\ \hline
+    \end{tabular}
     \caption{Pre-processing time for tables of different sizes.}
     \label{tbl:offline-proving-time}
 \end{table}
