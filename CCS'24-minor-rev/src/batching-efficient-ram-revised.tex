@@ -4,7 +4,10 @@ We now detail the steps required to realize batching efficient RAM outlined in t
 
 \subsection{Committed Index Lookup}\label{subsec:committed-index-lookup}
 In this section, we ``lift'' any committed sub-vector argument to a committed index lookup argument, where
-the latter makes a black-box use of the former. We rely on the following observation:
+the latter makes a black-box use of the former. We use the trick of random linear combination of vectors to infer
+indexed lookup relation among them from sub-vector relation over the aggregated vectors. Similar use of random
+ linear combinations has been made in the context of proving permutations in literature (e.g. ~\cite{SCN:GOTV22}).
+
 \begin{lemma}\label{lem:generic-transformation}
 Let $\vec{t}\in \F^n$ and let $\vec{a},\vec{v}\in \F^m$ for some positive integers $m,n$. Let $\vec{I}_n$ denote the vector $(1,\ldots,n)$.
 Then for $\gamma\gets \F$, $(\vec{v}+\gamma \vec{a})\preceq (\vec{t} + \gamma \vec{I}_n)$ implies
@@ -32,12 +35,17 @@ in Figure ~\ref{fig:committed-index-lookup} is an argument of knowledge for the 
 \begin{figure}[htbp]
 \begin{mdframed}
 {
+%<<<<<<< HEAD
     {\bf Common Input}: $\srs,c_t, c_a, c_v$, $c_I=\gone{I(X)}$ where $I(X)=\enc{(1,\ldots,N)}{\setN}$ encodes a vector $(1,\ldots,N)\in \F^N$. \\
+%=======
+%    {\bf Common Input}: $\srs,c_t, c_a, c_v$, $c_I=\gone{I(X)}$ where $I(X)=\enc{\vec{I}_N}{\setN}$
+%    with $\vec{I}_N=(1,\ldots,N)$. \\
+%>>>>>>> f162aeee62ad0161c590d91a0cd6435404bbcc83
     {\bf Prover's Input}: Vectors $\vec{t}\in \F^N$, $\vec{a},\vec{v}\in\F^m$.
     \begin{enumerate}[leftmargin=1em, label=\arabic*.]
     \item $\verifier$ sends $\gamma\gets \F$.
     \item $\prover$ and $\verifier$ compute: $\tilde{c}_t=\gamma c_I+c_t$, $\tilde{c}_v=\gamma c_a + c_v$.
-    \item $\prover$ computes: $\tilde{\vec{t}}=\gamma\vec{I}_n + \vec{t}$, $\tilde{\vec{v}}=\gamma\vec{a} + \vec{v}$.
+    \item $\prover$ computes: $\tilde{\vec{t}}=\gamma\vec{I}_N + \vec{t}$, $\tilde{\vec{v}}=\gamma\vec{a} + \vec{v}$.
     \item $\prover$ and $\verifier$ run sub-vector argument $(\subvecprover,\subvecverifier)$ with
     $(\srs,\tilde{c}_t,\tilde{c}_v)$ as the common input and $(\tilde{\vec{t}},\tilde{\vec{v}})$ as $\subvecprover$'s input.
     \item $\verifier$ outputs
@@ -238,13 +246,13 @@ $(c_T + \chi c_T', c_a, c_v + \chi c_v')\in \RLOOK$. Then, we show that
 RAMs $\vecT$ and $\vecT'$ are $\vec{a}$-identical using the protocol in Figure ~\ref{fig:a-identical}, described
 in Section ~\ref{subsec:proximity-ram}.
 All that remains is to prove is that the operation sequence $\vec{o}$ is consistent with small RAMs $S$ and $S'$.
-We check this using the argument in Section ~\ref{sec:poly-proto-ram}, which is obtained by compiling the
+We check this using the argument in Section ~\ref{sec:poly-proto-ram-app}, which is obtained by compiling the
 polynomial protocol for RAM in Section ~\ref{sec:poly-proto-ram} into an argument of knowledge in the AGM.
 Specifically, the prover and the verifier set
 $c_S = (c_a, c_v)$, $c_S'=(c_a, c_v')$ and $c_o = (c_\op, c_a, c_w)$, and execute the argument of knowledge for
 showing $(c_S, c_o, c_S')\in \CLRAM$ (see Definition ~\ref{defn:committed-ram}). We provide the complete protocol
 listing in Figure ~\ref{fig:complete-listing}. The protocol in Figure ~\ref{fig:complete-listing} assumes pre-computed parameters
-for the tables $T$ and $T'$. The maintenance of these pre-computed parameters in the presence of updates to the table
+for the tables $\vecT$ and $\vecT'$. The maintenance of these pre-computed parameters in the presence of updates to the table
 is detailed in Section ~\ref{sec:update-protocol}.
 
 \begin{theorem}\label{thm:committed-ram}
@@ -301,7 +309,7 @@ the AGM, under the $Q$-DLOG assumption for the bilinear group $(\F,\Gone,\Gtwo,\
         \item $\verifier$ accepts if all sub-protocols accept.
         \end{enumerate}
     \end{mdframed}
-    \caption{Batching-Efficient RAM Protocol}
+    \caption{Our batching-efficient RAM protocol}
     \label{fig:complete-listing}
 \end{figure}
 

@@ -9,46 +9,45 @@ Database file #2: cryptobib/crypto.bib
 Database file #3: main.bib
 Warning--to sort, need author or key in caulk-implementation
 Warning--empty booktitle in compwithstate
-Warning--empty year in benes
 You've used 39 entries,
             2118 wiz_defined-function locations,
-            14944 strings with 178976 characters,
-and the built_in function-call counts, 16214 in all, are:
-= -- 1574
-> -- 872
-< -- 32
-+ -- 329
-- -- 288
-* -- 1110
-:= -- 2530
+            14946 strings with 179045 characters,
+and the built_in function-call counts, 16522 in all, are:
+= -- 1606
+> -- 888
+< -- 33
++ -- 335
+- -- 294
+* -- 1133
+:= -- 2565
 add.period$ -- 144
 call.type$ -- 39
-change.case$ -- 246
+change.case$ -- 249
 chr.to.int$ -- 0
-cite$ -- 42
-duplicate$ -- 609
-empty$ -- 1234
-format.name$ -- 288
-if$ -- 3549
+cite$ -- 41
+duplicate$ -- 622
+empty$ -- 1258
+format.name$ -- 294
+if$ -- 3625
 int.to.chr$ -- 0
 int.to.str$ -- 39
 missing$ -- 23
 newline$ -- 208
 num.names$ -- 106
-pop$ -- 344
+pop$ -- 348
 preamble$ -- 1
-purify$ -- 207
+purify$ -- 210
 quote$ -- 0
-skip$ -- 515
+skip$ -- 529
 stack$ -- 0
-substring$ -- 791
-swap$ -- 256
-text.length$ -- 32
+substring$ -- 823
+swap$ -- 266
+text.length$ -- 33
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 156
-warning$ -- 3
-while$ -- 147
+warning$ -- 2
+while$ -- 150
 width$ -- 41
-write$ -- 459
-(There were 3 warnings)
+write$ -- 461
+(There were 2 warnings)

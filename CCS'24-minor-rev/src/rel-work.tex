@@ -87,7 +87,22 @@ that would need to be expressed as a circuit is the verification of digital sign
 	\label{tab:rel-work}
 \end{table*}
 
-\noindent{\bf Lookup Arguments.} There are several recently proposed constructions of lookup arguments which enable proving that a vector of size $m$ is a sub-vector of a larger~(predetermined) vector of size $N$~(see Table~\ref{tab:rel-work} for a summary of these schemes and the associated efficiency parameters). Of these, the very initial schemes~\cite{EPRINT:BowGriHop19,EPRINT:GabWil20,Halo2} incur proving costs linear in $N$. Starting with Caulk~\cite{CCS:ZBKMNS22}, many lookup arguments were proposed with proving costs that are (largely) independent of $N$. Broadly, these schemes can be divided into categories based on how they achieve proving costs independent of $N$. The lookup arguments in the first category~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:GabKho22,EPRINT:EagFioGab22,EPRINT:ZGKMR22,PKC:CFFLL24,PKC:ZSG24} use polynomial protocols in conjunction with the $\kzg$ polynomial commitment scheme, where the lookup efficiency relies crucially on \textit{pre-computed} $\kzg$ opening proofs for the polynomial encoding the predetermined $N$-sized vector. We point out that na\"ively adapting these lookup arguments for updatable tables/RAM is challenging since even small updates to the table require re-computing all of the opening proofs, which is prohibitively expensive~(requires $\wt{O}(N)$ computation). To overcome the ``rigidity'' inherent to these schemes, we propose a new method of constructing lookup arguments which allows re-using the pre-computed opening proofs across several batch updates, thus avoiding the need for re-computing after each batch~(see Sections~\ref{sec:tech-overview} and~\ref{sec:update-protocol} for more details). 
+\noindent{\bf Lookup Arguments.} There are several recently proposed constructions of lookup arguments which enable proving
+that a vector of size $m$ is a sub-vector of a larger~(predetermined) vector of size $N$~(see Table~\ref{tab:rel-work}
+for a summary of these schemes and the associated efficiency parameters).
+Of these, the very initial schemes~\cite{EPRINT:BowGriHop19,EPRINT:GabWil20,Halo2} incur proving costs
+linear in $N$. Starting with Caulk~\cite{CCS:ZBKMNS22}, many lookup arguments were proposed with
+proving costs that are (largely) independent of $N$. Broadly, these schemes can be divided into categories
+based on how they achieve proving costs independent of $N$. The lookup arguments in the first
+category~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:GabKho22,EPRINT:EagFioGab22,EPRINT:ZGKMR22,PKC:CFFLL24,PKC:ZSG24} use polynomial protocols
+in conjunction with the $\kzg$ polynomial commitment scheme, where the lookup efficiency relies crucially on \textit{pre-computed}
+$\kzg$ opening proofs for the polynomial encoding the predetermined $N$-sized vector.
+We point out that na\"ively adapting these lookup arguments for updatable tables/RAM is challenging since
+even small updates to the table require re-computing all of the opening proofs,
+which is prohibitively expensive~(requires $\wt{O}(N)$ computation).
+To overcome the ``rigidity'', we propose a new method of constructing lookup arguments which allows
+re-using the pre-computed opening proofs across several batch updates, thus avoiding the need for
+re-computing after each batch~(see Sections~\ref{sec:tech-overview} and~\ref{sec:update-protocol} for more details).
 
 
 %Caulk~\cite{CCS:ZBKMNS22} provides with lookup arguments where a vector of size $m$ is proved to be a subvector of a large vector of size $N$, while maintaining privacy regarding the positions of the subvector (called \emph{position-hiding linkability}) where the prover complexity is $O(m^2+m\log N)$ with $O(N\log N)$ preprocessing and $O(N)$ storage. Caulk+~\cite{EPRINT:PosKat22} improves over Caulk to $O(m^2)$ prover complexity by removing the dependency on the size of the large vector $N$, and CQ~\cite{EPRINT:EagFioGab22}, using the ``logarithmic derivative based lookup" of \cite{Eag22,Hab22}, further improves it to $O(m\log m)$, while retaining the same $O(N\log N)$ preprocessing. Additional lookup arguments, namely cq+, cq++, zkcq+~\cite{pkc-lookup-mat} and locq~\cite{PKC:ZSG24} provides further improvements over CQ.
@@ -95,11 +110,22 @@ that would need to be expressed as a circuit is the verification of digital sign
 
 \smallskip
 
-\noindent{\bf Lasso.} The second category of lookup arguments is exemplified by the recently proposed Lasso scheme~\cite{lasso,jolt}, which enables efficient lookups for tables with a decomposable structure. Informally, a table $\vecT:\{0,1\}^n\to \{0,1\}^k$ is said to have a decomposable structure if there exists a decomposition of the table $T$ into $c$ sub-tables $\vecT_1,\ldots,\vecT_c:\{0,1\}^{n/c} \to\{0,1\}^\ell$ and a very efficiently computable function $f$ such that for $x = x_1\|\ldots\|x_c$ where $x_i \in \{0,1\}^{n/c}$, we have
+\noindent{\bf Lasso.} The second category of lookup arguments is exemplified by the recently proposed Lasso scheme~\cite{lasso,jolt},
+which enables efficient lookups for tables with a decomposable structure.
+Informally, a table $\vecT:\{0,1\}^n\to \{0,1\}^k$ is said to have a decomposable structure if there exists
+a decomposition of the table $\vec{T}$ into $c$ sub-tables $\vecT_1,\ldots,\vecT_c:\{0,1\}^{n/c} \to\{0,1\}^\ell$ and a
+succinctly computable function $f$ such that for $x = x_1\|\ldots\|x_c$ where $x_i \in \{0,1\}^{n/c}$, we have
 \[\vecT[x] = f(\vecT_1(x_1),\ldots,\vecT_c(x_c))\]
-A simple example of such a function is a bit-wise AND~(we refer to~\cite{lasso,jolt} for a more detailed exposition). Lasso crucially leverages this decomposability of the table to reduce a lookup into a table of size $N=2^n$ into $c$ lookups, each into a table of size $N^{1/c}$. While this strategy works elegantly for tables with special structure, it is not compatible with arbitrary tables/updates, which is the focus of our work~(in particular, in applications such as rollups, we need the ability to handle updates to arbitrary tables).
+A simple example of such a function is a bit-wise AND~(we refer to~\cite{lasso,jolt} for a more detailed exposition).
+Lasso crucially leverages this decomposability of the table to reduce a lookup into a table of size $N=2^n$ into $c$ lookups,
+each into a table of size $N^{1/c}$.
+While this strategy works elegantly for tables with special structure, it is not compatible with arbitrary tables/updates,
+which is the focus of our work~(in particular, in applications such as rollups, we need the ability to handle updates to arbitrary tables).
 
-To summarize, existing lookup arguments achieve efficiency either by leveraging table-specific pre-computations or specially structured tables, both of which do not na\"ively extend to arbitrary dynamic tables. We focus on handling batch updates for arbitrary tables, and our techniques can be viewed as enabling the utility of table-specific parameters even \textit{across batch updates}.    
+To summarize, existing lookup arguments achieve efficiency either by leveraging table-specific pre-processing
+or exploiting special structure, both of which do not na\"ively extend to arbitrary dynamic tables.
+We focus on handling batch updates for arbitrary tables, and our techniques can be viewed as enabling the
+utility of table-specific pre-processing even \textit{across batch updates}.
 
 %However, 
 %
