@@ -62,28 +62,28 @@ that would need to be expressed as a circuit is the verification of digital sign
 \smallskip
 
 \begin{table*}[tb!]
-	\begin{tabular}{|llll|}
+	\begin{tabular}{|lllll|}
 		\hline
-		\multicolumn{1}{|l|}{\textbf{Scheme}} & \multicolumn{1}{l|}{\textbf{Proof Size}} & \multicolumn{1}{l|}{\textbf{Prover Work}} & \textbf{Verifier Work} \\ \hline
+		\multicolumn{1}{|l|}{\textbf{Scheme}} & \multicolumn{1}{l|}{\textbf{Setup}} & \multicolumn{1}{l|}{\textbf{Proof Size}} & \multicolumn{1}{l|}{\textbf{Prover Work}} & \textbf{Verifier Work} \\ \hline
 		\rowcolor{gray}
-		\multicolumn{4}{|c|}{\textcolor{white}{Lookup Arguments for Static Tables}} \\ \hline
-		\multicolumn{1}{|l|}{Plookup \cite{EPRINT:GabWil20}} & \multicolumn{1}{l|}{$5 \Gone, ~9\F$} & \multicolumn{1}{l|}{$O(N) \,\Gone$, $O(N\log N) \,\F$} & $2P$ \\ \hline
-		\multicolumn{1}{|l|}{Halo2 \cite{EPRINT:BowGriHop19,Halo2}} & \multicolumn{1}{l|}{$6 \Gone, ~5\F$} & \multicolumn{1}{l|}{$O(N) \,\Gone$, $O(N\log N) \,\F$} & $2P$ \\ \hline
-		\multicolumn{1}{|l|}{Caulk \cite{CCS:ZBKMNS22}} & \multicolumn{1}{l|}{$14 \Gone, ~1 \Gtwo, ~4\F$} & \multicolumn{1}{l|}{$15m \,\Gone$, $O(m^2+m\log N) \,\F$} & $4P$ \\ \hline
-		\multicolumn{1}{|l|}{Caulk+ \cite{EPRINT:PosKat22}} & \multicolumn{1}{l|}{$7 \Gone, ~1 \Gtwo, ~2\F$} & \multicolumn{1}{l|}{$8m \,\Gone$, $O(m^2) \,\F$} & $3P$ \\ \hline
-		\multicolumn{1}{|l|}{Flookup \cite{EPRINT:GabKho22}} & \multicolumn{1}{l|}{$7 \Gone, ~1 \Gtwo, ~2\F$} & \multicolumn{1}{l|}{$O(m) \,\G$, $O(m \log^2 m) \,\F$} & $3P$ \\ \hline
-		\multicolumn{1}{|l|}{Baloo \cite{EPRINT:ZGKMR22}} & \multicolumn{1}{l|}{$12 \Gone, ~1 \Gtwo, ~4\F$} & \multicolumn{1}{l|}{$14m \,\G$, $O(m \log^2 m) \,\F$} & $5P$ \\ \hline
-		\multicolumn{1}{|l|}{CQ \cite{EPRINT:EagFioGab22}} & \multicolumn{1}{l|}{$8 \Gone, ~3\F$} & \multicolumn{1}{l|}{$8m \,\Gone$, $O(m \log m) \,\F$} & $5P$ \\ \hline
-		\multicolumn{1}{|l|}{CQ+ \cite{PKC:CFFLL24}} & \multicolumn{1}{l|}{$7 \Gone, ~1\F$} & \multicolumn{1}{l|}{$8m \,\Gone$, $O(m \log m) \,\F$} & $5P$ \\ \hline
-		\multicolumn{1}{|l|}{Locq \cite{PKC:ZSG24}} & \multicolumn{1}{l|}{$4 \Gone, ~1 \Gtwo$} & \multicolumn{1}{l|}{$6m \,\Gone$, $m \,\Gtwo$, $O(m \log m) \,\F$} & $4P$ \\ \hline
-		\multicolumn{1}{|l|}{Lasso \cite{lasso}} & \multicolumn{1}{l|}{$O(1) \,\G, ~O(\log m) \,\F$} & \multicolumn{1}{l|}{$o(cm+cN^{1/c}) \,\Gone$, $O(cm) \F$} & $O(\log m) \,\F$, $O(1) \,\G$ \\ \hline
+		\multicolumn{5}{|c|}{\textcolor{white}{Lookup Arguments for Static Tables}} \\ \hline
+		\multicolumn{1}{|l|}{Plookup \cite{EPRINT:GabWil20} \moumita{Hab22,23}} & \multicolumn{1}{l|}{Updatable}  & \multicolumn{1}{l|}{$5 \Gone, ~9\F$} & \multicolumn{1}{l|}{$O(N) \,\Gone$, $O(N\log N) \,\F$} & $2P$ \\ \hline
+		\multicolumn{1}{|l|}{Halo2 \cite{EPRINT:BowGriHop19,Halo2}} & \multicolumn{1}{l|}{Updatable}  & \multicolumn{1}{l|}{$6 \Gone, ~5\F$} & \multicolumn{1}{l|}{$O(N) \,\Gone$, $O(N\log N) \,\F$} & $2P$ \\ \hline
+		\multicolumn{1}{|l|}{Caulk \cite{CCS:ZBKMNS22}} & \multicolumn{1}{l|}{Updatable}  & \multicolumn{1}{l|}{$14 \Gone, ~1 \Gtwo, ~4\F$} & \multicolumn{1}{l|}{$15m \,\Gone$, $O(m^2+m\log N) \,\F$} & $4P$ \\ \hline
+		\multicolumn{1}{|l|}{Caulk+ \cite{EPRINT:PosKat22}} & \multicolumn{1}{l|}{Updatable}  & \multicolumn{1}{l|}{$7 \Gone, ~1 \Gtwo, ~2\F$} & \multicolumn{1}{l|}{$8m \,\Gone$, $O(m^2) \,\F$} & $3P$ \\ \hline
+		\multicolumn{1}{|l|}{Flookup \cite{EPRINT:GabKho22}} & \multicolumn{1}{l|}{Updatable}  & \multicolumn{1}{l|}{$7 \Gone, ~1 \Gtwo, ~2\F$} & \multicolumn{1}{l|}{$O(m) \,\G$, $O(m \log^2 m) \,\F$\moumita{G1 or G2} }  & $3P$ \\ \hline
+		\multicolumn{1}{|l|}{Baloo \cite{EPRINT:ZGKMR22}} & \multicolumn{1}{l|}{Updatable}  & \multicolumn{1}{l|}{$12 \Gone, ~1 \Gtwo, ~4\F$} & \multicolumn{1}{l|}{$14m \,\Gone$, $O(m \log^2 m) \,\F$} & $5P$ \\ \hline
+		\multicolumn{1}{|l|}{CQ \cite{EPRINT:EagFioGab22}} & \multicolumn{1}{l|}{Updatable}  & \multicolumn{1}{l|}{$8 \Gone, ~3\F$} & \multicolumn{1}{l|}{$8m \,\Gone$, $O(m \log m) \,\F$} & $5P$ \\ \hline
+		\multicolumn{1}{|l|}{CQ+ \cite{PKC:CFFLL24}} & \multicolumn{1}{l|}{Updatable} & \multicolumn{1}{l|}{$7 \Gone, ~1\F$} & \multicolumn{1}{l|}{$8m \,\Gone$, $O(m \log m) \,\F$} & $5P$ \\ \hline
+		\multicolumn{1}{|l|}{Locq \cite{PKC:ZSG24}} & \multicolumn{1}{l|}{Updatable}  & \multicolumn{1}{l|}{$4 \Gone, ~1 \Gtwo$} & \multicolumn{1}{l|}{$6m \,\Gone$, $m \,\Gtwo$, $O(m \log m) \,\F$} & $4P$ \\ \hline
+		\multicolumn{1}{|l|}{Lasso \cite{lasso}} & \multicolumn{1}{l|}{Updatable}  & \multicolumn{1}{l|}{$O(1) \,\G, ~O(\log m) \,\F$} & \multicolumn{1}{l|}{$o(cm+cN^{1/c}) \,\Gone$, $O(cm) \F$} & $O(\log m) \,\F$, $O(1) \,\G$ \\ \hline
 		\rowcolor{gray}
-		\multicolumn{4}{|c|}{\textcolor{white}{Lookup Arguments for Updatable Tables/Batching-Efficient RAM}} \\ \hline
-		\multicolumn{1}{|l|}{OWWB20~\cite{USENIX:OWWB20}} & \multicolumn{1}{l|}{$O(1)$} & \multicolumn{1}{l|}{$\wt{O}(m+N)$} & $O(1)$\\ \hline
-		\multicolumn{1}{|l|}{B-INS-ARISA~\cite{CCS:CFHKKO22}} & \multicolumn{1}{l|}{$O(1)$} & \multicolumn{1}{l|}{$\wt{O}(m+N)$} & $O(1)$ \\ \hline
-		\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}Our work\\ (c.f. Table ~\ref{tbl:efficiency-components})\end{tabular}} & \multicolumn{1}{l|}{$65\Gone,\, 1\Gtwo,\, 43\F$} & \multicolumn{1}{l|}{$\wt{O}(\sqrt{mN})\, \F,\Gone$} & $8P$ \\ \hline
+		\multicolumn{5}{|c|}{\textcolor{white}{Lookup Arguments for Updatable Tables/Batching-Efficient RAM}} \\ \hline
+		\multicolumn{1}{|l|}{OWWB20~\cite{USENIX:OWWB20}} & \multicolumn{1}{l|}{Trusted}  & \multicolumn{1}{l|}{$O(1)~\G$} & \multicolumn{1}{l|}{$\wt{O}(m+N)~\F,\G,\G'$} & $1 P$\\ \hline
+		\multicolumn{1}{|l|}{B-INS-ARISA~\cite{CCS:CFHKKO22}} & \multicolumn{1}{l|}{Trusted}  & \multicolumn{1}{l|}{$O(1)~\G$} & \multicolumn{1}{l|}{$\wt{O}(m+N)~\F,\G,\G'$} & $1P, O(1)~\G'$ \\ \hline
+		\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}Our work\\ (c.f. Table ~\ref{tbl:efficiency-components})\end{tabular}} & \multicolumn{1}{l|}{Updatable}  & \multicolumn{1}{l|}{$65\Gone,\, 1\Gtwo,\, 43\F$} & \multicolumn{1}{l|}{$\wt{O}(\sqrt{mN})\, \F,\Gone$} & $8P$ \\ \hline
 	\end{tabular}
-	\caption{Comparison with state-of-the-art lookup arguments. For comparison against Lasso (reported considering their polynomial commitment scheme Sona and structured tables), $c$ denotes an arbitrary positive integer. Note that our lookup argument inherits the complexity of the underlying lookup argument used in a black-box manner and can be instantiated with any of the non-updatable lookup arguments.}
+	\caption{Comparison with state-of-the-art lookup arguments. For comparison against Lasso (reported considering their polynomial commitment scheme Sona and structured tables), $c$ denotes an arbitrary positive integer. Note that our lookup argument inherits the complexity of the underlying lookup argument used in a black-box manner and can be instantiated with any of the non-updatable lookup arguments. Here, $N$ denotes the size of the large table and $m$ denotes the size of the small table (which corresponds to number of desired lookups). We consider the bilinear group $(\F,\Gone,\Gtwo,\GT, e, g_1, g_2,g_t)$ and an RSA group $\G'$. }
 	\label{tab:rel-work}
 \end{table*}
 
