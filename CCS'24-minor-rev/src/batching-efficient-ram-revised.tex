@@ -4,7 +4,10 @@ We now detail the steps required to realize batching efficient RAM outlined in t
 
 \subsection{Committed Index Lookup}\label{subsec:committed-index-lookup}
 In this section, we ``lift'' any committed sub-vector argument to a committed index lookup argument, where
-the latter makes a black-box use of the former. We rely on the following observation:
+the latter makes a black-box use of the former. We use the trick of random linear combination of vectors to infer
+indexed lookup relation among them from sub-vector relation over the aggregated vectors. Similar use of random
+ linear combinations has been made in the context of proving permutations in literature (e.g. ~\cite{SCN:GOTV22}).
+
 \begin{lemma}\label{lem:generic-transformation}
 Let $\vec{t}\in \F^n$ and let $\vec{a},\vec{v}\in \F^m$ for some positive integers $m,n$. Let $\vec{I}_n$ denote the vector $(1,\ldots,n)$.
 Then for $\gamma\gets \F$, $(\vec{v}+\gamma \vec{a})\preceq (\vec{t} + \gamma \vec{I}_n)$ implies

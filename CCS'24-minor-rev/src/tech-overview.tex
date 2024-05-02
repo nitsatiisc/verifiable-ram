@@ -23,7 +23,7 @@ tables will be denoted by $\RAM{I}{n}$.
 For a table $T=(\vec{a},\vec{v})\in \RAM{I}{n}$, we refer to tuples $(a_i,v_i)$, $i\in [n]$ as records of the table $T$.
 We use the access notation $v=T[a]$ to mean that $(a,v)$ is a record of $T$ (note there can be multiple such records
 according to our definition). When we refer to a vector $\vecT\in \F^n$ as a RAM, we implicitly
-assume $T=(\setind_n,\vecT)$ with $\setind_n=(1,2,\ldots,n)$. In this case we have $T[i]=\vecT[i]$.
+assume $T=(\vec{I}_n,\vecT)$ with $\vec{I}_n=(1,2,\ldots,n)$. In this case we have $T[i]=\vecT[i]$.
 For a RAM $T\in \RAM{I}{n}$, a RAM operation is a three tuple $(\op,a,v)$ with $\op\in \{0,1\}$,
 $a\in \setind$ and $v\in \F$. An operation with $\op=0$ is called a {\em load} operation which denotes reading a value $v$
 mapped to index $a$ in the RAM. Similarly, an operation with $\op=1$ is called a {\em store} operation,
@@ -63,7 +63,7 @@ a sequence of $m$ operations ($m < N$) which updates $\vec{T}$ to $\vec{T}'$. Le
 of RAM indices referenced by the operations in $\vec{o}$, i.e, $a_i$ is the index referenced by $i^{th}$ operation.
 To prove the transformation of $\vec{T}$ to $\vec{T}'$ via operation sequence $\vec{o}$, we proceed as follows:
 \begin{itemize}[leftmargin=1em, label=-]
-    \item We isolate sub-tables $S=(\vec{a},\vec{v})$ and $S'=(\vec{a},\vec{a'})$ of $T$ and $T'$ consisting of
+    \item We isolate sub-tables $S=(\vec{a},\vec{v})$ and $S'=(\vec{a},\vec{v}')$ of $T$ and $T'$ consisting of
     rows corresponding to indices in $\vec{a}$. This requires proving $\vec{v}=\vecT[\vec{a}]$ and $\vec{v'}=
     \vecT'[\vec{a}]$, which we show using {\em committed index lookup} argument discussed in Section ~\ref{subsec:committed-index-lookup}.
 
@@ -91,10 +91,11 @@ We now elaborate on the key technical components in realizing the above blueprin
 
 \noindent{\bf Committed Index Lookup.} To limit the size of the RAM on which we use memory-checking techniques,
 our first step is to isolate sub-tables of RAMs $\vecT$ and
-$\vecT'$ which are actually referenced by operations. This is accomplished by looking up RAMs $\vecT$ and
-$\vecT'$ at indices in the committed vector $\vec{a}$. Here, we leverage the recent work on efficient lookup
+$\vecT'$ corresponding to addresses which are involved in the operations.
+This is achieved by looking up RAMs $\vecT$ and
+$\vecT'$ at indices in the committed vector $\vec{a}$. We could leverage the recent work on efficient lookup
 arguments to verifiably extract $m$ indices from a table of size $N$, in time dependent only on $m$.
-There are two technical challenges here. First, the aforementioned lookup arguments only prove the sub-vector
+However, there are two technical challenges here. First, the aforementioned lookup arguments only prove the sub-vector
 relation, without linking the extracted vector to the indices in $\vec{a}$. This is easily solved, as there
 is an efficient realization of a {\em committed index lookup} from a {\em committed sub-vector} argument,
 where commitment scheme is homomorphic. The details appear in Section ~\ref{subsec:committed-index-lookup},
@@ -151,9 +152,9 @@ appears in Figure ~\ref{fig:a-identical}.
 \noindent{\bf Polynomial Protocol for Memory Checking.} To complete the verification, we need to show that
 the smaller RAMs, $S=(\vec{a},\vec{v})$ and $S'=(\vec{a},\vec{v}')$ extracted from larger RAMs $\vecT,\vecT'$
 are consistent with respect to the operations. This can be accomplished using standard memory checking techniques
-based on address ordered transcripts, which we formalize in Section ~\ref{sec:poly-proto-ram}. Later in
-Section ~\ref{sec:poly-proto-ram-app}, we assemble known techniques to present a polynomial protocol
-for memory consistency based on address ordered transcripts.
+based on address ordered transcripts, which we formalize in Section ~\ref{sec:model-for-ram}. Later in
+Sections ~\ref{sec:poly-proto-ram-app} and ~\ref{sec:poly-proto-ram}, we assemble known techniques to present
+a polynomial protocol for memory consistency based on address ordered transcripts.
 This involves encoding several artefacts such as operations, transcripts etc., as polynomials and relations
 among them such as concatenation, permutation and monotonicity as polynomial identities. Our modelling is
 simple and implementation friendly, and helps in realizing a ``circuit-free'' overall construction. Complete
@@ -171,7 +172,7 @@ less than the aggregate of component protocols; this is due to the fact that sev
 $\kzg$ verification proofs can be batched together. For concrete instantiation using BLS12-381 curve, RAM size
 of 1 million, the online cost of proving an update of $1000$ operations on a table as a function of its
 hamming distance from the ``pre-processed'' table is described in Figure ~\ref{fig:batch-ram-proving-time}.
-Other performance metrics are summarised in tables ~\ref{tbl:performance-comparison} and ~\ref{tbl:offline-proving-time}.
+Other performance metrics are summarised in Tables ~\ref{tbl:performance-comparison} and ~\ref{tbl:offline-proving-time}.
 %As an illustrative example,the other performance metrics for the same setting are summarized below:
 %\begin{table}[htbp]
 %\begin{tabularx}{0.45\textwidth}{|X|X|}

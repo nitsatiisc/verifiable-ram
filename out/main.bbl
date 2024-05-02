@@ -112,6 +112,13 @@ Alessandro Chiesa, Yuncong Hu, Mary Maller, Pratyush Mishra, Psi Vesely, and
   Part~I}, volume 12105 of {\em {LNCS}}, pages 738--768. Springer, Heidelberg,
   May 2020.
 
+\bibitem{SCN:GOTV22}
+Cyprien~Delpech de~Saint~Guilhem, Emmanuela Orsini, Titouan Tanguy, and Michiel
+  Verbauwhede.
+\newblock Efficient proof of {RAM} programs from any public-coin zero-knowledge
+  system.
+\newblock In {\em {SCN} 2022}, pages 615--638, 2022.
+
 \bibitem{EPRINT:EagFioGab22}
 Liam Eagen, Dario Fiore, and Ariel Gabizon.
 \newblock cq: Cached quotients for fast lookups.
@@ -177,11 +184,6 @@ Aniket Kate, Gregory~M. Zaverucha, and Ian Goldberg.
 \newblock Constant-size commitments to polynomials and their applications.
 \newblock In Masayuki Abe, editor, {\em ASIACRYPT~2010}, volume 6477 of {\em
   {LNCS}}, pages 177--194. Springer, Heidelberg, December 2010.
-
-\bibitem{benes}
-J.~F.~C. Kingman.
-\newblock {Mathematical Theory of Connecting Networks and Telephone Traffic}.
-\newblock {\em Royal Statistical Society. Journal. Series A: General}.
 
 \bibitem{C:Merkle87}
 Ralph~C. Merkle.
