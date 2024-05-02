@@ -44,7 +44,7 @@ We use $\RAMOp{I}$ to denote the set of all RAM operations with index set $\seti
         %	Permutation of transcripts                                                                      & Fig 9    & $O(m \log m)$       & 2P            & 4G1, 5F         \\ \hline
         %	\begin{tabular}[c]{@{}l@{}}Memory consistency \& \\ address ordering of transcript\end{tabular} & Fig 7    & $O(m \log m)$       & 5P            & 20G1,19F        \\ \hline
         \rowcolor{gray}
-        Batching-Efficient RAM                                                                          & Fig  ~\ref{fig:complete-listing}    & $\widetilde{O}(\sqrt{mN})\,\F,\G$            & 8P            & $65\Gone$, $1\Gtwo$, $43\F$  \\ \hline
+        \textcolor{white}{Batching-Efficient RAM}                                                                          & \textcolor{white}{Fig  ~\ref{fig:complete-listing}}    & \textcolor{white}{$\widetilde{O}(\sqrt{mN})\,\F,\G$}            & \textcolor{white}{8P}            & \textcolor{white}{$65\Gone$, $1\Gtwo$, $43\F$}  \\ \hline
     \end{tabular}
     \caption{Asymptotic efficiency of the component protocols for our scheme. Here $N$ = size of the RAM, $m$ = number of operations
     , $\delta$ = hamming distance of table for which pre-computed parameters are available from the current table.
@@ -63,7 +63,7 @@ a sequence of $m$ operations ($m < N$) which updates $\vec{T}$ to $\vec{T}'$. Le
 of RAM indices referenced by the operations in $\vec{o}$, i.e, $a_i$ is the index referenced by $i^{th}$ operation.
 To prove the transformation of $\vec{T}$ to $\vec{T}'$ via operation sequence $\vec{o}$, we proceed as follows:
 \begin{itemize}[leftmargin=1em, label=-]
-    \item We isolate sub-tables $S=(\vec{a},\vec{v})$ and $S'=(\vec{a},\vec{v}')$ of $T$ and $T'$ consisting of
+    \item We isolate sub-tables $S=(\vec{a},\vec{v})$ and $S'=(\vec{a},\vec{v'})$ of $T$ and $T'$ consisting of
     rows corresponding to indices in $\vec{a}$. This requires proving $\vec{v}=\vecT[\vec{a}]$ and $\vec{v'}=
     \vecT'[\vec{a}]$, which we show using {\em committed index lookup} argument discussed in Section ~\ref{subsec:committed-index-lookup}.
 

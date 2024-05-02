@@ -35,8 +35,12 @@ in Figure ~\ref{fig:committed-index-lookup} is an argument of knowledge for the 
 \begin{figure}[htbp]
 \begin{mdframed}
 {
-    {\bf Common Input}: $\srs,c_t, c_a, c_v$, $c_I=\gone{I(X)}$ where $I(X)=\enc{\vec{I}_N}{\setN}$
-    with $\vec{I}_N=(1,\ldots,N)$. \\
+%<<<<<<< HEAD
+    {\bf Common Input}: $\srs,c_t, c_a, c_v$, $c_I=\gone{I(X)}$ where $I(X)=\enc{(1,\ldots,N)}{\setN}$ encodes a vector $(1,\ldots,N)\in \F^N$. \\
+%=======
+%    {\bf Common Input}: $\srs,c_t, c_a, c_v$, $c_I=\gone{I(X)}$ where $I(X)=\enc{\vec{I}_N}{\setN}$
+%    with $\vec{I}_N=(1,\ldots,N)$. \\
+%>>>>>>> f162aeee62ad0161c590d91a0cd6435404bbcc83
     {\bf Prover's Input}: Vectors $\vec{t}\in \F^N$, $\vec{a},\vec{v}\in\F^m$.
     \begin{enumerate}[leftmargin=1em, label=\arabic*.]
     \item $\verifier$ sends $\gamma\gets \F$.

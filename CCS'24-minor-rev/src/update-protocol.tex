@@ -4,7 +4,7 @@ using pre-computed parameters of a table  which is a small hamming distance away
 pre-computed parameters in several recent lookup arguments such as ~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:ZGKMR22,EPRINT:EagFioGab22}
 stems from the need to compute an encoded quotient of the form:
 \begin{equation}\label{eq:enc-quotient}
-\gany{Q} = \sum_{i\in I}A_i\gany{\frac{T(X) - T(\xi^i)}{X-\xi^i}}
+\gany{Q} = \sum_{i\in I}c_i\gany{\frac{T(X) - T(\xi^i)}{X-\xi^i}}
 \end{equation}
 for some $O(m)$ sized set $I$. The quotient in Equation ~\eqref{eq:enc-quotient} can be computed in $O(m)$ cost
 when the quotients $\gany{(T(X)-T(\xi^i))/(X-\xi^i)}$ are available for all $i\in [N]$. In this Section
@@ -74,8 +74,8 @@ between vectors $\vecTbase$ and $\vecT$.
         {\small
     \begin{equation*}
         \begin{aligned}
-            Q(X) = \sum_{i\in \setind}\frac{1}{z_I'(\xi^i)}\left(\frac{\Tbasepoly{X} - \Tbasepoly{\xi^i}}{X-\xi^i}\right)
-            + \sum_{i\in \setind}\frac{1}{z_I'(\xi^i)}\left(\frac{\Tcachepoly{X} - \Tcachepoly{\xi^i}}{X-\xi^i}\right)
+            Q(X) = \sum_{i\in \setind}c_i\left(\frac{\Tbasepoly{X} - \Tbasepoly{\xi^i}}{X-\xi^i}\right)
+            + \sum_{i\in \setind}c_i\left(\frac{\Tcachepoly{X} - \Tcachepoly{\xi^i}}{X-\xi^i}\right)
         \end{aligned}
         %\label{eq:Q2-upd}
     \end{equation*}
@@ -83,14 +83,14 @@ between vectors $\vecTbase$ and $\vecT$.
 
     From above, we have $\gany{Q(x)}=\gany{\Qbasepoly{x}}+\gany{\Qcachepoly{x}}$ where
     \begin{gather*}
-        \Qbasepoly{X}=\sum_{i\in \setind}(Z_I'(\xi^i))^{-1} (\Tbasepoly{X}-\Tbasepoly{\xi^i})/(X-\xi^i) \\
-        \Qcachepoly{X}=\sum_{i\in \setind}(Z_I'(\xi^i))^{-1} (\Tcachepoly{X}-\Tcachepoly{\xi^i})/(X-\xi^i)
+        \Qbasepoly{X}=\sum_{i\in \setind}c_i (\Tbasepoly{X}-\Tbasepoly{\xi^i})/(X-\xi^i) \\
+        \Qcachepoly{X}=\sum_{i\in \setind}c_i(\Tcachepoly{X}-\Tcachepoly{\xi^i})/(X-\xi^i)
     \end{gather*}
     We can compute
     $\gany{\Qbasepoly{X}}$ from the pre-computed KZG openings of $\Tbasepoly{X}$ at points $\xi^i,i\in I$ using $O(|I|)$ group operations and
     $O(|I|\log^2 |I|)$ field operations. Therefore, it suffices to compute $\gany{\Qcachepoly{X}}$ efficiently.
     %\textbf{Thus, it suffices to describe the computation for $\elttwo{\Qcachepoly{X}}$. }\\
-    Using $\Tcachepoly{X}=\sum_{j\in K}\Delta t_j\mu_j(X)$ and setting $c_i=(1/z_I'(\xi^i))$ for $i\in I$,
+    Using $\Tcachepoly{X}=\sum_{j\in K}\Delta t_j\mu_j(X)$
     we write $\Qcachepoly{X}$ as linear combination of table-independent polynomials:
     \begin{align*}
         \Qcachepoly{X} &= \sum_{i\in \setind} c_i\sum_{j\in K} \Delta t_j\frac{\mu_j(X)-\mu_j(\xi^i)}{X-\xi^i} \\
@@ -131,20 +131,19 @@ between vectors $\vecTbase$ and $\vecT$.
     b_j=  \sum_{i\in \setind\setminus \{j\}}\frac{c_i}{\xi^j - \xi^i}, j\in K
         %W_3^i(X) = \frac{Z_\nroots(X)}{X-\xi^i}, \text{ for } i\in [N]
     \end{gather}
-    Now, recalling that
-    $W_3^j=\gany{\vpolyN(X)/(X-\xi^i)}$, we see that $\elany{\Qcachepolytwo{X}}$ can be written as linear combination of $O(|K|+|I|)$ group elements.
+    Now, define
+    $W_3^j:=\gany{\vpolyN(X)/(X-\xi^j)}$. We see that $W_3^j$ is just the KZG opening proof of the polynomial $\vpolyN(X)$ evaluated at $\xi^j$ for $j \in [N]$. These can be precomputed one time and it adds $O(N)$ to the setup parameters and the computation can be done in $O(N\log N)$ time.\\ Now, we see that   $\elany{\Qcachepolytwo{X}}$ can be written as linear combination of $O(|K|+|I|)$ group elements.
     \begin{equation}\label{eq:Qcachepoly2commit}
     \gany{\Qcachepolytwo{X}} = N^{-1}\left(\sum_{i\in\setind}(c_ia_i)\cdot W_3^i + \sum_{j\in K}(\xi^j \Delta t_j b_j)\cdot W_3^j\right)
     \end{equation}
-    Now $c_i=(z_I(\xi^i))^{-1}$ for all $i \in \setind$ can be determined in $O(|I|\log^2 |I|)$ field operations by evaluating $Z_{\setind}'(X)$ on
-    $H_{\setind}$. So, given $\{a_i\}_{i\in I}, \{b_j\}_{j\in K}$, $\gany{\Qcachepolytwo{X}}$ can be computed in $O(|\setind|+|K|)$ group operations.
+    Now, $c_i$ are known constants depending on the specific lookup scheme. So, given $\{a_i\}_{i\in I}, \{b_j\}_{j\in K}$, $\gany{\Qcachepolytwo{X}}$ can be computed in $O(|\setind|+|K|)$ group operations.
     While we have diligently reduced the group operations, we still seem to need $O(|I||K|)=O(m\delta)$ field operations. We clearly need better than
     naive way of computing the scalars in \eqref{eq:scalars} to obtain additive overhead in $\delta$. This is what we consider next.
-    Routine calculation shows that we can write $a_i$ as:
-    \begin{equation*}
-        a_i = -\Delta T + \Delta t_i + \xi^i\sum_{j\in K\setminus\{i\}}\frac{\Delta t_j}{\xi^i-\xi^j}, i\in I
-    \end{equation*}
-    where in the above, we have $\Delta T=\sum_{j\in K}\Delta t_j$.
+    %Routine calculation shows that we can write $a_i$ as:
+    %\begin{equation*}
+    % a_i = -\Delta T + \Delta t_i + \xi^i\sum_{j\in K\setminus\{i\}}\frac{\Delta t_j}{\xi^i-\xi^j}, i\in I
+    %  \end{equation*}
+    % where in the above, we have $\Delta T=\sum_{j\in K}\Delta t_j$.
     %a_i = -\sum_{j\in K\setminus \{i\}}\Delta t_j + \xi^i\sum_{j\in K\setminus \{i\}}\frac{\Delta t_j}{\xi^i-\xi^j} $$
     %This is because:
     %$$a_i+\sum_{j\in K\setminus \{i\}}\Delta t_j= \sum_{j \in K \setminus \{i\}}\frac{\xi^j\Delta t_j}{\xi^i-\xi^j}+\Delta t_j$$
@@ -156,40 +155,46 @@ between vectors $\vecTbase$ and $\vecT$.
     %$$  $$
     %Suppose we get $\sum_{j\in K\setminus\{i\}}\frac{\Delta t_j}{\xi^i-\xi_j}$ for all $i \in I$ efficiently. Then $a_i$ for all $i \in I$ can be obtained in $O(|I|)$ field operations. \\
     %\textbf{Thus, to get $a_i$ for all $i \in I$ it suffices to describe the computation of $e_i=\sum_{j\in K\setminus\{i\}}\frac{\Delta t_j}{\xi^i-\xi^j}$ for all $i \in I$}\\\\
-    Above implies that to compute $a_i, i\in I$ efficiently, it is sufficient to efficiently
-    compute $e_i=\sum_{j\in K\setminus\{i\}}\frac{\Delta t_j}{\xi^i-\xi^j}$ for all $i \in I$. Our next lemma claims that
-    such {\em reciprocal sums} can be computed efficiently. The computation of $b_j,j\in K$ can also be reduced a similar computation.
-    We defer this reduction and the full proof of Lemma ~\ref{lem:sum-computation} to the Appendix, but illustrate the key ideas in the proof.
+    Let $d_j:=\xi^j \Delta t_j$. Recall how $a_i$ and $b_j$ were defined:\\
+    \begin{gather}\label{eq:scalars}
+    a_i = \sum_{j\in K\setminus \{i\}}\frac{d_j}{\xi^i-\xi^j}, i\in \setind\quad
+    b_j=  \sum_{i\in \setind\setminus \{j\}}\frac{c_i}{\xi^j - \xi^i}, j\in K
+        %W_3^i(X) = \frac{Z_\nroots(X)}{X-\xi^i}, \text{ for } i\in [N]
+    \end{gather}
+    So, to compute $a_i$ and $b_j$, it suffices to compute {\em reciprocal sums} efficiently. Our next lemma claims that
+    such reciprocal sums can be computed efficiently.
+    We defer the full proof of Lemma ~\ref{lem:sum-computation} to the Appendix, but illustrate the key ideas in the proof.
     %Our requirement is now to bound the number of field operations for $e_i$ and for $b_j$. For this, we invoke the following lemma with the proof in the appendix.
     \begin{lemma}\label{lem:sum-computation}
-    Let $I\subset K\subset [N]$ and let $e_i$ for all $i \in \setind$ and $b_j$ for all $j \in K$ be as described above.
-    Then, $e_i$ for all $i \in I$ and $b_j$ for all $j \in K$ can be computed in $O(|K|\log^2|K|)\, \mathbb{F}$ operations
+    Let $I\subset K\subset [N]$ and let $a_i$ for all $i \in \setind$ and $b_j$ for all $j \in K$ be as described above.
+    Then, $a_i$ for all $i \in I$ and $b_j$ for all $j \in K$ can be computed in $O(|K|\log^2|K|)\, \mathbb{F}$ operations
     \end{lemma}
     \begin{proof}[Proof-Sketch]
-        First, we mention that the special case of the lemma when $\Delta t_j=1$ for all $j\in K$ admits an efficient computation due to the following identity
+        We sketch the proof here for $a_i$.
+        First, we mention that the special case of the lemma when $d_j=1$ for all $j\in K$ admits an efficient computation due to the following identity
         proved in Lemma ~\ref{lem:sumtoder}.
         \begin{equation*}
             \frac{Z_K''(\xi^i)}{Z_K'(\xi^i)} = 2\sum_{j\in K\setminus \{i\}}\frac{1}{\xi^i-\xi^j}
         \end{equation*}
         for $Z_K(X)=\prod_{i\in K}(X-\xi^i)$. The polynomial $Z_K$ can be computed in $O(|K|\log^2|K|)$ and subsequent evaluations of its first two
-        derivatives can also be evaluated on the set $\{\xi^i: i\in I\}$ with the same complexity. However, to deal with arbitrary values of $\Delta t_j$ we
-        need more ingenuity. We will {\em imagine} $\Delta t_j$ to be $p(\xi^j)$ for some polynomial $p(X)$. Moreover, we demand that $p(\xi^j)=0$ for $j\not\in K$.
+        derivatives can also be evaluated on the set $\{\xi^i: i\in I\}$ with the same complexity.\\ However, to deal with arbitrary values of $d_j$ we
+        need more ingenuity. We will {\em imagine} $d_j$ to be $p(\xi^j)$ for some polynomial $p(X)$. Moreover, we demand that $p(\xi^j)=0$ for $j\not\in K$.
         We will not compute such a polynomial $p$, as it has degree $O(N)$, but view it as an ``oracle'' which we can hopefully query at the points we need.
-        Then it can be seen that $e_i=g_i(\xi^i) - r_i(\xi^i)$ for rational functions $g_i(X)$ and $r_i(X)$ defined by:
+        Then it can be seen that $a_i=g_i(\xi^i) - r_i(\xi^i)$ for rational functions $g_i(X)$ and $r_i(X)$ defined by:
         \begin{align}\label{eq:rat-fun-f}
         g_i(X) =\sum_{j\in [N]\setminus i}\frac{p(X)}{X-\xi^j},\quad
         r_i(X) =\sum_{j\in [N]\setminus i} \frac{p(X)-p(\xi^j)}{X-\xi^j}
         \end{align}
         Now, $g_i(\xi^i)$ for $i\in I$ turns out to be (using the special case above):
-        $$p(\xi^i)\sum_{j\in K\setminus \{i\}} 1/(\xi^i-\xi^j)=\Delta t_i (Z_K''(\xi^i)/Z_K'(\xi^i))/2$$
+        $$p(\xi^i)\sum_{j\in K\setminus \{i\}} 1/(\xi^i-\xi^j)=d_i(Z_K''(\xi^i)/Z_K'(\xi^i))/2$$
         Defining $u(X,Y)=(p(X)-p(Y))/(X-Y)$, we can write $r_i(\xi^i)$ as:
         \begin{equation}
             r_i(X) = \sum_{j\in [N]}u(X,\xi^j) - u(X,\xi^i)
         \end{equation}
-        Using the fact that $u(X,X)=p'(X)$ gives the formal derivative of polynomial $p(X)$, we get
+        Observe that $u(X,X)=p'(X)$ and so $u(X,X)$ gives the formal derivative of polynomial $p(X)$. We get
         $r_i(\xi^i)=r(\xi^i)-p'(\xi^i)$ for all $i\in I$, where $r(X)=\sum_{j\in [N]}u(X,\xi^j)$. Fortunately,
-        $r(X)$ is simply $Nu(X,0)=N(p(X) - p(0))/X$, a fact that follows from univariate sum-check. The problem
-        thus reduces to being able to compute derivates $p'(\xi^i)$ for $i\in I$ and the value $p(0)$. Before
+        $r(X)$ is simply $Nu(X,0)=N(p(X) - p(0))/X$, a fact that follows from uni-variate sum-check. The problem
+        thus reduces to being able to compute derivatives $p'(\xi^i)$ for $i\in I$ and the value $p(0)$. Before
         concluding the proof-sketch, we briefly highlight the structure of the polynomial $p(X)$. Since $p(X)$
         vanishes for $p(\xi^i)$ for $i\not\in K$, it can we written as the product $\widehat{Z}_K(X)q(X)$ where
         $\widehat{Z}_K$ is the vanishing polynomial of ``complementary'' roots of unity $\{\xi^i: i\not\in K\}$
