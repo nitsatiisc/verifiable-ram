@@ -68,7 +68,7 @@
         };
         \end{axis}
     \end{tikzpicture}
-    \caption{Online Prover Performance of our Batching-Efficient RAM with updates}
+    \caption{Online prover performance of our Batching-Efficient RAM with updates}
     \label{fig:batch-ram-proving-time}
 \end{figure}
 
@@ -161,7 +161,7 @@ at the cheaper end of online proving performance.
     \label{tbl:sum-computation-compare}
 \end{table}
 
-\noindent{\bf Comparison with prior work}. The proof generation in the prior batching efficient RAM constructions
+\noindent{\bf Comparison with Prior Work}. The proof generation in the prior batching efficient RAM constructions
 using RSA accumulators ~\cite{USENIX:OWWB20,CCS:CFHKKO22} involves two key steps (i) generation of a SNARK
 proof showing knowledge of witness for a relation modeled as arithmetic circuit/R1CS and (ii) computing the witness
 for the proof generation. A platform agnostic metric to express the cost of the first step is the number of R1CS
@@ -172,7 +172,9 @@ using the \textsf{Groth16} protocol (used in prior works) for R1CS of equivalent
 available benchmarking suite in ~\cite{ark-groth-16} for \textsf{Groth16} benchmarks. Since the
 the prior works only report performance of parallel implementation of the second step which is common to both (with
 degree of parallelism not explicitly mentioned), we will use the reported parallel performance to estimate the
-overall proving time with this caveat. Even without the benefit of parallelization, our average proof generation
+overall proving time with this caveat. 
+
+Even without the benefit of parallelization, our average proof generation
 time of $\approx 90s$ for batch size of $2^{10}$ and RAM size of $2^{20}$ is $3-5\times$ faster than the prior works
 for the same setting. The proof sizes and verification complexity are constant for prior work and our work.
 Concrete proof sizes are smaller in ~\cite{USENIX:OWWB20,CCS:CFHKKO22} owing to their usage of \textsf{Groth16}
@@ -195,7 +197,7 @@ comparison in Table ~\ref{tbl:performance-comparison} which was considered in pr
         Our Work & $94$ & $15$ & $4.4$ \\
         \bottomrule
     \end{tabularx}
-    \caption{Comparing performance of our batching efficient RAM with prior works. $\prover$
+    \caption{Comparing performance of our batching-efficient RAM with prior works. $\prover$
     denotes proof generation time, $\verifier$ denotes verification time while $|\pi|$ denotes
     argument size. We mention proof generation time as $a+b$ for ~\cite{USENIX:OWWB20,CCS:CFHKKO22}
     where $a$ denote proving time of \textsf{Groth16} and $b$ denotes witness generation time. The latter
