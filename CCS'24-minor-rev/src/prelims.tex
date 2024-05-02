@@ -50,8 +50,7 @@ Informally, the prover and the verifier interact where the prover provides oracl
 check polynomial identities at random points of $\F$. %We refer the reader to ~\cite[Section 4.2]{Gabizon2019PLONKPO} for details on polynomial protocols and their compilation to SNARKs. 
 Many recent constructions of zkSNARKs~\cite{EC:BunFisSze20,EC:CHMMVW20,Gabizon2019PLONKPO} follow this approach where the information theoretic object is a polynomial interactive oracle proof (PIOP) (or a polynomial protocol), and the cryptoprimitive in the compiler is a polynomial commitment scheme.
 
-\subsection{Security Model} We describe public-coin interactive protocols in the structured reference string (SRS) model where
-where both the parties have access to a SRS. The SRS in our protocols consists of
+\subsection{Security Model} We describe public-coin interactive protocols in the structured reference string (SRS) model where both the parties have access to a SRS. The SRS in our protocols consists of
 encodings of monomials of the form $\left\{\gone{x^i}\right\}_{a\leq i\leq b}$, $\left\{\gtwo{x^i}\right\}_{c\leq i\leq d}$
 for $x$ chosen uniformly from $\F$ and $a,b,c,d$ are bounded by some polynomial in $\lambda$. It then follows
 from ~\cite{EPRINT:BowGabMie17} that such an SRS can be generated using a universal and updatable setup~\cite{C:GKMMM18} requiring
@@ -63,10 +62,10 @@ polynomial $f\in \F_{<Q}[X]$.
 \smallskip
 
 \noindent{\bf Algebraic Group Model.} 
-We analyse security of our protocols in the Algebraic Group Model (AGM) introduced
+We analyze security of our protocols in the Algebraic Group Model (AGM) introduced
 in ~\cite{C:FucKilLos18}. An adversary $\Adv$ is called \textit{algebraic} if every group element output by $\Adv$ is accompanied by a representation of that group element in terms of all the group elements that $\Adv$ has seen so far (input and output).
 In the AGM, an adversary $\Adv$ is restricted to be {\em algebraic}, which in our SRS-based protocol means a PPT algorithm satisfying the following:
-for $i\in \{1,2\}$, whenever $\Adv$ outputs an element $A\in \G_i$, it is accompanied by its representaion, $\Adv$ also outputs a vector $\vec{v}$
+for $i\in \{1,2\}$, whenever $\Adv$ outputs an element $A\in \G_i$, it is accompanied by its representation, $\Adv$ also outputs a vector $\vec{v}$
 	over $\F$ such that $A=\langle \vec{v},\srs_i\rangle$.
 %\begin{itemize}[leftmargin=1em]
 	%\item For $i\in \{1,2\}$, whenever $\Adv$ outputs an element $A\in \G_i$, it also outputs a vector $\vec{v}$
@@ -136,7 +135,7 @@ version of $\KZGopen$ is described as follows:
 	Here, the verifier interpolates the polynomial $r(X)\in \F_{<n}[X]$ such that $r(\alpha_i)=v_i$.
 \end{itemize}
 
-\noindent\textbf{KZG for vectors.} For $\vec{f}\in \F^N$, let $\enc{f}{\setN}$ denote the polynomial encoding of $\vec{f}$ over $\setN$ given by $\sum_{i=1}^N f_i\mu_i(X)$.
+\noindent\textbf{KZG for Vectors.} For $\vec{f}\in \F^N$, let $\enc{f}{\setN}$ denote the polynomial encoding of $\vec{f}$ over $\setN$ given by $\sum_{i=1}^N f_i\mu_i(X)$.
 We use KZG to commit to \emph{vectors} by committing to its polynomial encoding. In general a vector $\vec{g}$ of size $m$ is encoded by a polynomial $g(X)\in \F_{<m}[X]$
 which interpolates $\vec{g}$ over a subgroup $\setV$ consisting of $m^{th}$ roots of unity in some canonical order. We will explicitly state the subgroups for all sizes
 of vectors that we consider.
