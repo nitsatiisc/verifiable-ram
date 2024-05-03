@@ -56,10 +56,9 @@ phase of our proof generation involves computing the sum in Equation \eqref{eq:e
 \end{comment}
 The following Theorem determines the efficiency of the online phase of our prover.
 \begin{theorem}\label{thm:approx-setup}
-Let $N,\xi$ be as defined previously. Suppose we are given
+Let $N,\xi$ be as defined previously. Given
 $\kzg$ proofs $\{W_i\}_{i=1}^N$ with $W_i=\gany{\Tbasepoly{X} - \Tbasepoly{\xi^i}/(X-\xi^i)}$, where
-$\Tbasepoly{X}=\enc{T_{\mathsf{b}}}{\setN}$ encodes a vector $\vecTbase\in \F^N$.
-Then, for any $I\subseteq [N]$, there exists an algorithm to compute $\gany{Q}$ as given in Equation ~\eqref{eq:enc-quotient}
+$\Tbasepoly{X}=\enc{T_{\mathsf{b}}}{\setN}$ encodes a vector $\vecTbase\in \F^N$, for any $I\subseteq [N]$, there exists an algorithm to compute $\gany{Q}$ as given in Equation ~\eqref{eq:enc-quotient}
 for polynomial $T(X)=\enc{T}{\setN}$ encoding the vector $\vecT\in \F^N$ using $O((\delta + |I|) \log^2 (\delta + |I|))$ $\F$-operations
 and $O(\delta + |I|)$ $\mathbb{G}$-operations. Here, $\delta$ denotes the hamming distance
 between vectors $\vecTbase$ and $\vecT$.
@@ -71,7 +70,7 @@ between vectors $\vecTbase$ and $\vecT$.
     %By definition of $K$, $|K|\leq \delta +|I|$. So, we need to bound $\Gtwo$ operations by $O(|K|)$ and field operations by $O(|K| \log^2|K|)$\\
     %First of all note that:
     We write the quotient $Q(X)$ as:
-        {\small
+        {
     \begin{equation*}
         \begin{aligned}
             Q(X) = \sum_{i\in \setind}c_i\left(\frac{\Tbasepoly{X} - \Tbasepoly{\xi^i}}{X-\xi^i}\right)
@@ -80,7 +79,6 @@ between vectors $\vecTbase$ and $\vecT$.
         %\label{eq:Q2-upd}
     \end{equation*}
     }
-
     From above, we have $\gany{Q(x)}=\gany{\Qbasepoly{x}}+\gany{\Qcachepoly{x}}$ where
     \begin{gather*}
         \Qbasepoly{X}=\sum_{i\in \setind}c_i (\Tbasepoly{X}-\Tbasepoly{\xi^i})/(X-\xi^i) \\
@@ -97,7 +95,7 @@ between vectors $\vecTbase$ and $\vecT$.
         &= \sum_{i\in \setind} c_i\Delta t_i\frac{\mu_i(X) - 1}{X-\xi^i} + \sum_{i\in \setind}\sum_{j\in K\setminus\{i\}}c_i\Delta t_j\frac{\mu_j(X)}{X-\xi^i}
     \end{align*}
     Now, we can write $\gany{\Qcachepoly{X}}=\elany{\Qcachepolyone{X}} + \elany{\Qcachepolytwo{X}}$ where:
-        {\small
+        {
     \begin{gather*}
         \Qcachepolyone{X}=\sum_{i\in \setind}c_i\Delta t_i\frac{\mu_i(X)-1}{X-\xi^i},\,
         \Qcachepolytwo{X}=\sum_{i\in \setind}\sum_{j\in K\setminus \{i\}} c_i\Delta t_j\frac{\mu_j(X)}{X-\xi^i}
@@ -126,7 +124,7 @@ between vectors $\vecTbase$ and $\vecT$.
     %    $\sum_{i \in I} \sum_{j \in K \setminus \{i\}} f(i,j)=\sum_{j \in K} \sum_{i \in I \setminus \{j\}} f(i,j) $
     %\end{fact}
     %In the above equation \eqref{eq:Qcachepoly2}, let us define:
-    \begin{gather}\label{eq:scalars}
+    \begin{gather}\label{eq:scalars1}
     a_i = \sum_{j\in K\setminus \{i\}}\frac{\xi^j\Delta t_j}{\xi^i-\xi^j}, i\in \setind\quad
     b_j=  \sum_{i\in \setind\setminus \{j\}}\frac{c_i}{\xi^j - \xi^i}, j\in K
         %W_3^i(X) = \frac{Z_\nroots(X)}{X-\xi^i}, \text{ for } i\in [N]
@@ -138,7 +136,7 @@ between vectors $\vecTbase$ and $\vecT$.
     \end{equation}
     Now, $c_i$ are known constants depending on the specific lookup scheme. So, given $\{a_i\}_{i\in I}, \{b_j\}_{j\in K}$, $\gany{\Qcachepolytwo{X}}$ can be computed in $O(|\setind|+|K|)$ group operations.
     While we have diligently reduced the group operations, we still seem to need $O(|I||K|)=O(m\delta)$ field operations. We clearly need better than
-    naive way of computing the scalars in \eqref{eq:scalars} to obtain additive overhead in $\delta$. This is what we consider next.
+    naive way of computing the scalars in \eqref{eq:scalars1} to obtain additive overhead in $\delta$. This is what we consider next.
     %Routine calculation shows that we can write $a_i$ as:
     %\begin{equation*}
     % a_i = -\Delta T + \Delta t_i + \xi^i\sum_{j\in K\setminus\{i\}}\frac{\Delta t_j}{\xi^i-\xi^j}, i\in I
@@ -149,13 +147,12 @@ between vectors $\vecTbase$ and $\vecT$.
     %$$a_i+\sum_{j\in K\setminus \{i\}}\Delta t_j= \sum_{j \in K \setminus \{i\}}\frac{\xi^j\Delta t_j}{\xi^i-\xi^j}+\Delta t_j$$
     %$$=\sum_{j \in K \setminus \{i\}}\frac{\xi^i\Delta t_j}{\xi^i-\xi^j} = \xi^i\sum_{j\in K\setminus \{i\}}\frac{\Delta t_j}{\xi^i-\xi^j}$$
     %Now, define $\Delta T=\sum_{j\in K}\Delta t_j$\\
-
-    %Here computing $\Delta T$ is a one time computation (per batch). It can be computed from the knowledge of $T_{\text{ch}}$ in the online phase.
+	 %Here computing $\Delta T$ is a one time computation (per batch). It can be computed from the knowledge of $T_{\text{ch}}$ in the online phase.
     %We have:
     %$$  $$
     %Suppose we get $\sum_{j\in K\setminus\{i\}}\frac{\Delta t_j}{\xi^i-\xi_j}$ for all $i \in I$ efficiently. Then $a_i$ for all $i \in I$ can be obtained in $O(|I|)$ field operations. \\
     %\textbf{Thus, to get $a_i$ for all $i \in I$ it suffices to describe the computation of $e_i=\sum_{j\in K\setminus\{i\}}\frac{\Delta t_j}{\xi^i-\xi^j}$ for all $i \in I$}\\\\
-    Let $d_j:=\xi^j \Delta t_j$. Recall how $a_i$ and $b_j$ were defined:\\
+    Let $d_j:=\xi^j \Delta t_j$. Then we have from Eq ~\eqref{eq:scalars1}:\\
     \begin{gather}\label{eq:scalars}
     a_i = \sum_{j\in K\setminus \{i\}}\frac{d_j}{\xi^i-\xi^j}, i\in \setind\quad
     b_j=  \sum_{i\in \setind\setminus \{j\}}\frac{c_i}{\xi^j - \xi^i}, j\in K
@@ -167,7 +164,7 @@ between vectors $\vecTbase$ and $\vecT$.
     %Our requirement is now to bound the number of field operations for $e_i$ and for $b_j$. For this, we invoke the following lemma with the proof in the appendix.
     \begin{lemma}\label{lem:sum-computation}
     Let $I\subset K\subset [N]$ and let $a_i$ for all $i \in \setind$ and $b_j$ for all $j \in K$ be as described above.
-    Then, $a_i$ for all $i \in I$ and $b_j$ for all $j \in K$ can be computed in $O(|K|\log^2|K|)\, \mathbb{F}$ operations
+    Then, $a_i$ for all $i \in I$ and $b_j$ for all $j \in K$ can be computed in $O(|K|\log^2|K|)\, \mathbb{F}$ operations.
     \end{lemma}
     \begin{proof}[Proof-Sketch]
         We sketch the proof here for $a_i$.
@@ -177,7 +174,7 @@ between vectors $\vecTbase$ and $\vecT$.
             \frac{Z_K''(\xi^i)}{Z_K'(\xi^i)} = 2\sum_{j\in K\setminus \{i\}}\frac{1}{\xi^i-\xi^j}
         \end{equation*}
         for $Z_K(X)=\prod_{i\in K}(X-\xi^i)$. The polynomial $Z_K$ can be computed in $O(|K|\log^2|K|)$ and subsequent evaluations of its first two
-        derivatives can also be evaluated on the set $\{\xi^i: i\in I\}$ with the same complexity.\\ However, to deal with arbitrary values of $d_j$ we
+        derivatives can also be evaluated on the set $\{\xi^i: i\in I\}$ with the same complexity. However, to deal with arbitrary values of $d_j$ we
         need more ingenuity. We will {\em imagine} $d_j$ to be $p(\xi^j)$ for some polynomial $p(X)$. Moreover, we demand that $p(\xi^j)=0$ for $j\not\in K$.
         We will not compute such a polynomial $p$, as it has degree $O(N)$, but view it as an ``oracle'' which we can hopefully query at the points we need.
         Then it can be seen that $a_i=g_i(\xi^i) - r_i(\xi^i)$ for rational functions $g_i(X)$ and $r_i(X)$ defined by:
@@ -199,7 +196,7 @@ between vectors $\vecTbase$ and $\vecT$.
         vanishes for $p(\xi^i)$ for $i\not\in K$, it can we written as the product $\widehat{Z}_K(X)q(X)$ where
         $\widehat{Z}_K$ is the vanishing polynomial of ``complementary'' roots of unity $\{\xi^i: i\not\in K\}$
         and $q$ is a low-degree ($<K$) polynomial. Assuming we can interpolate $q(X)$, we can write:
-        \[ p'(\xi^i) = \widehat{Z}_K(\xi^i)q'(\xi^i) + \widehat{Z}_K'(\xi^i)q(\xi^i). \]
+        \[ p'(\xi^i) = \widehat{Z}_K(\xi^i)q'(\xi^i) + \widehat{Z}_K'(\xi^i)q(\xi^i) \]
         In the above expression, we require evaluations of high-degree polynomials $\widehat{Z}_K(X)$ and $\widehat{Z}_K'(X)$
         at $\xi^i$, $i\in I$. This is discussed in Lemma ~\ref{lem:zk-hat} and other related lemmas in Section ~\ref{subsec:sub-results},
         and motivates the at times tedious algebra there. We conclude the proof-sketch, deferring the missing details to the full

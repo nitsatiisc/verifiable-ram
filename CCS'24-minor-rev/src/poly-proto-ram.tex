@@ -5,58 +5,58 @@ will be used to describe polynomial protocol for RAM in Appendix~\ref{sec:poly-p
 \subsection{Correctness of RAM Update}\label{subsec:ram-update}
 The versatility of the RAM primitive stems from its updatability. While a load operation leaves the RAM unchanged, the store operation
 updates the value in the RAM associated with the referenced index. We model the update via the function
-$\Rupd{I}$ which takes RAM $T\in \RAM{I}{n}$, operation
-$o=(\op,a,v)\in \RAMOp{I}$ as inputs and returns an updated RAM $T'\in \RAM{I}{n}$.
-The updated RAM $T'=\Rupd{I}(T,o)$ satisfies
-$T'=T$ if $\op=0$ while for $\op=1$ it satisfies $T'[\,a\,]=v$  and $T'[\,x\,]=T[\,x\,]$ for $x\neq a$. The central problem
+$\Rupd{I}$ which takes RAM $\vecT\in \RAM{I}{n}$, operation
+$o=(\op,a,v)\in \RAMOp{I}$ as inputs and returns an updated RAM $\vecT'\in \RAM{I}{n}$.
+The updated RAM $\vecT'=\Rupd{I}(\vecT,o)$ satisfies
+$\vecT'=\vecT$ if $\op=0$ while for $\op=1$ it satisfies $\vecT'[\,a\,]=v$  and $\vecT'[\,x\,]=\vecT[\,x\,]$ for $x\neq a$. The central problem
 in verifiable RAM protocols is to establish that a sequence of operations $\vec{o}=(o_1,\ldots,o_m)$ are correct with
-respect to the initial RAM state $T$ and the final RAM state $T'$. This involves ensuring
+respect to the initial RAM state $\vecT$ and the final RAM state $\vecT'$. This involves ensuring
 that all load operations read the value which is consistent with updates to the RAM as a result of preceding
-store operations, and that $T'$ is the final state. We say that an operation $o=(\op,a,v)$ is {\em load-consistent}
-with respect to RAM $T$ if $v=T[a]$ whenever $o$ is a load operation (store operations are vacuously defined to be load-consistent).
+store operations, and that $\vecT'$ is the final state. We say that an operation $o=(\op,a,v)$ is {\em load-consistent}
+with respect to RAM $T$ if $v=\vecT[a]$ whenever $o$ is a load operation (store operations are vacuously defined to be load-consistent).
 We formally define the notion of consistency below:
 
 \begin{definition}[Consistent Operations]\label{defn:consistent-operations}
-    Let $n\in \N$ and $T,T'\in \RAM{I}{n}$ for some index set $\setind$. We say that a sequence of operations
+    Let $n\in \N$ and $\vecT,\vecT'\in \RAM{I}{n}$ for some index set $\setind$. We say that a sequence of operations
     $\vec{o}=(o_1,\ldots,o_k)\in \RAMOp{I}^k$ over $\setind$ is {\em consistent} with RAM states
-    $T,T'$ if for all $i\in [k]$, $T_{i}=\Rupd{I}(T_{i-1},o_i)$ and operation $o_i$ is load-consistent with respect to $T_{i-1}$. Here
-    we assume $T_0=T$ and $T_k=T'$.
+    $\vecT,\vecT'$ if for all $i\in [k]$, $\vecT_{i}=\Rupd{I}(\vecT_{i-1},o_i)$ and operation $o_i$ is load-consistent with respect to $\vecT_{i-1}$. Here
+    we assume $\vecT_0=\vecT$ and $\vecT_k=\vecT'$.
 \end{definition}
 
-For $m,n\in \N$, let $\LRAM{I}{m}{n}$ denote the language consisting of tuples $(T,\vec{o},T')$ with $T,T'\in \RAM{I}{n}$ and $\vec{o}\in (\RAMOp{I})^m$
-such that $\vec{o}$ is consistent with $T,T'$.
+For $m,n\in \N$, let $\LRAM{I}{m}{n}$ denote the language consisting of tuples $(\vecT,\vec{o},\vecT')$ with $\vecT,\vecT'\in \RAM{I}{n}$ and $\vec{o}\in (\RAMOp{I})^m$
+such that $\vec{o}$ is consistent with $\vecT,\vecT'$.
 Next, we formalize the folklore technique of checking correctness of RAM operations
 using {\em address-ordered transcripts}.
 
 \subsection{Consistency Check via Transcripts}\label{subsec:transcripts}
 A {\em transcript} is time-stamped sequence of operations executed on a RAM.
-More formally, given a RAM $T=(\vec{a},\vec{v})\in \RAM{I}{n}$,
-operation sequence $\vec{o}=(o_1,\ldots,o_m)$ with $o_i=(\bar{\op_i},\bar{a}_i,\bar{v}_i)\in \RAMOp{I}$ and RAM $T'=(\vec{a}', \vec{v}')\in \RAM{I}{n}$,
-the {\em time ordered transcript} for the tuple $(T,\vec{o},T')$ is given by the table $\tr$ with $k=2n+m$ rows and four columns
+More formally, given a RAM $\vecT=(\vec{a},\vec{v})\in \RAM{I}{n}$,
+operation sequence $\vec{o}=(o_1,\ldots,o_m)$ with $o_i=(\bar{\op_i},\bar{a}_i,\bar{v}_i)\in \RAMOp{I}$ and RAM $\vecT'=(\vec{a}', \vec{v}')\in \RAM{I}{n}$,
+the {\em time ordered transcript} for the tuple $(\vecT,\vec{o},\vecT')$ is given by the table $\tr$ with $k=2n+m$ rows and four columns
 $\tr = (\vec{t},\vec{\op},\vec{A},\vec{V})$  defined as follows: (i) $\vec{t}=\setind_{k}=(1,\ldots,k)$,
 (ii) $\vec{\op}=0^n||(\bar{\op}_1,\ldots,\bar{\op}_m)||0^n$,
 (iii) $\vec{A}=\vec{a}||(\bar{a}_1,\ldots,\bar{a}_m)||\vec{a}'$ and
 (iv) $\vec{V}=\vec{v}||(\bar{v}_1,\ldots,\bar{v}_m)||\vec{v}'$. The $i^{th}$ row of the table $\tr$ is
-$(t_i,\op_i,A_i,V_i)$ for $i\in [k]$. The first $n$ records in $\tr$ correspond to the contents of $T$,
+$(t_i,\op_i,A_i,V_i)$ for $i\in [k]$. The first $n$ records in $\tr$ correspond to the contents of $\vecT$,
 the next $m$ records correspond to the operations in $\vec{o}$ and final $n$
-records correspond to contents of $T'$. The timestamp column $\vec{t}$ is added to order operations with the same index.
-Notationally, we write $\tr=\TOT(T,\vec{o},T')$.
+records correspond to contents of $\vecT'$. The timestamp column $\vec{t}$ is added to order operations with the same index.
+Notationally, we write $\tr=\TOT(\vecT,\vec{o},\vecT')$.
 
 We call a transcript $\tr=(\vec{t},\vec{\op},\vec{A},\vec{V})$ to be {\em address ordered} if $A_i\leq A_{i+1}$ for $i\in [k-1]$ and
 $t_i < t_{i+1}$ whenever $A_i=A_{i+1}$. For a transcript $\tr=(\vec{t},\vec{\op},\vec{A},\vec{V})$ with $k$ records and a
 permutation $\sigma:[k]\rightarrow [k]$, we use $\sigma(\tr)$ to denote the transcript
 $(\sigma(\vec{t}),\sigma(\vec{\op}),\sigma(\vec{A}),\sigma(\vec{V}))$
 obtained by permuting the records of $\tr$ according to the permutation $\sigma$.
-An address ordered transcript for tuple $(T,\vec{o},T')$ is defined as $\tr^\ast=\sigma(\tr)$ where $\tr=\TOT(T,\vec{o},T')$ and $\sigma$ is
-a permutation such that $\tr^\ast$ is address ordered. We denote it by $\tr^\ast=\AOT(T,\vec{o},T')$.
+An address ordered transcript for tuple $(\vecT,\vec{o},\vecT')$ is defined as $\tr^\ast=\sigma(\tr)$ where $\tr=\TOT(\vecT,\vec{o},\vecT')$ and $\sigma$ is
+a permutation such that $\tr^\ast$ is address ordered. We denote it by $\tr^\ast=\AOT(\vecT,\vec{o},\vecT')$.
 We say that an address ordered transcript $\tr=(\vec{t},\vec{\op},\vec{A},\vec{V})$ satisfies {\em load-store correctness}
 if for all pairs of consecutive records $(t_i,\op_i,A_i,V_i)$ and $(t_{i+1},\op_{i+1},A_{i+1},V_{i+1})$ we have $V_{i+1}=V_i$
 whenever $\op_{i+1}=0$ (load operation) and
 $A_i=A_{i+1}$, i.e, a load operation does not change the value at an index.
 We formally state the folklore technique for enforcing memory consistency in our setting.
 \begin{lemma}\label{lem:consistency-check}
-Let $\F$ be a finite field, $m,n\in \N$ be positive integers and $\setind\subseteq \F$. Then $(T,\vec{o},T')\in \LRAM{I}{n}{m}$ if and only if
-    the address ordered transcript $\tr^\ast=\AOT(T,\vec{o},T')$ satisfies load-store correctness.
+Let $\F$ be a finite field, $m,n\in \N$ be positive integers and $\setind\subseteq \F$. Then $(\vecT,\vec{o},\vecT')\in \LRAM{I}{n}{m}$ if and only if
+    the address ordered transcript $\tr^\ast=\AOT(\vecT,\vec{o},\vecT')$ satisfies load-store correctness.
 \end{lemma}
 
 The consistency check in Lemma \ref{lem:consistency-check} can be encoded as an arithmetic circuit of size $\wt{O}(m+n)$, thus

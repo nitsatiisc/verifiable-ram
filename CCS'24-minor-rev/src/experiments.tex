@@ -25,6 +25,7 @@
     \caption{Comparison of R1CS constraints incurred by existing approaches for batching efficient
     RAMs. MT20 refers to Merkle-tree with depth 20, instantiated using Poseidon hash.}
     \label{fig:batch-ram-constraints}
+    \vspace*{-5mm}
 \end{figure}
 
 \begin{figure}[t!]
@@ -71,6 +72,7 @@
     \end{tikzpicture}
     \caption{Online proving time of updates on table $\vecT$ given the pre-processing parameters for table $\vecTbase$, plotted against the hamming distance $\delta$ between $\vecTbase$ and $\vecT$. Here $m$ denotes the batch size of updates, while the RAM size is $N=2^{20}$. The blue plot corresponds to our scheme instantiated with CQ as the sub-vector argument (in a black-box manner). The red plot corresponds to the non-black-box adaptation of Caulk+ described in Appendix~\ref{app:committed-index-lookup}.}
     \label{fig:batch-ram-proving-time}
+    \vspace*{-3mm}
 \end{figure}
 
 In this section we present concrete evaluation of our batching efficient RAM and compare it to the
@@ -85,8 +87,10 @@ in Section ~\ref{sec:update-protocol} over the na\"{i}ve approach.
 %for our evaluation.
 Our implementation is built on top of existing implementation ~\cite{caulk-implementation}
 of lookup argument Caulk ~\cite{CCS:ZBKMNS22}. We make our implementation available at
-\url{https://anonymous.4open.science/r/updatableRAM/} for anonymous submission. We later plan to
-make the implementation available as open-source project.
+\url{https://anonymous.4open.science/r/updatableRAM/}. 
+%for anonymous submission. 
+%We later plan to
+%make the implementation available as open-source project.
 
 \noindent{\bf Experimental Test-bed.} All the benchmarks were run single-threaded on a commodity configuration featuring a
 $2.1GHz$ Intel-I5 processor, $16$ GB memory running Ubuntu Linux 22.04. The implementation was compiled using {\tt --release}
@@ -111,11 +115,12 @@ made an order of magnitude more efficient by leveraging parallel implementation 
     \begin{tabular}{|l|c|c|c|c|c|c|}
         \hline
         %\rowcolor{gray}
-        \cellcolor{gray} Table-Size ($N$) & $2^{10}$ & $2^{12}$ & $2^{14}$ & $2^{16}$ & $2^{18}$ & $2^{20}$ \\ \hline
-        \cellcolor{gray} Time (s) & $7$ & $29$ & $135$ & $620$ & $2766$ & $12000$ \\ \hline
+        \cellcolor{lightgray} Table-Size ($N$) & $2^{10}$ & $2^{12}$ & $2^{14}$ & $2^{16}$ & $2^{18}$ & $2^{20}$ \\ \hline
+        \cellcolor{lightgray} Time (s) & $7$ & $29$ & $135$ & $620$ & $2766$ & $12000$ \\ \hline
     \end{tabular}
     \caption{Pre-processing time for tables of different sizes.}
     \label{tbl:offline-proving-time}
+    \vspace*{-5mm}
 \end{table}
 
 
@@ -160,6 +165,7 @@ at the cheaper end of online proving performance.
     \caption{Comparison of Lemma ~\ref{lem:sum-computation} and naive computation for calculating
     scalar coefficients for encoded quotients.}
     \label{tbl:sum-computation-compare}
+    \vspace*{-5mm}
 \end{table}
 
 \noindent{\bf Comparison with Prior Work}. The proof generation in the prior batching efficient RAM constructions
@@ -204,6 +210,7 @@ comparison in Table ~\ref{tbl:performance-comparison} which was considered in pr
     where $a$ denote proving time of \textsf{Groth16} and $b$ denotes witness generation time. The latter
     is reported in respective works for a parallel implementation.}
     \label{tbl:performance-comparison}
+    \vspace*{-5mm}
 \end{table}
 
 

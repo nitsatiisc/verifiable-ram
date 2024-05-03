@@ -10,8 +10,8 @@ the RAM $n$). Finally, for an index, there should be at most one value in the RA
 The formal definition of the RAM follows:
 \begin{definition}[RAM]\label{defn:RAM}
 Given $n\in \N$, finite field $\F$ and a set $\mathcal{I}\subseteq \F$, a RAM of size $n$ over indices $\mathcal{I}$
-is a tuple $T=(\vec{a},\vec{v})\in \mathcal{I}^n\times \F^n$ such that $\forall\, i,j\in [n]$  $v_i=v_j$ whenever $a_i=a_j$.
-We think of $T$ as a table with vectors $\vec{a}$ and $\vec{v}$ denoting its columns. The set of all such
+is a tuple $\vecT=(\vec{a},\vec{v})\in \mathcal{I}^n\times \F^n$ such that $\forall\, i,j\in [n]$  $v_i=v_j$ whenever $a_i=a_j$.
+We think of $\vecT$ as a table with vectors $\vec{a}$ and $\vec{v}$ denoting its columns. The set of all such
 tables will be denoted by $\RAM{I}{n}$.
     %\begin{align*}
     %        T[\,a\,] = \begin{cases}
@@ -20,11 +20,14 @@ tables will be denoted by $\RAM{I}{n}$.
     %                \end{cases}
     %\end{align*}
 \end{definition}
-For a table $T=(\vec{a},\vec{v})\in \RAM{I}{n}$, we refer to tuples $(a_i,v_i)$, $i\in [n]$ as records of the table $T$.
-We use the access notation $v=T[a]$ to mean that $(a,v)$ is a record of $T$ (note there can be multiple such records
-according to our definition). When we refer to a vector $\vecT\in \F^n$ as a RAM, we implicitly
-assume $T=(\vec{I}_n,\vecT)$ with $\vec{I}_n=(1,2,\ldots,n)$. In this case we have $T[i]=\vecT[i]$.
-For a RAM $T\in \RAM{I}{n}$, a RAM operation is a three tuple $(\op,a,v)$ with $\op\in \{0,1\}$,
+For a table $\vecT=(\vec{a},\vec{v})\in \RAM{I}{n}$, we refer to tuples $(a_i,v_i)$, $i\in [n]$ as records of the table $\vecT$.
+We use the access notation $v=\vecT[a]$ to mean that $(a,v)$ is a record of $\vecT$ (note there can be multiple such records
+according to our definition). When we consider RAMs where the first column~(of indices) is of the form $\vec{I}_n=(1,2,\ldots,n)$, we simply 
+denote such RAMs by $\vecT\in\F^n$.
+%When we refer to a vector $\vecT\in \F^n$ as a RAM, we implicitly
+%assume the first column of the RAM $\vecT$ to be $\vec{I}_n=(1,2,\ldots,n)$. 
+%$T=(\vec{I}_n,\vecT)$ with $\vec{I}_n=(1,2,\ldots,n)$. In this case we have $T[i]=\vecT[i]$.
+For a RAM $\vecT\in \RAM{I}{n}$, a RAM operation is a three tuple $(\op,a,v)$ with $\op\in \{0,1\}$,
 $a\in \setind$ and $v\in \F$. An operation with $\op=0$ is called a {\em load} operation which denotes reading a value $v$
 mapped to index $a$ in the RAM. Similarly, an operation with $\op=1$ is called a {\em store} operation,
 which denotes associating the value $v$ with index $a$ in the RAM.
@@ -43,14 +46,15 @@ We use $\RAMOp{I}$ to denote the set of all RAM operations with index set $\seti
         %	Concatenation of transcripts                                                                    & Fig 8    & $O(m \log m)$      & 2P            & 4G1, 6F         \\ \hline
         %	Permutation of transcripts                                                                      & Fig 9    & $O(m \log m)$       & 2P            & 4G1, 5F         \\ \hline
         %	\begin{tabular}[c]{@{}l@{}}Memory consistency \& \\ address ordering of transcript\end{tabular} & Fig 7    & $O(m \log m)$       & 5P            & 20G1,19F        \\ \hline
-        \rowcolor{gray}
-        \textcolor{white}{Batching-Efficient RAM}                                                                          & \textcolor{white}{Fig  ~\ref{fig:complete-listing}}    & \textcolor{white}{$\widetilde{O}(\sqrt{mN})\,\F,\G$}            & \textcolor{white}{8P}            & \textcolor{white}{$65\Gone$, $1\Gtwo$, $43\F$}  \\ \hline
+        \rowcolor{lightgray}
+        {Batching-Efficient RAM}                                                                          & {Fig  ~\ref{fig:complete-listing}}    & {$\widetilde{O}(\sqrt{mN})\,\F,\G$}            & {8P}            & {$65\Gone$, $1\Gtwo$, $43\F$}  \\ \hline
     \end{tabular}
     \caption{Asymptotic efficiency of the component protocols for our scheme. Here $N$ = size of the RAM, $m$ = number of operations
     , $\delta$ = hamming distance of table for which pre-computed parameters are available from the current table.
     $P$ denotes a pairing evaluation. The performance corresponds to CQ based realization of batching-efficient
     RAM.}
     \label{tbl:efficiency-components}
+    \vspace*{-5mm}
 \end{table*}
 
 
@@ -58,12 +62,12 @@ We use $\RAMOp{I}$ to denote the set of all RAM operations with index set $\seti
 \subsection{Batching-Efficient RAM: Blueprint}\label{subsec:batching-efficient-ram-blueprint}
 We will use a vectors in $\F^N$ to denote the ``large'' RAMs, where index column is implicitly
 assumed to be $(1,\ldots,N)$.
-Let $\vec{T},\vec{T'}\in \F^N$ denote the initial and final RAM states, and let $\vec{o}$ be
-a sequence of $m$ operations ($m < N$) which updates $\vec{T}$ to $\vec{T}'$. Let $\vec{a}\in \F^m$ denote the vector
+Let $\vecT,\vec{T'}\in \F^N$ denote the initial and final RAM states, and let $\vec{o}$ be
+a sequence of $m$ operations ($m < N$) which updates $\vecT$ to $\vecT'$. Let $\vec{a}\in \F^m$ denote the vector
 of RAM indices referenced by the operations in $\vec{o}$, i.e, $a_i$ is the index referenced by $i^{th}$ operation.
-To prove the transformation of $\vec{T}$ to $\vec{T}'$ via operation sequence $\vec{o}$, we proceed as follows:
+To prove the transformation of $\vecT$ to $\vecT'$ via operation sequence $\vec{o}$, we proceed as follows:
 \begin{itemize}[leftmargin=1em, label=-]
-    \item We isolate sub-tables $S=(\vec{a},\vec{v})$ and $S'=(\vec{a},\vec{v'})$ of $T$ and $T'$ consisting of
+    \item We isolate sub-tables $S=(\vec{a},\vec{v})$ and $S'=(\vec{a},\vec{v'})$ of $\vecT$ and $\vecT'$ consisting of
     rows corresponding to indices in $\vec{a}$. This requires proving $\vec{v}=\vecT[\vec{a}]$ and $\vec{v'}=
     \vecT'[\vec{a}]$, which we show using {\em committed index lookup} argument discussed in Section ~\ref{subsec:committed-index-lookup}.
 
@@ -71,7 +75,7 @@ To prove the transformation of $\vec{T}$ to $\vec{T}'$ via operation sequence $\
     presented in Section \ref{sec:poly-proto-ram-app}) to prove that sequence $\vec{o}$ correctly updates $S$ to $S'$ with
     prover complexity of $\wt{O}(m)$.
 
-    \item Finally, we show that the RAMs $T$ and $T'$ are identical outside indices in $\vec{a}$. We describe the protocol
+    \item Finally, we show that the RAMs $\vecT$ and $\vecT'$ are identical outside indices in $\vec{a}$. We describe the protocol
     for proving the same in Section ~\ref{subsec:proximity-ram}.
 \end{itemize}
 
@@ -200,16 +204,16 @@ are highly parallelizable.
 %Finally, to maintain {\em liveliness} of the system~(this is particularly important for applications such as rollups), we must carefully align the online prover performance curve with the cost of offline computation. 
 
 
-%As an example, suppose $\vec{T}_0$
-%is the initial pre-processed table at time $t=0$. We generate proofs using pre-computed parameters for $\vec{T}_0$
-%till the time $t=t_1$, when the table state $\vec{T}_1$ is at hamming distance $2^{17}$ from $\vec{T}_0$. At this point,
+%As an example, suppose $\vecT_0$
+%is the initial pre-processed table at time $t=0$. We generate proofs using pre-computed parameters for $\vecT_0$
+%till the time $t=t_1$, when the table state $\vecT_1$ is at hamming distance $2^{17}$ from $\vecT_0$. At this point,
 %from Figure ~\ref{fig:batch-ram-proving-time}, online proof generation takes around $40s$ for batch of $1000$ updates.
-%At $t=t_1$, we also start an offline parameter computation for the table $\vec{T}_1$, while continuing to generate
-%online proofs using parameters for $\vec{T}_0$. We can generate the next $2^7$ batches of updates at an average of
-%approximately $12000/128\approx 94s$ each, thus finishing with a table state $\vec{T}_2$ at hamming distance at most
-%$2^{18}$ from $\vec{T}_0$ at $t_2=t_1+12000$. At this point, we should have the pre-computed parameters for $\vec{T}_1$,
-%which is at update distance of $2^{17}$ from $\vec{T}_2$, and thus online proof generation can switch to parameters
-%for the table $\vec{T}_1$. This alignment gives us a proving time of $94s$ per batch of $1000$, while ensuring system
+%At $t=t_1$, we also start an offline parameter computation for the table $\vecT_1$, while continuing to generate
+%online proofs using parameters for $\vecT_0$. We can generate the next $2^7$ batches of updates at an average of
+%approximately $12000/128\approx 94s$ each, thus finishing with a table state $\vecT_2$ at hamming distance at most
+%$2^{18}$ from $\vecT_0$ at $t_2=t_1+12000$. At this point, we should have the pre-computed parameters for $\vecT_1$,
+%which is at update distance of $2^{17}$ from $\vecT_2$, and thus online proof generation can switch to parameters
+%for the table $\vecT_1$. This alignment gives us a proving time of $94s$ per batch of $1000$, while ensuring system
 %is live at all times. Clearly, a faster offline pre-computation using parallel implementation would allow us to stay
 %at the cheaper end of online proving performance.
 

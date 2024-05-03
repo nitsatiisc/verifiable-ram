@@ -31,7 +31,7 @@ As before, we define the encoding of vectors in $\vec{f}\in \F^k$ as $\enc{f}{\s
 %The encoding of vectors as polynomials can be succinctly described using lagrange basis polynomials.
 %Then we have $\enc{f}{\setH}=\sum_{i=1}^k f_i\lambda_i(X)$ and $\enc{g}{\setV}=\sum_{i=1}^m g_i\tau_i(X)$.
 We canonically extend the encoding of vectors to encode RAM, operations and transcripts by encoding their component vectors.
-Thus, for a RAM $T=(\vec{a},\vec{v})\in \RAM{I}{m}$, we define its encoding
+Thus, for a RAM $\vecT=(\vec{a},\vec{v})\in \RAM{I}{m}$, we define its encoding
 $\wt{T}=(a(X),v(X))$ where $a(X),v(X)\in \F_{<m}[X]$ encode vectors $\vec{a}, \vec{v}$ respectively.
 Given an operation sequence
 $\vec{o}=(o_1,\ldots,o_m)$ with $o_i=(\bar{\op}_i,\bar{a}_i,\bar{v}_i)$ we encode $\vec{o}$ as
@@ -39,7 +39,7 @@ $\wt{O}$ $=$ $(\bar{\op}(X)$ ,$\bar{a}(X)$ ,$\bar{v}(X))$
 where $\bar{\op}(X)$ encodes the
 vector $\vec{\op}=(\bar{\op}_1,\ldots,\bar{\op}_m)$, $\bar{a}(X)$ encodes the vector $(\bar{a}_1,\ldots,\bar{a}_m)$ and
 $\bar{v}(X)$encodes the vector $(\bar{v}_1,\ldots,\bar{v}_m)$.
-Finally, a transcript $\tr=(\vec{t},\vec{\op},\vec{A},\vec{V})$ for tuples $(T,\vec{o},T')$ where $T,T'$ are RAMs of size $m$,
+Finally, a transcript $\tr=(\vec{t},\vec{\op},\vec{A},\vec{V})$ for tuples $(\vecT,\vec{o},\vecT')$ where $\vecT,\vecT'$ are RAMs of size $m$,
 and $\vec{o}$ is an operation sequence of size $m$ is encoded as $\wt{\tr}$ $=$ $(t(X)$, $\op(X)$, $A(X)$, $V(X))$
 where the polynomials $t(X),\op(X),V(X)$ and $A(X)$ encode the respective vectors in $\F^k$ (See Section \ref{sec:model-for-ram}).
 
@@ -223,29 +223,29 @@ checking the membership in the language $\LRAM{I}{m}{m}$ for $m\in \N$. The poly
 be compiled into a succinct argument using an extractable polynomial commitment scheme.
 In this section, we use $\kzg$ polynomial commitment scheme to obtain a succinct argument for checking membership in $\LRAM{I}{m}{m}$
 in the Algebraic Group Model (AGM).
-At a high level, to prove $(\vec{T},\vec{o},\vec{T'})\in \LRAM{I}{m}{m}$, the prover
+At a high level, to prove $(\vecT,\vec{o},\vecT')\in \LRAM{I}{m}{m}$, the prover
 constructs time ordered transcript $\tr$ and then permutes it to obtain the address sorted transcript $\tr^\ast$.
-It then sends the polynomial encodings of $\vec{T},\vec{o},\vec{T'},\tr$ and $\tr^\ast$ to the verifier, who verifies that:
+It then sends the polynomial encodings of $\vecT,\vec{o},\vecT',\tr$ and $\tr^\ast$ to the verifier, who verifies that:
 \begin{enumerate}[leftmargin=1em]
-    \item The time ordered transcript is correctly constructed, i.e, $\tr=\TOT(\vec{T},\vec{o},\vec{T'})$.
+    \item The time ordered transcript is correctly constructed, i.e, $\tr=\TOT(\vecT,\vec{o},\vecT')$.
     \item The transcript $\tr^\ast$ is a permutation of the transcript $\tr$, i.e, $\tr^\ast=\sigma(\tr)$ for some permutation $\sigma$ of $[k]$.
     \item The transcript $\tr^\ast$ is address ordered and satisfies load-store consistency.
 \end{enumerate}
-In fact, we consider memebership in the above language under commitments. Let $\srs$ denote a $\kzg$ setup over a bilinear group, with
+In fact, we consider membership in the above language under commitments. Let $\srs$ denote a $\kzg$ setup over a bilinear group, with
 prime order groups $\Gone, \Gtwo$ and $\GT$. We canonically commit to RAM, operation sequences and transcripts by committing to their
 polynomial encodings. Commitment of an encoding represented as tuple of polynomials is simply the tuple consisting of commitments of the component
 polynomials. We now define
 the relation $\CLRAM$ below, and present a succinct argument for the same.
 \begin{definition}\label{defn:committed-vram}
-Let $\CLRAM$ consist of tuples $((c_T, c_o, c_T'), (T, \vec{o},T'))$ where $c_T$ $=$ $\kzgcommit(\srs, \wt{T})$,
+Let $\CLRAM$ consist of tuples $((c_T, c_o, c_T'), (\vecT, \vec{o},\vecT'))$ where $c_T$ $=$ $\kzgcommit(\srs, \wt{T})$,
 $c_T'$ $=$ $\kzgcommit(\srs, \wt{T'})$,
-$c_o$ $=$ $\kzgcommit(\srs,\wt{O})$ commit to $T$, $T'$ and $\vec{o}$ with $(T,\vec{o},T')\in \LRAM{I}{m}{m}$.
+$c_o$ $=$ $\kzgcommit(\srs,\wt{O})$ commit to $\vecT$, $\vecT'$ and $\vec{o}$ with $(\vecT,\vec{o},\vecT')\in \LRAM{I}{m}{m}$.
 \end{definition}
 \noindent In the above definition we have $c_T=(c_a,c_v)$ where $c_a$ and $c_v$ are $\kzg$ commitments to polynomials $a(X)$ and $v(X)$ in
 the encoding $\wt{T}=(a(X), v(X))$. Similarly we parse $c_T'=(c_a', c_v')$ and $c_o=(\bar{c}_\op, \bar{c}_a, \bar{c}_v)$ (see Section
 \ref{subsec:poly-encoding} for polynomial encodings).
-For proving relation \ref{defn:committed-vram}, prover's input consists of initial RAM state $T=(\vec{a},\vec{v})$,
-final RAM state $T'=(\vec{a'},\vec{v'})$, operation sequence $\vec{o}=(o_1,\ldots,o_m)$ with $o_i=(\bar{\op}_i,\bar{a}_i,\bar{v}_i)$,
+For proving relation \ref{defn:committed-vram}, prover's input consists of initial RAM state $\vecT=(\vec{a},\vec{v})$,
+final RAM state $\vecT'=(\vec{a'},\vec{v'})$, operation sequence $\vec{o}=(o_1,\ldots,o_m)$ with $o_i=(\bar{\op}_i,\bar{a}_i,\bar{v}_i)$,
 time-ordered transcript $\tr=(\vec{t},\vec{\op},\vec{A},\vec{V})$ and address-ordered transcript $\tr^\ast=(\vec{t^\ast},\vec{\op^\ast},
 \vec{A^\ast},\vec{V^\ast})$ obtained from $\tr$ using a permutation $\sigma:[k]\rightarrow [k]$. Verifier's input consists of the
 commitments $c_T, c_o$ and $c_T'$ as described above.
@@ -266,9 +266,9 @@ The complete polynomial protocol is detailed in Figure \ref{fig:time-ordered-tra
     \begin{mdframed}
     {
             {\bf Common Input}: Commitments $c_T=(c_a,c_v)$, $c_o=(\bar{c}_\op, \bar{c}_a, \bar{c}_v)$, $c_T'=(c_a', c_v')$
-        and $c_\tr=(c_t, c_\op, c_A, c_V)$ to $T,o,T'$ and $\tr$(which is supposed to be the time ordered transcript) respectively. Commitment $\gone{Z(X)}$ to the polynomial
+        and $c_\tr=(c_t, c_\op, c_A, c_V)$ to $\vecT,o,\vecT'$ and $\tr$(which is supposed to be the time ordered transcript) respectively. Commitment $\gone{Z(X)}$ to the polynomial
         $Z(X)=\prod_{i=1}^m (X-\omega^i)$\\
-    {\bf Prover's Input}: $\tr, T, T', \vec{o}$ and their polynomial encodings, $Z(X)$
+    {\bf Prover's Input}: $\tr, \vecT, \vecT', \vec{o}$ and their polynomial encodings, $Z(X)$
         \begin{enumerate}[leftmargin=1em, label=\arabic*.]
             \item $\verifier$ sends $\beta,\gamma\gets \F$.
             \item $\prover$ computes:
@@ -366,11 +366,11 @@ The range checks in (C7) can be checked using polynomial protocols in sub-vector
     {
             {\bf Common Input}: Commitments $c_T=(c_a,c_v)$, $c_o=(\bar{c}_\op, \bar{c}_a, \bar{c}_v)$, $c_T'=(c_a', c_v')$
 
-            {\bf Prover's Input}: $ T, T', \vec{o}$ and their polynomial encodings
+            {\bf Prover's Input}: $ \vecT, \vecT', \vec{o}$ and their polynomial encodings
         \begin{enumerate}[leftmargin=1em, label=\arabic*.]
             \item $\prover$ computes:
             \begin{itemize}
-                \item $\tr$, which is the time ordered transcript corresponding to $T, \vec{o}, T'$, and its polynomial encoding
+                \item $\tr$, which is the time ordered transcript corresponding to $\vecT, \vec{o}, \vecT'$, and its polynomial encoding
                 \item $Z(X)=\prod_{i=1}^m (X-\omega^i)$
                 \item $c_\tr=(c_t, c_\op, c_A, c_V)$ which is the commitment of $\tr$
                 \item $[Z(X)]_1$

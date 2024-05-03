@@ -60,18 +60,18 @@ in Figure ~\ref{fig:committed-index-lookup} is an argument of knowledge for the 
 \subsection{Almost Identical RAM States}\label{subsec:proximity-ram}
 For a vector $\vec{a}\in [N]^m$, let $\uniq{a}=\{a_i: i\in [m]\}$ denote the subset of unique values in $\vec{a}$. We call two
 RAM states $\vecT, \vecT'\in \F^N$ to be $\vec{a}$-{\em identical} if $\vecT[i]=\vecT'[i]$ for all $i\not\in\uniq{a}$. As before,
-let $T(X),T'(X)$ and $a(X)$ be polynomials encoding the vectors $\vecT,\vecT'$ (over $\setN$) and $\vec{a}$ (over $\setV$). Let
+let $T(X),T^*(X)$ and $a(X)$ be polynomials encoding the vectors $\vecT,\vecT'$ (over $\setN$) and $\vec{a}$ (over $\setV$). Let
 $c_T, c_T'$ and $c_a$ be the commitments to vectors $\vecT, \vecT'$ and $\vec{a}$ respectively in the group $\Gone$. The polynomial protocol to prove that
 $\vecT,\vecT'\in \F^N$ and $\vec{a}\in \F^m$ are $\vec{a}$-identical requires proving the relation
-$Z_I(X)(T(X) - T'(X)) = 0$ over the set $Z_\setN$ where
+$Z_I(X)(T(X) - T^*(X)) = 0$ over the set $Z_\setN$ where
 $I=\uniq{a}$ and $Z_I(X)=\prod_{i\in I}(X-\xi^i)$ is the vanishing polynomial for the set $\setN_I=\{\xi^i: i\in I\}$.
 To proceed, the honest prover commits to polynomial $Z_I$ and proves (i) $Z_I(T - T') = 0 \text{ mod } Z_\setN$ and (ii) the zeroes
-of $Z_I$ form a subset of $\setN_I$ as defined. Together, the two conditions imply that $T(\xi^i)=T'(\xi^i)$ for $i\not\in \uniq{a}$.
+of $Z_I$ form a subset of $\setN_I$ as defined. Together, the two conditions imply that $T(\xi^i)=T^*(\xi^i)$ for $i\not\in \uniq{a}$.
 To prove the first relation, the prover computes the polynomial $D(X)$ as below:
 \begin{align}\label{eq:poly-q}
-D(X) &= \frac{(T(X)-T'(X))\cdot Z_I(X)}{Z_\setN(X)} \nonumber \\
-&= \sum_{i\in I}\frac{(t_i - t_i')\mu_i(X)}{Z_\setN(X)} Z_I(X) \nonumber \\
-\intertext{ Substituting, $\Delta_i=t_i-t_i'$, $\mu_i(X)=\vpolyN(X)/(\vpolyN'(\xi^i)(X-\xi^i))$ }
+D(X) &= \frac{(T(X)-T^*(X))\cdot Z_I(X)}{Z_\setN(X)} \nonumber \\
+&= \sum_{i\in I}\frac{(T(\xi^i) - T^*(\xi^i))\mu_i(X)}{Z_\setN(X)} Z_I(X) \nonumber \\
+\intertext{ Substituting, $\Delta_i=T(\xi^i) - T^*(\xi^i)$, $\mu_i(X)=\vpolyN(X)/(\vpolyN'(\xi^i)(X-\xi^i))$ }
 &=\sum_{i\in I}\frac{\Delta_i}{Z_\setN'(\xi^i)}\left(\frac{Z_I(X)}{X-\xi^i}\right) = \sum_{i\in I}\frac{\Delta_i Z_I'(\xi^i)}{Z_\setN'(\xi^i)}\kappa_i(X)
 \end{align}
 In the above, the summation only runs over indices in $I$, as $\Delta i = 0$ for $i\not\in I$. In the final equality, we use
@@ -81,7 +81,7 @@ $D(\xi^i)=\Delta_i Z_I'(\xi^i)/\vpolyN'(\xi^i)$ for $i\in I$.
 The prover can therefore interpolate $D(X)$ (in power basis)
 in $O(|I|\log^2 |I|)$ $\F$-operations and compute $\gone{D(X)}$ in $O(|I|)$ $\Gone$-operations. The prover sends the
 commitment $\gone{D(X)}$ to the verifier. Finally, the verifier can
-check the identity $Z_I(T - T') = D\cdot Z_\setN$ by a pairing check. For this, since the tables are committed in $\Gone$, prover will need to send $\elttwo{Z_I(X)}$.
+check the identity $Z_I(T - T^*) = D\cdot Z_\setN$ by a pairing check. For this, since the tables are committed in $\Gone$, prover will need to send $\elttwo{Z_I(X)}$.
 
 Next, the prover needs to show that zeroes of $Z_I$ are indeed in the set $\setN_I=\{\xi^i: i\in I\}=\{\xi^{a_i}:i\in [m]\}$.
 Clearly, it suffices to show that $Z_I(X)$ divides the polynomial $\prod_{i\in [m]}(X - \xi^{a_i})$. To obtain a
@@ -134,7 +134,7 @@ if and only if $K(\alpha)=1+\beta=\prod_{i\in [m]} (\alpha - h(\nu^i))$.
 
         {\bf Common Input}: $\srs$, $c_T, c_T', c_a$.
 
-        {\bf Prover's Input}: Vectors $\vecT,\vecT'\in \F^N$, $\vec{a}\in \F^m$. Polynomials $T(X),T'(X)$ and
+        {\bf Prover's Input}: Vectors $\vecT,\vecT'\in \F^N$, $\vec{a}\in \F^m$. Polynomials $T(X),T^*(X)$ and
         $a(X)$ encoding $\vecT,\vecT'$ and $\vec{a}$ respectively.
 
         {\bf Round 1}: Prover commits to auxiliary polynomials
@@ -142,7 +142,7 @@ if and only if $K(\alpha)=1+\beta=\prod_{i\in [m]} (\alpha - h(\nu^i))$.
             \item $\prover$ computes:
                 \begin{itemize}[leftmargin=1em, label=-]
                 \item $I=\uniq{a}$, $Z_I(X)=\prod_{i\in I}(X-\xi^i)$.
-                \item $D(X)=Z_I(X)(T(X) - T'(X))/\vpolyN(X)$.
+                \item $D(X)=Z_I(X)(T(X) - T^*(X))/\vpolyN(X)$.
                 \item $h(X)$ such that $h(\nu^i)=\xi^{a_i}$ for $i\in [m]$.
                 \item $K(X)=\prod_{i=1}^m (X - h(\nu^i))$, $q(X)=K(X)/Z_I(X)$.
                 \end{itemize}
@@ -227,10 +227,12 @@ We define the {\em committed ram} relation
 $\CRAM$ to consist of tuples $((c_T, c_T', c_\op, c_a, c_w),(\vecT, \vecT',\vec{\op},\vec{a},\vec{w}))$
 such that:
 \begin{itemize}[leftmargin=1em]
-    \item $(T,\vec{o},T')\in \LRAM{I}{N}{m}$ for $T=(\setind_N,\vecT)$, $T'=(\setind_N,\vecT')$ and $\vec{o}=(o_1,\ldots,o_m)$
-    where $o_i=(\op_i, a_i, w_i)\in \RAMOp{I}$ for all $i\in [m]$.
-    \item $c_T=\KZGcommit(\srs, T(X))$, $c_T'=\KZGcommit(\srs, T'(X))$, $c_\op = \KZGcommit(\srs,\op(X))$,  $c_a=\KZGcommit(\srs, a(X))$,
-    $c_w = \KZGcommit(\srs, w(X))$ where polynomials $T(X), T'(X)$ encode vectors $\vecT, \vecT'$ over $\setN$, while $\op(X), a(X)$ and
+    \item $(\vecT,\vec{o},\vecT')\in \LRAM{I}{N}{m}$ for $\vec{o}=(o_1,\ldots,o_m)$ where we have $o_i=(\op_i, a_i, w_i)\in \RAMOp{I}$ for all $i\in [m]$~(here we implicitly view vectors $\vecT$ and $\vecT'$ as RAMs with index column $\setind_N$). 
+    
+%    for $T=(\setind_N,\vecT)$, $T'=(\setind_N,\vecT')$ and $\vec{o}=(o_1,\ldots,o_m)$
+   
+    \item $c_T=\KZGcommit(\srs, T(X))$, $c_T'=\KZGcommit(\srs, T^*(X))$, $c_\op = \KZGcommit(\srs,\op(X))$,  $c_a=\KZGcommit(\srs, a(X))$,
+    $c_w = \KZGcommit(\srs, w(X))$ where polynomials $T(X), T^*(X)$ encode vectors $\vecT, \vecT'$ over $\setN$, while $\op(X), a(X)$ and
     $w(X)$ encode vectors $\vec{\op}=(\op_1,\ldots,\op_m)$, $\vec{a}$ and $\vec{w}$ over $\setV$.
 \end{itemize}
 \end{definition}
@@ -252,7 +254,7 @@ Specifically, the prover and the verifier set
 $c_S = (c_a, c_v)$, $c_S'=(c_a, c_v')$ and $c_o = (c_\op, c_a, c_w)$, and execute the argument of knowledge for
 showing $(c_S, c_o, c_S')\in \CLRAM$ (see Definition ~\ref{defn:committed-ram}). We provide the complete protocol
 listing in Figure ~\ref{fig:complete-listing}. The protocol in Figure ~\ref{fig:complete-listing} assumes pre-computed parameters
-for the tables $\vecT$ and $\vecT'$. The maintenance of these pre-computed parameters in the presence of updates to the table
+for the tables $\vecT$ and $\vecT'$. The maintenance of these pre-computed parameters in the presence of updates
 is detailed in Section ~\ref{sec:update-protocol}.
 
 \begin{theorem}\label{thm:committed-ram}
@@ -273,7 +275,7 @@ the AGM, under the $Q$-DLOG assumption for the bilinear group $(\F,\Gone,\Gtwo,\
         \underline{Precompute $(\vecT, \vecT')$}:
         \begin{itemize}[leftmargin=1em]
             \item $W_1^i=\gtwo{(T(X)-T(\xi^i))/(X-\xi^i)}$, $i\in [N]$,
-            \item ${W_1^i}'=\gtwo{(T'(X) - T'(\xi^i))/(X-\xi^i)}$, $i\in [N]$.
+            \item ${W_1^i}'=\gtwo{(T^*(X) - T^*(\xi^i))/(X-\xi^i)}$, $i\in [N]$.
         \end{itemize}
 
         {\bf Common Input}: $\srs$, $c_T, c_T', c_\op, c_a, c_w\in \Gone$.\\
