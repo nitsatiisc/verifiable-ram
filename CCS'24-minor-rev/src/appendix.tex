@@ -842,15 +842,10 @@ $F_K(X)$ is defined as
     &= \frac{1}{Z_K'(\xi^i)}\sum_{j\in K\setminus \{i\}}\left(\eta_j(X)/(X-\xi^i)\right)(\xi^i)
     \end{align*}
 
-    Now, \begin{align*}
-             \left(\eta_j(X)/(X-\xi^i)\right)(\xi^i)&=\left(\frac{Z_K(X)}{(X-\xi^j)(X-\xi^i)Z_K'(\xi^j)}\right)(\xi^i)\\
-             &= \frac{Z_K'(\xi^i)}{(\xi^i-\xi^j)Z_K'(\xi^j)}
-    \end{align*}
+    Now, note that for all $j \neq i$, $\left(\eta_j(X)/(X-\xi^i)\right)(\xi^i)$ is just the evaluation of the polynomial $\frac{\eta_j(X)-\eta_j(\xi^i)}{X-\xi^i}$ at the point $\xi^i$.\\
+    But, since $\eta_j$ is a (Lagrange) polynomial, this is just $\eta_j'(\xi^i)$ by definition of formal derivative of the polynomial $\eta_j(X)$.
 
-    But if we compute, $\eta_j'(\xi^i)$ by quotient rule, we get:
-    $$\eta_j'(\xi^i)=\frac{Z_K'(\xi^i)}{(\xi^i-\xi^j)Z_K'(\xi^j)}$$
-    Thus,
-    $$\left(\eta_j(X)/(X-\xi^i)\right)(\xi^i)=\eta_j'(\xi^i) $$
+  
 
     Thus, we get:
 
