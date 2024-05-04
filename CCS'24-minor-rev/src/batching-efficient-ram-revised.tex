@@ -65,10 +65,9 @@ $c_T, c_T'$ and $c_a$ be the commitments to vectors $\vecT, \vecT'$ and $\vec{a}
 $\vecT,\vecT'\in \F^N$ and $\vec{a}\in \F^m$ are $\vec{a}$-identical requires proving the relation
 $Z_I(X)(T(X) - T^*(X)) = 0$ over the set $Z_\setN$ where
 $I=\uniq{a}$ and $Z_I(X)=\prod_{i\in I}(X-\xi^i)$ is the vanishing polynomial for the set $\setN_I=\{\xi^i: i\in I\}$.
-To proceed, the honest prover commits to polynomial $Z_I$ and proves (i) $Z_I(T - T') = 0 \text{ mod } Z_\setN$ and (ii) the zeroes
-of $Z_I$ form a subset of $\setN_I$ as defined. 
-\moumita{To proceed, the honest prover commits to polynomial $Z_I(X)$ and proves (i) $Z_I(X)\cdot (T(X) - T^*(X)) = 0 \text{ mod } Z_\setN$ and (ii) the zeroes
-	of $Z_I(X)$ form a subset of zeroes of $\setN_I(X)$ as defined.}
+\moumita{ Prev: To proceed, the honest prover commits to polynomial $Z_I$ and proves (i) $Z_I(T - T') = 0 \text{ mod } Z_\setN$ and (ii) the zeroes
+of $Z_I$ form a subset of $\setN_I$ as defined. }
+To proceed, the honest prover commits to polynomial $Z_I(X)$ and proves (i) $Z_I(X)\cdot (T(X) - T^*(X)) = 0 \text{ mod } Z_\setN$ and (ii) the zeroes of $Z_I(X)$ form a subset of zeroes of $\setN_I(X)$ as defined.
 Together, the two conditions imply that $T(\xi^i)=T^*(\xi^i)$ for $i\not\in \uniq{a}$.
 To prove the first relation, the prover computes the polynomial $D(X)$ as below:
 \begin{align}\label{eq:poly-q}
@@ -84,7 +83,8 @@ $D(\xi^i)=\Delta_i Z_I'(\xi^i)/\vpolyN'(\xi^i)$ for $i\in I$.
 The prover can therefore interpolate $D(X)$ (in power basis)
 in $O(|I|\log^2 |I|)$ $\F$-operations and compute $\gone{D(X)}$ in $O(|I|)$ $\Gone$-operations. The prover sends the
 commitment $\gone{D(X)}$ to the verifier. Finally, the verifier can
-check the identity $Z_I(T - T^*) = D\cdot Z_\setN$ \moumita{$Z_I(T - T') = D\cdot Z_\setN$ [OR] $Z_I(X) \cdot  (T(X) - T^*(X)) = D(X) \cdot Z_\setN(X)$ } by a pairing check. For this, since the tables are committed in $\Gone$, prover will need to send $\elttwo{Z_I(X)}$.
+check the identity $Z_I(X) \cdot  (T(X) - T^*(X)) = D(X) \cdot Z_\setN(X)$ %\moumita{Prev: $Z_I(T - T^*) = D\cdot Z_\setN$ . Alternative: $Z_I(T - T') = D\cdot Z_\setN$} 
+by a pairing check. For this, since the tables are committed in $\Gone$, prover will need to send $\elttwo{Z_I(X)}$.
 
 Next, the prover needs to show that zeroes of $Z_I$ are indeed in the set $\setN_I=\{\xi^i: i\in I\}=\{\xi^{a_i}:i\in [m]\}$.
 Clearly, it suffices to show that $Z_I(X)$ divides the polynomial $\prod_{i\in [m]}(X - \xi^{a_i})$. To obtain a
