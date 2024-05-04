@@ -72,7 +72,7 @@ To prove the transformation of $\vecT$ to $\vecT'$ via operation sequence $\vec{
     \vecT'[\vec{a}]$, which we show using {\em committed index lookup} argument discussed in Section ~\ref{subsec:committed-index-lookup}.
 
     \item On the isolated sub-tables $S$ and $S'$ of size $m$, we use the standard memory checking arguments (c.f. argument
-    presented in Section \ref{sec:poly-proto-ram-app}) to prove that sequence $\vec{o}$ correctly updates $S$ to $S'$ with
+    presented in Appendix \ref{sec:poly-proto-ram-app}) to prove that sequence $\vec{o}$ correctly updates $S$ to $S'$ with
     prover complexity of $\wt{O}(m)$.
 
     \item Finally, we show that the RAMs $\vecT$ and $\vecT'$ are identical outside indices in $\vec{a}$. We describe the protocol
@@ -119,7 +119,7 @@ We show that for $\delta=\Delta(\vecT, \vecT')$,
 an argument for $m$ lookups from $\vecT'$ incurs an additional prover overhead of $(m+\delta)\log^2(m+\delta)$ over the
 lookup argument for static tables. We note that the overhead is {\em quasi}-linear in both $m$ and $\delta$.
 Our competitive overhead rests on several innovative applications of algebraic
-algorithms, which are summarised in Section ~\ref{subsec:comp-algebra-app}. We then leverage this ability to use ``approximate"
+algorithms, which are summarised in Appendix ~\ref{subsec:comp-algebra-app}. We then leverage this ability to use ``approximate"
 setup into a {\em base + cache} strategy; where at all times we maintain pre-computed parameters corresponding to
 a base table $\vecTbase$, and use this setup to prove lookups from the current table $\vecT$. We achieve optimal
 prover effort on average by using parameters for $\vecTbase$ till the current table is at a hamming distance
@@ -157,7 +157,7 @@ appears in Figure ~\ref{fig:a-identical}.
 the smaller RAMs, $S=(\vec{a},\vec{v})$ and $S'=(\vec{a},\vec{v}')$ extracted from larger RAMs $\vecT,\vecT'$
 are consistent with respect to the operations. This can be accomplished using standard memory checking techniques
 based on address ordered transcripts, which we formalize in Section ~\ref{sec:model-for-ram}. Later in
-Sections ~\ref{sec:poly-proto-ram-app} and ~\ref{sec:poly-proto-ram}, we assemble known techniques to present
+Appendix ~\ref{sec:poly-proto-ram-app} and ~\ref{sec:poly-proto-ram}, we assemble known techniques to present
 a polynomial protocol for memory consistency based on address ordered transcripts.
 This involves encoding several artefacts such as operations, transcripts etc., as polynomials and relations
 among them such as concatenation, permutation and monotonicity as polynomial identities. Our modelling is
@@ -172,7 +172,7 @@ how different components discussed in this section contribute to the overall eff
 of our scheme using CQ ~\cite{EPRINT:EagFioGab22} is summarized in Table ~\ref{tbl:efficiency-components}, with
 efficiency of the overall scheme highlighted in gray. The table also serves as a ready-reckoner for component protocols
 involved in the overall scheme. A more detailed discussion and break-up of the polynomial protocol for RAM
-appears in Table~\ref{tbl:components-poly-ram} in Section~\ref{sec:poly-proto-ram-app}. We note that the verification complexity of the overall solution is substantially
+appears in Table~\ref{tbl:components-poly-ram} in Appendix~\ref{sec:poly-proto-ram-app}. We note that the verification complexity of the overall solution is substantially
 less than the aggregate of component protocols; this is due to the fact that several pairing checks required for
 $\kzg$ verification proofs can be batched together. For concrete instantiation using BLS12-381 curve, RAM size
 of 1 million, the online cost of proving an update of $1000$ operations on a table as a function of its

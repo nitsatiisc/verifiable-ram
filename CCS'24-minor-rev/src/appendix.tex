@@ -163,7 +163,7 @@ Protocols facilitating the checks mentioned in Lemma~\ref{lem:vec-concatenation}
 
             {\bf Prover's Input}: $\tr=(\vec{t}, \vec{op}, \vec{A}, \vec{V})$ and its polynomial encoding $\wt{\tr}=(t(X), \op(X), A(X), V(X))$.
         \begin{enumerate}[leftmargin=1em, label=\arabic*]
-            \item Prover determines sets $I_1, I_2$ as described in section A.2.
+            \item Prover determines sets $I_1, I_2$ as described in Appendix A.2.
             \item Prover computes polynomials $Z_1(X)$, $Z_2(X)$, $\delta_T(X)$, $\delta_A(X)$.
             \item $\prover$ sends $\gone{Z_1(X)}$, $\gone{Z_2(X)}$, $\gone{\delta_T(X)}$, $\gone{\delta_A(X)}$.
             \item $\verifier$ sends $\gamma\gets \F$.
@@ -247,7 +247,7 @@ $c_T'$ $=$ $\kzgcommit(\srs, \wt{T'})$,
 $c_o$ $=$ $\kzgcommit(\srs,\wt{O})$ commit to $\vecT$, $\vecT'$ and $\vec{o}$ with $(\vecT,\vec{o},\vecT')\in \LRAM{I}{m}{m}$.
 \end{definition}
 \noindent In the above definition we have $c_T=(c_a,c_v)$ where $c_a$ and $c_v$ are $\kzg$ commitments to polynomials $a(X)$ and $v(X)$ in
-the encoding $\wt{T}=(a(X), v(X))$. Similarly we parse $c_T'=(c_a', c_v')$ and $c_o=(\bar{c}_\op, \bar{c}_a, \bar{c}_v)$ (see Section
+the encoding $\wt{T}=(a(X), v(X))$. Similarly we parse $c_T'=(c_a', c_v')$ and $c_o=(\bar{c}_\op, \bar{c}_a, \bar{c}_v)$ (see Appendix
 \ref{subsec:poly-encoding} for polynomial encodings).
 For proving relation~\ref{defn:committed-vram}, prover's input consists of initial RAM state $\vecT=(\vec{a},\vec{v})$,
 final RAM state $\vecT'=(\vec{a'},\vec{v'})$, operation sequence $\vec{o}=(o_1,\ldots,o_m)$ with $o_i=(\bar{\op}_i,\bar{a}_i,\bar{v}_i)$,
@@ -381,7 +381,7 @@ the random linear combination of the columns of the respective transcripts.
 Finally, we see that Lemma~\ref{lem:addr-ordered-transcript} implies a polynomial protocol to check that the transcript
 $\tr^\ast$ is address ordered and satisfies load-store consistency, which
 essentially involves the prover identifying sets
-$I_1, I_2$ as described in Section \ref{subsec:encoded-relations} and sending auxiliary polynomials $Z_1(X),Z_2(X),\delta^\ast_A(X)$ and $\delta^\ast_T(X)$ to the verifier.
+$I_1, I_2$ as described in Appendix \ref{subsec:encoded-relations} and sending auxiliary polynomials $Z_1(X),Z_2(X),\delta^\ast_A(X)$ and $\delta^\ast_T(X)$ to the verifier.
 The verifier then checks the identities (C1)-(C6) in Lemma \ref{lem:addr-ordered-transcript}.
 The range checks in (C7) can be checked using polynomial protocols in sub-vector lookup arguments such as
 ~\cite{EPRINT:PosKat22,EPRINT:EagFioGab22,PKC:CFFLL24,PKC:ZSG24}.
