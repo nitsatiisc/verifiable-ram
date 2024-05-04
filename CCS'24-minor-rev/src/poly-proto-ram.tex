@@ -13,7 +13,7 @@ in verifiable RAM protocols is to establish that a sequence of operations $\vec{
 respect to the initial RAM state $\vecT$ and the final RAM state $\vecT'$. This involves ensuring
 that all load operations read the value which is consistent with updates to the RAM as a result of preceding
 store operations, and that $\vecT'$ is the final state. We say that an operation $o=(\op,a,v)$ is {\em load-consistent}
-with respect to RAM $T$ if $v=\vecT[a]$ whenever $o$ is a load operation (store operations are vacuously defined to be load-consistent).
+with respect to RAM $\vec{T}$ if $v=\vecT[a]$ whenever $o$ is a load operation (store operations are vacuously defined to be load-consistent).
 We formally define the notion of consistency below:
 
 \begin{definition}[Consistent Operations]\label{defn:consistent-operations}

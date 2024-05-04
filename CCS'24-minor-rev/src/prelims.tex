@@ -7,7 +7,7 @@ parameters for the protocols. Specifically $\bg(1^\secp)$ outputs $(\F,\Gone,\Gt
 where:
 \begin{itemize}[leftmargin=2em, label=-]
 	\item $\F=\Fp$ is a prime field of super-polynomial size in $\lambda$, with $p=\lambda^{\omega(1)}$.
-	\item $\Gone,\Gtwo$ and $\GT$ are groups of order $p$, and $e$ is an efficiently computable non-degenerate
+	\item $\Gone,\Gtwo$ and $\GT$ are groups of order $p$, and $e$ is an efficiently computable non-degenerate bilinear
 	pairing $e:\Gone\times \Gtwo\rightarrow \GT$.
 	\item Generators $g_1,g_2$ are uniformly chosen from $\Gone$ and $\Gtwo$ respectively and $g_t=e(g_1,g_2)$.
 \end{itemize}
@@ -178,7 +178,7 @@ The definition below summarizes the sub-vector relation as defined in prior work
 \begin{definition}
 \label{defn:comm-subvec}
 We define the {\em committed sub-vector} relation $\RSVEC$ to consist of tuples
-$((c_t, c_v), (\vec{t}, \vec{v}))$ where $c_t,c_a\in \Gone$, $\vec{t}\in \F^N$, $\vec{v}\in \F^m$ such that
+$((c_t, c_v), (\vec{t}, \vec{v}))$ where $c_t,c_v\in \Gone$, $\vec{t}\in \F^N$, $\vec{v}\in \F^m$ such that
 $\vec{v}\preceq \vec{t}$ and $c_t=\kzgcommit(\srs,\enc{t}{\setN})$ and $c_v=\kzgcommit(\srs,\enc{v}{\setV})$.
 \end{definition}
 A committed sub-vector argument is an argument of knowledge for the relation $\RSVEC$.
