@@ -239,8 +239,8 @@ such that:
     $w(X)$ encode vectors $\vec{\op}=(\op_1,\ldots,\op_m)$, $\vec{a}$ and $\vec{w}$ over $\setV$.
 \end{itemize}
 \end{definition}
-As outlined in the blueprint, the prover first commits to ``smaller'' RAMs $S=(\vec{a},\vec{v})$ and $S'=(\vec{a},\vec{v}')$
-where $\vec{v}=\vecT[\vec{a}]$ and $\vec{v}'=\vecT'[\vec{a}]$. The prover commits to $S$ and $S'$ by sending commitments
+As outlined in the blueprint, the prover first commits to ``smaller'' RAMs $\Sbf=(\vec{a},\vec{v})$ and $\Sbf'=(\vec{a},\vec{v}')$
+where $\vec{v}=\vecT[\vec{a}]$ and $\vec{v}'=\vecT'[\vec{a}]$. The prover commits to $\Sbf$ and $\Sbf'$ by sending commitments
 $c_v$ and $c_v'$ to $\vec{v}$ and $\vec{v}'$. Then the prover and verifier execute the committed index lookup protocol to
 prove:
 \begin{equation}
@@ -250,7 +250,7 @@ The verifier uses a random challenge $\chi\gets \F$ to reduce two instances of $
 $(c_T + \chi c_T', c_a, c_v + \chi c_v')\in \RLOOK$. Then, we show that
 RAMs $\vecT$ and $\vecT'$ are $\vec{a}$-identical using the protocol in Figure ~\ref{fig:a-identical}, described
 in Section ~\ref{subsec:proximity-ram}.
-All that remains is to prove is that the operation sequence $\vec{o}$ is consistent with small RAMs $S$ and $S'$.
+All that remains is to prove is that the operation sequence $\vec{o}$ is consistent with small RAMs $\Sbf$ and $\Sbf'$.
 We check this using the argument in Appendix ~\ref{sec:poly-proto-ram-app}, which is obtained by compiling the
 polynomial protocol for RAM in Appendix ~\ref{sec:poly-proto-ram} into an argument of knowledge in the AGM.
 Specifically, the prover and the verifier set

@@ -67,12 +67,12 @@ a sequence of $m$ operations ($m < N$) which updates $\vecT$ to $\vecT'$. Let $\
 of RAM indices referenced by the operations in $\vec{o}$, i.e, $a_i$ is the index referenced by the $i^{th}$ operation.
 To prove the transformation of $\vecT$ to $\vecT'$ via operation sequence $\vec{o}$, we proceed as follows:
 \begin{itemize}[leftmargin=1em, label=-]
-    \item We isolate sub-tables $S=(\vec{a},\vec{v})$ and $S'=(\vec{a},\vec{v'})$ of $\vecT$ and $\vecT'$ consisting of
+    \item We isolate sub-tables $\Sbf=(\vec{a},\vec{v})$ and $\Sbf'=(\vec{a},\vec{v'})$ of $\vecT$ and $\vecT'$ consisting of
     rows corresponding to indices in $\vec{a}$. This requires proving $\vec{v}=\vecT[\vec{a}]$ and $\vec{v'}=
     \vecT'[\vec{a}]$, which we show using {\em committed index lookup} argument discussed in Section ~\ref{subsec:committed-index-lookup}.
 
-    \item On the isolated sub-tables $S$ and $S'$ of size $m$, we use the standard memory checking arguments (c.f. argument
-    presented in Appendix \ref{sec:poly-proto-ram-app}) to prove that sequence $\vec{o}$ correctly updates $S$ to $S'$ with
+    \item On the isolated sub-tables $\Sbf$ and $\Sbf'$ of size $m$, we use the standard memory checking arguments (c.f. argument
+    presented in Appendix \ref{sec:poly-proto-ram-app}) to prove that sequence $\vec{o}$ correctly updates $\Sbf$ to $\Sbf'$ with
     prover complexity of $\wt{O}(m)$.
 
     \item Finally, we show that the RAMs $\vecT$ and $\vecT'$ are identical outside indices in $\vec{a}$. We describe the protocol
@@ -154,7 +154,7 @@ appears in Figure ~\ref{fig:a-identical}.
 \smallskip
 
 \noindent{\bf Polynomial Protocol for Memory Checking.} To complete the verification, we need to show that
-the smaller RAMs, $S=(\vec{a},\vec{v})$ and $S'=(\vec{a},\vec{v}')$ extracted from larger RAMs $\vecT,\vecT'$
+the smaller RAMs, $\Sbf=(\vec{a},\vec{v})$ and $\Sbf'=(\vec{a},\vec{v}')$ extracted from larger RAMs $\vecT,\vecT'$
 are consistent with respect to the operations. This can be accomplished using standard memory checking techniques
 based on address ordered transcripts, which we formalize in Section ~\ref{sec:model-for-ram}. Later in
 Appendix ~\ref{sec:poly-proto-ram-app} and ~\ref{sec:poly-proto-ram}, we assemble known techniques to present
