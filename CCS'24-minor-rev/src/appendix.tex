@@ -123,7 +123,7 @@ Protocols facilitating the checks mentioned in Lemma~\ref{lem:vec-concatenation}
 				\item $\prover$ computes:
 				\begin{align}
 					& h(X) = a(X) + \gamma b(X) + \gamma^2 c(X),\\
-					& Q(X) = (h(X^3) - v(X) - \gamma v(\omega^m X) - \gamma^2 v(\omega^{2m} X))/Z(X)
+					& Q(X) = (h(X^3) - v(X) - \gamma v(\omega^m X) - \gamma^2 v(\omega^{2m} X))/Z(X).
 				\end{align}
 				\item $\prover$ sends commitment $\gone{Q}$ = $\gone{Q(X)}$.
 				\item $\verifier$ sends $s\gets\F$.
@@ -168,7 +168,6 @@ Protocols facilitating the checks mentioned in Lemma~\ref{lem:vec-concatenation}
             \item $\prover$ sends $\gone{Z_1(X)}$, $\gone{Z_2(X)}$, $\gone{\delta_T(X)}$, $\gone{\delta_A(X)}$.
             \item $\verifier$ sends $\gamma\gets \F$.
             \item $\prover$ computes:
-
             $$Q_1(X) =  (A(\omega X) - A(X) - \delta_A(X)) / \Z_1(X)$$
             $$Q_2(X) =  [(A(\omega X) - A(X))+\gamma(t(\omega X) - t(X) - \delta_T(X))+$$
             $$ \gamma^2 (\op(X) - 1)(V(\omega X) - V(X))] / Z_2(X) $$
@@ -176,7 +175,7 @@ Protocols facilitating the checks mentioned in Lemma~\ref{lem:vec-concatenation}
 
             \item $\prover$ sends commitments $\gone{Q_1(X)}$, $\gone{Q_2(X)}$.
             \item $\verifier$ sends $s\gets\F$.
-            \item $\prover$ sends evaluations $\val{s}{A}=A(s)$, $\val{\omega s}{A}=A(\omega s)$, $\val{s}{\delta_A} = \delta_A(s)$, $\val{s}{t}=t(s)$, $\val{\omega s}{t}=t(\omega s)$, $\val{s}{\delta_T} = \delta_T(s)$, $\val{s}{\op}=\op(s)$, $\val{s}{V}=V(s)$, $\val{\omega s}{V}=V(\omega s)$, $\val{s}{Q_1}=Q_1(s)$, $\val{s}{Q_2}=Q_2(s)$, $\val{s}{Z_1}=Z_1(s)$, $\val{s}{Z_2}=Z_2(s)$
+            \item $\prover$ sends evaluations $\val{s}{A}=A(s)$, $\val{\omega s}{A}=A(\omega s)$, $\val{s}{\delta_A} = \delta_A(s)$, $\val{s}{t}=t(s)$, $\val{\omega s}{t}=t(\omega s)$, $\val{s}{\delta_T} = \delta_T(s)$, $\val{s}{\op}=\op(s)$, $\val{s}{V}=V(s)$, $\val{\omega s}{V}=V(\omega s)$, $\val{s}{Q_1}=Q_1(s)$, $\val{s}{Q_2}=Q_2(s)$, $\val{s}{Z_1}=Z_1(s)$, $\val{s}{Z_2}=Z_2(s)$.
             \item $\verifier$ checks:
             \begin{itemize}
                 \item $\val{s}{Q_1}\cdot \val{s}{Z_1} = (\val{\omega s}{A} - \val{s}{A} - \val{s}{\delta_A})$.
@@ -196,8 +195,7 @@ Protocols facilitating the checks mentioned in Lemma~\ref{lem:vec-concatenation}
             \item $\verifier$ computes:
             \begin{itemize}
                 \item $[\Phi_{\omega s}(X)]_1= c_A +r_1 c_t + r_1^2 c_V$.
-                \item $[\Phi_{s}(X)]_1= c_A +r_2 [\delta_A(X)]_1 + r_2^2 c_t +r_2^3 [\delta_T(X)]_1 +r_2^4 c_{\op} +r_2^5 c_V +r_2^6 [Q_1(X)]_1 +r_2^7 [Q_2(X)]_1 +r_2^8 [Z_1(X)]_1 +
-                r_2^9 [Z_2(X)]_1 $.
+                \item $[\Phi_{s}(X)]_1= c_A +r_2 [\delta_A(X)]_1 + r_2^2 c_t +r_2^3 [\delta_T(X)]_1 +r_2^4 c_{\op} +r_2^5 c_V +r_2^6 [Q_1(X)]_1 +r_2^7 [Q_2(X)]_1 +r_2^8 [Z_1(X)]_1 + r_2^9 [Z_2(X)]_1 $.
                 \item $V_{ws}= \val{\omega s}{A}+r_1 \val{\omega s}{t}+ r_1^2 \val{\omega s}{V}$.
                 \item $V_s=\val{s}{A}+r_2 \val{s}{\delta_A}+r_2^2 \val{s}{t}+r_2^3 \val{s}{\delta_T}+r_2^4 \val{s}{\op}
                 +r_2^5 \val{s}{V} +r_2^6 \val{s}{Q_1} +r_2^7 \val{s}{Q_2}+r_2^8 \val{s}{Z_1} +r_2^9 \val{s}{Z_2}$.
@@ -272,11 +270,11 @@ The complete polynomial protocol is detailed in Figure \ref{fig:time-ordered-tra
     \begin{tabular}{|l|l|l|l|l|}
         \hline
         {\bf Component  }                                                                                      & {\bf Protocol} & {\bf Prover Work}      & {\bf Verifier Work} & {\bf Communication}   \\ \hline
-        Concatenation of transcripts                                                                    & Fig ~\ref{fig:time-ordered-transcript}    & $O(m \log m)\F,\, O(m)\Gone$      & $2P$            & $4\Gone$, $6\F$         \\ \hline
-        Permutation of transcripts                                                                      & Fig ~\ref{fig:permutated-transcripts}   & $O(m \log m)\F,\, O(m)\Gone$       & $2P$            & $4\Gone$, $5\F$         \\ \hline
-        \begin{tabular}[c]{@{}l@{}}Memory consistency \& \\ address ordering of transcript\end{tabular} & Fig ~\ref{fig:encoded-relations}    & $O(m \log m)\F,\, O(m)\Gone$       & $6P$            & $20\Gone$,$19\F$        \\ \hline
+        Concatenation of transcripts                                                                    & Figure ~\ref{fig:time-ordered-transcript}    & $O(m \log m)\,\F,\, O(m)\,\Gone$      & $2P$            & $4\Gone$, $6\F$         \\ \hline
+        Permutation of transcripts                                                                      & Figure ~\ref{fig:permutated-transcripts}   & $O(m \log m)\,\F,\, O(m)\,\Gone$       & $2P$            & $4\Gone$, $5\F$         \\ \hline
+        \begin{tabular}[c]{@{}l@{}}Memory consistency \& \\ address ordering of transcript\end{tabular} & Figure ~\ref{fig:encoded-relations}    & $O(m \log m)\,\F,\, O(m)\,\Gone$       & $6P$            & $20\Gone$,$19\F$        \\ \hline
         \rowcolor{lightgray}
-        Polynomial Protocol for RAM                                                                     & Fig ~\ref{fig:covering-protocol}   & $O(m \log m)\F,\, O(m)\Gone$      & $7P$            & $36\Gone$, $30\F$       \\ \hline
+        Polynomial Protocol for RAM                                                                     & Figure ~\ref{fig:covering-protocol}   & $O(m \log m)\,\F,\, O(m)\,\Gone$      & $7P$            & $36\Gone$, $30\F$       \\ \hline
 
     \end{tabular}
     \caption{Efficiency parameters for components of polynomial protocol for RAM. Here $m$ denotes both the size of
@@ -295,14 +293,14 @@ The complete polynomial protocol is detailed in Figure \ref{fig:time-ordered-tra
     {
             {\bf Common Input}: Commitments $c_T=(c_a,c_v)$, $c_o=(\bar{c}_\op, \bar{c}_a, \bar{c}_v)$, $c_T'=(c_a', c_v')$
         and $c_\tr=(c_t, c_\op, c_A, c_V)$ to $\vecT,\vec{o},\vecT'$ and $\tr$(which is supposed to be the time ordered transcript) respectively. Commitment $\gone{Z(X)}$ to the polynomial
-        $Z(X)=\prod_{i=1}^m (X-\omega^i)$\\
-    {\bf Prover's Input}: $\tr, \vecT, \vecT', \vec{o}$ and their polynomial encodings, $Z(X)$
+        $Z(X)=\prod_{i=1}^m (X-\omega^i)$.\\
+    {\bf Prover's Input}: $\tr, \vecT, \vecT', \vec{o}$ and their polynomial encodings, $Z(X)$.
         \begin{enumerate}[leftmargin=1em, label=\arabic*.]
             \item $\verifier$ sends $\beta,\gamma\gets \F$.
             \item $\prover$ computes:
             \begin{align}\label{eq:poly-constraints}
             & G_1(X) = a(X) + \beta v(X),\, G_2(X) = \bar{a}(X) + \beta \bar{v}(X) + \beta^2 \bar{\op}(X) \tag{A1} \\
-            & G_3(X) = a'(X) + \beta v'(X),\, G(X) = A(X) + \beta V(X) + \beta^2 \op(X) \tag{A2} \\
+            & G_3(X) = a^*(X) + \beta v^*(X),\, G(X) = A(X) + \beta V(X) + \beta^2 \op(X) \tag{A2} \\
             & H(X) = G_1(X) + \gamma G_2(X) + \gamma^2 G_3(X), \tag{A3} \\
             & Q(X) = [(H(X^3) - G(X) - \gamma G(\omega^m X) - \gamma^2 G(\omega^{2m} X))]/Z(X) \tag{A4}
             \end{align}
@@ -357,9 +355,9 @@ the random linear combination of the columns of the respective transcripts.
     {
             {\bf Common Input}: Commitments $c_\tr=(c_t,c_\op,c_A, c_V)$ and $c_\tr^\ast=(c_t^\ast,c_\op^\ast, c_A^\ast, c_V^\ast)$
         of transcripts $\tr$ and $\tr^\ast$ respectively.\\
-    {\bf Prover's Input}: Transcripts $\tr, \tr^{*}$ and their polynomial encodings, permutation $\sigma$ such that $\tr^{*}=\sigma(\tr)$
+    {\bf Prover's Input}: Transcripts $\tr, \tr^{*}$ and their polynomial encodings, permutation $\sigma$ such that $\tr^{*}=\sigma(\tr)$.
         \begin{enumerate}[leftmargin=1em, label=\arabic*]
-            \item $\verifier$ sends $\alpha,\beta, \chi\gets \F$
+            \item $\verifier$ sends $\alpha,\beta, \chi\gets \F$.
             \item $\prover$ computes $f(X)=t(X) + \beta \op(X) + \beta^2 A(X) + \beta^3 V(X)$, $g(X) = t^\ast(X) + \beta \op^\ast(X)$
             $+ \beta^2 A^\ast(X) + \beta^3 V^\ast(X)$. It then computes polynomials $z(X),q(X)$ as:
             \begin{itemize}[leftmargin=1em]
@@ -368,10 +366,10 @@ the random linear combination of the columns of the respective transcripts.
                 \item Compute $q(X) = ((\alpha - g(X))z(\omega X) - (\alpha - f(X))z(X) + \chi\lambda_1(X)(z(X) - 1))/\mathbb{Z}_{\setH}(X)$.
             \end{itemize}
             \item $\prover$ sends commitments $\gone{z(X)}$ and $\gone{q(X)}$ to polynomials $z(X)$ and $q(X)$ respectively.
-            \item $\verifier$ computes commitments $[f]_1, [g]_1$ by homomorphism
+            \item $\verifier$ computes commitments $[f]_1, [g]_1$ by homomorphism.
             \item $\verifier$ checks that $q(X)Z_\setH(X)$ = $(\alpha - g(X))z(\omega X)-(\alpha - f(X))z(X) + \chi\lambda_1(X)(z(X) - 1)$
             by requesting evaluations and $\kzg$ proofs of polynomials $f,g, q, z$ at a random point, say $s$ and evaluation and $\kzg$ proof of $z$ at $\omega s$.
-            \item $\verifier$ accepts if all the checks succeed, else it rejects
+            \item $\verifier$ accepts if all the checks succeed, else it rejects.
         \end{enumerate}
     }
     \end{mdframed}
@@ -386,32 +384,32 @@ essentially involves the prover identifying sets
 $I_1, I_2$ as described in Section \ref{subsec:encoded-relations} and sending auxiliary polynomials $Z_1(X),Z_2(X),\delta^\ast_A(X)$ and $\delta^\ast_T(X)$ to the verifier.
 The verifier then checks the identities (C1)-(C6) in Lemma \ref{lem:addr-ordered-transcript}.
 The range checks in (C7) can be checked using polynomial protocols in sub-vector lookup arguments such as
-~\cite{EPRINT:PosKat22,EPRINT:EagFioGab22,PKC:CFFLL24} etc.
-The protocol(compiled using KZG commitments in AGM) can be found in Figure~\ref{fig:encoded-relations}.
+~\cite{EPRINT:PosKat22,EPRINT:EagFioGab22,PKC:CFFLL24,PKC:ZSG24}.
+The protocol (compiled using KZG commitments in AGM) can be found in Figure~\ref{fig:encoded-relations}.
 The overall protocol for $\CLRAM$ which combines invokes protocols in Figures~\ref{fig:time-ordered-transcript},\ref{fig:permutated-transcripts}
 and \ref{fig:encoded-relations} as sub-protocols is presented in Figure~\ref{fig:covering-protocol}.
 \begin{figure}[htbp]
 
     \begin{mdframed}
     {
-            {\bf Common Input}: Commitments $c_T=(c_a,c_v)$, $c_o=(\bar{c}_\op, \bar{c}_a, \bar{c}_v)$, $c_T'=(c_a', c_v')$
+            {\bf Common Input}: Commitments $c_T=(c_a,c_v)$, $c_o=(\bar{c}_\op, \bar{c}_a, \bar{c}_v)$, $c_T'=(c_a', c_v')$.
 
-            {\bf Prover's Input}: $ \vecT, \vecT', \vec{o}$ and their polynomial encodings
+            {\bf Prover's Input}: $ \vecT, \vecT', \vec{o}$ and their polynomial encodings.
         \begin{enumerate}[leftmargin=1em, label=\arabic*.]
             \item $\prover$ computes:
             \begin{itemize}
-                \item $\tr$, which is the time ordered transcript corresponding to $\vecT, \vec{o}, \vecT'$, and its polynomial encoding
-                \item $Z(X)=\prod_{i=1}^m (X-\omega^i)$
-                \item $c_\tr=(c_t, c_\op, c_A, c_V)$ which is the commitment of $\tr$
-                \item $[Z(X)]_1$
+                \item $\tr$, which is the time ordered transcript corresponding to $\vecT, \vec{o}, \vecT'$, and its polynomial encoding.
+                \item $Z(X)=\prod_{i=1}^m (X-\omega^i)$.
+                \item $c_\tr=(c_t, c_\op, c_A, c_V)$ which is the commitment of $\tr$.
+                \item $[Z(X)]_1$.
             \end{itemize}
 
-            \item $\prover$ sends  $c_\tr=(c_t, c_\op, c_A, c_V)$ and $[Z(X)]_1$
-            \item $\left<\prover, \verifier \right>$ run the protocol for checking correctness of time ordered transcript as in figure \ref{fig:time-ordered-transcript}
-            \item $\prover$ computes the address ordered transcript $\tr^{*}$ from the time ordered transcript $\tr$ by permuting suitably. It also computes its polynomial encoding
-            \item $\prover$ computes the permutation $\sigma$ such that $\tr^{*}= \sigma(\tr)$ (this is computed along with the $\tr^{*}$)
-            \item $\prover$ computes the commitment $c_\tr^\ast=(c_t^\ast,c_\op^\ast, c_A^\ast, c_V^\ast)$ of $\tr^{*}$
-            \item $\prover$ sends  $c_\tr^\ast$
+            \item $\prover$ sends  $c_\tr=(c_t, c_\op, c_A, c_V)$ and $[Z(X)]_1$.
+            \item $\prover$ and $\verifier$ run the protocol for checking correctness of time ordered transcript as in Figure~\ref{fig:time-ordered-transcript}.
+            \item $\prover$ computes the address ordered transcript $\tr^{*}$ from the time ordered transcript $\tr$ by permuting suitably. It also computes its polynomial encoding.
+            \item $\prover$ computes the permutation $\sigma$ such that $\tr^{*}= \sigma(\tr)$ (this is computed along with the $\tr^{*}$).
+            \item $\prover$ computes the commitment $c_\tr^\ast=(c_t^\ast,c_\op^\ast, c_A^\ast, c_V^\ast)$ of $\tr^{*}$.
+            \item $\prover$ sends  $c_\tr^\ast$.
             \item $\prover$ and $\verifier$ run the protocol for checking that the two transcripts are permutations of each other
             as in Figure~\ref{fig:permutated-transcripts}.
             \item $\prover$ and $\verifier$ run  the protocol for checking the constraints given in Lemma~\ref{lem:addr-ordered-transcript}

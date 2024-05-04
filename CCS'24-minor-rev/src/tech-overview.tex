@@ -38,19 +38,19 @@ We use $\RAMOp{I}$ to denote the set of all RAM operations with index set $\seti
         \hline
         {\bf Component  }                                                                                      & {\bf Protocol} & {\bf Prover Work}      & {\bf Verifier Work} & {\bf Communication}   \\ \hline
         Committed Sub-vector Lookup                                                                     & CQ ~\cite{EPRINT:EagFioGab22}      & $O(m \log m)\,\F$, $O(m)\,\Gone$      & $5P$            & $8\Gone$, $3\F$         \\ \hline
-        Committed Index Lookup                                                                          & Fig ~\ref{fig:committed-index-lookup}    & $O(m \log m)\,F$, $O(m)\,\Gone$      & $5P$            & $8\Gone$, $3\F$         \\ \hline
-        Localized Update in RAM                                                                                & Fig ~\ref{fig:a-identical}   & $O(m \log^2 m)\, \F$, $O(m)\,\Gone$      & $8P$            & $19\Gone$, $1\Gtwo$, $10\F$ \\ \hline
+        Committed Index Lookup                                                                          & Figure ~\ref{fig:committed-index-lookup}    & $O(m \log m)\,\F$, $O(m)\,\Gone$      & $5P$            & $8\Gone$, $3\F$         \\ \hline
+        Localized Update in RAM                                                                                & Figure ~\ref{fig:a-identical}   & $O(m \log^2 m)\, \F$, $O(m)\,\Gone$      & $8P$            & $19\Gone$, $1\Gtwo$, $10\F$ \\ \hline
         Table Specific Preprocessing                                                                    & Fast KZG ~\cite{EPRINT:FeiKho23}      & $O(N \log N)\,\F,\G$      & -             & -               \\ \hline
-        Lookup from Approximate Setup                                                                   & Sec ~\ref{sec:update-protocol}    & $O((m+\delta)\log^2(m+\delta))\,\F$, $O(m+\delta)\,\Gone$ & -             & -               \\ \hline
-        Polynomial Protocol for RAM                                                                     & Fig ~\ref{fig:covering-protocol}   & $O(m \log m)\F,\, O(m)\G$      & $7P$            & $36\Gone$, $30\F$       \\ \hline
+        Lookup from Approximate Setup                                                                   & Section ~\ref{sec:update-protocol}    & $O((m+\delta)\log^2(m+\delta))\,\F$, $O(m+\delta)\,\Gone$ & -             & -               \\ \hline
+        Polynomial Protocol for RAM                                                                     & Figure ~\ref{fig:covering-protocol}   & $O(m \log m)\,\F,\, O(m)\,\G$      & $7P$            & $36\Gone$, $30\F$       \\ \hline
         %	Concatenation of transcripts                                                                    & Fig 8    & $O(m \log m)$      & 2P            & 4G1, 6F         \\ \hline
         %	Permutation of transcripts                                                                      & Fig 9    & $O(m \log m)$       & 2P            & 4G1, 5F         \\ \hline
         %	\begin{tabular}[c]{@{}l@{}}Memory consistency \& \\ address ordering of transcript\end{tabular} & Fig 7    & $O(m \log m)$       & 5P            & 20G1,19F        \\ \hline
         \rowcolor{lightgray}
-        {Batching-Efficient RAM}                                                                          & {Fig  ~\ref{fig:complete-listing}}    & {$\widetilde{O}(\sqrt{mN})\,\F,\G$}            & ${9P}$            & {$65\Gone$, $1\Gtwo$, $43\F$}  \\ \hline
+        {Batching-Efficient RAM}                                                                          & {Figure  ~\ref{fig:complete-listing}}    & {$\widetilde{O}(\sqrt{mN})\,\F,\G$}            & ${9P}$            & {$65\Gone$, $1\Gtwo$, $43\F$}  \\ \hline
     \end{tabular}
-    \caption{Asymptotic efficiency of the component protocols for our scheme. Here $N$ = size of the RAM, $m$ = number of operations
-    , $\delta$ = Hamming distance of table for which pre-computed parameters are available from the current table.
+    \caption{Asymptotic efficiency of the component protocols for our scheme. Here $N$ = size of the RAM, $m$ = number of operations,
+    and $\delta$ = Hamming distance of table for which pre-computed parameters are available from the current table.
     $P$ denotes a pairing evaluation. The performance corresponds to CQ based realization of batching-efficient
     RAM.}
     \label{tbl:efficiency-components}
@@ -82,7 +82,7 @@ To prove the transformation of $\vecT$ to $\vecT'$ via operation sequence $\vec{
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.49\textwidth]{RAM-Lookup}
-    \caption{Illustrating different steps of sub-linear lookup protocol between large RAMs $\vecT$ and $\vecT'$.}
+    \caption{Illustrating different steps of sublinear lookup protocol between large RAMs $\vecT$ and $\vecT'$.}
     \label{fig:blueprint}
 \end{figure}
 

@@ -80,7 +80,7 @@ We summarize our contributions below.
 	to sub-vector arguments is obtained under a more restrictive assumption about the elements of the table.
 	\item We crucially employ the above two contributions to construct a {\em batching-efficient} RAM, which
 	can prove a batch of $m$ updates with an amortized prover complexity of $O(m\log m + \sqrt{mN})$,
-	with $N$ being the size of the RAM. Our dependence on the RAM size is sub-linear, in contrast to the linear complexity
+	with $N$ being the size of the RAM. Our dependence on the RAM size is sublinear, in contrast to the linear complexity
 	inherent in recent works on batching-efficient RAM using RSA accumulators ~\cite{USENIX:OWWB20,CCS:CFHKKO22} or using generic memory checking techniques~\cite{NDSS:WSRBW15,USENIX:BCTV14,C:BCGTV13,SP:ZGKPP18}. All of our protocols are public-coin, and can be made non-interactive using standard techniques~\cite{C:FiaSha86}. 
 	
 	\item We implement our scheme in Rust\footnote{\url{https://anonymous.4open.science/r/updatableRAM/}}.
@@ -98,9 +98,9 @@ We present a brief summary of our techniques below. A more detailed technical ov
 \noindent{\bf Update-friendly Lookup Arguments.} Our starting point is the recent line of works on lookup arguments which prove
 that a vector of size $m$ appears as
 a sub-vector in a large fixed vector (table) of size $N$ with succinct proof sizes and verification, but most notably
-ensuring that prover runs in time sub-linear in the size of the table ($N$). The pioneering work ~\cite{CCS:ZBKMNS22}
+ensuring that prover runs in time sublinear in the size of the table ($N$). The pioneering work ~\cite{CCS:ZBKMNS22}
 obtained prover complexity of $O(m^2+m\log N)$, which was improved in subsequent works to $O(m^2)$ ~\cite{EPRINT:PosKat22},
-$O(m\log^2 m)$ ~\cite{EPRINT:ZGKMR22}, and $O(m\log m)$ ~\cite{EPRINT:EagFioGab22,PKC:CFFLL24}. However, the sub-linear prover
+$O(m\log^2 m)$ ~\cite{EPRINT:ZGKMR22}, and $O(m\log m)$ ~\cite{EPRINT:EagFioGab22,PKC:CFFLL24}. However, the sublinear prover
 complexity requires table-dependent $O(N\log N)$ pre-processing and $O(N)$ storage. This table-dependent
 pre-processing implies that while
 the aforementioned lookup arguments can be used to obtain efficient ROM (read only memory) semantics
@@ -165,7 +165,7 @@ re-computation optimally while still availing efficient lookups. More specifical
 re-compute the full table-specific parameters after $k$ batches (of $m$ updates each),
 the average cost per batch is $O(N\log N/k + mk\log^2(mk) + f(m))$. Here, $f(m)$ as earlier denotes complexity
 of the non-updatable base protocol. Setting $k\approx \sqrt{N/m}$ yields the average cost of $m$ updates as $\wt{O}(f(m)+\sqrt{mN})$,
-which scales sub-linearly with the size of the RAM.
+which scales sublinearly with the size of the RAM.
 While the preceding analysis considers the worst case,
 in specific applications (such as account transactions, where few accounts contribute a large volume of transactions), it may be
 possible to further delay the computation of table-specific parameters.
