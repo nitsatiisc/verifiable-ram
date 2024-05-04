@@ -39,15 +39,15 @@ We use $\RAMOp{I}$ to denote the set of all RAM operations with index set $\seti
         {\bf Component  }                                                                                      & {\bf Protocol} & {\bf Prover Work}      & {\bf Verifier Work} & {\bf Communication}   \\ \hline
         Committed Sub-vector Lookup                                                                     & CQ ~\cite{EPRINT:EagFioGab22}      & $O(m \log m)\,\F$, $O(m)\,\Gone$      & 5P            & $8\Gone$, $3\F$         \\ \hline
         Committed Index Lookup                                                                          & Fig ~\ref{fig:committed-index-lookup}    & $O(m \log m)\,F$, $O(m)\,\Gone$      & 5P            & $8\Gone$, $3\F$         \\ \hline
-        Localized Update in RAM                                                                                & Fig ~\ref{fig:a-identical}   & $O(m \log^2 m)\, \F$, $O(m)\,\Gone$      & 7P            & $19\Gone$, $1\Gtwo$, $10\F$ \\ \hline
+        Localized Update in RAM                                                                                & Fig ~\ref{fig:a-identical}   & $O(m \log^2 m)\, \F$, $O(m)\,\Gone$      & 8P            & $19\Gone$, $1\Gtwo$, $10\F$ \\ \hline
         Table Specific Preprocessing                                                                    & Fast KZG ~\cite{EPRINT:FeiKho23}      & $O(N \log N)\,\F,\G$      & -             & -               \\ \hline
         Lookup from Approximate Setup                                                                   & Sec ~\ref{sec:update-protocol}    & $O((m+\delta)\log^2(m+\delta))\,\F$, $O(m+\delta)\,\Gone$ & -             & -               \\ \hline
-        Polynomial Protocol for RAM                                                                     & Fig ~\ref{fig:covering-protocol}   & $O(m \log m)\, \F,\G$      & 6P            & $36\Gone$, $30\F$       \\ \hline
+        Polynomial Protocol for RAM                                                                     & Fig ~\ref{fig:covering-protocol}   & $O(m \log m)\, \F,\G$      & 7P            & $36\Gone$, $30\F$       \\ \hline
         %	Concatenation of transcripts                                                                    & Fig 8    & $O(m \log m)$      & 2P            & 4G1, 6F         \\ \hline
         %	Permutation of transcripts                                                                      & Fig 9    & $O(m \log m)$       & 2P            & 4G1, 5F         \\ \hline
         %	\begin{tabular}[c]{@{}l@{}}Memory consistency \& \\ address ordering of transcript\end{tabular} & Fig 7    & $O(m \log m)$       & 5P            & 20G1,19F        \\ \hline
         \rowcolor{lightgray}
-        {Batching-Efficient RAM}                                                                          & {Fig  ~\ref{fig:complete-listing}}    & {$\widetilde{O}(\sqrt{mN})\,\F,\G$}            & {8P}            & {$65\Gone$, $1\Gtwo$, $43\F$}  \\ \hline
+        {Batching-Efficient RAM}                                                                          & {Fig  ~\ref{fig:complete-listing}}    & {$\widetilde{O}(\sqrt{mN})\,\F,\G$}            & {9P}            & {$65\Gone$, $1\Gtwo$, $43\F$}  \\ \hline
     \end{tabular}
     \caption{Asymptotic efficiency of the component protocols for our scheme. Here $N$ = size of the RAM, $m$ = number of operations
     , $\delta$ = hamming distance of table for which pre-computed parameters are available from the current table.
@@ -171,7 +171,8 @@ appear in Figures ~\ref{fig:time-ordered-transcript}, ~\ref{fig:encoded-relation
 how different components discussed in this section contribute to the overall efficiency. The asymptotic performance
 of our scheme using CQ ~\cite{EPRINT:EagFioGab22} is summarized in Table ~\ref{tbl:efficiency-components}, with
 efficiency of the overall scheme highlighted in gray. The table also serves as a ready-reckoner for component protocols
-involved in the overall scheme. We note that the verification complexity of the overall solution is substantially
+involved in the overall scheme. A more detailed discussion and break-up of the polynomial protocol for RAM
+appears in Table~\ref{tbl:components-poly-ram} in Section~\ref{sec:poly-proto-ram-app}. We note that the verification complexity of the overall solution is substantially
 less than the aggregate of component protocols; this is due to the fact that several pairing checks required for
 $\kzg$ verification proofs can be batched together. For concrete instantiation using BLS12-381 curve, RAM size
 of 1 million, the online cost of proving an update of $1000$ operations on a table as a function of its

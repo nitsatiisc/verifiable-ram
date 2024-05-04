@@ -179,6 +179,12 @@ Jens Groth, Markulf Kohlweiss, Mary Maller, Sarah Meiklejohn, and Ian Miers.
   Part~III}, volume 10993 of {\em {LNCS}}, pages 698--728. Springer,
   Heidelberg, August 2018.
 
+\bibitem{EPRINT:Habock22b}
+Ulrich Hab{\"o}ck.
+\newblock Multivariate lookups based on logarithmic derivatives.
+\newblock Cryptology ePrint Archive, Report 2022/1530, 2022.
+\newblock \url{https://eprint.iacr.org/2022/1530}.
+
 \bibitem{AC:KatZavGol10}
 Aniket Kate, Gregory~M. Zaverucha, and Ian Goldberg.
 \newblock Constant-size commitments to polynomials and their applications.
@@ -196,6 +202,11 @@ Alex Ozdemir, Riad~S. Wahby, Barry Whitehat, and Dan Boneh.
 \newblock Scaling verifiable computation using efficient set accumulators.
 \newblock In Srdjan Capkun and Franziska Roesner, editors, {\em USENIX Security
   2020}, pages 2075--2092. {USENIX} Association, August 2020.
+
+\bibitem{EPRINT:PapHab23}
+Shahar Papini and Ulrich Hab{\"{o}}ck.
+\newblock Improving logarithmic derivative lookups using {GKR}.
+\newblock {\em {IACR} Cryptol. ePrint Arch.}, page 1284, 2023.
 
 \bibitem{EPRINT:PosKat22}
 Jim Posen and Assimakis~A. Kattis.
