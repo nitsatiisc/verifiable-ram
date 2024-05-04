@@ -7,7 +7,7 @@ working definition of RAM for the rest of the paper. Informally, a RAM maps indi
 we assume that values come from a finite field $\F$, while indices come from a subset $\setind$ of $\F$. For us,
 $\setind$ will generally be the set $\{1,\ldots,k\}$ for some integer $k$ (which may be different from size of
 the RAM $n$). Finally, for an index, there should be at most one value in the RAM, i.e., the association is unambiguous.
-The formal definition of the RAM follows:
+The formal definition of RAM is as follows:
 \begin{definition}[RAM]\label{defn:RAM}
 Given $n\in \N$, finite field $\F$ and a set $\mathcal{I}\subseteq \F$, a RAM of size $n$ over indices $\mathcal{I}$
 is a tuple $\vecT=(\vec{a},\vec{v})\in \mathcal{I}^n\times \F^n$ such that $\forall\, i,j\in [n]$  $v_i=v_j$ whenever $a_i=a_j$.
@@ -50,7 +50,7 @@ We use $\RAMOp{I}$ to denote the set of all RAM operations with index set $\seti
         {Batching-Efficient RAM}                                                                          & {Fig  ~\ref{fig:complete-listing}}    & {$\widetilde{O}(\sqrt{mN})\,\F,\G$}            & ${9P}$            & {$65\Gone$, $1\Gtwo$, $43\F$}  \\ \hline
     \end{tabular}
     \caption{Asymptotic efficiency of the component protocols for our scheme. Here $N$ = size of the RAM, $m$ = number of operations
-    , $\delta$ = hamming distance of table for which pre-computed parameters are available from the current table.
+    , $\delta$ = Hamming distance of table for which pre-computed parameters are available from the current table.
     $P$ denotes a pairing evaluation. The performance corresponds to CQ based realization of batching-efficient
     RAM.}
     \label{tbl:efficiency-components}
@@ -64,14 +64,14 @@ We will use a vectors in $\F^N$ to denote the ``large'' RAMs, where index column
 assumed to be $(1,\ldots,N)$.
 Let $\vecT,\vec{T'}\in \F^N$ denote the initial and final RAM states, and let $\vec{o}$ be
 a sequence of $m$ operations ($m < N$) which updates $\vecT$ to $\vecT'$. Let $\vec{a}\in \F^m$ denote the vector
-of RAM indices referenced by the operations in $\vec{o}$, i.e, $a_i$ is the index referenced by $i^{th}$ operation.
+of RAM indices referenced by the operations in $\vec{o}$, i.e, $a_i$ is the index referenced by the $i^{th}$ operation.
 To prove the transformation of $\vecT$ to $\vecT'$ via operation sequence $\vec{o}$, we proceed as follows:
 \begin{itemize}[leftmargin=1em, label=-]
     \item We isolate sub-tables $S=(\vec{a},\vec{v})$ and $S'=(\vec{a},\vec{v'})$ of $\vecT$ and $\vecT'$ consisting of
     rows corresponding to indices in $\vec{a}$. This requires proving $\vec{v}=\vecT[\vec{a}]$ and $\vec{v'}=
     \vecT'[\vec{a}]$, which we show using {\em committed index lookup} argument discussed in Section ~\ref{subsec:committed-index-lookup}.
 
-    \item On the isolated sub-table $S$ and $S'$ of size $m$, we use the standard memory checking arguments (c.f. argument
+    \item On the isolated sub-tables $S$ and $S'$ of size $m$, we use the standard memory checking arguments (c.f. argument
     presented in Section \ref{sec:poly-proto-ram-app}) to prove that sequence $\vec{o}$ correctly updates $S$ to $S'$ with
     prover complexity of $\wt{O}(m)$.
 
@@ -102,7 +102,7 @@ arguments to verifiably extract $m$ indices from a table of size $N$, in time de
 However, there are two technical challenges here. First, the aforementioned lookup arguments only prove the sub-vector
 relation, without linking the extracted vector to the indices in $\vec{a}$. This is easily solved, as there
 is an efficient realization of a {\em committed index lookup} from a {\em committed sub-vector} argument,
-where commitment scheme is homomorphic. The details appear in Section ~\ref{subsec:committed-index-lookup},
+where the commitment scheme is homomorphic. The details appear in Section ~\ref{subsec:committed-index-lookup},
 with the complete protocol presented in Figure ~\ref{fig:committed-index-lookup}. The second challenge is much more
 formidable: the efficiency of sub-vector arguments (and the committed index lookup argument derived from them)
 depends on {\em expensive} table-specific pre-processing. This is acceptable when the table in question is
@@ -117,7 +117,7 @@ Our key idea is to extend the utility of pre-computed
 parameters for a table $\vecT$, to proving lookups from tables $\vecT'\neq \vecT$.
 We show that for $\delta=\Delta(\vecT, \vecT')$,
 an argument for $m$ lookups from $\vecT'$ incurs an additional prover overhead of $(m+\delta)\log^2(m+\delta)$ over the
-lookup argument for static tables. We note that overhead is {\em quasi}-linear in both $m$ and $\delta$.
+lookup argument for static tables. We note that the overhead is {\em quasi}-linear in both $m$ and $\delta$.
 Our competitive overhead rests on several innovative applications of algebraic
 algorithms, which are summarised in Section ~\ref{subsec:comp-algebra-app}. We then leverage this ability to use ``approximate"
 setup into a {\em base + cache} strategy; where at all times we maintain pre-computed parameters corresponding to
@@ -134,7 +134,7 @@ While constructions ~\cite{CCS:ZBKMNS22,EPRINT:PosKat22}
 consider quotients encoded in the group $\Gtwo$, the protocol in ~\cite{EPRINT:EagFioGab22} encodes them in $\Gone$.
 We use a generic $[\,\cdot\,]_g$ to
 account for protocol-specific choices. We also see that even a small change to the table requires one to update all the quotients (the polynomial $T(X)$ is
-common to all quotients). Updating the $|\vecT|$ quotients for each batch is clearly infeasible. One could consider delaying the updation of the quotients, till
+common to all quotients). Updating all the quotients after each batch is clearly infeasible. One could consider delaying the updation of the quotients, till
 the time they are actually required in a proof, which happens when the corresponding index in the table is involved in lookup. However, each of the $m$ quotients
 is now potentially ``lagging'' by $\delta$ updates, so we would need $\Omega(m\delta)$ group operations to refresh all of them. This gives us multiplicative degradation
 with $\delta$, and is clearly unsustainable for reasonable values of $\delta$. In Section ~\ref{sec:update-protocol}, we present an efficient method
@@ -144,9 +144,9 @@ to directly compute linear combination of upto $O(m)$ encoded quotients of the f
 
 \noindent{\bf Localizing changes in RAMs.} While the above two components allow us to reliably extract sub-RAMs
 corresponding to indices in vector $\vec{a}$, we still need to prove that RAMs are identical outside indices in
-$\vec{a}$. Looking ahead, in terms of polynomials this requires proving that $T(\xi^i)=T'(\xi^i)$ for $i\not\in
+$\vec{a}$. Looking ahead, in terms of polynomials this requires proving that $T(\xi^i)=T^*(\xi^i)$ for $i\not\in
 \{a_i:i\in [m]\}$. Assuming $Z_I(X)$ to be the vanishing polynomial of the set $\{\xi^{a_i}:i\in [m]\}$,
-this is equivalent to proving that $Z_I(X)(T(X) - T'(X)) = D(X)\vpolyN(X)$ for some polynomial $D$. However, naively
+this is equivalent to proving that $Z_I(X)(T(X) - T^*(X)) = D(X)\vpolyN(X)$ for some polynomial $D$. However, naively
 this involves working with polynomials with degree $O(N)$, which is expensive.
 In Section ~\ref{subsec:proximity-ram} we show a polynomial protocol for the above relation which requires only $O(m\log^2 m)$ prover effort. The protocol
 appears in Figure ~\ref{fig:a-identical}.
@@ -176,7 +176,7 @@ appears in Table~\ref{tbl:components-poly-ram} in Section~\ref{sec:poly-proto-ra
 less than the aggregate of component protocols; this is due to the fact that several pairing checks required for
 $\kzg$ verification proofs can be batched together. For concrete instantiation using BLS12-381 curve, RAM size
 of 1 million, the online cost of proving an update of $1000$ operations on a table as a function of its
-hamming distance from the ``pre-processed'' table is described in Figure ~\ref{fig:batch-ram-proving-time}.
+Hamming distance from the ``pre-processed'' table is described in Figure ~\ref{fig:batch-ram-proving-time}.
 Other performance metrics are summarised in Tables ~\ref{tbl:performance-comparison} and ~\ref{tbl:offline-proving-time}.
 %As an illustrative example,the other performance metrics for the same setting are summarized below:
 %\begin{table}[htbp]
