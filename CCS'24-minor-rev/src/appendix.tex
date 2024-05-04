@@ -244,7 +244,8 @@ polynomial encodings. Commitment of an encoding represented as tuple of polynomi
 polynomials. We now define
 the relation $\CLRAM$ below, and present a succinct argument for the same.
 \begin{definition}\label{defn:committed-vram}
-Let $\CLRAM$ consist of tuples $((c_T, c_o, c_T'), (\vecT, \vec{o},\vecT'))$ where $c_T$ $=$ $\kzgcommit(\srs, \wt{T})$,
+Let $\CLRAM$ consist of tuples $((c_T, c_o, c_T')$, \\
+$(\vecT, \vec{o},\vecT'))$ where $c_T$ $=$ $\kzgcommit(\srs, \wt{T})$,
 $c_T'$ $=$ $\kzgcommit(\srs, \wt{T'})$,
 $c_o$ $=$ $\kzgcommit(\srs,\wt{O})$ commit to $\vecT$, $\vecT'$ and $\vec{o}$ with $(\vecT,\vec{o},\vecT')\in \LRAM{I}{m}{m}$.
 \end{definition}
@@ -502,7 +503,7 @@ Then, $p''(\xi^i)/p'(\xi^i)=2 \cdot \sum_{j\in K\setminus \{i\}} 1/(\xi^i-\xi^j)
 \end{lemma}
 
 \begin{proof}
-    Observe that $p'(X)=\sum_{i\in K}\prod_{j\in K\setminus \{i\}}(X-\xi^j)$ and
+    Observe that $p'(X)=\sum_{i\in K}\prod_{j\in K\setminus \{i\}}(X-\xi^j)$ and \\
     $p''(X)=\sum_{i\in K}\sum_{j\in K\setminus \{i\}}\prod_{k\in K\setminus \{i,j\}}(X-\xi^k)$. Thus for $r\in K$,
     we have:
     \begin{align*}
@@ -784,7 +785,8 @@ $F_K(X)$ is defined as
     $$r_i(\xi^i)=r(\xi^i) - p'(\xi^i) $$
 
 
-    Now, from Lemma \ref{lem:sumcheck}, we have that $r(X)=N u(X,0)=N \frac{(p(X) - p(0))}{X}$ which gives $r(\xi^i)$ for $i\in \setind$ as:
+    Now, from Lemma \ref{lem:sumcheck}, we have that $r(X)=N u(X,0)$ \\ 
+    $=N \frac{(p(X) - p(0))}{X}$ which gives $r(\xi^i)$ for $i\in \setind$ as:
     $$r(\xi^i)=N \frac{(d_i - p(0))}{\xi^i}$$
 
     \textbf{Thus, it suffices to compute $p(0)$ and $p'(X)$ at the set $\{\xi^i:i \in I\}$}\\\\
