@@ -36,7 +36,7 @@ in Figure ~\ref{fig:committed-index-lookup} is an argument of knowledge for the 
 \begin{mdframed}
 {
 %<<<<<<< HEAD
-    {\bf Common Input}: $\srs,c_t, c_a, c_v$, $c_I=\gone{I(X)}$ where $I(X)=\enc{(1,\ldots,N)}{\setN}$ encodes a vector $(1,\ldots,N)\in \F^N$. \\
+    {\bf Common Input}: $\srs,c_t, c_a, c_v$, $c_I=\gone{I(X)}$ where $I(X)=\enc{I}{\setN}$ encodes the vector $\vec{I}=(1,\ldots,N)\in \F^N$. \\
 %=======
 %    {\bf Common Input}: $\srs,c_t, c_a, c_v$, $c_I=\gone{I(X)}$ where $I(X)=\enc{\vec{I}_N}{\setN}$
 %    with $\vec{I}_N=(1,\ldots,N)$. \\
@@ -138,7 +138,7 @@ if and only if $K(\alpha)=1+\beta=\prod_{i\in [m]} (\alpha - h(\nu^i))$.
         {\bf Common Input}: $\srs$, $c_T, c_T', c_a$.
 
         {\bf Prover's Input}: Vectors $\vecT,\vecT'\in \F^N$, $\vec{a}\in \F^m$. Polynomials $T(X),T^*(X)$ and
-        $a(X)$ encoding $\vecT,\vecT'$ and $\vec{a}$ respectively.
+        $a(X)$ encoding $\vecT,\vecT'$ and $\vec{a}$ respectively.\\
 
         {\bf Round 1}: Prover commits to auxiliary polynomials
         \begin{enumerate}[leftmargin=1em, label=\arabic*.]
@@ -154,7 +154,7 @@ if and only if $K(\alpha)=1+\beta=\prod_{i\in [m]} (\alpha - h(\nu^i))$.
             \item $\verifier$ sends $\alpha\gets \F$.
         \end{enumerate}
 
-        {\bf Round 2}: Prover commits to polynomial $u(X)$
+        {\bf Round 2}: Prover commits to polynomial $u(X)$.
         \begin{enumerate}[leftmargin=1em, label=\arabic*.]
             \item $\prover$ sets $\beta=K(\alpha)-1$ and interpolates $u(X)$ on $\setV$ such that
                 $u(\nu^i)=\prod_{j=1}^{i-1}\big((\alpha - h(\nu^j))/(1 + \beta\tau_1(\nu^j))\big)$ for $i\in [m]$.
@@ -163,7 +163,7 @@ if and only if $K(\alpha)=1+\beta=\prod_{i\in [m]} (\alpha - h(\nu^i))$.
         \end{enumerate}
 
 
-        {\bf Round 3}: Prover batches checks in Eq ~\eqref{eq:kh-check}
+        {\bf Round 3}: Prover batches checks in Eq ~\eqref{eq:kh-check}.
         \begin{enumerate}[leftmargin=1em, label=\arabic*.]
             \item $\prover$ computes:
             \begin{align*}
@@ -239,8 +239,8 @@ such that:
     $w(X)$ encode vectors $\vec{\op}=(\op_1,\ldots,\op_m)$, $\vec{a}$ and $\vec{w}$ over $\setV$.
 \end{itemize}
 \end{definition}
-As outlined in the blueprint, the prover first commits to ``smaller'' RAMs $S=(\vec{a},\vec{v})$ and $S'=(\vec{a},\vec{v}')$
-where $\vec{v}=\vecT[\vec{a}]$ and $\vec{v}'=\vecT'[\vec{a}]$. The prover commits to $S$ and $S'$ by sending commitments
+As outlined in the blueprint, the prover first commits to ``smaller'' RAMs $\Sbf=(\vec{a},\vec{v})$ and $\Sbf'=(\vec{a},\vec{v}')$
+where $\vec{v}=\vecT[\vec{a}]$ and $\vec{v}'=\vecT'[\vec{a}]$. The prover commits to $\Sbf$ and $\Sbf'$ by sending commitments
 $c_v$ and $c_v'$ to $\vec{v}$ and $\vec{v}'$. Then the prover and verifier execute the committed index lookup protocol to
 prove:
 \begin{equation}
@@ -250,12 +250,12 @@ The verifier uses a random challenge $\chi\gets \F$ to reduce two instances of $
 $(c_T + \chi c_T', c_a, c_v + \chi c_v')\in \RLOOK$. Then, we show that
 RAMs $\vecT$ and $\vecT'$ are $\vec{a}$-identical using the protocol in Figure ~\ref{fig:a-identical}, described
 in Section ~\ref{subsec:proximity-ram}.
-All that remains is to prove is that the operation sequence $\vec{o}$ is consistent with small RAMs $S$ and $S'$.
-We check this using the argument in Section ~\ref{sec:poly-proto-ram-app}, which is obtained by compiling the
-polynomial protocol for RAM in Section ~\ref{sec:poly-proto-ram} into an argument of knowledge in the AGM.
+All that remains is to prove is that the operation sequence $\vec{o}$ is consistent with small RAMs $\Sbf$ and $\Sbf'$.
+We check this using the argument in Appendix ~\ref{sec:poly-proto-ram-app}, which is obtained by compiling the
+polynomial protocol for RAM in Appendix ~\ref{sec:poly-proto-ram} into an argument of knowledge in the AGM.
 Specifically, the prover and the verifier set
 $c_S = (c_a, c_v)$, $c_S'=(c_a, c_v')$ and $c_o = (c_\op, c_a, c_w)$, and execute the argument of knowledge for
-showing $(c_S, c_o, c_S')\in \CLRAM$ (see Definition ~\ref{defn:committed-ram}). We provide the complete protocol
+showing $(c_S, c_o, c_S')\in \CLRAM$ (see Definition ~\ref{defn:committed-vram}). We provide the complete protocol
 listing in Figure ~\ref{fig:complete-listing}. The protocol in Figure ~\ref{fig:complete-listing} assumes pre-computed parameters
 for the tables $\vecT$ and $\vecT'$. The maintenance of these pre-computed parameters in the presence of updates
 is detailed in Section ~\ref{sec:update-protocol}.
@@ -271,8 +271,8 @@ the AGM, under the $Q$-DLOG assumption for the bilinear group $(\F,\Gone,\Gtwo,\
         \underline{Setup $(1^\secp,N,m, \vecT, \vecT')$}:
         \begin{itemize}[leftmargin=1em]
             \item $\srs = (\{\gone{\tau^i}\}_{i=0}^N, \{\gtwo{\tau^i}\}_{i=0}^N)$ for $\tau\gets \F$.
-            \item $W_2^i=\gtwo{\vpolyN(X)/(X-\xi^i)}$, $i\in [N]$(needed by prover)
-            \item $\gone{\vpolyN(X)}, \gtwo{\vpolyN(X)}$(known by both)
+            \item $W_2^i=\gtwo{\vpolyN(X)/(X-\xi^i)}$, $i\in [N]$ (needed by prover).
+            \item $\gone{\vpolyN(X)}, \gtwo{\vpolyN(X)}$ (known to both $\prover$ and $\verifier$).
         \end{itemize}
 
         \underline{Precompute $(\vecT, \vecT')$}:
@@ -287,17 +287,17 @@ the AGM, under the $Q$-DLOG assumption for the bilinear group $(\F,\Gone,\Gtwo,\
         {\bf Round 1}: Commit to sub RAMs.
         \begin{enumerate}[leftmargin=1em, label=\arabic*.]
             \item $\prover$ computes $\vec{v}=\vecT[\,\vec{a}\,]$, $\vec{v}'=\vecT'[\,\vec{a}\,]$ and the encoding
-            polynomials $v(X)$ and $v'(X)$.
-            \item $\prover$ sends $c_v = \gone{v(X)}$, $c_v'=\gone{v'(X)}$.
+            polynomials $v(X)$ and $v^*(X)$.
+            \item $\prover$ sends $c_v = \gone{v(X)}$, $c_v'=\gone{v^*(X)}$.
             \item $\verifier$ sends $\chi\gets \F$.
         \end{enumerate}
 
         {\bf Round 2}: Execute committed index lookup.
         \begin{enumerate}[leftmargin=1em, label=\arabic*.]
-            \item $\prover$ and $\verifier$ compute $c_T^\ast=c_T + \chi c_T'$, $c_V^\ast=c_v + \chi c_v'$.
-            \item $\prover$ computes $\vec{T}^\ast = \vecT + \chi \vecT'$, $\vec{v}^\ast = \vec{v} + \chi \vec{v}'$
+            \item $\prover$ and $\verifier$ compute $\hat{c}_T=c_T + \chi c_T'$, $\hat{c}_v=c_v + \chi c_v'$.
+            \item $\prover$ computes $\hat{\vec{T}} = \vecT + \chi \vecT'$, $\hat{\vec{v}}= \vec{v} + \chi \vec{v}'$.
             \item $\prover$ and $\verifier$ execute committed index lookup argument in Fig ~\ref{fig:committed-index-lookup},
-            with $(c_T^\ast,c_a,c_v^\ast)$ as the common input and $(\vec{T}^\ast, \vec{a},\vec{v}^\ast)$ as prover's input.
+            with $(\hat{c}_T,c_a,\hat{c}_v)$ as the common input and $(\hat{\vec{T}}, \vec{a},\hat{\vec{v}})$ as prover's input.
         \end{enumerate}
 
         {\bf Round 3}: Prove RAMs are $\vec{a}$-identical.
