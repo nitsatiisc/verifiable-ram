@@ -590,7 +590,7 @@ with generator $\xi \in \F$. Then $\sum_{i\in [N]}u(X,\xi^i)= Nu(X,0)$
     where each $a_i$ is a polynomial in $X$ of degree less than $N$.
     Now we write the sum:
     \begin{align*}
-        \sum_{i\in [N]}u(X,\xi^i) &= N a_0+a_1(\xi^+\xi^2+\cdots+\xi^N) \\
+        \sum_{i\in [N]}u(X,\xi^i) &= N a_0+a_1(\xi+\xi^2+\cdots+\xi^N) \\
         &\, +a_2(\xi^2+\xi^4+\cdots+\xi^{2N})+ \cdots + a_d(\xi^d+\cdots +\xi^{Nd})
     \end{align*}
     But for any $\alpha=\xi^k$ for $k<N$, $\alpha+\alpha^2+\cdots \alpha^N=0$. Thus, all terms vanish except the first term
@@ -638,7 +638,7 @@ of the $N^{th}$ roots of unity. Then we have:
 \end{lemma}
 
 \begin{proof}
-    Suppose first that $i \neq j$.
+    First, let us assume that $i \neq j$.
     We know that $\mu_i(X)= \frac{Z_H(X)}{Z_H'(\xi^i)(X-\xi^i)}$.
     Thus, by applying quotient rule(we can apply quotient rule because $\mu_i$ is defined at $\xi^j$ as $j\neq i$):
     $$\mu_i'(X) \cdot Z_H'(\xi^i)= \frac{(X-\xi^i)(N\cdot X^{N-1})-(X^N-1)}{(X-\xi^i)^2}$$
@@ -646,10 +646,10 @@ of the $N^{th}$ roots of unity. Then we have:
     $$\mu_i'(\xi^j) \cdot \frac{N}{\xi^i}= \frac{N(\xi^j-\xi^i)}{\xi^j (\xi^j-\xi^i)^2}$$
     Thus, we get:
     $$\mu_i'(\xi^j)=\frac{\xi^i}{\xi^j(\xi^j-\xi^i)}$$
-    In particular, when $i=j$, we have:
+    For the scenario where $i=j$, we have:
     \begin{align*}
     \mu_i(X) &= \frac{\prod_{j \in [N] \setminus \{i\}}(X-\xi^j)}{Z_H'(\xi^i)}\\
-    \textnormal{or,  }\mu_i(X)\cdot Z_H'(\xi^i) &= \prod_{j \in [N] \setminus \{i\}}(X-\xi^j)\\    
+    \implies \mu_i(X)\cdot Z_H'(\xi^i) &= \prod_{j \in [N] \setminus \{i\}}(X-\xi^j)\\    
     \end{align*} 
 	Differentiating the above equation on both sides, we get:
 	\[\mu_i'(X) \cdot \frac{N}{\xi^i} = \sum_{j \in [N] \setminus \{i\}}\prod_{k \in [N]\setminus\{i,j\}}(X-\xi^k)\]  

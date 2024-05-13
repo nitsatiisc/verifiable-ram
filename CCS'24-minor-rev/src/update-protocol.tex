@@ -7,7 +7,7 @@ stems from the need to compute an encoded quotient of the form:
 \gany{Q} = \sum_{i\in I}c_i\gany{\frac{T(X) - T(\xi^i)}{X-\xi^i}}
 \end{equation}
 for some $O(m)$ sized set $I$. The quotient in Equation ~\eqref{eq:enc-quotient} can be computed in $O(m)$ cost
-when the quotients $\gany{(T(X)-T(\xi^i))/(X-\xi^i)}$ are available for all $i\in [N]$. In this Section
+when the quotients $\gany{(T(X)-T(\xi^i))/(X-\xi^i)}$ are available for all $i\in [N]$. In this section
 we exhibit an algorithm which computes the above with $O((m+\delta)\log^2(m+\delta))$ cost, given access to
 similar quotients for a table at hamming distance $\delta$ from $\vecT$. We now describe our approach.
 %Recall that our lookup protocol in section 5.1 involves certain precomputations by the prover namely $W_1^i, W_2^i, W_3^i$. $W_2^i$ and $W_3^i$ do not depend on the table. However, $W_1^i$ depends on the lookup table and their values will change even if the table changes by a small amount. It is expensive to recompute all the $W_1^i$ for every small change in the table and this will affect the efficiency of our lookup protocol in the long run.\\\\
