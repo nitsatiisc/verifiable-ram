@@ -120,33 +120,37 @@ Protocols facilitating the checks mentioned in Lemma~\ref{lem:vec-concatenation}
 			{\bf Prover's Input}: Vectors $\vec{a},\vec{b},\vec{c}\in\F^m$ and $\vec{v}\in \F^k$.
 			\begin{enumerate}[leftmargin=1em, label=\arabic*.]
 				\item $\verifier$ sends $\gamma\gets \F$.
-				\item $\prover$ computes:
-				\begin{align}
-					& h(X) = a(X) + \gamma b(X) + \gamma^2 c(X),\\
-					& Q(X) = (h(X^3) - v(X) - \gamma v(\omega^m X) - \gamma^2 v(\omega^{2m} X))/Z(X).
-				\end{align}
+				\item $\prover$ computes the following:
+				\begin{itemize}[leftmargin=1em, label=-]
+					\item $h(X) = a(X) + \gamma b(X) + \gamma^2 c(X)$.
+					\item $Q(X) = (h(X^3) - v(X) - \gamma v(\omega^m X) - \gamma^2 v(\omega^{2m} X))/Z(X).$
+				\end{itemize}
+%				\begin{align}
+%					& h(X) = a(X) + \gamma b(X) + \gamma^2 c(X),\\
+%					& Q(X) = (h(X^3) - v(X) - \gamma v(\omega^m X) - \gamma^2 v(\omega^{2m} X))/Z(X).
+%				\end{align}
 				\item $\prover$ sends commitment $\gone{Q}$ = $\gone{Q(X)}$.
 				\item $\verifier$ sends $s\gets\F$.
 				\item $\prover$ sends evaluations $\val{s}{v}=v(s)$, $\val{\omega^m s}{v}=v(\omega^m s)$,
 				$\val{\omega^{2m}s}{v}=v(\omega^{2m} s)$, $\val{s^3}{h}=h(s^3)$, $\val{s}{Q}=Q(s)$ and $\val{s}{Z}=Z(s)$.
 				\item $\verifier$ sends $r\gets\F$.
 				\item $\prover$ computes $\kzg$ proofs:
-				\begin{itemize}[leftmargin=1em]
+				\begin{itemize}[leftmargin=1em, label=-]
 					\item $\Pi_v=\kzgprove(\srs,v,(s,\omega^m s, \omega^{2m}s))$.
 					\item $\Pi_h=\kzgprove(\srs,h,s^3)$.
 					\item $\Pi_f=\kzgprove(\srs,f,s)$ where $f(X)=Z(X) + rQ(X)$.
 				\end{itemize}
 				\item $\prover$ sends $\Pi_v$, $\Pi_h$ and $\Pi_f$.
-				\item $\verifier$ Computes commitments $\gone{h}$ and $\gone{f}$ using homomorphism.
+				\item $\verifier$ computes commitments $\gone{h}$ and $\gone{f}$. \footnote{This can be done locally by leveraging the linearity of the operation}
 				\item $\verifier$ checks:
-				\begin{itemize}[leftmargin=1em]
+				\begin{itemize}[leftmargin=1em, label=-]
 					\item $\kzgverify(\srs,\gone{v}, \vec{e}_v, \vec{p}_v, \Pi_v)$ where
 					$\vec{p}_v$ = $(s,\omega^m s, \omega^{2m}s)$ and $\vec{e}_v$ = $(\val{s}{v}, \val{\omega^m s}{v}, \val{\omega^{2m} s}{v})$.
 					\item $\kzgverify(\srs,\gone{h},  \val{s^3}{h}, s^3,\Pi_h)$.
 					\item $\kzgverify(\srs,\gone{f},  \val{s}{Z} + r\val{s}{Q}, s,\Pi_f)$.
 					\item $\val{s}{Q}\cdot \val{s}{Z} = \val{s^3}{h}-\val{s}{v}-\gamma \val{\omega^m s}{v}-\gamma^2\val{\omega^{2m}s}{v}$.
 				\end{itemize}
-				\item $\verifier$ outputs accept if all the above checks succeed, else it rejects.
+				\item $\verifier$ outputs accept if all the above checks succeed, else it outputs reject.
 			\end{enumerate}
 		}
 	\end{mdframed}
@@ -167,33 +171,35 @@ Protocols facilitating the checks mentioned in Lemma~\ref{lem:vec-concatenation}
             \item Prover computes polynomials $Z_1(X)$, $Z_2(X)$, $\delta_T(X)$, $\delta_A(X)$.
             \item $\prover$ sends $\gone{Z_1(X)}$, $\gone{Z_2(X)}$, $\gone{\delta_T(X)}$, $\gone{\delta_A(X)}$.
             \item $\verifier$ sends $\gamma\gets \F$.
-            \item $\prover$ computes:
-            $$Q_1(X) =  (A(\omega X) - A(X) - \delta_A(X)) / \Z_1(X)$$
-            $$Q_2(X) =  [(A(\omega X) - A(X))+\gamma(t(\omega X) - t(X) - \delta_T(X))+$$
-            $$ \gamma^2 (\op(X) - 1)(V(\omega X) - V(X))] / Z_2(X) $$
-
+            \item $\prover$ computes the following:
+%            $$Q_1(X) =  (A(\omega X) - A(X) - \delta_A(X)) / \Z_1(X)$$
+%            $$Q_2(X) =  [(A(\omega X) - A(X))+\gamma(t(\omega X) - t(X) - \delta_T(X))+$$
+%            $$ \gamma^2 (\op(X) - 1)(V(\omega X) - V(X))] / Z_2(X) $$
+			\begin{itemize}[label=-]
+				\item $Q_1(X) =  (A(\omega X) - A(X) - \delta_A(X)) / \Z_1(X)$.
+				\item $Q_2(X) =  [(A(\omega X) - A(X))+\gamma(t(\omega X) - t(X) - \delta_T(X))+\gamma^2 (\op(X) - 1)(V(\omega X) - V(X))] / Z_2(X) $
+			\end{itemize}
 
             \item $\prover$ sends commitments $\gone{Q_1(X)}$, $\gone{Q_2(X)}$.
             \item $\verifier$ sends $s\gets\F$.
             \item $\prover$ sends evaluations $\val{s}{A}=A(s)$, $\val{\omega s}{A}=A(\omega s)$, $\val{s}{\delta_A} = \delta_A(s)$, $\val{s}{t}=t(s)$, $\val{\omega s}{t}=t(\omega s)$, $\val{s}{\delta_T} = \delta_T(s)$, $\val{s}{\op}=\op(s)$, $\val{s}{V}=V(s)$, $\val{\omega s}{V}=V(\omega s)$, $\val{s}{Q_1}=Q_1(s)$, $\val{s}{Q_2}=Q_2(s)$, $\val{s}{Z_1}=Z_1(s)$, $\val{s}{Z_2}=Z_2(s)$.
             \item $\verifier$ checks:
-            \begin{itemize}
+            \begin{itemize}[label=-]
                 \item $\val{s}{Q_1}\cdot \val{s}{Z_1} = (\val{\omega s}{A} - \val{s}{A} - \val{s}{\delta_A})$.
                 \item  $\val{s}{Q_2}\cdot \val{s}{Z_2} = (\val{\omega s}{A} - \val{s}{A})+\gamma (\val{\omega s}{t} - \val{s}{t} - \val{s}{\delta_T})+\gamma^2 (\val{s}{\op}-1)(\val{\omega s}{V} - \val{s}{V}) $.
                 \item $\val{s}{Z_1} \cdot \val{s}{Z_2}=s^{3m}-1$.
             \end{itemize}
             \item $\verifier$ sends $r_1, r_2\gets\F$.
-            \item $\prover$ computes:
-            \begin{itemize}
+            \item $\prover$ computes the following:
+            \begin{itemize}[label=-]
                 \item $\Phi_{ws}(X)= A(X)+r_1 t(X) +r_1^2 V(X)$.
                 \item $\Phi_s(X)=A(X)+r_2 \delta_A(X)+r_2^2 t(X)+ r_2^3 \delta_T(X)+r_2^4 \op(X) +r_2^5 V(X)+r_2^6 Q_1(X)+ r_2^7 Q_2(x)+r_2^8 Z_1(X)+r_2^9 Z_2(X)$.
-                \item $\prover$ computes $\Pi_{\omega s} = \KZGopen(\srs, \Phi_{\omega s}(X), \omega s)$.
-                \item $\prover$ computes $\Pi_{s} = \KZGopen(\srs, \Phi_{s}(X),s)$.
-
+                \item $\Pi_{\omega s} = \KZGopen(\srs, \Phi_{\omega s}(X), \omega s)$.
+                \item $\Pi_{s} = \KZGopen(\srs, \Phi_{s}(X),s)$.
             \end{itemize}
             \item $\prover$ sends $\Pi_{\omega s}, \Pi_{s}$.
             \item $\verifier$ computes:
-            \begin{itemize}
+            \begin{itemize}[label=-]
                 \item $[\Phi_{\omega s}(X)]_1= c_A +r_1 c_t + r_1^2 c_V$.
                 \item $[\Phi_{s}(X)]_1= c_A +r_2 [\delta_A(X)]_1 + r_2^2 c_t +r_2^3 [\delta_T(X)]_1 +r_2^4 c_{\op} +r_2^5 c_V +r_2^6 [Q_1(X)]_1 +r_2^7 [Q_2(X)]_1 +r_2^8 [Z_1(X)]_1 + r_2^9 [Z_2(X)]_1 $.
                 \item $V_{ws}= \val{\omega s}{A}+r_1 \val{\omega s}{t}+ r_1^2 \val{\omega s}{V}$.
@@ -201,7 +207,7 @@ Protocols facilitating the checks mentioned in Lemma~\ref{lem:vec-concatenation}
                 +r_2^5 \val{s}{V} +r_2^6 \val{s}{Q_1} +r_2^7 \val{s}{Q_2}+r_2^8 \val{s}{Z_1} +r_2^9 \val{s}{Z_2}$.
             \end{itemize}
             \item $\verifier$ checks:
-            \begin{itemize}
+            \begin{itemize}[label=-]
                 \item $\KZGverify(\srs, \gone{\Phi_{ws}}, V_{ws}, \omega s, \Pi_{\omega s})$.
                 \item $\KZGverify(\srs, \gone{\Phi_{s}}, V_{s}, s, \Pi_{s})$.
             \end{itemize}
@@ -210,7 +216,7 @@ Protocols facilitating the checks mentioned in Lemma~\ref{lem:vec-concatenation}
             to prove that $(\srs,c_A,c_I)$, $(\srs,c_t,c_I)$, $(\srs,\gone{\delta_A(X)},c_I)$ and $(\srs,\gone{\delta_T(X)},c_I)$
             are in $\RSVEC$.
 
-            \item $\verifier$ accepts if all checks succeed and the sub-vector arguments accept. Otherwise it rejects.
+            \item $\verifier$ outputs accept if all checks succeed and the sub-vector arguments outputs accept. Otherwise it outputs reject.
         \end{enumerate}
     }
     \end{mdframed}
@@ -292,30 +298,36 @@ The complete polynomial protocol is detailed in Figure \ref{fig:time-ordered-tra
     \begin{mdframed}
     {
             {\bf Common Input}: Commitments $c_T=(c_a,c_v)$, $c_o=(\bar{c}_\op, \bar{c}_a, \bar{c}_v)$, $c_T'=(c_a', c_v')$
-        and $c_\tr=(c_t, c_\op, c_A, c_V)$ to $\vecT,\vec{o},\vecT'$ and $\tr$(which is supposed to be the time ordered transcript) respectively. Commitment $\gone{Z(X)}$ to the polynomial
+        and $c_\tr=(c_t, c_\op, c_A, c_V)$ to $\vecT,\vec{o},\vecT'$ and $\tr$ (which is supposed to be the time ordered transcript) respectively. Commitment $\gone{Z(X)}$ to the polynomial
         $Z(X)=\prod_{i=1}^m (X-\omega^i)$.\\
     {\bf Prover's Input}: $\tr, \vecT, \vecT', \vec{o}$ and their polynomial encodings, $Z(X)$.
         \begin{enumerate}[leftmargin=1em, label=\arabic*.]
             \item $\verifier$ sends $\beta,\gamma\gets \F$.
-            \item $\prover$ computes:
-            \begin{align}\label{eq:poly-constraints}
-            & G_1(X) = a(X) + \beta v(X),\, G_2(X) = \bar{a}(X) + \beta \bar{v}(X) + \beta^2 \bar{\op}(X) \tag{A1} \\
-            & G_3(X) = a^*(X) + \beta v^*(X),\, G(X) = A(X) + \beta V(X) + \beta^2 \op(X) \tag{A2} \\
-            & H(X) = G_1(X) + \gamma G_2(X) + \gamma^2 G_3(X), \tag{A3} \\
-            & Q(X) = [(H(X^3) - G(X) - \gamma G(\omega^m X) - \gamma^2 G(\omega^{2m} X))]/Z(X) \tag{A4}
-            \end{align}
+            \item $\prover$ computes the following:
+            \begin{itemize}[label=-]
+            	\item $G_1(X) = a(X) + \beta v(X),\, G_2(X) = \bar{a}(X) + \beta \bar{v}(X) + \beta^2 \bar{\op}(X)$
+            	\item $G_3(X) = a^*(X) + \beta v^*(X),\, G(X) = A(X) + \beta V(X) + \beta^2 \op(X)$
+            	\item $H(X) = G_1(X) + \gamma G_2(X) + \gamma^2 G_3(X)$
+            	\item $Q(X) = [(H(X^3) - G(X) - \gamma G(\omega^m X) - \gamma^2 G(\omega^{2m} X))]/Z(X)$
+            \end{itemize}
+%            \begin{align}\label{eq:poly-constraints}
+%            & G_1(X) = a(X) + \beta v(X),\, G_2(X) = \bar{a}(X) + \beta \bar{v}(X) + \beta^2 \bar{\op}(X) \tag{A1} \\
+%            & G_3(X) = a^*(X) + \beta v^*(X),\, G(X) = A(X) + \beta V(X) + \beta^2 \op(X) \tag{A2} \\
+%            & H(X) = G_1(X) + \gamma G_2(X) + \gamma^2 G_3(X), \tag{A3} \\
+%            & Q(X) = [(H(X^3) - G(X) - \gamma G(\omega^m X) - \gamma^2 G(\omega^{2m} X))]/Z(X) \tag{A4}
+%            \end{align}
             \item $\prover$ sends commitment $\gone{Q}$ to $Q(X)$.
             \item $\verifier$ sends $s\gets\F$.
             \item $\prover$ sends evaluations $\val{s}{G}=G(s)$, $\val{\omega^m s}{G}=G(\omega^m s)$,
             $\val{\omega^{2m}s}{G}=G(\omega^{2m} s)$, $\val{s^3}{H}=H(s^3)$, $\val{s}{Q}=Q(s)$ and $\val{s}{Z}=Z(s)$.
             \item $\verifier$ sends $r\gets\F$.
-            \item $\prover$ sends $\kzg$ proofs:
+            \item $\prover$ sends the following $\kzg$ proofs:
             \begin{itemize}[leftmargin=1em]
                 \item $\Pi_G=\kzgprove(\srs,G(X),(s,\omega^m s, \omega^{2m}s))$.
                 \item $\Pi_H=\kzgprove(\srs,H(X),s^3)$.
                 \item $\Pi_F=\kzgprove(\srs,F(X),s)$ where $F(X)=Z(X) + rQ(X)$.
             \end{itemize}
-            \item $\verifier$ computes $\gone{G(X)},\gone{H(X)}$ and $\gone{F(X)}$ using homomorphism.
+            \item $\verifier$ computes $\gone{G(X)},\gone{H(X)}$ and $\gone{F(X)}$. \footnote{This can be done locally by leveraging the linearlity of the operation}
             \item $\verifier$ checks:
             \begin{itemize}[leftmargin=1em]
                 \item $\kzgverify(\srs,\gone{G}, (\val{s}{G}, \val{\omega^m s}{G}, \val{\omega^{2m} s}{G}),\\(s,\omega^m s, \omega^{2m}s),\Pi_G)$.
@@ -323,7 +335,7 @@ The complete polynomial protocol is detailed in Figure \ref{fig:time-ordered-tra
                 \item $\kzgverify(\srs,\gone{F}, \val{s}{Z} + r\val{s}{Q}, s, \Pi_F)$.
                 \item $\val{s}{Q}\cdot \val{s}{Z} = \val{s^3}{H}-\val{s}{G}-\gamma \val{\omega^m s}{G}-\gamma^2\val{\omega^{2m}s}{G}$.
             \end{itemize}
-            \item $\verifier$ accepts if all the above checks succeeds, otherwise it rejects.
+            \item $\verifier$ outputs accept if all the above checks succeeds, otherwise it outputs reject.
         \end{enumerate}
     }
     \end{mdframed}
@@ -358,18 +370,24 @@ the random linear combination of the columns of the respective transcripts.
     {\bf Prover's Input}: Transcripts $\tr, \tr^{*}$ and their polynomial encodings, permutation $\sigma$ such that $\tr^{*}=\sigma(\tr)$.
         \begin{enumerate}[leftmargin=1em, label=\arabic*]
             \item $\verifier$ sends $\alpha,\beta, \chi\gets \F$.
-            \item $\prover$ computes $f(X)=t(X) + \beta \op(X) + \beta^2 A(X) + \beta^3 V(X)$, $g(X) = t^\ast(X) + \beta \op^\ast(X)$
-            $+ \beta^2 A^\ast(X) + \beta^3 V^\ast(X)$. It then computes polynomials $z(X),q(X)$ as:
-            \begin{itemize}[leftmargin=1em]
+            \item $\prover$ computes the following: 
+            \begin{itemize}[label=-]
+            	\item $f(X)=t(X) + \beta \op(X) + \beta^2 A(X) + \beta^3 V(X)$.
+            	\item $g(X) = t^\ast(X) + \beta \op^\ast(X)+ \beta^2 A^\ast(X) + \beta^3 V^\ast(X)$.
+            \end{itemize}
+%            $f(X)=t(X) + \beta \op(X) + \beta^2 A(X) + \beta^3 V(X)$, $g(X) = t^\ast(X) + \beta \op^\ast(X)$
+%            $+ \beta^2 A^\ast(X) + \beta^3 V^\ast(X)$. 
+			\item $\prover$ then computes polynomials $z(X),q(X)$ as:
+            \begin{itemize}[leftmargin=1em, label=-]
                 \item Interpolate polynomial $z(X)$ of degree $k-1$ such that $z(\omega)=1$ and
                 $z(\omega^{i+1})=\prod_{j=1}^i (\alpha - f(\omega^j))/(\alpha - g(\omega^j))$ for $1\leq i\leq k-1$.
-                \item Compute $q(X) = ((\alpha - g(X))z(\omega X) - (\alpha - f(X))z(X) + \chi\lambda_1(X)(z(X) - 1))/\mathbb{Z}_{\setH}(X)$.
+                \item $q(X) = ((\alpha - g(X))z(\omega X) - (\alpha - f(X))z(X) + \chi\lambda_1(X)(z(X) - 1))/\mathbb{Z}_{\setH}(X)$.
             \end{itemize}
             \item $\prover$ sends commitments $\gone{z(X)}$ and $\gone{q(X)}$ to polynomials $z(X)$ and $q(X)$ respectively.
-            \item $\verifier$ computes commitments $[f]_1, [g]_1$ by homomorphism.
+            \item $\verifier$ computes commitments $[f]_1, [g]_1$. \footnote{This can be done locally by leveraging the linearlity of the operation}
             \item $\verifier$ checks that $q(X)Z_\setH(X)$ = $(\alpha - g(X))z(\omega X)-(\alpha - f(X))z(X) + \chi\lambda_1(X)(z(X) - 1)$
             by requesting evaluations and $\kzg$ proofs of polynomials $f,g, q, z$ at a random point, say $s$ and evaluation and $\kzg$ proof of $z$ at $\omega s$.
-            \item $\verifier$ accepts if all the checks succeed, else it rejects.
+            \item $\verifier$ outputs accept if all the checks succeed, else it outputs reject.
         \end{enumerate}
     }
     \end{mdframed}
@@ -396,25 +414,25 @@ and \ref{fig:encoded-relations} as sub-protocols is presented in Figure~\ref{fig
 
             {\bf Prover's Input}: $ \vecT, \vecT', \vec{o}$ and their polynomial encodings.
         \begin{enumerate}[leftmargin=1em, label=\arabic*.]
-            \item $\prover$ computes:
+            \item $\prover$ computes the following:
             \begin{itemize}
-                \item $\tr$, which is the time ordered transcript corresponding to $\vecT, \vec{o}, \vecT'$, and its polynomial encoding.
-                \item $Z(X)=\prod_{i=1}^m (X-\omega^i)$.
-                \item $c_\tr=(c_t, c_\op, c_A, c_V)$ which is the commitment of $\tr$.
-                \item $[Z(X)]_1$.
+                \item $\tr$ (time ordered transcript corresponding to $\vecT, \vec{o}, \vecT'$), its polynomial encoding, and its commitment $c_\tr=(c_t, c_\op, c_A, c_V)$.
+                \item $Z(X)=\prod_{i=1}^m (X-\omega^i)$ and its commitment $[Z(X)]_1$.
+%                \item $c_\tr=(c_t, c_\op, c_A, c_V)$ which is the commitment of $\tr$.
+%                \item $[Z(X)]_1$.
             \end{itemize}
 
             \item $\prover$ sends  $c_\tr=(c_t, c_\op, c_A, c_V)$ and $[Z(X)]_1$.
-            \item $\prover$ and $\verifier$ run the protocol for checking correctness of time ordered transcript as in Figure~\ref{fig:time-ordered-transcript}.
-            \item $\prover$ computes the address ordered transcript $\tr^{*}$ from the time ordered transcript $\tr$ by permuting suitably. It also computes its polynomial encoding.
-            \item $\prover$ computes the permutation $\sigma$ such that $\tr^{*}= \sigma(\tr)$ (this is computed along with the $\tr^{*}$).
-            \item $\prover$ computes the commitment $c_\tr^\ast=(c_t^\ast,c_\op^\ast, c_A^\ast, c_V^\ast)$ of $\tr^{*}$.
-            \item $\prover$ sends  $c_\tr^\ast$.
-            \item $\prover$ and $\verifier$ run the protocol for checking that the two transcripts are permutations of each other
-            as in Figure~\ref{fig:permutated-transcripts}.
-            \item $\prover$ and $\verifier$ run  the protocol for checking the constraints given in Lemma~\ref{lem:addr-ordered-transcript}
-            as in Figure~\ref{fig:encoded-relations}.
-            \item $\verifier$ accepts if all the three sub-protocols accept. $\verifier$ rejects otherwise.
+            \item $\prover$ and $\verifier$ run the protocol for checking correctness of time ordered transcript (Figure~\ref{fig:time-ordered-transcript}).
+            \item $\prover$ computes the address ordered transcript $\tr^{*}$ (along with its polynomial encoding) and the permutation $\sigma$ from the time ordered transcript $\tr$, such that $\tr^{*}= \sigma(\tr)$.
+%            
+%            \item $\prover$ computes the address ordered transcript $\tr^{*}$ from the time ordered transcript $\tr$ by permuting suitably. It also computes its polynomial encoding.
+%            \item $\prover$ computes the permutation $\sigma$ such that $\tr^{*}= \sigma(\tr)$ (this is computed along with the $\tr^{*}$).
+            \item $\prover$ computes the commitment $c_\tr^\ast=(c_t^\ast,c_\op^\ast, c_A^\ast, c_V^\ast)$ of $\tr^{*}$ and sends $c_\tr^\ast$.
+%            \item $\prover$ sends  $c_\tr^\ast$.
+            \item $\prover$ and $\verifier$ run the protocol for checking that the two transcripts are permutations of each other (Figure~\ref{fig:permutated-transcripts}).
+            \item $\prover$ and $\verifier$ run  the protocol for checking the constraints given in Lemma~\ref{lem:addr-ordered-transcript} (Figure~\ref{fig:encoded-relations}.)
+            \item $\verifier$ outputs accept if all the three sub-protocols lead to accept, else it outputs reject.
         \end{enumerate}
     }
     \end{mdframed}
@@ -590,13 +608,18 @@ with generator $\xi \in \F$. Then $\sum_{i\in [N]}u(X,\xi^i)= Nu(X,0)$
     where each $a_i$ is a polynomial in $X$ of degree less than $N$.
     Now we write the sum:
     \begin{align*}
-        \sum_{i\in [N]}u(X,\xi^i) &= N a_0+a_1(\xi^+\xi^2+\cdots+\xi^N) \\
+        \sum_{i\in [N]}u(X,\xi^i) &= N a_0+a_1(\xi+\xi^2+\cdots+\xi^N) \\
         &\, +a_2(\xi^2+\xi^4+\cdots+\xi^{2N})+ \cdots + a_d(\xi^d+\cdots +\xi^{Nd})
     \end{align*}
     But for any $\alpha=\xi^k$ for $k<N$, $\alpha+\alpha^2+\cdots \alpha^N=0$. Thus, all terms vanish except the first term
     and hence $\sum_{i\in [N]}u(X,\xi^i)=N a_0$.
     The lemma follows by observing that $a_0=u(X, 0)$.
 \end{proof}
+
+We use the following standard observation for our next lemma:
+\begin{fact}
+	If polynomials $f,g$ of degree $<N$ agree on $N$ points, then they are equal as polynomials, that is, $f(X)=g(X)$
+\end{fact}
 
 \begin{lemma}\label{lem:zk-hat}
 Let $Z_\nroots(X)$ be the vanishing polynomial for $\nroots$, let $\widehat{Z}_K(X)$ and  $Z_K(X)$ be the vanishing polynomials for $H_{[N]\setminus K}$ and $H_K$ respectively.
@@ -606,10 +629,6 @@ Let $\mu_1(X),\ldots,\mu_N(X)$ be Lagrange polynomials for the set $\nroots=\{\x
     \widehat{Z}_K'(X)= \sum_{j\in K}\frac{Z_\nroots'(\xi^j)}{Z_K'(\xi^j)}\mu_j'(X)
 \end{gather}
 \end{lemma}
-We use the following standard observation:
-\begin{fact}
-    If polynomials $f,g$ of degree $<N$ agree on $N$ points, then they are equal as polynomials, that is, $f(X)=g(X)$
-\end{fact}
 
 \begin{proof}
     Note that the second equation follows from the first by linearity of derivatives, so it suffices to prove the first equation.
@@ -638,15 +657,16 @@ of the $N^{th}$ roots of unity. Then we have:
 \end{lemma}
 
 \begin{proof}
-    Suppose first that $i \neq j$.
+    Let us first consider the case where $i \neq j$.
     We know that $\mu_i(X)= \frac{Z_H(X)}{Z_H'(\xi^i)(X-\xi^i)}$.
-    Thus, by applying quotient rule(we can apply quotient rule because $\mu_i$ is defined at $\xi^j$ as $j\neq i$):
+    Thus, by applying quotient rule (note that $\mu_i$ is defined at $\xi^j$ as $j\neq i$):
     $$\mu_i'(X) \cdot Z_H'(\xi^i)= \frac{(X-\xi^i)(N\cdot X^{N-1})-(X^N-1)}{(X-\xi^i)^2}$$
     Substituting $X$ by $\xi^j$, we get:
     $$\mu_i'(\xi^j) \cdot \frac{N}{\xi^i}= \frac{N(\xi^j-\xi^i)}{\xi^j (\xi^j-\xi^i)^2}$$
     Thus, we get:
     $$\mu_i'(\xi^j)=\frac{\xi^i}{\xi^j(\xi^j-\xi^i)}$$
-    In particular, when $i=j$, we have:
+    
+    Now, for the second case where $i=j$, we have:
     \begin{align*}
     \mu_i(X) &= \frac{\prod_{j \in [N] \setminus \{i\}}(X-\xi^j)}{Z_H'(\xi^i)}\\
     \textnormal{or,  }\mu_i(X)\cdot Z_H'(\xi^i) &= \prod_{j \in [N] \setminus \{i\}}(X-\xi^j)\\    

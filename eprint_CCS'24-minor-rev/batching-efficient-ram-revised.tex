@@ -165,11 +165,11 @@ if and only if $K(\alpha)=1+\beta=\prod_{i\in [m]} (\alpha - h(\nu^i))$.
 
         {\bf Round 3}: Prover batches checks in Eq ~\eqref{eq:kh-check}.
         \begin{enumerate}[leftmargin=1em, label=\arabic*.]
-            \item $\prover$ computes:
-            \begin{align*}
-            Q(X)=\big(&u(\nu X)(1+\beta \tau_1(X)) - u(X)(\alpha - h(X)) \\
-            &\quad + r\tau_1(X)(u(X)-1)\big)/Z_{\setV}(X)
-            \end{align*}
+            \item $\prover$ computes $Q(X)=\big(u(\nu X)(1+\beta \tau_1(X)) - u(X)(\alpha - h(X)) \quad + r\tau_1(X)(u(X)-1)\big)/Z_{\setV}(X)$
+%            \begin{align*}
+%            Q(X)=\big(&u(\nu X)(1+\beta \tau_1(X)) - u(X)(\alpha - h(X)) \\
+%            &\quad + r\tau_1(X)(u(X)-1)\big)/Z_{\setV}(X)
+%            \end{align*}
             \item $\prover$ sends $c_Q = \gone{Q(X)}$.
             \item $\verifier$ sends $s\gets \F$.
         \end{enumerate}
@@ -183,14 +183,14 @@ if and only if $K(\alpha)=1+\beta=\prod_{i\in [m]} (\alpha - h(\nu^i))$.
 
         {\bf Round 5}: Prover batches evaluation proofs.
         \begin{enumerate}[leftmargin=1em, label=\arabic*.]
-        \item Compute:
+        \item $\prover$ computes:
             \begin{itemize}[leftmargin=1em, label=-]
             \item $p_\alpha(X)=Z_I(X) + r_\alpha q(X) + r_\alpha^2 K(X)$.
             \item $p_s(X) = Q(X) + r_s u(X) + r_s^2 h(X)$.
             \item $\Pi_\alpha = \kzgprove(\srs,p_\alpha,\alpha)$.
             \item $\Pi_s = \kzgprove(\srs,p_s,s)$, $\Pi_{\nu s}$ = $\kzgprove(\srs,u,\nu s)$.
             \end{itemize}
-        \item Send $\Pi_\alpha, \Pi_s, \Pi_{\nu s}$.
+        \item $\prover$ sends $\Pi_\alpha, \Pi_s, \Pi_{\nu s}$.
         \end{enumerate}
 
         {\bf Round 6}: Verifier checks identities.
@@ -268,18 +268,34 @@ the AGM, under the $Q$-DLOG assumption for the bilinear group $(\F,\Gone,\Gtwo,\
 \begin{figure}[t!]
     \begin{mdframed}
 
+		\underline{Setup $(1^\secp,N,m, \vecT, \vecT')$}: 
+		\begin{itemize}[leftmargin=1em]
+			\item $\srs = (\{\gone{\tau^i}\}_{i=0}^N, \{\gtwo{\tau^i}\}_{i=0}^N)$ for $\tau\gets \F$
+			\item Both $\prover$ and $\verifier$ precomputes $\gone{\vpolyN(X)}, \gtwo{\vpolyN(X)}$
+			\item $\prover$ precomputes the following:
+			\begin{itemize}[leftmargin=1em]
+				\item $W_2^i=\gtwo{\vpolyN(X)/(X-\xi^i)}$, $i\in [N]$
+			\end{itemize}
+			\item $\prover$ precomutes the following (with respect to $(\vecT, \vecT')$):
+			 \begin{itemize}[leftmargin=1em]
+				\item $W_1^i=\gtwo{(T(X)-T(\xi^i))/(X-\xi^i)}$, $i\in [N]$,
+				\item ${W_1^i}'=\gtwo{(T^*(X) - T^*(\xi^i))/(X-\xi^i)}$, $i\in [N]$.
+			\end{itemize}
+		\end{itemize}
+		
+		\moumita{ Removing this makes this more streamlined since Precompute() is not used/defined anywhere else.\\
         \underline{Setup $(1^\secp,N,m, \vecT, \vecT')$}:
         \begin{itemize}[leftmargin=1em]
             \item $\srs = (\{\gone{\tau^i}\}_{i=0}^N, \{\gtwo{\tau^i}\}_{i=0}^N)$ for $\tau\gets \F$.
             \item $W_2^i=\gtwo{\vpolyN(X)/(X-\xi^i)}$, $i\in [N]$ (needed by prover).
             \item $\gone{\vpolyN(X)}, \gtwo{\vpolyN(X)}$ (known to both $\prover$ and $\verifier$).
         \end{itemize}
-
         \underline{Precompute $(\vecT, \vecT')$}:
         \begin{itemize}[leftmargin=1em]
             \item $W_1^i=\gtwo{(T(X)-T(\xi^i))/(X-\xi^i)}$, $i\in [N]$,
             \item ${W_1^i}'=\gtwo{(T^*(X) - T^*(\xi^i))/(X-\xi^i)}$, $i\in [N]$.
         \end{itemize}
+    	}
 
         {\bf Common Input}: $\srs$, $c_T, c_T', c_\op, c_a, c_w\in \Gone$.\\
         {\bf Prover's Input}: Vectors $\vecT,\vecT',\vec{\op},\vec{a},\vec{w}$ and their encoding polynomials.\\
