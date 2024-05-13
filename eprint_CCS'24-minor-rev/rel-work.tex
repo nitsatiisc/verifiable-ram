@@ -1,0 +1,151 @@
+Efficient modeling of the RAM primitive is a widely studied problem in
+verifiable computation (VC), due to its inherent usefulness in modeling several computations of interest.
+Encapsulating RAM semantics in VC circuits is also challenging; since (i) arithmetic/boolean circuits do not
+adequately model random access, and (ii) incorporating entire memory as gates in a circuit is prohibitive.
+
+Several novel techniques have been proposed to work around the above limitations of circuit based representation
+of RAM. Among them, Merkle tree-based accumulators to model the RAM state are popular
+~\cite{EPRINT:BFRSBW13,compwithstate,C:BCTV14} as they can efficiently
+prove updates to the state, without modeling the entire memory in the arithmetic circuit. Other
+approaches based on {\em address ordered time-scripts} avoid the concrete costs of Merkle tree-based approaches
+by letting the prover provide inputs and outputs of RAM operations in a non-deterministic manner, which
+are then checked to satisfy consistency of {\em loads} and {\em stores}.
+Several works such as \cite{NDSS:WSRBW15,USENIX:BCTV14,C:BCGTV13,SP:ZGKPP18} implement and improve variants
+of the aforementioned approach. Most transcript-based realizations of RAM only consider it to be transient,
+i.e, its state is useful only during the execution of a program, and do not consider {\em persistence} of the
+RAM state across several executions. 
+
+Another feature, which has only been considered in recent works
+\cite{USENIX:OWWB20,CCS:CFHKKO22} is {\em batching}, where a verifiable update of RAM state is required
+for a batch of $m$ updates, with $m$ being much smaller than the RAM size. Both the Merkle tree-based approaches
+and the transcript-based approaches are inefficient with respect to batching.
+While constructions using Merkle tree-based accumulators~(realized from collision-resistant hash functions) suffer from high concrete costs and poor
+ability to batch proofs, those based on checking consistency using transcripts incur a linear overhead in the
+RAM size.
+
+\smallskip
+
+\noindent{\bf Batching-Efficient RAM.} There have been recent efforts~\cite{USENIX:OWWB20,CCS:CFHKKO22} on batching-efficient
+realization of the RAM primitive~(see Table~\ref{tab:rel-work} for a summary of these schemes and the associated efficiency parameters). This is a natural setting in applications of verifiable
+computation, most notably in the context of blockchain {\em rollups}. Here, one is required
+to show that a batch of $m$ transactions correctly updates the state of a table of account balances, which
+is maintained off-chain by the rollup provider. Here the batch-size $m$ ranges from few hundreds to few
+thousands, whereas the table itself could contain several million accounts.
+Similar to prior work on batching-efficient RAMs~\cite{USENIX:OWWB20,CCS:CFHKKO22}, our work is also motivated
+ by the problem of enabling more efficient rollup for tables, which are
+naturally modeled as RAMs.
+
+While the aforementioned works substantially mitigate disadvantages of both the
+Merkle-tree based approaches and transcript-based approaches by using RSA accumulators to model the state,
+they still incur large prover costs and memory requirements even for modest sized batches. The approaches
+in~\cite{USENIX:OWWB20,CCS:CFHKKO22} encode complex modular arithmetic over RSA groups and {\em hash
+to prime} functions as arithmetic circuits, which results in a fixed overhead of around $10$ million R1CS constraints
+at batch sizes of $m=1000$ (this overhead is significantly larger for ~\cite{USENIX:OWWB20}). This is already prohibitive on a modest hardware. In addition, the witness computation for each update incurs cost
+linear in the size of accumulated set. The prior works~\cite{USENIX:OWWB20,CCS:CFHKKO22} seek to mitigate this through pre-computation and
+parallel/distributed processing. However, the issue of maintaining pre-computed parameters in sync with dynamic accumulator state has not been adequately addressed in~\cite{USENIX:OWWB20,CCS:CFHKKO22}. For example, in RSA-based accumulators, generating $O(N)$ non-membership witnesses straightforwardly requires $O(N^2)$ time; however, these witnesses become stale once the accumulator state changes, and hence cannot be used as-is for subsequent update proofs. 
+
+Our approach considers both the cost of online proof generation as well as the offline cost of maintaining pre-computed parameters. In addition, our solution is almost ``circuit-free''. Our entire RAM operation is modeled as a polynomial protocol, which is readily transformed into an argument of
+knowledge using a polynomial commitment scheme. In an application of our primitive to rollups, the only part of the statement 
+that would need to be expressed as a circuit is the verification of digital signatures on transactions~(which is around $500$ constraints per verification for EDDSA signatures). By suitably balancing the online and offline costs, we can prove a batch of $1000$ updates on a RAM of size $1$ million in an average of $90$ seconds on a commodity laptop with a single-threaded implementation. Our performance can be substantially improved using a parallel implementation. See Sections~\ref{sec:tech-overview} and~\ref{sec:experiments}  for more detailed discussions on the efficiency of our scheme. 
+
+%Combining our novel update protocol with highly efficient
+%lookup arguments such as~\cite{EPRINT:EagFioGab22}, our online proof generation can prove around $0.5$ million
+%updates at an average of just $120$ seconds per batch of $1000$ updates on a commodity laptop. Even
+%this performance is under worst-case assumption that each update is to a different position in the table.
+%The expensive offline computation, mainly consisting of highly parallelized FFTs over groups requires around $3$ hours for a
+%table of size 1 million, with a single-threaded implementation. Clearly, with more potent hardware and
+%parallelization, one can process a table of size upto $10$ million in a few hours. 
+%Our approach is also in the updatable SRS setting in constrast to trusted setup required for RSA parameter generation. We
+%compare our work with the prior approaches more elaborately in Section ~\ref{sec:experiments}.
+
+
+\smallskip
+
+\begin{table*}[tb!]
+	\begin{tabular}{|ll|lll|}
+		\hline
+		\multicolumn{1}{|l|}{\textbf{Scheme}} & \multicolumn{1}{l|}{\textbf{Setup}} & \multicolumn{1}{l|}{\textbf{Proof Size}} & \multicolumn{1}{l|}{\textbf{Prover Work}} & \textbf{Verifier Work} \\ \hline
+		\rowcolor{lightgray}
+		\multicolumn{5}{|c|}{{Lookup Arguments for Static Tables}} \\ \hline
+		\multicolumn{1}{|l|}{Plookup \cite{EPRINT:GabWil20}} & \multirow{10}{*}{{Updatable}}  & \multicolumn{1}{l|}{$5 \Gone, ~9\F$} & \multicolumn{1}{l|}{$O(N) \,\Gone$, $O(N\log N) \,\F$} & $2P$ \\ \cline{1-1}\cline{3-5}
+		\multicolumn{1}{|l|}{LogUp~\cite{EPRINT:Habock22b,EPRINT:PapHab23}} &  & \multicolumn{1}{l|}{$O(1)\,\Gone, ~O(1) \,\F$} & \multicolumn{1}{l|}{$O(N) \,\Gone$, $O(N\log N) \,\F$} & $O(1) \,P$ \\ \cline{1-1}\cline{3-5}
+		\multicolumn{1}{|l|}{Halo2 \cite{EPRINT:BowGriHop19,Halo2}} & & \multicolumn{1}{l|}{$6 \Gone, ~5\F$} & \multicolumn{1}{l|}{$O(N) \,\Gone$, $O(N\log N) \,\F$} & $2P$ \\ \cline{1-1}\cline{3-5}
+		\multicolumn{1}{|l|}{Caulk \cite{CCS:ZBKMNS22}} & & \multicolumn{1}{l|}{$14 \Gone, ~1 \Gtwo, ~4\F$} & \multicolumn{1}{l|}{$15m \,\Gone$, $O(m^2+m\log N) \,\F$} & $4P$ \\ \cline{1-1}\cline{3-5}
+		\multicolumn{1}{|l|}{Caulk+ \cite{EPRINT:PosKat22}} &   & \multicolumn{1}{l|}{$7 \Gone, ~1 \Gtwo, ~2\F$} & \multicolumn{1}{l|}{$8m \,\Gone$, $O(m^2) \,\F$} & $3P$ \\ \cline{1-1}\cline{3-5}
+		\multicolumn{1}{|l|}{Flookup \cite{EPRINT:GabKho22}} &  & \multicolumn{1}{l|}{$7 \Gone, ~1 \Gtwo, ~2\F$} & \multicolumn{1}{l|}{$O(m) \,\Gone$, $O(m \log^2 m) \,\F$}  & $3P$ \\ \cline{1-1}\cline{3-5}
+		\multicolumn{1}{|l|}{Baloo \cite{EPRINT:ZGKMR22}} &  & \multicolumn{1}{l|}{$12 \Gone, ~1 \Gtwo, ~4\F$} & \multicolumn{1}{l|}{$14m \,\Gone$, $O(m \log^2 m) \,\F$} & $5P$ \\ \cline{1-1}\cline{3-5}
+		\multicolumn{1}{|l|}{CQ \cite{EPRINT:EagFioGab22}} &   & \multicolumn{1}{l|}{$8 \Gone, ~3\F$} & \multicolumn{1}{l|}{$8m \,\Gone$, $O(m \log m) \,\F$} & $5P$ \\ \cline{1-1}\cline{3-5}
+		\multicolumn{1}{|l|}{CQ+ \cite{PKC:CFFLL24}} &  & \multicolumn{1}{l|}{$7 \Gone, ~1\F$} & \multicolumn{1}{l|}{$8m \,\Gone$, $O(m \log m) \,\F$} & $5P$ \\ \cline{1-1}\cline{3-5}
+		\multicolumn{1}{|l|}{Locq \cite{PKC:ZSG24}} &   & \multicolumn{1}{l|}{$4 \Gone, ~1 \Gtwo$} & \multicolumn{1}{l|}{$6m \,\Gone$, $m \,\Gtwo$, $O(m \log m) \,\F$} & $4P$ \\ \hline
+%		\cline{1-1}\cline{3-5}
+		\multicolumn{1}{|l|}{Lasso \cite{lasso}} &   Transparent & \multicolumn{1}{l|}{$O(1) \,\G, ~O(\log m) \,\F$} & \multicolumn{1}{l|}{$o(cm+cN^{1/c}) \,\Gone$, $O(cm) \F$} & $O(\log m) \,\F$, $O(1) \,\G$ \\ \hline
+		\rowcolor{lightgray}
+		\multicolumn{5}{|c|}{{Lookup Arguments for Updatable Tables/Batching-Efficient RAM}} \\ \hline
+		\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}OWWB20~\cite{USENIX:OWWB20}\\ \textcolor{white}{text}\end{tabular}} & \multirow{2}{*}{Trusted}  & \multicolumn{1}{l|}{$O(1)~\G$} & \multicolumn{1}{l|}{$\wt{O}(m)\, \F,\G,\,\wt{O}(N)\, \G'$} & $1 P$\\ \cline{1-1}\cline{3-5}
+		\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}B-INS-ARISA~\cite{CCS:CFHKKO22}\\ \textcolor{white}{text}\end{tabular}} &  & \multicolumn{1}{l|}{$O(1)~\G$} & \multicolumn{1}{l|}{$\wt{O}(m)\, \F,\G,\,\wt{O}(N) \,\G'$} & $1P, O(1)~\G'$ \\ \hline
+		\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}Our work\\ (c.f. Table ~\ref{tbl:efficiency-components})\end{tabular}} & \multicolumn{1}{l|}{Updatable}  & \multicolumn{1}{l|}{$65\Gone,\, 1\Gtwo,\, 43\F$} & \multicolumn{1}{l|}{$\wt{O}(\sqrt{mN})\, \F,\Gone$} & $9P$ \\ \hline
+	\end{tabular}
+	\caption{Comparison with state-of-the-art lookup arguments. Here, $N$ denotes the size of the RAM and $m$ denotes the number of updates (typically $m \ll N$). We use $(\F,\Gone,\Gtwo,\GT, e, g_1, g_2,g_t)$ to denote a bilinear group~($\G$ denotes either $\Gone$ or $\Gtwo$, and is used in cases where the exact group is unspecified), and $\G'$ to denote an RSA group. $P$ denotes a pairing evaluation. For Lasso, we report the overheads considering the polynomial commitment scheme Sona and assuming \textit{structured} tables~(here, $c$ denotes an arbitrary positive integer). For our scheme, we report performance for the CQ-based instantiation.}
+	\label{tab:rel-work}
+	\vspace*{-5mm}
+\end{table*}
+
+\noindent{\bf Lookup Arguments.} There are several recently proposed constructions of lookup arguments which enable proving
+that a vector of size $m$ is a sub-vector of a larger~(predetermined) vector of size $N$~(see Table~\ref{tab:rel-work}
+for a summary of these schemes and the associated efficiency parameters).
+Of these, the very initial schemes~\cite{EPRINT:BowGriHop19,EPRINT:GabWil20,Halo2} incur proving costs
+linear in $N$. Starting with Caulk~\cite{CCS:ZBKMNS22}, many lookup arguments were proposed with
+proving costs that are (largely) independent of $N$. Broadly, these schemes can be divided into categories
+based on how they achieve proving costs independent of $N$. The lookup arguments in the first
+category~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:GabKho22,EPRINT:EagFioGab22,EPRINT:ZGKMR22,PKC:CFFLL24,PKC:ZSG24} use polynomial protocols
+in conjunction with the $\kzg$ polynomial commitment scheme, where the lookup efficiency relies crucially on \textit{pre-computed}
+$\kzg$ opening proofs for the polynomial encoding the predetermined $N$-sized vector.
+We point out that na\"ively adapting these lookup arguments for updatable tables/RAM is challenging since
+even small updates to the table require re-computing all of the opening proofs,
+which is prohibitively expensive~(requires $\wt{O}(N)$ computation).
+To overcome the ``rigidity'', we propose a new method of constructing lookup arguments which allows
+re-using the pre-computed opening proofs across several batch updates, thus avoiding the need for
+re-computing after each batch~(see Sections~\ref{sec:tech-overview} and~\ref{sec:update-protocol} for more details).
+
+
+%Caulk~\cite{CCS:ZBKMNS22} provides with lookup arguments where a vector of size $m$ is proved to be a subvector of a large vector of size $N$, while maintaining privacy regarding the positions of the subvector (called \emph{position-hiding linkability}) where the prover complexity is $O(m^2+m\log N)$ with $O(N\log N)$ preprocessing and $O(N)$ storage. Caulk+~\cite{EPRINT:PosKat22} improves over Caulk to $O(m^2)$ prover complexity by removing the dependency on the size of the large vector $N$, and CQ~\cite{EPRINT:EagFioGab22}, using the ``logarithmic derivative based lookup" of \cite{Eag22,Hab22}, further improves it to $O(m\log m)$, while retaining the same $O(N\log N)$ preprocessing. Additional lookup arguments, namely cq+, cq++, zkcq+~\cite{pkc-lookup-mat} and locq~\cite{PKC:ZSG24} provides further improvements over CQ.
+%However, we aim to provide committed index lookup arguments that can `link' a set of indices in the vector of size $N$ to the `claimed' subvector of size $m$, that helps in ensuring that we can always `lookup' relevant indices from a committed vector. Additionally, note that the prior works provides lookup arguments for `static' tables, i.e. any `updates' to the large table requires $O(N\log N)$ recomputation each time in the prior works. Our work ensures a batching friendly preprocessing can be done whenever there are incremental changes to the vector of size $N$, and avoid performing the $O(N\log N)$ recomputation per update. This modification extends to the other works as well. We also present techniques to extend lookup argument \cite{EPRINT:EagFioGab22}, which uses homomorphic commitments, to provide a committed index lookup argument.
+
+\smallskip
+
+\noindent{\bf Lasso.} The second category of lookup arguments is exemplified by the recently proposed Lasso scheme~\cite{lasso,jolt},
+which enables efficient lookups for tables with a decomposable structure.
+Informally, a table $\vecT:\{0,1\}^n\to \{0,1\}^k$ is said to have a decomposable structure if there exists
+a decomposition of the table $\vec{T}$ into $c$ sub-tables $\vecT_1,\ldots,\vecT_c:\{0,1\}^{n/c} \to\{0,1\}^\ell$ and a
+succinctly computable function $f$ such that for $x = x_1\|\ldots\|x_c$ where $x_i \in \{0,1\}^{n/c}$, we have
+\[\vecT[x] = f(\vecT_1(x_1),\ldots,\vecT_c(x_c))\]
+A simple example of such a function is a bit-wise AND~(we refer to~\cite{lasso,jolt} for a more detailed exposition).
+Lasso crucially leverages this decomposability of the table to reduce a lookup into a table of size $N=2^n$ into $c$ lookups,
+each into a table of size $N^{1/c}$.
+While this strategy works elegantly for tables with special structure, it is not compatible with arbitrary tables/updates,
+which is the focus of our work~(in particular, in applications such as rollups, we need the ability to handle updates to arbitrary tables).
+
+To summarize, existing lookup arguments achieve efficiency either by leveraging table-specific pre-processing
+or exploiting special structure, both of which do not na\"ively extend to arbitrary dynamic tables.
+We focus on handling batch updates for arbitrary tables, and our techniques can be viewed as enabling the
+utility of table-specific pre-processing even \textit{across batch updates}.
+
+%However, 
+%
+%consider a table $T$
+%
+%In the literature, to provide sublinear lookups for large tables, either one cleverly uses preprocessing to ensure optimal online cost or one leverages a predefined structure in the tables in consideration.
+%Lasso~\cite{lasso} gives a new family of lookup arguments for the second category, where the prover's cost only grows with table entries that are accessed by the lookup operations, for tables that are structured. Lasso provides efficient lookups by leveraging a predefined relation between the large table and the `looked-up' small table, where the large table has tensor-structure and is efficiently `decomposable'. This structure  helps to reduce number of elements which need to be committed, in turn reducing the prover time as well.
+%On the contrary, our work applies to tables without any structure (as is the case with rollup application), and additionally we can handle \emph{updatable} %\chaya{agree on spelling of updatable throughout} 
+%tables. 
+
+
+%Note that lasso crucially leverages the tensor-structure of static tables, and uses techniques that are inherently incompatible with arbitrary updates which is essential for handling arbitrary state updates in our considered application and the prover complexity would still be linear in the large table for arbitrary tables which lacks the tensor-structure. 
+%Therefore, to support arbitrary updates, our work relies on optimally using and updating the pre-computed parameters instead.
+%Lasso also defines a committed index lookup relation like us and gives a reduction between indexed and unindexed lookups (subvector relation); however, their reduction needs an upper bound on the elements of the table. We provide a different reduction without this restriction. 
+%A recent work called Jolt~\cite{jolt} expresses all constraints of a computation as lookups by creating a lookup table that contains the entire evaluation table of each instruction $f$ in an instruction set.
+%This approach of using table lookups requires memory checking arguments as well. However Jolt uses lookup arguments to \emph{model} CPU operations, whereas our work uses lookup arguments to reduce the size of memory in memory-checking methods. \chaya{could add a line here or in conclusion that our techniques could be used to improve Jolt's mem consistency approach.}
+
+
+
+

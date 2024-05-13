@@ -1,0 +1,198 @@
+This section presents notations and preliminary background material used in the rest of the paper.
+
+\smallskip
+
+\noindent\textbf{Notation.} Throughout the paper, we assume a bilinear group generator $\bg$ which on input $\lambda$ outputs
+parameters for the protocols. Specifically $\bg(1^\secp)$ outputs $(\F,\Gone,\Gtwo,\GT, e, g_1, g_2,g_t)$
+where:
+\begin{itemize}[leftmargin=2em, label=-]
+	\item $\F=\Fp$ is a prime field of super-polynomial size in $\lambda$, with $p=\lambda^{\omega(1)}$.
+	\item $\Gone,\Gtwo$ and $\GT$ are groups of order $p$, and $e$ is an efficiently computable non-degenerate bilinear
+	pairing $e:\Gone\times \Gtwo\rightarrow \GT$.
+	\item Generators $g_1,g_2$ are uniformly chosen from $\Gone$ and $\Gtwo$ respectively and $g_t=e(g_1,g_2)$.
+\end{itemize}
+We write groups $\Gone$ and $\Gtwo$ additively, and use the shorthand notation $\gone{x}$ and $\gtwo{x}$
+to denote group elements $x\cdot g_1$ and $x\cdot g_2$ respectively for $x\in \F$. We implicitly assume
+that all the setup algorithms for the protocols invoke $\bg$ to generate descriptions of groups and fields
+over which the protocol is instantiated. We use $[n]$ to denote the set of integers $\{1,\ldots,n\}$.
+
+\smallskip
+
+\noindent{\bf Lagrange Polynomials.}
+%\chaya{move to here from sec 6: Lagrange polynomial, vanishing polynomial, roots of unity}
+We denote the $N$th root of unity by $\xi$ and define the subgroup $\setN$ as $\setN =\{\xi,\ldots,\xi^N\}$. 
+Let $\{\mu_i(X)\}_{i=1}^N$ be the associated
+Lagrange basis polynomials over the set $\setN$; that is, $\mu_i(X) = \prod_{j\neq i} \frac{X-\xi^j}{\xi^{i}-\xi^j}$.
+We denote by $Z_{\setN}$ the vanishing polynomial of $\setN$;  $Z_{\setN}(X)=X^N-1$.
+
+\smallskip
+
+\noindent{\bf Formal Derivatives of Polynomials.} For a polynomial $f(X) = \sum_{i=0}^{d}a_iX^i \in \F[X]$, we define its formal derivative  to be the polynomial $f'(X) = \sum_{i=1}^{d}ia_iX^{i-1}$.
+%\[f'(X) = \sum_{i=1}^{d}ia_iX^{i-1}\]
+
+\subsection{Succinct Arguments of Knowledge}
+Let $\R$ be a NP-relation and $\L$ be the corresponding NP-language, where $\L=\{x : \exists$ $w$ such that $(x,w) \in \R\}$. 
+A \emph{succinct argument of knowledge} consists of a pair of PPT algorithms $(\prover,\verifier)$.
+Given a public instance $x$, the prover $\prover$, convinces the verifier $\verifier$, that $x\in \L$, where the prover additionally has as a witness $w$.
+We use the notation $b\gets \argoutput{\prover}{\verifier}{w}{x}$ to denote $\verifier$'s output in the interactive
+protocol involving $\prover$ and $\verifier$ with $w$ as $\prover$'s input and $x$ as the common input.
+The \emph{knowledge-soundness} property says that if the verifier is convinced, then an efficient extractor algorithm given oracle access to the prover outputs a witness $w$ such that $(x,w)\in \R$. An argument system is \emph{succinct} if the communication complexity and the complexity of $\verifier$ is polylogarithmic in the size of the witness. We provide formal definitions in Appendix~\ref{sec:aok}.
+
+\smallskip
+
+\noindent\textbf{Fiat-Shamir.} An interactive protocol is \emph{public-coin} if the verifier's messages are uniformly random strings. Public-coin protocols can be transformed into non-interactive arguments in the Random Oracle Model (ROM) by using the Fiat-Shamir~\cite{C:FiaSha86} heuristic to derive the verifier's messages as the output of a Random Oracle. 
+
+\smallskip
+
+\noindent{\bf Modular Approach.}
+A modular approach for designing efficient succinct arguments consists of two steps; constructing an information theoretic protocol in an idealized model, and then compiling the information-theoretic protocol via a cryptographic compiler to obtain an argument system. 
+Informally, the prover and the verifier interact where the prover provides oracle access to a set of polynomials, and the verifier accepts or rejects by checking certain identities over the polynomials output by the prover and possibly public polynomials known to the verifier. Such a protocol can be compiled into a succinct argument of knowledge by realizing the polynomial oracles using a \emph{polynomial commitment scheme}. A polynomial commitment scheme allows a prover to commit to polynomials, and later verifiably open evaluations at chosen points by giving evaluation proofs. This enables the verifier to probabilistically
+check polynomial identities at random points of $\F$. %We refer the reader to ~\cite[Section 4.2]{Gabizon2019PLONKPO} for details on polynomial protocols and their compilation to SNARKs. 
+Many recent constructions of zkSNARKs~\cite{EC:BunFisSze20,EC:CHMMVW20,Gabizon2019PLONKPO} follow this approach where the information theoretic object is a polynomial interactive oracle proof (PIOP) (or a polynomial protocol), and the cryptoprimitive in the compiler is a polynomial commitment scheme.
+
+\subsection{Security Model} We describe public-coin interactive protocols in the structured reference string (SRS) model where both the parties have access to a SRS. The SRS in our protocols consists of
+encodings of monomials of the form $\left\{\gone{x^i}\right\}_{a\leq i\leq b}$, $\left\{\gtwo{x^i}\right\}_{c\leq i\leq d}$
+for $x$ chosen uniformly from $\F$ and $a,b,c,d$ are bounded by some polynomial in $\lambda$. It then follows
+from ~\cite{EPRINT:BowGabMie17} that such an SRS can be generated using a universal and updatable setup~\cite{C:GKMMM18} requiring
+only one honest participant. In practice, this is a superior security model compared to requiring a fully
+trusted setup. We use $\srs = (\srs_1,\srs_2)$ to denote the structured reference string of the above form. We say
+that the $\srs$ has degree $Q$ if all the elements of $\srs_i$, $i=1,2$ are of the form $[f(x)]_i$ for a
+polynomial $f\in \F_{<Q}[X]$.
+
+\smallskip
+
+\noindent{\bf Algebraic Group Model.} 
+We analyze security of our protocols in the Algebraic Group Model (AGM) introduced
+in ~\cite{C:FucKilLos18}. An adversary $\Adv$ is called \textit{algebraic} if every group element output by $\Adv$ is accompanied by a representation of that group element in terms of all the group elements that $\Adv$ has seen so far (input and output).
+In the AGM, an adversary $\Adv$ is restricted to be {\em algebraic}, which in our SRS-based protocol means a PPT algorithm satisfying the following:
+for $i\in \{1,2\}$, whenever $\Adv$ outputs an element $A\in \G_i$, it is accompanied by its representation, $\Adv$ also outputs a vector $\vec{v}$
+	over $\F$ such that $A=\langle \vec{v},\srs_i\rangle$.
+%\begin{itemize}[leftmargin=1em]
+	%\item For $i\in \{1,2\}$, whenever $\Adv$ outputs an element $A\in \G_i$, it also outputs a vector $\vec{v}$
+	%over $\F$ such that $A=\langle \vec{v},\srs_i\rangle$.
+%\end{itemize}
+%\chaya{do we use this in proofs?}Following~\cite{C:FucKilLos18}, we write $[A]$ to denote a group element enhanced with its representation; $[A] = (A,v_1,\ldots,v_k)$.
+%AGM is a useful framework for analyzing security of succinct non-interactive arguments of knowledge (SNARKs) obtained from interactive protocols that are described as {\em polynomial protocols}. 
+
+\smallskip
+
+\noindent{\bf Real and Ideal Pairing Checks}: For an algebraic adversary $\Adv$ interacting in a protocol with a degree $Q$ SRS over a bilinear group, the verifier
+can use the pairing $e:\Gone\times \Gtwo\rightarrow \GT$ to perform ``ideal check'' of the form $(R_1\cdot T_1)\cdot (R_2\cdot T_2)\equiv 0$, where $R_1,R_2$ are
+vectors of polynomials over $\F$ and $T_1, T_2$ are public matrices over $\F$.
+Under the $Q$-DLOG assumption stated below, the aforementioned ideal check
+is equivalent (except with a negligible probability) to a real pairing check $(a\cdot T_1)\cdot (T_2\cdot b)=0$ with $a$ and $b$ denoting vectors in $\F$ encoding polynomials in $R_1$ and $R_2$ in
+groups $\Gone$ and $\Gtwo$ respectively (see ~\cite[Lemma 2.2]{Gabizon2019PLONKPO}).
+
+\begin{definition}[Q-DLOG Assumption ~\cite{C:FucKilLos18}]\label{defn:q-dlog}
+Fix an integer $Q$. The $Q$-DLOG assumption for $(\Gone,\Gtwo)$ states that given $\gone{1}$,$\gone{x}$,$\ldots$, \\
+$\gone{x^Q}$, $\gtwo{1},\gtwo{x},\ldots,\gtwo{x^Q}$ for
+uniformly chosen $x\gets \F$, the probability of an efficient $\Adv$ outputting $x$ is $\negl(\secp)$.
+\end{definition}
+
+
+\subsection{KZG Commitment Scheme}
+\label{sec:KZG}
+A polynomial commitment scheme allows the prover to open evaluations of a committed polynomial succinctly (Appendix~\ref{sec:pcs_def}).
+We use the $\kzg$ commitment scheme introduced in ~\cite{AC:KatZavGol10} which satisfies succinctness, completeness and knowledge-soundness (extractability)
+in the algebraic group model, while additionally featuring a universal and updatable setup. We denote the $\kzg$ scheme by the tuple of $\ppt$ algorithms $(\KZGsetup$,$\KZGcommit$, $\KZGopen$, $\KZGverify)$ as defined below.
+%We then establish the isomorphism of the KZG polynomial commitment scheme as a vector commitment scheme.
+\begin{definition}[KZG Polynomial Commitment Scheme]
+	Let $(\F,\Gone,\Gtwo,\GT, e, g_1, g_2, g_t)$ be output of bilinear group generator \\
+	$\bg(1^\secp)$ for security parameter $\secp$.
+	The KZG polynomial commitment scheme is defined as follows:
+	\begin{itemize}[leftmargin=1em]
+		\item $\KZGsetup$ on input $(1^\secp,d)$, where $d$ is the degree bound, outputs
+		$\srs = (\{\eltone{\tau},\ldots,\eltone{\tau^d}\}$ ,$\{\elttwo{\tau},\ldots,\elttwo{\tau^d}\})$.
+		\item $\KZGcommit$ on input $(\srs,p(X))$, where $p(X) \in \F_{\leq d}[X]$, outputs $C=\eltone{p(\tau)}$
+		\item $\KZGopen$ on input $(\srs,p(X),\alpha)$, where $p(X) \in \F_{\leq d}[X]$ and $\alpha\in \F$, outputs $(v, \pi)$ such that $v=p(\alpha)$ and $\pi=\eltone{q(\tau)}$, for
+		\[ q(X)=\frac{p(X)-p(\alpha)}{X-\alpha} \]
+		\item $\KZGverify$ on input $(\srs,C,v, \alpha,\pi)$, outputs $1$ if the following equation holds, and $0$ otherwise.
+		\[ e(C-v\eltone{1} + \alpha\pi, \elttwo{1}) = e(\pi, \elttwo{\tau}) \]
+
+	\end{itemize}
+\end{definition}
+Note that both sides of the verification equation involve a fixed generator, and hence several proof verifications
+can be batched together to reduce the number of pairing computations.
+We also assume (w.l.o.g) analogues of $\KZGcommit$, $\KZGopen$ and \\
+$\KZGverify$ defined over the group $\Gtwo$.
+We shall use the (non-standard) notation $[p(X)]_i$ to denote $[p(\tau)]_i$ for $i\in \{1,2\}$.
+This allows us a convenient shorthand for referring to ``commitment of the polynomial $p(X)$'' in group $\G_i$.
+Our protocols also use batched KZG proofs to show that polynomial $p(X)$ satisfies $p(\alpha_i)=v_i$ for $i\in [n]$. Let
+$\vec{\alpha}=(\alpha_1,\ldots,\alpha_n)$
+denote the vector of evaluation points and $\vec{v}=(v_1,\ldots,v_n)$ denote the vector of claimed evaluations. Then the batched
+version of $\KZGopen$ is described as follows:
+\begin{itemize}[leftmargin=1em]
+	\item $\KZGopen$ on input $(\srs,p(X),\vec{\alpha})$, where $p(X) \in \F_{\leq d}[X]$ and $\vec{\alpha}\in\F^n$,
+	outputs $(\vec{v}, \pi)$ with $\vec{v}\in \F^n$ such that $v_i=p(\alpha_i)$ and $\pi=\eltone{q(\tau)}$ where
+	\[ q(X)=\frac{p(X)-r(X)}{a(X)} \]
+	In the above, $a(X)=(X-\alpha_1)\cdots(X-\alpha_n)$, while $q(X)$ and $r(X)$ are the quotient and remainder polynomials when
+	 $p(X)$ is divided by $a(X)$.
+	%Note that the polynomials $a(X)$ and $r(X)$ can be computed by the verifier since $\{\alpha_i,v_i\}_{i\in [n]}$ are known and
+	%$a(X)=(X-\alpha_1)\cdots(X-\alpha_n)$ and $r(\alpha_i)=v_i$ for all $i\in [n]$ such that $0\leq \deg(r(X)) \leq n$.
+	\item $\KZGverify$ on input $(\srs,C,\vec{v}, \vec{\alpha}, \pi)$, outputs $1$ if the following equations hold, and $0$ otherwise.
+	\begin{align*}
+		e(C-\eltone{r(\tau)}, \elttwo{1}) &= e(\pi, \elttwo{a(\tau)})
+	\end{align*}
+	Here, the verifier interpolates the polynomial $r(X)\in \F_{<n}[X]$ such that $r(\alpha_i)=v_i$.
+\end{itemize}
+
+\noindent\textbf{KZG for Vectors.} For $\vec{f}\in \F^N$, let $\enc{f}{\setN}$ denote the polynomial encoding of $\vec{f}$ over $\setN$ given by $\sum_{i=1}^N f_i\mu_i(X)$.
+We use KZG to commit to \emph{vectors} by committing to its polynomial encoding. In general a vector $\vec{g}$ of size $m$ is encoded by a polynomial $g(X)\in \F_{<m}[X]$
+which interpolates $\vec{g}$ over a subgroup $\setV$ consisting of $m^{th}$ roots of unity in some canonical order. We will explicitly state the subgroups for all sizes
+of vectors that we consider.
+
+%\begin{definition}[KZG Polynomial Commitment Scheme \textcolor{red}{degree check included}]
+%    Let $(p,\Gone,\Gtwo,\GT, e, \eltone{1},\elttwo{1})$ be a bilinear group. The KZG polynomial commitment scheme is defined as follows: 
+%    \begin{itemize}
+%	        \item $\KZGsetup$ on input $(1^\lambda,d)$, where $\lambda$ is the security parameter and $d$ is the degree bound, outputs $\srs = \{ \eltone{\tau},\ldots,\eltone{\tau^d},\elttwo{\tau},\ldots,\elttwo{\tau^d}\}$
+%	        \item $\KZGcommit$ on input $(\srs,p(X))$, where $p(X) \in \F_{\leq d}[X]$, outputs $C=\eltone{p(X)}:=\eltone{p(\tau)}$
+%	        \item $\KZGopen$ on input $(\srs,p(X),\alpha)$, where $p(X) \in \F_{\leq d}[X]$ and $\alpha\in \F$, outputs $(v, \pi)$ such that $v=p(\alpha)$ and $\pi=\Comtwo{q(X)}:=\elttwo{q(\tau)}$, for
+%	        \[ q(X)=\frac{p(X)-p(\alpha)}{X-\alpha} \]
+%	        \item $\KZGverify$ on input $(\srs,C,\deg,\alpha,v,\pi)$, outputs $1$ if the following equation holds, and $0$ otherwise.
+%	        \[ e(C-v, \elttwo{\tau}) = e(\pi, \elttwo{\tau-\alpha}) \]
+%	        { \color{teal} \moumita{var 3.}
+%		        Degree check has not been added. With degree check, $\pi$ is modified with
+%		        \[ q(X)=X^{d-\deg(p(X))+2}\frac{p(X)-p(\alpha)}{X-\alpha} \]
+%		        and the verification equation if modified as 
+%		        \[ e(C-v, \elttwo{\tau}^{d-\deg+2}) = e(\pi, \elttwo{\tau-\alpha}) \]
+%		        } %stays unchanged from var 1
+%	    \end{itemize}
+%\end{definition}
+%\nitin{Defer the commitment to vectors to where we need it}
+\begin{comment}
+\paragraph{Vector Commitment Scheme.} We note that there is a natural isomorphism between the set of vectors of length $n$ and polynomials of degree $n-1$, where any vector $\abf=(a_1,\ldots,a_n) \in \F^n$ has a natural equivalent representation as a polynomial $a(X)=a_1\lambda_1(X)+\ldots,a_n\lambda_n(X)$, where $\{\lambda_i(X)\}_{i\in [n]}$ is basis of $\F_{\leq n-1}[X]$. Hence, when we use the KZG polynomial commitment scheme for a vector $\abf=(a_1,\ldots,a_n) \in \F^n$, we can output the commitment as $\KZGcommit(\srs,a(X))$, where $a(X)=a_1\lambda_1(X)+\ldots,a_n\lambda_n(X)$.
+
+
+Now, for vectors of length $n$, we consider the basis $\{\lambda_i(X)\}$ to be the langrange basis with respect to the set consisting of $n^{th}$ roots of unity $\doubleH=\{\omega,\ldots,\omega^n\}$. The lagrange basis helps us use the property that, for some $i\in [n]$ and a value $\alpha$, $a(\omega^i)=a_i=\alpha$ if and only if there exists a polynomial $W(X)$ such that $W(X)=\frac{a(X)-\alpha}{X-\omega^i}$. 
+\end{comment}
+%Throughout the draft, for $\abf\in \F^n$, we use $\Comone{.}$ to denote $\KZGcommit(\srs,\abf)$ for vectors of length $n$, using the langrange polynomial basis $\{\lambda_i(X)\}$, with respect to the $n^{th}$ root of unity $\omega$, and for $\bbf \in \F^m$, we use $\Comtwo{.}$ to denote $\KZGcommit(\srs,\bbf)$ for vectors of length $m$, using the langrange polynomial basis $\{\mu_i(X)\}$, with respect to the $m^{th}$ root of unity $\nu$.
+
+ 
+
+
+\subsection{Lookup Arguments}
+Prior works on lookup arguments~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:ZGKMR22,EPRINT:EagFioGab22}
+consider proving sub-vector relation over committed vectors, i.e, given commitments $c_t$ and $c_v$ to vectors $\vec{t}\in \F^N$
+and $\vec{v}\in \F^m$, one proves that for all $i\in [m]$, there exists $j\in [N]$ such that $v_i=t_j$ . We will use
+$\vec{v}\preceq \vec{t}$ to denote that $\vec{v}$ is a sub-vector of $\vec{t}$.
+The definition below summarizes the sub-vector relation as defined in prior works.
+\begin{definition}
+\label{defn:comm-subvec}
+We define the {\em committed sub-vector} relation $\RSVEC$ to consist of tuples
+$((c_t, c_v), (\vec{t}, \vec{v}))$ where $c_t,c_v\in \Gone$, $\vec{t}\in \F^N$, $\vec{v}\in \F^m$ such that
+$\vec{v}\preceq \vec{t}$ and $c_t=\kzgcommit(\srs,\enc{t}{\setN})$ and $c_v=\kzgcommit(\srs,\enc{v}{\setV})$.
+\end{definition}
+A committed sub-vector argument is an argument of knowledge for the relation $\RSVEC$.
+Next, we consider a slightly modified relation that we call {\em committed index lookup} (called indexed lookup in~\cite{lasso})
+where there is a commitment to the indices where $\vec{v}$ appears in $\vec{t}$. Formally, we define it as below:
+
+\begin{definition}
+\label{defn:comm-index-lookup}
+We define the {\em committed index lookup} relation $\RLOOK$ to consist of tuples
+$((c_t,c_a,c_v),(\vec{t},\vec{a},\vec{v}))$ where $c_t,c_a,c_v\in \Gone$, $\vec{t}\in \F^N$, $\vec{a},\vec{v}\in \F^m$ such
+that $v_i = \vec{t}[a_i]=t_{a_i}$ for all $i\in [m]$ and $c_t = \kzgcommit(\srs, \enc{t}{\setN})$, $c_a=\kzgcommit(\srs,\enc{a}{\setV})$
+and $c_v=\kzgcommit(\srs,\enc{v}{\setV})$.
+\end{definition}
+
+A committed lookup argument is a succinct argument of knowledge for the relation $\RLOOK$. 
+%\chaya{by defn, in the NI case, the prover is allowed to come up with an adversarial instance, in this case all commitments.}
