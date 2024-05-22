@@ -84,7 +84,7 @@ Similarly,load-store consistency also holds for all $i\in I_2$.
 It remains to exhibit the sets and show that they satisfy the above invariants using polynomials, as in the following
 lemma:
 \begin{lemma}\label{lem:addr-ordered-transcript}
-Let $\wt{\tr}$ be a polynomial encoding of transcript $\tr$ of size $k$, given by polynomials $t(X),\op(X),A(X)$ and $V(X)$,
+Let $\wt{\tr}$ be a polynomial encoding of transcript $\tr$ of size $k$, given by polynomials $t(X)$, $\op(X)$, $A(X)$ and $V(X)$,
 with index set $[N]$. Then assuming $kN<|\F|$, $\tr$ is address ordered and satisfies load-store consistency if and only if there exist polynomials
 $Z_1,Z_2,\delta_T,\delta_A$
 such that the following hold:
@@ -273,6 +273,7 @@ The complete polynomial protocol is detailed in Figure \ref{fig:time-ordered-tra
 
 
 \begin{table*}[bt]
+	\centering
     \begin{tabular}{|l|l|l|l|l|}
         \hline
         {\bf Component  }                                                                                      & {\bf Protocol} & {\bf Prover Work}      & {\bf Verifier Work} & {\bf Communication}   \\ \hline
@@ -330,7 +331,7 @@ The complete polynomial protocol is detailed in Figure \ref{fig:time-ordered-tra
             \item $\verifier$ computes $\gone{G(X)},\gone{H(X)}$ and $\gone{F(X)}$. \footnote{This can be done locally by leveraging the linearlity of the operation}
             \item $\verifier$ checks:
             \begin{itemize}[leftmargin=1em]
-                \item $\kzgverify(\srs,\gone{G}, (\val{s}{G}, \val{\omega^m s}{G}, \val{\omega^{2m} s}{G}),\\(s,\omega^m s, \omega^{2m}s),\Pi_G)$.
+                \item $\kzgverify(\srs,\gone{G}, (\val{s}{G}, \val{\omega^m s}{G}, \val{\omega^{2m} s}{G}),(s,\omega^m s, \omega^{2m}s),\Pi_G)$.
                 \item $\kzgverify(\srs,\gone{H}, \val{s^3}{H}, s^3, \Pi_H)$.
                 \item $\kzgverify(\srs,\gone{F}, \val{s}{Z} + r\val{s}{Q}, s, \Pi_F)$.
                 \item $\val{s}{Q}\cdot \val{s}{Z} = \val{s^3}{H}-\val{s}{G}-\gamma \val{\omega^m s}{G}-\gamma^2\val{\omega^{2m}s}{G}$.
@@ -430,7 +431,7 @@ and \ref{fig:encoded-relations} as sub-protocols is presented in Figure~\ref{fig
 %            \item $\prover$ computes the permutation $\sigma$ such that $\tr^{*}= \sigma(\tr)$ (this is computed along with the $\tr^{*}$).
             \item $\prover$ computes the commitment $c_\tr^\ast=(c_t^\ast,c_\op^\ast, c_A^\ast, c_V^\ast)$ of $\tr^{*}$ and sends $c_\tr^\ast$.
 %            \item $\prover$ sends  $c_\tr^\ast$.
-            \item $\prover$ and $\verifier$ run the protocol for checking that the two transcripts are permutations of each other (Figure~\ref{fig:permutated-transcripts}).
+            \item $\prover$ and $\verifier$ run the protocol for checking that the two transcripts are permutations of each other \\(Figure~\ref{fig:permutated-transcripts}).
             \item $\prover$ and $\verifier$ run  the protocol for checking the constraints given in Lemma~\ref{lem:addr-ordered-transcript} (Figure~\ref{fig:encoded-relations}.)
             \item $\verifier$ outputs accept if all the three sub-protocols lead to accept, else it outputs reject.
         \end{enumerate}
@@ -608,8 +609,8 @@ with generator $\xi \in \F$. Then $\sum_{i\in [N]}u(X,\xi^i)= Nu(X,0)$
     where each $a_i$ is a polynomial in $X$ of degree less than $N$.
     Now we write the sum:
     \begin{align*}
-        \sum_{i\in [N]}u(X,\xi^i) &= N a_0+a_1(\xi+\xi^2+\cdots+\xi^N) \\
-        &\, +a_2(\xi^2+\xi^4+\cdots+\xi^{2N})+ \cdots + a_d(\xi^d+\cdots +\xi^{Nd})
+        \sum_{i\in [N]}u(X,\xi^i) &= N a_0+a_1(\xi+\xi^2+\cdots+\xi^N) 
+        \, +a_2(\xi^2+\xi^4+\cdots+\xi^{2N})+ \cdots + a_d(\xi^d+\cdots +\xi^{Nd})
     \end{align*}
     But for any $\alpha=\xi^k$ for $k<N$, $\alpha+\alpha^2+\cdots \alpha^N=0$. Thus, all terms vanish except the first term
     and hence $\sum_{i\in [N]}u(X,\xi^i)=N a_0$.
@@ -706,8 +707,8 @@ $F_K(X)$ is defined as
     \[\tau_j(X)=\frac{Z_\mathcal{X}(X)}{(X-x_j)Z_\mathcal{X}'(x_j)}= \frac{1}{Z_\mathcal{X}'(x_j)}\frac{Z_\mathcal{X}(X)}{X-x_j}\] 
     by definition of Lagrange polynomials. By long division of $Z_\mathcal{X}(X)$ by $(X-x_j)$, we have:
     \begin{align*}
-        \tau_j(X) &= \frac{1}{Z_\mathcal{X}'(x_j)}\big(z_k X^{k-1} + (x_jz_k + z_{k-1})X^{k-2} + \cdots\\
-        & \quad + (x_j^{k-1}z_k + \cdots + z_1)\big)\\
+        \tau_j(X) &= \frac{1}{Z_\mathcal{X}'(x_j)}\big(z_k X^{k-1} + (x_jz_k + z_{k-1})X^{k-2} + \cdots
+         + (x_j^{k-1}z_k + \cdots + z_1)\big)\\
         &= \frac{1}{Z_\mathcal{X}'(x_j)}\sum_{p=0}^{k-1} \left(\sum_{q=p+1}^k z_q x_j^{q-p-1}\right)X^p
     \end{align*}
     Differentiating both sides, we have:
@@ -790,7 +791,7 @@ $F_K(X)$ is defined as
     Thus, we need to compute $g_i(\xi^i)$ and $r_i(\xi^i)$ for all $i \in I \subset K$.
     \begin{align*}
         g_i(\xi^i) &= p(\xi^i)\sum_{j\in [N]\setminus \{i\}} \frac{1}{\xi^i-\xi^j} \\
-        &= \frac{p(\xi^i)Z_{\nroots}''(\xi^i)}{2 Z_{\nroots}'(\xi^i)} \quad \text{(from lemma \ref{lem:sumtoder})} \\
+        &= \frac{p(\xi^i)Z_{\nroots}''(\xi^i)}{2 Z_{\nroots}'(\xi^i)} \quad \text{(from Lemma \ref{lem:sumtoder})} \\
         &= \frac{(N-1)d_i}{2\xi^i}
     \end{align*}
 	In the above, we used $Z_H(X)=X^N-1$ and that $p(\xi^i)=d_i$. In other words, $g_i(\xi^i)$ for all $i$ can be obtained in $O(|\setind|)$ operations. Therefore, it suffices to compute $r_i(\xi^i)$ for all $i \in I$ efficiently. To this end, we write $r_i(X)$ as:
@@ -803,7 +804,7 @@ $F_K(X)$ is defined as
     $$r_i(X)=r(X)-u(X, \xi^i)$$
     Substituting $X = \xi^i$ in the above, we have: 
     $$r_i(\xi^i)=r(\xi^i) - u(\xi^i,\xi^i) = r(\xi^i) - p'(\xi^i)$$
-    where $p'(\xi^i) =  u(\xi^i,\xi^i)$ by the definition of formal derivative. Now, using $r(X)=N u(X,0)$~(Lemma \ref{lem:sumcheck}), we have: 
+    where $p'(\xi^i) =  u(\xi^i,\xi^i)$ by the definition of formal derivative. Now, using $r(X)=N u(X,0)$~(Lemma~\ref{lem:sumcheck}), we have: 
     \[r(X)=N \frac{(p(X) - p(0))}{X}\] 
     Finally, substituting $X = \xi^i$ above, we have:
     $$r(\xi^i)=N \frac{(d_i - p(0))}{\xi^i}$$
@@ -814,7 +815,7 @@ $F_K(X)$ is defined as
     \noindent{\bf Computing the polynomial $q(X)$.} Recall from Equation~\eqref{eq:px} that
     \[q(\xi^j) = \frac{p(\xi^j)}{\widehat{Z}_K(\xi^j)}\]
 	for all $j\in K$. Furthermore, by Lemma~\ref{lem:zk-hat}, we have: 
-	\[\hat{Z}_K(\xi^j)=\frac{Z_{\nroots}'(\xi^j)}{Z_K'(\xi^j)}=\frac{\frac{N}{\xi^j}}{Z_K'(\xi^j)}\]
+	\[\hat{Z}_K(\xi^j)=\frac{Z_{\nroots}'(\xi^j)}{Z_K'(\xi^j)}=\frac{{N/\xi^j}}{Z_K'(\xi^j)}\]
 	for each $j\in K$. Observe that, given the set $K$, we can compute the polynomial $Z_K(X)$ in $O(|K|\log^2 |K|)$ operations using the fast multiplication, and we can then obtain $Z_K'(X)$ in additional $O(|K|)$ operations. Finally, $Z_K'(\xi^j)$ can be evaluated for $j\in K$ in additional $O(|K|\log^2 |K|)$ operations. Thus we can efficiently compute $q(\xi^j)$ for all $j\in K$  $O(|K|\log^2 |K|)$ operations. Since degree of $q(X)$ is strictly less than $|K|$, we can further interpolate to obtain the polynomial $q(X)$ in $O(|K|\log^2 |K|)$ field operations.
     
     \smallskip

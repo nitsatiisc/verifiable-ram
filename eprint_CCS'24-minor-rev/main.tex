@@ -1,31 +1,11 @@
 \newif\ifDraft
 %\Drafttrue % comment this out for submission
-%\documentclass[11pt]{article}
 \documentclass{llncs}
 %\documentclass[runningheads]{llncs}
-%\usepackage{geometry}
-%\usepackage{amsmath,amsthm,amsfonts,enumerate,tikz}
-%\usepackage{fullpage}
 \usepackage[a4paper,margin=2.7cm]{geometry}
-
-\usepackage{amsmath,amsfonts,enumitem,tikz, subcaption, mdframed}
-\usepackage{multirow}
-\usepackage{amssymb}
-%\usepackage{amsthm}
-\usepackage{tcolorbox}
-\usepackage{comment}
-\usepackage{graphicx}
-\usepackage{caption}
-\usepackage{subcaption}
-\usepackage{hyperref}
-\usepackage{pgfplots}
-\usepackage{booktabs, tabularx}
-\usepackage{colortbl}
-\usepackage{url}
-\usetikzlibrary{arrows,arrows.meta,shapes.arrows, calc, positioning,matrix}
-
+\input{packages.tex}  %<-------------- Add new packages here
 \input{notation}
-
+\input{macros}
 
 
 \title{Batching-Efficient RAM using Updatable Lookup Arguments}
@@ -109,5 +89,3 @@
 
 \end{document}
 \endinput
-%%
-%% End of file `sample-sigconf.tex'.

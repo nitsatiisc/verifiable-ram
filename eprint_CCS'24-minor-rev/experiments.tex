@@ -1,6 +1,5 @@
 \begin{figure}[t!]
     \centering
-    \resizebox{0.4\textwidth}{!}{
 	    \begin{tikzpicture}
 	        \begin{axis}[
 	        ybar,
@@ -11,7 +10,7 @@
 	        xlabel={},
 	        xtick=data,
 	        symbolic x coords= {A, B, C},
-	        xticklabels = {CFHKKO22 ~\cite{CCS:CFHKKO22}, OWWB20 ~\cite{USENIX:OWWB20}, MT-20},
+	        xticklabels = {CFHKKO22~\cite{CCS:CFHKKO22}, OWWB20~\cite{USENIX:OWWB20}, MT-20},
 	        yticklabels = {$10^4$, $10^5$, $10^6$, $10^7$, $10^8$},
 	        xlabel near ticks,
 	        ylabel near ticks,
@@ -22,7 +21,6 @@
 	        \legend{Batching Efficient RAMs}
 	        \end{axis}
    	 \end{tikzpicture}
-	}
     \caption{Comparison of R1CS constraints incurred by existing approaches for batching efficient
     RAMs. MT20 refers to Merkle-tree with depth 20, instantiated using Poseidon hash.}
     \label{fig:batch-ram-constraints}
@@ -31,7 +29,6 @@
 
 \begin{figure}[t!]
     \centering
-    \resizebox{0.4\textwidth}{!}{
 	    \begin{tikzpicture}
 	        \begin{axis}[
 	        xmin=0,
@@ -72,24 +69,23 @@
 	        };
 	        \end{axis}
 	    \end{tikzpicture}
-	}
     \caption{Online proving time of updates on table $\vecT$ given the pre-processing parameters for table $\vecTbase$, plotted against the Hamming distance $\delta$ between $\vecTbase$ and $\vecT$. Here $m$ denotes the batch size of updates, while the RAM size is $N=2^{20}$. The blue plot corresponds to our scheme instantiated with CQ as the sub-vector argument (in a black-box manner). The red plot corresponds to the non-black-box adaptation of Caulk+ described in Appendix~\ref{app:committed-index-lookup}.}
     \label{fig:batch-ram-proving-time}
     \vspace*{-3mm}
 \end{figure}
 
 In this section we present a concrete evaluation of our batching efficient RAM and compare it to the
-prior works on batching efficient RAM ~\cite{USENIX:OWWB20,CCS:CFHKKO22}.
+prior works on batching efficient RAM~\cite{USENIX:OWWB20,CCS:CFHKKO22}.
 We also separately benchmark the effectiveness of our approach of computing encoded quotients presented
-in Section ~\ref{sec:update-protocol} over the na\"{i}ve approach.
+in Section~\ref{sec:update-protocol} over the na\"{i}ve approach.
  %on the experimental evaluation of our batching-efficient RAM.
 %In addition, we also report on the overhead (as a function of changes since last parameter computation)
 %incurred by our updatable lookup arguments over the vanilla lookup arguments with read-only table. We
-%benchmark this overhead over vanilla implementations of Caulk+ ~\cite{EPRINT:PosKat22} and
-%CQ ~\cite{EPRINT:EagFioGab22}, both of which we also implement (as their non zero-knowledge variants)
+%benchmark this overhead over vanilla implementations of Caulk+~\cite{EPRINT:PosKat22} and
+%CQ~\cite{EPRINT:EagFioGab22}, both of which we also implement (as their non zero-knowledge variants)
 %for our evaluation.
-Our implementation is built on top of existing implementation ~\cite{caulk-implementation}
-of lookup argument Caulk ~\cite{CCS:ZBKMNS22}. We make our implementation available at
+Our implementation is built on top of existing implementation~\cite{caulk-implementation}
+of lookup argument Caulk~\cite{CCS:ZBKMNS22}. We make our implementation available at
 \url{https://anonymous.4open.science/r/updatableRAM/}. 
 %for anonymous submission. 
 %We later plan to
@@ -99,37 +95,37 @@ of lookup argument Caulk ~\cite{CCS:ZBKMNS22}. We make our implementation availa
 
 \noindent{\bf Experimental Test-bed.} All the benchmarks were run single-threaded on a commodity configuration featuring a
 $2.1GHz$ Intel-I5 processor, $16$ GB memory running Ubuntu Linux 22.04. The implementation was compiled using {\tt --release}
-flag in Rust. Our protocol was instantiated for BLS12-381 curve, using the scheme CQ ~\cite{EPRINT:EagFioGab22}
+flag in Rust. Our protocol was instantiated for BLS12-381 curve, using the scheme CQ~\cite{EPRINT:EagFioGab22}
 as the underlying sub-vector argument.
 
 \smallskip
 
-\noindent{\bf Online Proof Generation.} In Figure ~\ref{fig:batch-ram-proving-time}, we benchmark the time
+\noindent{\bf Online Proof Generation.} In Figure~\ref{fig:batch-ram-proving-time}, we benchmark the time
 to prove a batch of $m=2^{10}$ updates on a table of size $N=2^{20}$. Here, the values on the $x$-axis denote
 the hamming distance between the table on which the updates are being proved and the table whose pre-processed
 parameters are used for the proof generation. Naturally, we expect the proving time to increase as the table
 becomes more distant from the one used to generate pre-processed parameters. Our proof generation time stays
 under a minute till the two table differ in almost $2\times 10^5$ positions. In conjunction with offline
-pre-processing time from table ~\ref{tbl:offline-proving-time}, the graph in Figure ~\ref{fig:batch-ram-proving-time}
+pre-processing time from table~\ref{tbl:offline-proving-time}, the graph in Figure~\ref{fig:batch-ram-proving-time}
 determines how the offline parameter generation should be scheduled to achieve optimal performance on average.
 
 \smallskip
 
-\noindent{\bf Offline Pre-Processing.} In Table ~\ref{tbl:offline-proving-time} we provide the time to compute
+\noindent{\bf Offline Pre-Processing.} In Table~\ref{tbl:offline-proving-time} we provide the time to compute
 table-specific parameters as a function of table size. This is the most computationally intensive step in our
 scheme involving FFTs over group polynomials as the main bottle-neck. We believe offline pre-processing can be
 made an order of magnitude more efficient by leveraging parallel implementation for the FFTs.
 
 \begin{table}[htbp]
+	\centering
     \begin{tabular}{|l|c|c|c|c|c|c|}
         \hline
-        %\rowcolor{gray}
         \cellcolor{lightgray} Table-Size ($N$) & $2^{10}$ & $2^{12}$ & $2^{14}$ & $2^{16}$ & $2^{18}$ & $2^{20}$ \\ \hline
         \cellcolor{lightgray} Time (s) & $7$ & $29$ & $135$ & $620$ & $2766$ & $12000$ \\ \hline
     \end{tabular}
     \caption{Pre-processing time for tables of different sizes.}
     \label{tbl:offline-proving-time}
-    \vspace*{-5mm}
+%    \vspace*{-5mm}
 \end{table}
 
 
@@ -140,10 +136,10 @@ we incur a proof size of $4.4KB$ while the verification takes around $15ms$.
 \smallskip
 
 \noindent{\bf Fast Update Benchmarks.} We also benchmark the efficiency of the algorithm to compute
- scalar coefficients in Lemma ~\ref{lem:sum-computation}, required to assemble the encoded quotients from pre-computed quotients.
+ scalar coefficients in Lemma~\ref{lem:sum-computation}, required to assemble the encoded quotients from pre-computed quotients.
 This algorithm is implemented and tested in the {\tt fastupdate} module of the referenced repository.
-In Table ~\ref{tbl:sum-computation-compare}, we compare it against the naive computation of the quotients.
-In the table, we vary the sizes of set $I$ in Lemma ~\ref{lem:sum-computation} in the set $\{2^i:7\leq i\leq 10\}$
+In Table~\ref{tbl:sum-computation-compare}, we compare it against the naive computation of the quotients.
+In the table, we vary the sizes of set $I$ in Lemma~\ref{lem:sum-computation} in the set $\{2^i:7\leq i\leq 10\}$
 and set $K=2^7|I|$. %i.e, we compare the two methods to sustain $\approx 100$ online proofs.
 We clearly see $5\times-20\times$ advantage over the naive computation.
 
@@ -153,7 +149,7 @@ We clearly see $5\times-20\times$ advantage over the naive computation.
 align the online prover performance curve with the cost of offline computation.  As an example, suppose $\vec{T}_0$
 is the initial pre-processed table at time $t=0$. We generate proofs using pre-computed parameters for $\vec{T}_0$
 till the time $t=t_1$, when the table state $\vec{T}_1$ is at hamming distance $2^{17}$ from $\vec{T}_0$. At this point,
-from Figure ~\ref{fig:batch-ram-proving-time}, online proof generation takes around $40s$ for batch of $1000$ updates.
+from Figure~\ref{fig:batch-ram-proving-time}, online proof generation takes around $40s$ for batch of $1000$ updates.
 At $t=t_1$, we also start an offline parameter computation for the table $\vec{T}_1$, while continuing to generate
 online proofs using parameters for $\vec{T}_0$. We can generate the next $2^7$ batches of updates at an average of
 approximately $12000/128\approx 94s$ each, thus finishing with a table state $\vec{T}_2$ at hamming distance at most
@@ -168,28 +164,28 @@ at the cheaper end of online proving performance.
     \centering
     \begin{tabularx}{0.45\textwidth}{@{}XXXX@{}}
         \toprule
-        $|I|$ & $|K|$ & Lemma ~\ref{lem:sum-computation} & Naive \\ \midrule
+        $|I|$ & $|K|$ & Lemma~\ref{lem:sum-computation} & Naive \\ \midrule
         $2^7$ & $2^{14}$ & 3.3s  & 12s \\
         $2^8$ & $2^{15}$ & 7.7s  & 48s \\
         $2^9$ & $2^{16}$ & 16.8s & 198s \\
         $2^{10}$ & $2^{17}$ & 39.2s & 839s \\
         \bottomrule
     \end{tabularx}
-    \caption{Comparison of Lemma ~\ref{lem:sum-computation} and naive computation for calculating
+    \caption{Comparison of Lemma~\ref{lem:sum-computation} and naive computation for calculating
     scalar coefficients for encoded quotients.}
     \label{tbl:sum-computation-compare}
     \vspace*{-5mm}
 \end{table}
 
 \noindent{\bf Comparison with Prior Works}. The proof generation in the prior batching efficient RAM constructions
-using RSA accumulators ~\cite{USENIX:OWWB20,CCS:CFHKKO22} involves two key steps (i) generation of a SNARK
+using RSA accumulators~\cite{USENIX:OWWB20,CCS:CFHKKO22} involves two key steps (i) generation of a SNARK
 proof showing knowledge of witness for a relation modeled as arithmetic circuit/R1CS and (ii) computing the witness
 for the proof generation. A platform agnostic metric to express the cost of the first step is the number of R1CS
-constraints needed to encode the relation, which is also the metric used in ~\cite{CCS:CFHKKO22} for comparison.
-Using the R1CS constraints reported in ~\cite{USENIX:OWWB20,CCS:CFHKKO22} (see Figure ~\ref{fig:batch-ram-constraints}),
+constraints needed to encode the relation, which is also the metric used in~\cite{CCS:CFHKKO22} for comparison.
+Using the R1CS constraints reported in~\cite{USENIX:OWWB20,CCS:CFHKKO22} (see Figure~\ref{fig:batch-ram-constraints}),
 we benchmark single-threaded proof generation
 using the \textsf{Groth16} protocol (used in prior works) for R1CS of equivalent size on our test-bed. We use publicly
-available benchmarking suite in ~\cite{ark-groth-16} for \textsf{Groth16} benchmarks. Since the
+available benchmarking suite in~\cite{ark-groth-16} for \textsf{Groth16} benchmarks. Since the
 the prior works only report performance of parallel implementation of the second step which is common to both (with
 degree of parallelism not explicitly mentioned), we will use the reported parallel performance to estimate the
 overall proving time with this caveat. 
@@ -197,29 +193,29 @@ overall proving time with this caveat.
 Even without the benefit of parallelization, our average proof generation
 time of $\approx 90s$ for batch size of $2^{10}$ and RAM size of $2^{20}$ is $3-5\times$ faster than the prior works
 for the same setting. The proof sizes and verification complexity are constant for prior work and our work.
-Concrete proof sizes are smaller in ~\cite{USENIX:OWWB20,CCS:CFHKKO22} owing to their usage of \textsf{Groth16}
-proving backend, while our verification times are competitive with ~\cite{USENIX:OWWB20} and substantially
-less than ~\cite{CCS:CFHKKO22}. One way to reduce proof size in our scheme would be to use a SNARK to prove
+Concrete proof sizes are smaller in~\cite{USENIX:OWWB20,CCS:CFHKKO22} owing to their usage of \textsf{Groth16}
+proving backend, while our verification times are competitive with~\cite{USENIX:OWWB20} and substantially
+less than~\cite{CCS:CFHKKO22}. One way to reduce proof size in our scheme would be to use a SNARK to prove
 memory-checking on smaller sub-RAMs, instead of explicit polynomial protocol that we employ for the same. For
 completeness, we also include the batching efficient RAM using Merkle tree (with Poseidon hash) in the performance
-comparison in Table ~\ref{tbl:performance-comparison} which was considered in prior works. Note that the Merkle
- tree-based approach is faster than that of ~\cite{USENIX:OWWB20} for batch size of $2^{10}$ (the break-even
+comparison in Table~\ref{tbl:performance-comparison} which was considered in prior works. Note that the Merkle
+ tree-based approach is faster than that of~\cite{USENIX:OWWB20} for batch size of $2^{10}$ (the break-even
  point reported to be batch size of $\approx 1200$).
 
 \begin{table}[htbp]
     \centering
-    \begin{tabularx}{0.49\textwidth}{@{}XXXX@{}}
+    \begin{tabularx}{0.8\textwidth}{@{}XXXX@{}}
         \toprule
         Scheme & $\prover$ (s) & $\verifier$ (ms) & $|\pi|$ (KB) \\ \midrule
         MT20 & $450$ & $7$  & $0.26$ \\
-        OWWB20 ~\cite{USENIX:OWWB20} & $550+43$ & $7$  & $0.26$ \\
-        CFHKKO22 ~\cite{CCS:CFHKKO22} & $226+43$ & $120$ & $1.3$ \\
+        OWWB20~\cite{USENIX:OWWB20} & $550+43$ & $7$  & $0.26$ \\
+        CFHKKO22~\cite{CCS:CFHKKO22} & $226+43$ & $120$ & $1.3$ \\
         Our Work & $94$ & $15$ & $4.4$ \\
         \bottomrule
     \end{tabularx}
     \caption{Comparing performance of our batching-efficient RAM with prior works. $\prover$
     denotes proof generation time, $\verifier$ denotes verification time while $|\pi|$ denotes
-    argument size. We mention proof generation time as $a+b$ for ~\cite{USENIX:OWWB20,CCS:CFHKKO22}
+    argument size. We mention proof generation time as $a+b$ for~\cite{USENIX:OWWB20,CCS:CFHKKO22}
     where $a$ denote proving time of \textsf{Groth16} and $b$ denotes witness generation time. The latter
     is reported in respective works for a parallel implementation.}
     \label{tbl:performance-comparison}
@@ -232,7 +228,7 @@ comparison in Table ~\ref{tbl:performance-comparison} which was considered in pr
 
 %We first provide overall running time of batching-efficient RAM primitive instantiated with Caulk+
 %and CQ lookup arguments. The degradation in running time is plotted as function of accumulated updates
-%since the last computation of full table-specific parameters in Figure ~\ref{fig:batch-ram-proving-time}.
+%since the last computation of full table-specific parameters in Figure~\ref{fig:batch-ram-proving-time}.
 %We choose batch size of $m=128$ for Caulk+ based instantiation (to avoid prohibitive performance),
 %while we consider $m=1024$ for CQ based instantiation. Our overhead remains barely noticable against
 %the quadratic costs incurred by Caulk+ base protocol till about $2^{15}$ accumulated changes, equivalent of
@@ -242,10 +238,10 @@ comparison in Table ~\ref{tbl:performance-comparison} which was considered in pr
 %scenario). In real application scenarios, we can expect better degradation curve, as its unlikely that updates
 %to the table occur uniformly across all positions.
 
-%In Figure ~\ref{fig:batch-ram-constraints}, we compare the
+%In Figure~\ref{fig:batch-ram-constraints}, we compare the
 %R1CS constraints incurred by existing approaches to batching friendly RAMs/accumulators. For our work, we assume
 %that the memory checking on the RAM instance of size $m$ is implemented as an arithmetic circuit using a Bene's
-%routing network ~\cite{benes}, though we also provide a purely polynomial protocol for the same in Section ~\ref{sec:poly-proto-ram-app}.
+%routing network~\cite{benes}, though we also provide a purely polynomial protocol for the same in Section~\ref{sec:poly-proto-ram-app}.
 %Our construction is relatively ``circuit-free'' and relies on the efficiency of lookup arguments coupled with
 %our novel modifications to make them update resilient.
 

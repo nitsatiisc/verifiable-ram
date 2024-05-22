@@ -34,25 +34,27 @@ which denotes associating the value $v$ with index $a$ in the RAM.
 We use $\RAMOp{I}$ to denote the set of all RAM operations with index set $\setind$.
 
 \begin{table*}[bt]
-    \begin{tabular}{l|l|l|l|l}
+	\resizebox{\textwidth}{!}{
+    \begin{tabular}{|l|l|l|l|l|}
         \hline
         {\bf Component  }                                                                                      & {\bf Protocol} & {\bf Prover Work}      & {\bf Verifier Work} & {\bf Communication}   \\ \hline
-        Committed Sub-vector Lookup                                                                     & CQ ~\cite{EPRINT:EagFioGab22}      & $O(m \log m)\,\F$, $O(m)\,\Gone$      & $5P$            & $8\Gone$, $3\F$         \\ \hline
-        Committed Index Lookup                                                                          & Figure ~\ref{fig:committed-index-lookup}    & $O(m \log m)\,\F$, $O(m)\,\Gone$      & $5P$            & $8\Gone$, $3\F$         \\ \hline
-        Localized Update in RAM                                                                                & Figure ~\ref{fig:a-identical}   & $O(m \log^2 m)\, \F$, $O(m)\,\Gone$      & $8P$            & $19\Gone$, $1\Gtwo$, $10\F$ \\ \hline
-        Table Specific Preprocessing                                                                    & Fast KZG ~\cite{EPRINT:FeiKho23}      & $O(N \log N)\,\F,\G$      & -             & -               \\ \hline
-        Lookup from Approximate Setup                                                                   & Section ~\ref{sec:update-protocol}    & $O((m+\delta)\log^2(m+\delta))\,\F$, $O(m+\delta)\,\Gone$ & -             & -               \\ \hline
-        Polynomial Protocol for RAM                                                                     & Figure ~\ref{fig:covering-protocol}   & $O(m \log m)\,\F,\, O(m)\,\G$      & $7P$            & $36\Gone$, $30\F$       \\ \hline
+        Committed Sub-vector Lookup                                                                     & CQ~\cite{EPRINT:EagFioGab22}      & $O(m \log m)\,\F$, $O(m)\,\Gone$      & $5P$            & $8\Gone$, $3\F$         \\ \hline
+        Committed Index Lookup                                                                          & Figure~\ref{fig:committed-index-lookup}    & $O(m \log m)\,\F$, $O(m)\,\Gone$      & $5P$            & $8\Gone$, $3\F$         \\ \hline
+        Localized Update in RAM                                                                                & Figure~\ref{fig:a-identical}   & $O(m \log^2 m)\, \F$, $O(m)\,\Gone$      & $8P$            & $19\Gone$, $1\Gtwo$, $10\F$ \\ \hline
+        Table Specific Preprocessing                                                                    & Fast KZG~\cite{EPRINT:FeiKho23}      & $O(N \log N)\,\F,\G$      & -             & -               \\ \hline
+        Lookup from Approximate Setup                                                                   & Section~\ref{sec:update-protocol}    & $O((m+\delta)\log^2(m+\delta))\,\F$, $O(m+\delta)\,\Gone$ & -             & -               \\ \hline
+        Polynomial Protocol for RAM                                                                     & Figure~\ref{fig:covering-protocol}   & $O(m \log m)\,\F,\, O(m)\,\G$      & $7P$            & $36\Gone$, $30\F$       \\ \hline
         %	Concatenation of transcripts                                                                    & Fig 8    & $O(m \log m)$      & 2P            & 4G1, 6F         \\ \hline
         %	Permutation of transcripts                                                                      & Fig 9    & $O(m \log m)$       & 2P            & 4G1, 5F         \\ \hline
         %	\begin{tabular}[c]{@{}l@{}}Memory consistency \& \\ address ordering of transcript\end{tabular} & Fig 7    & $O(m \log m)$       & 5P            & 20G1,19F        \\ \hline
         \rowcolor{lightgray}
-        {Batching-Efficient RAM}                                                                          & {Figure  ~\ref{fig:complete-listing}}    & {$\widetilde{O}(\sqrt{mN})\,\F,\G$}            & ${9P}$            & {$65\Gone$, $1\Gtwo$, $43\F$}  \\ \hline
+        {Batching-Efficient RAM}                                                                          & {Figure~\ref{fig:complete-listing}}    & {$\widetilde{O}(\sqrt{mN})\,\F,\G$}            & ${9P}$            & {$65\Gone$, $1\Gtwo$, $43\F$}  \\ \hline
     \end{tabular}
+	}
     \caption{Asymptotic efficiency of the component protocols for our scheme. Here, $N$ denotes the size of the RAM, $m$ denotes the number of operations,
     and $\delta$ denotes Hamming distance of table for which pre-computed parameters are available from the current table. As before, we use $(\F,\Gone,\Gtwo,\GT, e, g_1, g_2,g_t)$ to denote a bilinear group, and $P$ to denote a pairing evaluation. The performance figures reported here correspond to the CQ-based realization of our batching-efficient RAM scheme.}
     \label{tbl:efficiency-components}
-    \vspace*{-5mm}
+%    \vspace*{-5mm}
 \end{table*}
 
 
@@ -67,14 +69,14 @@ To prove the transformation of $\vecT$ to $\vecT'$ via operation sequence $\vec{
 \begin{itemize}[leftmargin=1em, label=-]
     \item We isolate sub-tables $\Sbf=(\vec{a},\vec{v})$ and $\Sbf'=(\vec{a},\vec{v'})$ of $\vecT$ and $\vecT'$ consisting of
     rows corresponding to indices in $\vec{a}$. This requires proving $\vec{v}=\vecT[\vec{a}]$ and $\vec{v'}=
-    \vecT'[\vec{a}]$, which we show using {\em committed index lookup} argument discussed in Section ~\ref{subsec:committed-index-lookup}.
+    \vecT'[\vec{a}]$, which we show using {\em committed index lookup} argument discussed in Section~\ref{subsec:committed-index-lookup}.
 
     \item On the isolated sub-tables $\Sbf$ and $\Sbf'$ of size $m$, we use the standard memory checking arguments (c.f. argument
     presented in Appendix \ref{sec:poly-proto-ram-app}) to prove that sequence $\vec{o}$ correctly updates $\Sbf$ to $\Sbf'$ with
     prover complexity of $\wt{O}(m)$.
 
     \item Finally, we show that the RAMs $\vecT$ and $\vecT'$ are identical outside indices in $\vec{a}$. We describe the protocol
-    for proving the same in Section ~\ref{subsec:proximity-ram}.
+    for proving the same in Section~{subsec:proximity-ram}.
 \end{itemize}
 
 \begin{figure}[htbp]
@@ -84,7 +86,7 @@ To prove the transformation of $\vecT$ to $\vecT'$ via operation sequence $\vec{
     \label{fig:blueprint}
 \end{figure}
 
-The blueprint for the above approach is illustrated in Figure ~\ref{fig:blueprint}.
+The blueprint for the above approach is illustrated in Figure~\ref{fig:blueprint}.
 
 \subsection{Batching-Efficient RAM: Components}\label{subsec:batching-efficient-ram-components}
 We now elaborate on the key technical components in realizing the above blueprint.
@@ -100,8 +102,8 @@ arguments to verifiably extract $m$ indices from a table of size $N$, in time de
 However, there are two technical challenges here. First, the aforementioned lookup arguments only prove the sub-vector
 relation, without linking the extracted vector to the indices in $\vec{a}$. This is easily solved, as there
 is an efficient realization of a {\em committed index lookup} from a {\em committed sub-vector} argument,
-where the commitment scheme is homomorphic. The details appear in Section ~\ref{subsec:committed-index-lookup},
-with the complete protocol presented in Figure ~\ref{fig:committed-index-lookup}. The second challenge is much more
+where the commitment scheme is homomorphic. The details appear in Section~\ref{subsec:committed-index-lookup},
+with the complete protocol presented in Figure~\ref{fig:committed-index-lookup}. The second challenge is much more
 formidable: the efficiency of sub-vector arguments (and the committed index lookup argument derived from them)
 depends on {\em expensive} table-specific pre-processing. This is acceptable when the table in question is
 static, but is infeasible in our setting requiring updatable tables. This motivates our next technical
@@ -117,7 +119,7 @@ We show that for $\delta=\Delta(\vecT, \vecT')$,
 an argument for $m$ lookups from $\vecT'$ incurs an additional prover overhead of $(m+\delta)\log^2(m+\delta)$ over the
 lookup argument for static tables. We note that the overhead is {\em quasi}-linear in both $m$ and $\delta$.
 Our competitive overhead rests on several innovative applications of algebraic
-algorithms, which are summarised in Appendix ~\ref{subsec:comp-algebra-app}. We then leverage this ability to use ``approximate"
+algorithms, which are summarised in Appendix~\ref{subsec:comp-algebra-app}. We then leverage this ability to use ``approximate"
 setup into a {\em base + cache} strategy; where at all times we maintain pre-computed parameters corresponding to
 a base table $\vecTbase$, and use this setup to prove lookups from the current table $\vecT$. We achieve optimal
 prover effort on average by using parameters for $\vecTbase$ till the current table is at a hamming distance
@@ -128,14 +130,14 @@ $O(N\log N)$ prover effort. The cycle then repeats with current table as the bas
 
 \noindent{\bf Naive Approaches are Inadequate.} We notice that the aforementioned constructions of lookup arguments require linear combination of
 encoded quotients of the form $\gany{(T(X)-T(\xi^i))/(X-\xi^i)}$ for upto $m$ values of $i$ during the proof generation.
-While constructions ~\cite{CCS:ZBKMNS22,EPRINT:PosKat22}
-consider quotients encoded in the group $\Gtwo$, the protocol in ~\cite{EPRINT:EagFioGab22} encodes them in $\Gone$.
+While constructions~\cite{CCS:ZBKMNS22,EPRINT:PosKat22}
+consider quotients encoded in the group $\Gtwo$, the protocol in~\cite{EPRINT:EagFioGab22} encodes them in $\Gone$.
 We use a generic $[\,\cdot\,]_g$ to
 account for protocol-specific choices. We also see that even a small change to the table requires one to update all the quotients (the polynomial $T(X)$ is
 common to all quotients). Updating all the quotients after each batch is clearly infeasible. One could consider delaying the updation of the quotients, till
 the time they are actually required in a proof, which happens when the corresponding index in the table is involved in lookup. However, each of the $m$ quotients
 is now potentially ``lagging'' by $\delta$ updates, so we would need $\Omega(m\delta)$ group operations to refresh all of them. This gives us multiplicative degradation
-with $\delta$, and is clearly unsustainable for reasonable values of $\delta$. In Section ~\ref{sec:update-protocol}, we present an efficient method
+with $\delta$, and is clearly unsustainable for reasonable values of $\delta$. In Section~\ref{sec:update-protocol}, we present an efficient method
 to directly compute linear combination of upto $O(m)$ encoded quotients of the form $\gany{(T(X)-T(\xi^i))/(X-\xi^i)}$.
 
 \smallskip
@@ -146,36 +148,36 @@ $\vec{a}$. Looking ahead, in terms of polynomials this requires proving that $T(
 \{a_i:i\in [m]\}$. Assuming $Z_I(X)$ to be the vanishing polynomial of the set $\{\xi^{a_i}:i\in [m]\}$,
 this is equivalent to proving that $Z_I(X)(T(X) - T^*(X)) = D(X)\vpolyN(X)$ for some polynomial $D$. However, naively
 this involves working with polynomials with degree $O(N)$, which is expensive.
-In Section ~\ref{subsec:proximity-ram} we show a polynomial protocol for the above relation which requires only $O(m\log^2 m)$ prover effort. The protocol
-appears in Figure ~\ref{fig:a-identical}.
+In Section~\ref{subsec:proximity-ram} we show a polynomial protocol for the above relation which requires only $O(m\log^2 m)$ prover effort. The protocol
+appears in Figure~\ref{fig:a-identical}.
 
 \smallskip
 
 \noindent{\bf Polynomial Protocol for Memory Checking.} To complete the verification, we need to show that
 the smaller RAMs, $\Sbf=(\vec{a},\vec{v})$ and $\Sbf'=(\vec{a},\vec{v}')$ extracted from larger RAMs $\vecT,\vecT'$
 are consistent with respect to the operations. This can be accomplished using standard memory checking techniques
-based on address ordered transcripts, which we formalize in Section ~\ref{sec:model-for-ram}. Later in
-Appendix ~\ref{sec:poly-proto-ram-app} and ~\ref{sec:poly-proto-ram}, we assemble known techniques to present
+based on address ordered transcripts, which we formalize in Section~\ref{sec:model-for-ram}. Later in
+Appendix~\ref{sec:poly-proto-ram-app} and~\ref{sec:poly-proto-ram}, we assemble known techniques to present
 a polynomial protocol for memory consistency based on address ordered transcripts.
 This involves encoding several artefacts such as operations, transcripts etc., as polynomials and relations
 among them such as concatenation, permutation and monotonicity as polynomial identities. Our modelling is
 simple and implementation friendly, and helps in realizing a ``circuit-free'' overall construction. Complete
-polynomial protocol for memory checking appears in Figure ~\ref{fig:covering-protocol}, while constituent protocols
-appear in Figures ~\ref{fig:time-ordered-transcript}, ~\ref{fig:encoded-relations} and ~\ref{fig:permutated-transcripts}.
+polynomial protocol for memory checking appears in Figure~\ref{fig:covering-protocol}, while constituent protocols
+appear in Figures~\ref{fig:time-ordered-transcript},~\ref{fig:encoded-relations} and~\ref{fig:permutated-transcripts}.
 
 \smallskip
 
 \noindent{\bf Efficiency.} We conclude the overview with a discussion of efficiency achieved by our scheme, and
 how different components discussed in this section contribute to the overall efficiency. The asymptotic performance
-of our scheme using CQ ~\cite{EPRINT:EagFioGab22} is summarized in Table ~\ref{tbl:efficiency-components}, with
+of our scheme using CQ~\cite{EPRINT:EagFioGab22} is summarized in Table~\ref{tbl:efficiency-components}, with
 efficiency of the overall scheme highlighted in gray. The table also serves as a ready-reckoner for component protocols
 involved in the overall scheme. A more detailed discussion and break-up of the polynomial protocol for RAM
 appears in Table~\ref{tbl:components-poly-ram} in Appendix~\ref{sec:poly-proto-ram-app}. We note that the verification complexity of the overall solution is substantially
 less than the aggregate of component protocols; this is due to the fact that several pairing checks required for
 $\kzg$ verification proofs can be batched together. For concrete instantiation using BLS12-381 curve, RAM size
 of 1 million, the online cost of proving an update of $1000$ operations on a table as a function of its
-Hamming distance from the ``pre-processed'' table is described in Figure ~\ref{fig:batch-ram-proving-time}.
-Other performance metrics are summarised in Tables ~\ref{tbl:performance-comparison} and ~\ref{tbl:offline-proving-time}.
+Hamming distance from the ``pre-processed'' table is described in Figure~\ref{fig:batch-ram-proving-time}.
+Other performance metrics are summarised in Tables~\ref{tbl:performance-comparison} and~\ref{tbl:offline-proving-time}.
 %As an illustrative example,the other performance metrics for the same setting are summarized below:
 %\begin{table}[htbp]
 %\begin{tabularx}{0.45\textwidth}{|X|X|}
@@ -206,7 +208,7 @@ are highly parallelizable.
 %As an example, suppose $\vecT_0$
 %is the initial pre-processed table at time $t=0$. We generate proofs using pre-computed parameters for $\vecT_0$
 %till the time $t=t_1$, when the table state $\vecT_1$ is at hamming distance $2^{17}$ from $\vecT_0$. At this point,
-%from Figure ~\ref{fig:batch-ram-proving-time}, online proof generation takes around $40s$ for batch of $1000$ updates.
+%from Figure~\ref{fig:batch-ram-proving-time}, online proof generation takes around $40s$ for batch of $1000$ updates.
 %At $t=t_1$, we also start an offline parameter computation for the table $\vecT_1$, while continuing to generate
 %online proofs using parameters for $\vecT_0$. We can generate the next $2^7$ batches of updates at an average of
 %approximately $12000/128\approx 94s$ each, thus finishing with a table state $\vecT_2$ at hamming distance at most
@@ -235,9 +237,9 @@ are highly parallelizable.
 
 %The efficiency of the above approach relies crucially on the efficiency of committed index lookup used to
 %reduce the size of the RAMs for quasi-linear memory checking methods. It is tempting to use the recent lookup arguments
-%in ~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:EagFioGab22} to prove the correctness of the first step with prover complexity dependent only on $m$.
+%in~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:EagFioGab22} to prove the correctness of the first step with prover complexity dependent only on $m$.
 %However, employing them directly is difficult; their table-independent efficiency relies on
 %table specific expensive pre-computation, which does not help when the table is updatable. This is the problem we solve
-%in Section ~\ref{sec:update-protocol}, where we modify the prover algorithm for the lookup arguments to remain efficient
+%in Section~\ref{sec:update-protocol}, where we modify the prover algorithm for the lookup arguments to remain efficient
 %with access to pre-computed parameters for an ``approximate'' table.
 

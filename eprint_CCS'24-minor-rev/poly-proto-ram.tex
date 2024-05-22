@@ -62,7 +62,7 @@ Let $\F$ be a finite field, $m,n\in \N$ be positive integers and $\setind\subset
 The consistency check in Lemma \ref{lem:consistency-check} can be encoded as an arithmetic circuit of size $\wt{O}(m+n)$, thus
 yielding an argument of knowledge for the language $\LRAM{I}{n}{m}$ with prover complexity quasi-linear in
 $m+n$. For completeness, we present a self-contained argument of knowledge for
-$\LRAM{I}{m}{m}$ ($m=n$) based on the ``polynomial protocol'' framework defined in ~\cite{Gabizon2019PLONKPO}.
+$\LRAM{I}{m}{m}$ ($m=n$) based on the ``polynomial protocol'' framework defined in~\cite{Gabizon2019PLONKPO}.
 
 
 
@@ -76,7 +76,7 @@ The prover also interpolates polynomials $\delta^\ast_A(X)$ and $\delta^\ast_T(X
 $\delta^\ast_A(\omega^i) = A^\ast_{i+1} - A^\ast_i$ for $i\in I_1$ and $\delta^\ast_T(\omega^i)=t^\ast_{i+1}-t^\ast_i$ for $i\not\in I_1$.
 The prover sends all the above polynomials to the verifier.
 \item $\verifier$ computes: The verifier checks relations (C1)-(C6) in Lemma \ref{lem:addr-ordered-transcript}. The range constraints
-in (C7) can be verified using polynomial protocols in sub-vector lookup arguments such as Caulk+ ~\cite{EPRINT:PosKat22}, CQ
+in (C7) can be verified using polynomial protocols in sub-vector lookup arguments such as Caulk+~\cite{EPRINT:PosKat22}, CQ
 ~\cite{EPRINT:EagFioGab22}.
 \end{enumerate}
 
@@ -212,7 +212,7 @@ $\F=\F_p$ be the finite field where $p$ is the order of the groups.
 
 \begin{comment}
 Let $\LLconcat$ denote the language consisting of polynomial tuples $(a(X)$, $b(X)$, $c(X)$, $v(X))$ satisfying the identities
-in Lemma ~\ref{lem:vec-concatenation}. To check membership of $(T,\vec{o},T',\tr)$ in the language $\LTr$, let $\wt{T}=(a(X),v(X))$, $\wt{T'}=(a'(X),v'(X))$,
+in Lemma~\ref{lem:vec-concatenation}. To check membership of $(T,\vec{o},T',\tr)$ in the language $\LTr$, let $\wt{T}=(a(X),v(X))$, $\wt{T'}=(a'(X),v'(X))$,
 $\wt{O}=(\bar{\op}(X),\bar{a}(X),\bar{v}(X))$ and $\wt{\tr}=(t(X),o(X),A(X),V(X))$ be the polynomial
 encodings of $T,T',\vec{o}$ and $\tr$ respectively.
 From the construction of time ordered transcript $\tr$ outlined

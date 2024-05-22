@@ -4,8 +4,7 @@ Encapsulating RAM semantics in VC circuits is also challenging; since (i) arithm
 adequately model random access, and (ii) incorporating entire memory as gates in a circuit is prohibitive.
 
 Several novel techniques have been proposed to work around the above limitations of circuit based representation
-of RAM. Among them, Merkle tree-based accumulators to model the RAM state are popular
-~\cite{EPRINT:BFRSBW13,compwithstate,C:BCTV14} as they can efficiently
+of RAM. Among them, Merkle tree-based accumulators to model the RAM state are popular~\cite{EPRINT:BFRSBW13,compwithstate,C:BCTV14} as they can efficiently
 prove updates to the state, without modeling the entire memory in the arithmetic circuit. Other
 approaches based on {\em address ordered time-scripts} avoid the concrete costs of Merkle tree-based approaches
 by letting the prover provide inputs and outputs of RAM operations in a non-deterministic manner, which
@@ -40,7 +39,7 @@ Merkle-tree based approaches and transcript-based approaches by using RSA accumu
 they still incur large prover costs and memory requirements even for modest sized batches. The approaches
 in~\cite{USENIX:OWWB20,CCS:CFHKKO22} encode complex modular arithmetic over RSA groups and {\em hash
 to prime} functions as arithmetic circuits, which results in a fixed overhead of around $10$ million R1CS constraints
-at batch sizes of $m=1000$ (this overhead is significantly larger for ~\cite{USENIX:OWWB20}). This is already prohibitive on a modest hardware. In addition, the witness computation for each update incurs cost
+at batch sizes of $m=1000$ (this overhead is significantly larger for~\cite{USENIX:OWWB20}). This is already prohibitive on a modest hardware. In addition, the witness computation for each update incurs cost
 linear in the size of accumulated set. The prior works~\cite{USENIX:OWWB20,CCS:CFHKKO22} seek to mitigate this through pre-computation and
 parallel/distributed processing. However, the issue of maintaining pre-computed parameters in sync with dynamic accumulator state has not been adequately addressed in~\cite{USENIX:OWWB20,CCS:CFHKKO22}. For example, in RSA-based accumulators, generating $O(N)$ non-membership witnesses straightforwardly requires $O(N^2)$ time; however, these witnesses become stale once the accumulator state changes, and hence cannot be used as-is for subsequent update proofs. 
 
@@ -56,7 +55,7 @@ that would need to be expressed as a circuit is the verification of digital sign
 %table of size 1 million, with a single-threaded implementation. Clearly, with more potent hardware and
 %parallelization, one can process a table of size upto $10$ million in a few hours. 
 %Our approach is also in the updatable SRS setting in constrast to trusted setup required for RSA parameter generation. We
-%compare our work with the prior approaches more elaborately in Section ~\ref{sec:experiments}.
+%compare our work with the prior approaches more elaborately in Section~\ref{sec:experiments}.
 
 
 \smallskip
@@ -83,7 +82,7 @@ that would need to be expressed as a circuit is the verification of digital sign
 		\multicolumn{5}{|c|}{{Lookup Arguments for Updatable Tables/Batching-Efficient RAM}} \\ \hline
 		\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}OWWB20~\cite{USENIX:OWWB20}\\ \textcolor{white}{text}\end{tabular}} & \multirow{2}{*}{Trusted}  & \multicolumn{1}{l|}{$O(1)~\G$} & \multicolumn{1}{l|}{$\wt{O}(m)\, \F,\G,\,\wt{O}(N)\, \G'$} & $1 P$\\ \cline{1-1}\cline{3-5}
 		\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}B-INS-ARISA~\cite{CCS:CFHKKO22}\\ \textcolor{white}{text}\end{tabular}} &  & \multicolumn{1}{l|}{$O(1)~\G$} & \multicolumn{1}{l|}{$\wt{O}(m)\, \F,\G,\,\wt{O}(N) \,\G'$} & $1P, O(1)~\G'$ \\ \hline
-		\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}Our work\\ (c.f. Table ~\ref{tbl:efficiency-components})\end{tabular}} & \multicolumn{1}{l|}{Updatable}  & \multicolumn{1}{l|}{$65\Gone,\, 1\Gtwo,\, 43\F$} & \multicolumn{1}{l|}{$\wt{O}(\sqrt{mN})\, \F,\Gone$} & $9P$ \\ \hline
+		\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}Our work\\ (c.f. Table~\ref{tbl:efficiency-components})\end{tabular}} & \multicolumn{1}{l|}{Updatable}  & \multicolumn{1}{l|}{$65\Gone,\, 1\Gtwo,\, 43\F$} & \multicolumn{1}{l|}{$\wt{O}(\sqrt{mN})\, \F,\Gone$} & $9P$ \\ \hline
 	\end{tabular}
 	\caption{Comparison with state-of-the-art lookup arguments. Here, $N$ denotes the size of the RAM and $m$ denotes the number of updates (typically $m \ll N$). We use $(\F,\Gone,\Gtwo,\GT, e, g_1, g_2,g_t)$ to denote a bilinear group~($\G$ denotes either $\Gone$ or $\Gtwo$, and is used in cases where the exact group is unspecified), and $\G'$ to denote an RSA group. $P$ denotes a pairing evaluation. For Lasso, we report the overheads considering the polynomial commitment scheme Sona and assuming \textit{structured} tables~(here, $c$ denotes an arbitrary positive integer). For our scheme, we report performance for the CQ-based instantiation.}
 	\label{tab:rel-work}

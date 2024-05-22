@@ -47,13 +47,13 @@ The \emph{knowledge-soundness} property says that if the verifier is convinced, 
 \noindent{\bf Modular Approach.}
 A modular approach for designing efficient succinct arguments consists of two steps; constructing an information theoretic protocol in an idealized model, and then compiling the information-theoretic protocol via a cryptographic compiler to obtain an argument system. 
 Informally, the prover and the verifier interact where the prover provides oracle access to a set of polynomials, and the verifier accepts or rejects by checking certain identities over the polynomials output by the prover and possibly public polynomials known to the verifier. Such a protocol can be compiled into a succinct argument of knowledge by realizing the polynomial oracles using a \emph{polynomial commitment scheme}. A polynomial commitment scheme allows a prover to commit to polynomials, and later verifiably open evaluations at chosen points by giving evaluation proofs. This enables the verifier to probabilistically
-check polynomial identities at random points of $\F$. %We refer the reader to ~\cite[Section 4.2]{Gabizon2019PLONKPO} for details on polynomial protocols and their compilation to SNARKs. 
+check polynomial identities at random points of $\F$. %We refer the reader to~\cite[Section 4.2]{Gabizon2019PLONKPO} for details on polynomial protocols and their compilation to SNARKs. 
 Many recent constructions of zkSNARKs~\cite{EC:BunFisSze20,EC:CHMMVW20,Gabizon2019PLONKPO} follow this approach where the information theoretic object is a polynomial interactive oracle proof (PIOP) (or a polynomial protocol), and the cryptoprimitive in the compiler is a polynomial commitment scheme.
 
 \subsection{Security Model} We describe public-coin interactive protocols in the structured reference string (SRS) model where both the parties have access to a SRS. The SRS in our protocols consists of
 encodings of monomials of the form $\left\{\gone{x^i}\right\}_{a\leq i\leq b}$, $\left\{\gtwo{x^i}\right\}_{c\leq i\leq d}$
 for $x$ chosen uniformly from $\F$ and $a,b,c,d$ are bounded by some polynomial in $\lambda$. It then follows
-from ~\cite{EPRINT:BowGabMie17} that such an SRS can be generated using a universal and updatable setup~\cite{C:GKMMM18} requiring
+from~\cite{EPRINT:BowGabMie17} that such an SRS can be generated using a universal and updatable setup~\cite{C:GKMMM18} requiring
 only one honest participant. In practice, this is a superior security model compared to requiring a fully
 trusted setup. We use $\srs = (\srs_1,\srs_2)$ to denote the structured reference string of the above form. We say
 that the $\srs$ has degree $Q$ if all the elements of $\srs_i$, $i=1,2$ are of the form $[f(x)]_i$ for a
@@ -63,7 +63,7 @@ polynomial $f\in \F_{<Q}[X]$.
 
 \noindent{\bf Algebraic Group Model.} 
 We analyze security of our protocols in the Algebraic Group Model (AGM) introduced
-in ~\cite{C:FucKilLos18}. An adversary $\Adv$ is called \textit{algebraic} if every group element output by $\Adv$ is accompanied by a representation of that group element in terms of all the group elements that $\Adv$ has seen so far (input and output).
+in~\cite{C:FucKilLos18}. An adversary $\Adv$ is called \textit{algebraic} if every group element output by $\Adv$ is accompanied by a representation of that group element in terms of all the group elements that $\Adv$ has seen so far (input and output).
 In the AGM, an adversary $\Adv$ is restricted to be {\em algebraic}, which in our SRS-based protocol means a PPT algorithm satisfying the following:
 for $i\in \{1,2\}$, whenever $\Adv$ outputs an element $A\in \G_i$, it is accompanied by its representation, $\Adv$ also outputs a vector $\vec{v}$
 	over $\F$ such that $A=\langle \vec{v},\srs_i\rangle$.
@@ -81,9 +81,9 @@ can use the pairing $e:\Gone\times \Gtwo\rightarrow \GT$ to perform ``ideal chec
 vectors of polynomials over $\F$ and $T_1, T_2$ are public matrices over $\F$.
 Under the $Q$-DLOG assumption stated below, the aforementioned ideal check
 is equivalent (except with a negligible probability) to a real pairing check $(a\cdot T_1)\cdot (T_2\cdot b)=0$ with $a$ and $b$ denoting vectors in $\F$ encoding polynomials in $R_1$ and $R_2$ in
-groups $\Gone$ and $\Gtwo$ respectively (see ~\cite[Lemma 2.2]{Gabizon2019PLONKPO}).
+groups $\Gone$ and $\Gtwo$ respectively (see~\cite[Lemma 2.2]{Gabizon2019PLONKPO}).
 
-\begin{definition}[Q-DLOG Assumption ~\cite{C:FucKilLos18}]\label{defn:q-dlog}
+\begin{definition}[Q-DLOG Assumption~\cite{C:FucKilLos18}]\label{defn:q-dlog}
 Fix an integer $Q$. The $Q$-DLOG assumption for $(\Gone,\Gtwo)$ states that given $\gone{1}$,$\gone{x}$,$\ldots$, \\
 $\gone{x^Q}$, $\gtwo{1},\gtwo{x},\ldots,\gtwo{x^Q}$ for
 uniformly chosen $x\gets \F$, the probability of an efficient $\Adv$ outputting $x$ is $\negl(\secp)$.
@@ -93,7 +93,7 @@ uniformly chosen $x\gets \F$, the probability of an efficient $\Adv$ outputting 
 \subsection{KZG Commitment Scheme}
 \label{sec:KZG}
 A polynomial commitment scheme allows the prover to open evaluations of a committed polynomial succinctly (Appendix~\ref{sec:pcs_def}).
-We use the $\kzg$ commitment scheme introduced in ~\cite{AC:KatZavGol10} which satisfies succinctness, completeness and knowledge-soundness (extractability)
+We use the $\kzg$ commitment scheme introduced in~\cite{AC:KatZavGol10} which satisfies succinctness, completeness and knowledge-soundness (extractability)
 in the algebraic group model, while additionally featuring a universal and updatable setup. We denote the $\kzg$ scheme by the tuple of $\ppt$ algorithms $(\KZGsetup$,$\KZGcommit$, $\KZGopen$, $\KZGverify)$ as defined below.
 %We then establish the isomorphism of the KZG polynomial commitment scheme as a vector commitment scheme.
 \begin{definition}[KZG Polynomial Commitment Scheme]

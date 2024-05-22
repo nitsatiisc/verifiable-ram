@@ -20,18 +20,18 @@ where verifiable update of the RAM state is required for small batches of update
 
 \smallskip
 
-\noindent{\bf Application to Blockchain Rollups.} Batching-efficient RAM is especially relevant in the context of blockchain {\em rollups} ~\cite{rollup},
+\noindent{\bf Application to Blockchain Rollups.} Batching-efficient RAM is especially relevant in the context of blockchain {\em rollups}~\cite{rollup},
 an umbrella term for recent efforts to scale blockchains by moving expensive computation off the blockchain to the so-called {\em layer two}~(or L2) chains. The blockchain only needs to verify succinct proofs attesting to the correctness of the off-chain computation. This approach is popularly called \textit{rollup} as it allows verifying the result of several (rolled-up) transactions modifying the L2 state, as part of one transaction verified on the main chain.
 This simultaneously improves scalability and lowers the cost (e.g., gas fees) per transaction due to succinct verification. We consider improving efficiency of rollups an important motivation for our work, but avoid precise details of a smart-contract based
 instantiation of our solution.
 
 \subsection{Our Contribution}\label{subsec:ourwork} 
 We present batching-efficient RAM construction, which advances the efforts
-towards achieving {\em verifiable outsourcing of state update} such as in ~\cite{EPRINT:BFRSBW13}
-and more recently in ~\cite{USENIX:OWWB20, CCS:CFHKKO22}.
+towards achieving {\em verifiable outsourcing of state update} such as in~\cite{EPRINT:BFRSBW13}
+and more recently in~\cite{USENIX:OWWB20,CCS:CFHKKO22}.
 The most popular approaches to succinctly represent
-state involve accumulators based on Merkle-trees ~\cite{C:Merkle87}, or ones based on groups of unknown order
-(e.g. RSA, class-groups) ~\cite{C:CamLys02,C:BonBunFis19,USENIX:OWWB20, CCS:CFHKKO22}.
+state involve accumulators based on Merkle-trees~\cite{C:Merkle87}, or ones based on groups of unknown order
+(e.g. RSA, class-groups)~\cite{C:CamLys02,C:BonBunFis19,USENIX:OWWB20,CCS:CFHKKO22}.
 The updates to the state are effected by insertions or deletions in the  accumulated set.
 In this work, we
 model the state as an addressable memory (RAM) described by vector $\vecT$, which stores value $v_i$ at address $i$.
@@ -49,7 +49,7 @@ via small adaptations to our construction.\smallskip
 
 \begin{comment}
 \noindent{\bf Application to Blockchain Rollups}: We consider the application of persistent RAM primitive to a common rollup scenario.
-Our application is a simplified adaptation of rollup protocols such as ZkSync ~\cite{ZkSync}.
+Our application is a simplified adaptation of rollup protocols such as ZkSync~\cite{ZkSync}.
 We assume a layer two (L2) chain \textsf{DemoChain}, which issues its clients \textsf{DemoCoins}. The clients have accounts on
 L2, and they transfer \textsf{DemoCoins} to each other using L2 transactions. Such a system will also have mechanism to transfer
 funds to and from main-chain (e.g. Ethereum) accounts, but we
@@ -76,12 +76,12 @@ We summarize our contributions below.
 	\item We construct {\em committed index lookup} arguments via black-box reduction to
 	sub-vector arguments that use homomorphic commitments. A committed index lookup involves
 	three committed vectors $\vec{t},\vec{a}$ and $\vec{v}$ satisfying $v_i=t_{a_i}$ for all $i$. Similar
-	definition is also used in recent multi-variate lookup arguments in ~\cite{lasso}, where a similar reduction
+	definition is also used in recent multi-variate lookup arguments in~\cite{lasso}, where a similar reduction
 	to sub-vector arguments is obtained under a more restrictive assumption about the elements of the table.
 	\item We crucially employ the above two contributions to construct a {\em batching-efficient} RAM, which
 	can prove a batch of $m$ updates with an amortized prover complexity of $O(m\log m + \sqrt{mN})$,
 	with $N$ being the size of the RAM. Our dependence on the RAM size is sublinear, in contrast to the linear complexity
-	inherent in recent works on batching-efficient RAM using RSA accumulators ~\cite{USENIX:OWWB20,CCS:CFHKKO22} or using generic memory checking techniques~\cite{NDSS:WSRBW15,USENIX:BCTV14,C:BCGTV13,SP:ZGKPP18}. All of our protocols are public-coin, and can be made non-interactive using standard techniques~\cite{C:FiaSha86}. 
+	inherent in recent works on batching-efficient RAM using RSA accumulators~\cite{USENIX:OWWB20,CCS:CFHKKO22} or using generic memory checking techniques~\cite{NDSS:WSRBW15,USENIX:BCTV14,C:BCGTV13,SP:ZGKPP18}. All of our protocols are public-coin, and can be made non-interactive using standard techniques~\cite{C:FiaSha86}. 
 	
 	\item We implement our scheme in Rust\footnote{\url{https://anonymous.4open.science/r/updatableRAM/}}.
 	Experimentally, we show that our scheme performs significantly better than prior works,
@@ -98,13 +98,13 @@ We present a brief summary of our techniques below. A more detailed technical ov
 \noindent{\bf Update-friendly Lookup Arguments.} Our starting point is the recent line of works on lookup arguments which prove
 that a vector of size $m$ appears as
 a sub-vector in a large fixed vector (table) of size $N$ with succinct proof sizes and verification, but most notably
-ensuring that prover runs in time sublinear in the size of the table ($N$). The pioneering work ~\cite{CCS:ZBKMNS22}
-obtained prover complexity of $O(m^2+m\log N)$, which was improved in subsequent works to $O(m^2)$ ~\cite{EPRINT:PosKat22},
-$O(m\log^2 m)$ ~\cite{EPRINT:ZGKMR22}, and $O(m\log m)$ ~\cite{EPRINT:EagFioGab22,PKC:CFFLL24}. However, the sublinear prover
+ensuring that prover runs in time sublinear in the size of the table ($N$). The pioneering work~\cite{CCS:ZBKMNS22}
+obtained prover complexity of $O(m^2+m\log N)$, which was improved in subsequent works to $O(m^2)$~\cite{EPRINT:PosKat22},
+$O(m\log^2 m)$~\cite{EPRINT:ZGKMR22}, and $O(m\log m)$~\cite{EPRINT:EagFioGab22,PKC:CFFLL24}. However, the sublinear prover
 complexity requires table-dependent $O(N\log N)$ pre-processing and $O(N)$ storage. This table-dependent
 pre-processing implies that while
 the aforementioned lookup arguments can be used to obtain efficient ROM (read only memory) semantics
-%\footnote{The protocols for sub-vector relation in ~\cite{CCS:ZBKMNS22, EPRINT:ZGKMR22} also implicitly support indexed lookup semantics},
+%\footnote{The protocols for sub-vector relation in~\cite{CCS:ZBKMNS22, EPRINT:ZGKMR22} also implicitly support indexed lookup semantics},
 they cannot be used as is for RAM (which supports update operations).
 Moreover, an update involving even a single
 index renders the entire $O(N)$ pre-processing unusable for further lookups,
@@ -135,28 +135,26 @@ while for~\cite{EPRINT:EagFioGab22,PKC:CFFLL24}, we have $f(m)=m\log m$.
 considers whether each entry of a given vector appears in the target vector to one that also identifies
 the precise positions where the given vector appears in the target vector. When this relation is checked
 over commitments of the respective vectors; given vector, the target vector and the position vector, we call
-it {\em committed index lookup}. The relation we consider is similar to the one considered in ~\cite{lasso}.
+it {\em committed index lookup}. The relation we consider is similar to the one considered in~\cite{lasso}.
 For lookup arguments with homomorphic commitment schemes, we show that committed index lookup can be obtained
 using a sub-vector lookup argument (Lemma~\ref{lem:generic-transformation}, Section~\ref{subsec:committed-index-lookup}). Such a construction was
 also considered in~\cite{lasso}, but under a more restrictive assumption that the size of the elements in the table have to be
 within a certain bound. Lemma~\ref{lem:generic-transformation} yields a construction of committed index lookup that uses (a single instance of) the underlying sub-vector protocol in a black-box manner. This immediately implies
-efficient constructions of arguments for committed index lookups from
-~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:ZGKMR22,EPRINT:EagFioGab22,PKC:CFFLL24}. In Appendix~\ref{app:committed-index-lookup}, we also present an explicit (non-black-box) adaptation of~\cite{EPRINT:PosKat22} to obtain a committed index lookup, which again incurs costs comparable to a single instance of the underlying sub-vector protocol.
+efficient constructions of arguments for committed index lookups from~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:ZGKMR22,EPRINT:EagFioGab22,PKC:CFFLL24}. In Appendix~\ref{app:committed-index-lookup}, we also present an explicit (non-black-box) adaptation of~\cite{EPRINT:PosKat22} to obtain a committed index lookup, which again incurs costs comparable to a single instance of the underlying sub-vector protocol.
 
 \smallskip
 
 
 \noindent{\bf Batching-Efficient RAM from Lookup Arguments.}
-Memory checking methods based on {\em address ordered transcripts}
-~\cite{NDSS:WSRBW15,USENIX:BCTV14,C:BCGTV13,SP:ZGKPP18}, which are popularly used in
+Memory checking methods based on {\em address ordered transcripts}~\cite{NDSS:WSRBW15,USENIX:BCTV14,C:BCGTV13,SP:ZGKPP18}, which are popularly used in
 efficient RAM abstractions, incur a cost linear in the size of the RAM. This is prohibitive for efficient batching. As a key idea in this work, we invoke committed index lookup on
 the large RAMs, to verifiably extract smaller sub-RAMs, which correspond to indices actually involved in
 the batch update. Then, we use the linear time memory-checking techniques to argue the consistency of these
 smaller sub-RAMs. 
 
 The idea needs to work through some more details, such as showing that the larger RAMs are identical
-on positions not referenced by the batch of updates (considered in Section ~\ref{subsec:proximity-ram}).
-The overall idea is illustrated in Figure ~\ref{fig:blueprint}. We also note that the extracted sub-RAMs can
+on positions not referenced by the batch of updates (considered in Section~\ref{subsec:proximity-ram}).
+The overall idea is illustrated in Figure~\ref{fig:blueprint}. We also note that the extracted sub-RAMs can
 have duplicate records, corresponding to multiple updates referencing the same RAM index; however, memory
 checking methods can be easily adapted to handle such cases. Finally, we would still hit the ``rigidity'' of lookup arguments
 in realizing this plan; once the table has changed, lookups are no longer efficient from it. To circumvent this,
@@ -179,13 +177,13 @@ Thus we have:
 \noindent{\bf Polynomial Protocol for RAM.} There are several ways to implement the ordered transcript based
 memory consistency check on the smaller $O(m)$-sized RAMs, for example by expressing the same as an arithmetic
 circuit. However, for completeness, we also present an argument for RAM as an
-interactive {\em polynomial protocol} ~\cite{Gabizon2019PLONKPO}, which is then compiled into an argument of knowledge using the $\kzg$ ~\cite{AC:KatZavGol10}
-commitment scheme in the algebraic group model (AGM) ~\cite{C:FucKilLos18}. This construction appears in
-Appendix ~\ref{sec:poly-proto-ram-app}.
+interactive {\em polynomial protocol}~\cite{Gabizon2019PLONKPO}, which is then compiled into an argument of knowledge using the $\kzg$~\cite{AC:KatZavGol10}
+commitment scheme in the algebraic group model (AGM)~\cite{C:FucKilLos18}. This construction appears in
+Appendix~\ref{sec:poly-proto-ram-app}.
 %\moumita{Making all references to Sections in Appendix, as Appendix B instead of Section B.}
 
 \begin{comment}
-Most of the efficient implementations of RAM in verifiable computation ~\cite{C:BCGTV13, NDSS:WSRBW15, SP:ZGKPP18}
+Most of the efficient implementations of RAM in verifiable computation~\cite{C:BCGTV13, NDSS:WSRBW15, SP:ZGKPP18}
 rely on the {\em address-ordered transcript} to check that a sequence of $\load$s and $\store$s are {\em consistent} with some initial state
 of the RAM. Using the tuple $(t,\op,\ind, v)$ to denote a RAM instruction with $t$ being the execution {\em timestamp}, $\op\in \{\load,\store\}$ being
 the operation type, $\ind$ being the index referenced and $v$ denoting the value read/stored, a time ordered execution transcript $\mathsf{tr} = (\ins_1,\ldots,\ins_m)$ is a sequence
@@ -212,7 +210,7 @@ RAM state $\vecT_0\in \F^n$ to RAM state $\vecT_1\in \F^n$ with the prover-compl
 \end{theorem}
 \end{comment}
 
-%and ~\ref{fig:subtable-consistency}
+%and~\ref{fig:subtable-consistency}
 %illustrate the overall idea for the first check with a concrete example.
 
 
