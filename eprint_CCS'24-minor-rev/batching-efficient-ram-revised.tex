@@ -278,19 +278,19 @@ the AGM, under the $Q$-DLOG assumption for the bilinear group $(\F,\Gone,\Gtwo,\
 			\end{itemize}
 		\end{itemize}
 		
-		\moumita{ Removing this makes this more streamlined since Precompute() is not used/defined anywhere else.\\
-        \underline{Setup $(1^\secp,N,m, \vecT, \vecT')$}:
-        \begin{itemize}[leftmargin=1em]
-            \item $\srs = (\{\gone{\tau^i}\}_{i=0}^N, \{\gtwo{\tau^i}\}_{i=0}^N)$ for $\tau\gets \F$.
-            \item $W_2^i=\gtwo{\vpolyN(X)/(X-\xi^i)}$, $i\in [N]$ (needed by prover).
-            \item $\gone{\vpolyN(X)}, \gtwo{\vpolyN(X)}$ (known to both $\prover$ and $\verifier$).
-        \end{itemize}
-        \underline{Precompute $(\vecT, \vecT')$}:
-        \begin{itemize}[leftmargin=1em]
-            \item $W_1^i=\gtwo{(T(X)-T(\xi^i))/(X-\xi^i)}$, $i\in [N]$,
-            \item ${W_1^i}'=\gtwo{(T^*(X) - T^*(\xi^i))/(X-\xi^i)}$, $i\in [N]$.
-        \end{itemize}
-    	}
+%		\moumita{ Removing this makes this more streamlined since Precompute() is not used/defined anywhere else.\\
+%        \underline{Setup $(1^\secp,N,m, \vecT, \vecT')$}:
+%        \begin{itemize}[leftmargin=1em]
+%            \item $\srs = (\{\gone{\tau^i}\}_{i=0}^N, \{\gtwo{\tau^i}\}_{i=0}^N)$ for $\tau\gets \F$.
+%            \item $W_2^i=\gtwo{\vpolyN(X)/(X-\xi^i)}$, $i\in [N]$ (needed by prover).
+%            \item $\gone{\vpolyN(X)}, \gtwo{\vpolyN(X)}$ (known to both $\prover$ and $\verifier$).
+%        \end{itemize}
+%        \underline{Precompute $(\vecT, \vecT')$}:
+%        \begin{itemize}[leftmargin=1em]
+%            \item $W_1^i=\gtwo{(T(X)-T(\xi^i))/(X-\xi^i)}$, $i\in [N]$,
+%            \item ${W_1^i}'=\gtwo{(T^*(X) - T^*(\xi^i))/(X-\xi^i)}$, $i\in [N]$.
+%        \end{itemize}
+%    	}
 
         {\bf Common Input}: $\srs$, $c_T, c_T', c_\op, c_a, c_w\in \Gone$.\\
         {\bf Prover's Input}: Vectors $\vecT,\vecT',\vec{\op},\vec{a},\vec{w}$ and their encoding polynomials.\\
