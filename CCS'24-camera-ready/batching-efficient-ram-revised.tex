@@ -1,0 +1,322 @@
+%\usepackage{amssymb}%! Author = nitinsingh
+%! Date = 12/04/24
+We now detail the steps required to realize batching efficient RAM outlined in the technical overview.
+
+\subsection{Committed Index Lookup}\label{subsec:committed-index-lookup}
+In this section, we ``lift'' any committed sub-vector argument to a committed index lookup argument, where
+the latter makes a black-box use of the former. We use the trick of random linear combination of vectors to infer
+indexed lookup relation among them from sub-vector relation over the aggregated vectors. Similar use of random
+ linear combinations has been made in the context of proving permutations in literature (e.g. ~\cite{SCN:GOTV22}).
+
+\begin{lemma}\label{lem:generic-transformation}
+Let $\vec{t}\in \F^n$ and let $\vec{a},\vec{v}\in \F^m$ for some positive integers $m,n$. Let $\vec{I}_n$ denote the vector $(1,\ldots,n)$.
+Then for $\gamma\gets \F$, $(\vec{v}+\gamma \vec{a})\preceq (\vec{t} + \gamma \vec{I}_n)$ implies
+$\vec{v}=\vec{t}[\,\vec{a}\,]$ except with probability $mn/|\F|$.
+\end{lemma}
+\begin{proof}
+We define vectors of linear polynomials $\vec{p}=(p_1,\ldots,p_m)$ and $\vec{q}=(q_1,\ldots,q_n)$ where
+$p_i(X) = v_i + a_i X$, $i\in [m]$ and $q_i(X) = t_i + i X$, $i\in [n]$. Now, we see that $\vec{v}=\vec{t}[\,\vec{a}\,]$
+if and only if $\vec{p}\preceq \vec{q}$. For $\gamma\in F$, let $\vec{p}_\gamma$ and $\vec{q}_\gamma$ denote the vectors
+$(p_1(\gamma),\ldots,p_m(\gamma))$ and $(q_1(\gamma),\ldots,q_n(\gamma))$ respectively. It is obvious that $\vec{p}\preceq \vec{q}$
+implies $\vec{p}_\gamma\preceq \vec{q}_\gamma$ for all $\gamma\in \F$. Using Schwartz-Zippel Lemma, it can also be seen that
+$\Pr_{{}_{\gamma\gets \F}}[\vec{p}\npreceq \vec{q} \,|\, \vec{p}_\gamma\preceq \vec{q}_\gamma]\leq mn/|\F|$. The bound
+follows from the observation that the event occurs only when $\gamma$ is a common root of at least one pair of linear polynomials
+$\{(p_i(X),q_j(X)): i\in [m], j\in [n]\}$.
+\end{proof}
+In Figure ~\ref{fig:committed-index-lookup}, we invoke Lemma ~\ref{lem:generic-transformation} to construct a
+committed index lookup argument using a committed sub-vector argument $(\subvecprover,\subvecverifier)$. We formally
+state the following lemma, whose proof essentially follows from Lemma ~\ref{lem:generic-transformation}.
+
+\begin{lemma}\label{lem:proto-committed-index-lookup}
+Assuming that $(\subvecprover,\subvecverifier)$ is an argument of knowledge for the relation $\RSVEC$ in the AGM, the interactive protocol
+in Figure ~\ref{fig:committed-index-lookup} is an argument of knowledge for the relation $\RLOOK$ in the AGM.
+\end{lemma}
+
+\begin{figure}[htbp]
+\begin{mdframed}
+{
+%<<<<<<< HEAD
+    {\bf Common Input}: $\srs,c_t, c_a, c_v$, $c_I=\gone{I(X)}$ where $I(X)=\enc{I}{\setN}$ encodes the vector $\vec{I}=(1,\ldots,N)\in \F^N$. \\
+%=======
+%    {\bf Common Input}: $\srs,c_t, c_a, c_v$, $c_I=\gone{I(X)}$ where $I(X)=\enc{\vec{I}_N}{\setN}$
+%    with $\vec{I}_N=(1,\ldots,N)$. \\
+%>>>>>>> f162aeee62ad0161c590d91a0cd6435404bbcc83
+    {\bf Prover's Input}: Vectors $\vec{t}\in \F^N$, $\vec{a},\vec{v}\in\F^m$.
+    \begin{enumerate}[leftmargin=1em, label=\arabic*.]
+    \item $\verifier$ sends $\gamma\gets \F$.
+    \item $\prover$ and $\verifier$ compute: $\tilde{c}_t=\gamma c_I+c_t$, $\tilde{c}_v=\gamma c_a + c_v$.
+    \item $\prover$ computes: $\tilde{\vec{t}}=\gamma\vec{I}_N + \vec{t}$, $\tilde{\vec{v}}=\gamma\vec{a} + \vec{v}$.
+    \item $\prover$ and $\verifier$ run sub-vector argument $(\subvecprover,\subvecverifier)$ with
+    $(\srs,\tilde{c}_t,\tilde{c}_v)$ as the common input and $(\tilde{\vec{t}},\tilde{\vec{v}})$ as $\subvecprover$'s input.
+    \item $\verifier$ outputs
+    $b\gets \argoutput{\subvecprover}{\subvecverifier}{\tilde{\vec{t}},\tilde{\vec{v}}}{\srs,\tilde{c}_t,\tilde{c}_v}$.
+    \end{enumerate}
+}
+\end{mdframed}
+\caption{Committed Index Lookup Argument}
+\label{fig:committed-index-lookup}
+\end{figure}
+
+\subsection{Almost Identical RAM States}\label{subsec:proximity-ram}
+For a vector $\vec{a}\in [N]^m$, let $\uniq{a}=\{a_i: i\in [m]\}$ denote the subset of unique values in $\vec{a}$. We call two
+RAM states $\vecT, \vecT'\in \F^N$ to be $\vec{a}$-{\em identical} if $\vecT[i]=\vecT'[i]$ for all $i\not\in\uniq{a}$. As before,
+let $T(X),T^*(X)$ and $a(X)$ be polynomials encoding the vectors $\vecT,\vecT'$ (over $\setN$) and $\vec{a}$ (over $\setV$). Let
+$c_T, c_T'$ and $c_a$ be the commitments to vectors $\vecT, \vecT'$ and $\vec{a}$ respectively in the group $\Gone$. The polynomial protocol to prove that
+$\vecT,\vecT'\in \F^N$ and $\vec{a}\in \F^m$ are $\vec{a}$-identical requires proving the relation
+$Z_I(X)(T(X) - T^*(X)) = 0$ over the set $Z_\setN$ where
+$I=\uniq{a}$ and $Z_I(X)=\prod_{i\in I}(X-\xi^i)$ is the vanishing polynomial for the set $\setN_I=\{\xi^i: i\in I\}$.
+%\moumita{ Prev: To proceed, the honest prover commits to polynomial $Z_I$ and proves (i) $Z_I(T - T') = 0 \text{ mod } Z_\setN$ and (ii) the zeroes
+%of $Z_I$ form a subset of $\setN_I$ as defined. }
+To proceed, the honest prover commits to polynomial $Z_I(X)$ and proves (i) $Z_I(X)\cdot (T(X) - T^*(X)) = 0 \text{ mod } Z_\setN$ and (ii) the zeroes of $Z_I(X)$ form a subset of zeroes of $\setN_I(X)$ as defined.
+Together, the two conditions imply that $T(\xi^i)=T^*(\xi^i)$ for $i\not\in \uniq{a}$.
+To prove the first relation, the prover computes the polynomial $D(X)$ as below:
+\begin{align}\label{eq:poly-q}
+D(X) &= \frac{(T(X)-T^*(X))\cdot Z_I(X)}{Z_\setN(X)} \nonumber \\
+&= \sum_{i\in I}\frac{(T(\xi^i) - T^*(\xi^i))\mu_i(X)}{Z_\setN(X)} Z_I(X) \nonumber \\
+\intertext{ Substituting, $\Delta_i=T(\xi^i) - T^*(\xi^i)$, $\mu_i(X)=\vpolyN(X)/(\vpolyN'(\xi^i)(X-\xi^i))$ }
+&=\sum_{i\in I}\frac{\Delta_i}{Z_\setN'(\xi^i)}\left(\frac{Z_I(X)}{X-\xi^i}\right) = \sum_{i\in I}\frac{\Delta_i Z_I'(\xi^i)}{Z_\setN'(\xi^i)}\kappa_i(X)
+\end{align}
+In the above, the summation only runs over indices in $I$, as $\Delta i = 0$ for $i\not\in I$. In the final equality, we use
+$\kappa_i(X) = Z_I(X)/(Z_I'(\xi^i)(X-\xi^i))$ for $i\in I$ which we recognize as the lagrange basis polynomials for the set
+$\{\xi^i: i\in I\}$. Thus, Equation \eqref{eq:poly-q} implies that $D(X)$ is at most degree $|I|-1$ polynomial, with
+$D(\xi^i)=\Delta_i Z_I'(\xi^i)/\vpolyN'(\xi^i)$ for $i\in I$.
+The prover can therefore interpolate $D(X)$ (in power basis)
+in $O(|I|\log^2 |I|)$ $\F$-operations and compute $\gone{D(X)}$ in $O(|I|)$ $\Gone$-operations. The prover sends the
+commitment $\gone{D(X)}$ to the verifier. Finally, the verifier can
+check the identity $Z_I(X) \cdot  (T(X) - T^*(X)) = D(X) \cdot Z_\setN(X)$ %\moumita{Prev: $Z_I(T - T^*) = D\cdot Z_\setN$ . Alternative: $Z_I(T - T') = D\cdot Z_\setN$} 
+by a pairing check. For this, since the tables are committed in $\Gone$, prover will need to send $\elttwo{Z_I(X)}$.
+
+Next, the prover needs to show that zeroes of $Z_I$ are indeed in the set $\setN_I=\{\xi^i: i\in I\}=\{\xi^{a_i}:i\in [m]\}$.
+Clearly, it suffices to show that $Z_I(X)$ divides the polynomial $\prod_{i\in [m]}(X - \xi^{a_i})$. To obtain a
+polynomial protocol, the prover commits to an auxiliary polynomial $h(X)=\sum_{i=1}^m \xi^{a_i}\tau_i(X)$
+which interpolates the vector $\vec{h}=(\xi^{a_1},\ldots,\xi^{a_m})$. The correctness of $h$ polynomial can be
+established by showing that the interpolated vector $\vec{h}$ satisfies committed index lookup relation
+$\vec{h}=\vec{T}_{\exp}[\,\vec{a}\,]$ where $\vec{T}_{\exp}=(\xi^1,\ldots,\xi^N)$. Moreover, we notice that the polynomial
+interpolating the table $\vec{T}_{\exp}$ is particularly simple, i.e, $T_{\exp}(X)=X$, and thus the setup need not be
+augmented with table-specific parameters for $\vec{T}_{\exp}$.
+Finally, it remains to show that $Z_I(X)$ divides $K(X) = \prod_{i=1}^m (X - h(\nu^i))$. To do so, the prover commits to
+$K(X)$ and the quotient polynomial $q(X)=K(X)/Z_I(X)$. The verifier checks the polynomial identities
+at $\alpha$, i.e $K(\alpha)=q(\alpha)Z_I(\alpha)$ and $K(\alpha)=\prod_{i=1}^m(\alpha - h(\nu^i))$.
+The former is easily accomplished
+using evaluation proofs for $K,q$ and $Z_I$ at $\alpha$.
+For checking the latter, the prover commits to another polynomial
+$u(X)$ satisfying $u(\nu^i)=\prod_{j=1}^{i-1}\big((\alpha - h(\nu^j))/(1 + \beta\tau_1(\nu^j))\big)$ for $i\in [m]$
+where $\beta=K(\alpha) - 1$.
+The verifier ensures the correctness of $u(X)$ by checking:
+\begin{equation}
+    \begin{aligned}
+        \tau_1(X)(u(X) - 1) &= 0 \text{ mod } Z_{\setV} \\
+        u(\nu X)(1+\beta \tau_1(X))-u(X)(\alpha - h(X)) &= 0 \text{ mod } Z_\setV.
+    \end{aligned}
+    \label{eq:kh-check}
+\end{equation}
+We prove that the above constraints imply that $K(\alpha)=\prod_{i\in [m]}(\alpha - h(\nu^i))$ in Lemma ~\ref{lem:kh-check}.
+Note that in this protocol we require commitment to the polynomial $Z_I$ in both $\Gone$ and $\Gtwo$,
+and thus another pairing check is required to show that the $Z_I(X)$ committed in $\Gone$
+is the same as the $Z_I(X)$ committed in $\Gtwo$ (used for the real pairing check).
+The complete protocol for checking that RAMs $\vecT$ and $\vecT'$ are identical outside indices in $\vec{a}$
+is given in Figure ~\ref{fig:a-identical}.
+
+\begin{lemma}\label{lem:kh-check}
+There exists a polynomial $u(X)\in \F[X]$ satisfying the identities in Equation ~\eqref{eq:kh-check}
+if and only if $K(\alpha)=1+\beta=\prod_{i\in [m]} (\alpha - h(\nu^i))$.
+\end{lemma}
+\begin{proof}
+    Assume that the identitites hold for some polynomial $u(X)$.
+    The first identity implies $u(\nu)=1$. From the second identity, we conclude that for all $i\in [m]$, we have
+    $u(\nu^{i+1})=u(\nu^i)\cdot ((\alpha - h(\nu^i))/(1+\beta \tau_1(\nu^i)))$, and thus:
+    $$1 = u(\nu^{m+1})/u(\nu) = \prod_{i\in [m]}\left(\frac{\alpha - h(\nu^i)}{1+\beta \tau_1(\nu^i)}\right).$$
+    We observe that the product of denominators in the above equation is simply $1+\beta$ as $\tau_1(\nu^i)$
+    is $0$ for all $i\neq 1$, and thus $1+\beta = \prod_{i=1}^m (\alpha - h(\nu^i))$. In the other direction,
+    it is easy to check that $u(X)$ as defined for an honest prover, satisfies the identities in Equation ~\ref{eq:kh-check}.
+\end{proof}
+
+%%% complete protocol listing %%%
+\begin{figure}[htbp]
+    \begin{mdframed}
+
+        {\bf Common Input}: $\srs$, $c_T, c_T', c_a$.
+
+        {\bf Prover's Input}: Vectors $\vecT,\vecT'\in \F^N$, $\vec{a}\in \F^m$. Polynomials $T(X),T^*(X)$ and
+        $a(X)$ encoding $\vecT,\vecT'$ and $\vec{a}$ respectively.\\
+
+        {\bf Round 1}: Prover commits to auxiliary polynomials
+        \begin{enumerate}[leftmargin=1em, label=\arabic*.]
+            \item $\prover$ computes:
+                \begin{itemize}[leftmargin=1em, label=-]
+                \item $I=\uniq{a}$, $Z_I(X)=\prod_{i\in I}(X-\xi^i)$.
+                \item $D(X)=Z_I(X)(T(X) - T^*(X))/\vpolyN(X)$.
+                \item $h(X)$ such that $h(\nu^i)=\xi^{a_i}$ for $i\in [m]$.
+                \item $K(X)=\prod_{i=1}^m (X - h(\nu^i))$, $q(X)=K(X)/Z_I(X)$.
+                \end{itemize}
+            \item $\prover$ sends $c_z = \gone{Z_I(X)}$, $c_z'=\gtwo{Z_I(X)}$, $c_d=\gone{D(X)}$, $c_h=\gone{h(X)}$, $c_k=\gone{K(X)}$,
+            $c_q=\gone{q(X)}$.
+            \item $\verifier$ sends $\alpha\gets \F$.
+        \end{enumerate}
+
+        {\bf Round 2}: Prover commits to polynomial $u(X)$.
+        \begin{enumerate}[leftmargin=1em, label=\arabic*.]
+            \item $\prover$ sets $\beta=K(\alpha)-1$ and interpolates $u(X)$ on $\setV$ such that
+                $u(\nu^i)=\prod_{j=1}^{i-1}\big((\alpha - h(\nu^j))/(1 + \beta\tau_1(\nu^j))\big)$ for $i\in [m]$.
+            \item $\prover$ sends $c_u=\gone{u(X)}$.
+            \item $\verifier$ sends $r\gets \F$.
+        \end{enumerate}
+
+
+        {\bf Round 3}: Prover batches checks in Eq ~\eqref{eq:kh-check}.
+        \begin{enumerate}[leftmargin=1em, label=\arabic*.]
+            \item $\prover$ computes:
+            \begin{align*}
+            Q(X)=\big(&u(\nu X)(1+\beta \tau_1(X)) - u(X)(\alpha - h(X)) \\
+            &\quad + r\tau_1(X)(u(X)-1)\big)/Z_{\setV}(X)
+            \end{align*}
+            \item $\prover$ sends $c_Q = \gone{Q(X)}$.
+            \item $\verifier$ sends $s\gets \F$.
+        \end{enumerate}
+
+        {\bf Round 4}: Prover sends evaluations.
+        \begin{enumerate}[leftmargin=1em, label=\arabic*.]
+        \item $\prover$ sends $\val{\alpha}{z}=Z_I(\alpha)$, $\val{\alpha}{q}=q(\alpha)$, $\val{\alpha}{K}=K(\alpha)$,
+        $\val{s}{Q}=Q(s)$, $\val{s}{u}=u(s)$, $\val{\nu s}{u}=u(\nu s)$, $\val{s}{h}=h(s)$.
+        \item $\verifier$ sends $r_\alpha, r_s\gets \F$.
+        \end{enumerate}
+
+        {\bf Round 5}: Prover batches evaluation proofs.
+        \begin{enumerate}[leftmargin=1em, label=\arabic*.]
+        \item Compute:
+            \begin{itemize}[leftmargin=1em, label=-]
+            \item $p_\alpha(X)=Z_I(X) + r_\alpha q(X) + r_\alpha^2 K(X)$.
+            \item $p_s(X) = Q(X) + r_s u(X) + r_s^2 h(X)$.
+            \item $\Pi_\alpha = \kzgprove(\srs,p_\alpha,\alpha)$.
+            \item $\Pi_s = \kzgprove(\srs,p_s,s)$, $\Pi_{\nu s}$ = $\kzgprove(\srs,u,\nu s)$.
+            \end{itemize}
+        \item Send $\Pi_\alpha, \Pi_s, \Pi_{\nu s}$.
+        \end{enumerate}
+
+        {\bf Round 6}: Verifier checks identities.
+        \begin{enumerate}[leftmargin=1em, label=\arabic*.]
+        \item $\verifier$ computes $\gone{p_\alpha}=c_z + r_\alpha c_q + r_\alpha^2$, $\gone{p_z}$ = $c_Q + r_s c_u + r_s^2 c_h$.
+        \item $\verifier$ checks:
+            \begin{itemize}[leftmargin=1em, label=-]
+                \item $\val{\alpha}{z}\cdot \val{\alpha}{q}=\val{\alpha}{K}$.
+                \item $\val{\nu s}{u}(1+\beta \tau_1(s)) - \val{s}{u}(\alpha - \val{s}{h}) + r\tau_1(s)(\val{s}{u}-1)=\val{s}{Q}Z_\setV(s)$.
+                \item $e(c_T - c_T', c_z')=e(c_d, \gtwo{\vpolyN(X)})$.
+                \item $e(\gone{1},c_z')=e(c_z, \gtwo{1})$.
+                \item $\kzgverify(\srs$ ,
+        $\gone{p_\alpha}$, $\val{\alpha}{z}+r_\alpha \val{\alpha}{q} + r_\alpha^2 \val{\alpha}{K}$, $\alpha$, $\Pi_\alpha)$.
+                \item $\kzgverify(\srs$,
+                $\gone{p_z}$,  $\val{s}{Q}+r_s \val{s}{u} + r_s^2 \val{s}{K}$, $s$, $\Pi_s)$.
+                \item $\kzgverify(\srs,c_u, \val{\nu s}{u}, \nu s, \Pi_{\nu s})$.
+            \end{itemize}
+        \end{enumerate}
+
+        {\bf Round 7}: Check correctness of polynomial $h$.
+        \begin{enumerate}[leftmargin=1em, label=\arabic*.]
+        \item $\prover$ and $\verifier$ execute committed index lookup argument (Fig ~\ref{fig:committed-index-lookup})
+        to check $(\gone{X},c_a,c_h)\in \RLOOK$.
+        \item $\verifier$ accepts if the above argument accepts and all the preceding checks succeed.
+        \end{enumerate}
+    \end{mdframed}
+    \caption{Argument for showing RAMs are identical outside small set of indices.}
+    \label{fig:a-identical}
+\end{figure}
+
+\subsection{Batching-Efficient RAM: Combined Protocol}\label{subsec:all-together}
+We put the entire protocol together now. Let $\setind$ denote the set of indices $\{1,\ldots,N\}$, and $\vec{I}_N$
+denote the vector $(1,\ldots,N)$. We formally define the committed RAM relation for which we present an argument of
+knowledge in this section.
+\begin{definition}\label{defn:committed-ram}
+We define the {\em committed ram} relation
+$\CRAM$ to consist of tuples $((c_T, c_T', c_\op, c_a, c_w),(\vecT, \vecT',\vec{\op},\vec{a},\vec{w}))$
+such that:
+\begin{itemize}[leftmargin=1em]
+    \item $(\vecT,\vec{o},\vecT')\in \LRAM{I}{N}{m}$ for $\vec{o}=(o_1,\ldots,o_m)$ where we have $o_i=(\op_i, a_i, w_i)\in \RAMOp{I}$ for all $i\in [m]$~(here we implicitly view vectors $\vecT$ and $\vecT'$ as RAMs with index column $\setind_N$). 
+    
+%    for $T=(\setind_N,\vecT)$, $T'=(\setind_N,\vecT')$ and $\vec{o}=(o_1,\ldots,o_m)$
+   
+    \item $c_T=\KZGcommit(\srs, T(X))$, $c_T'=\KZGcommit(\srs, T^*(X))$, $c_\op = \KZGcommit(\srs,\op(X))$,  $c_a=\KZGcommit(\srs, a(X))$,
+    $c_w = \KZGcommit(\srs, w(X))$ where polynomials $T(X), T^*(X)$ encode vectors $\vecT, \vecT'$ over $\setN$, while $\op(X), a(X)$ and
+    $w(X)$ encode vectors $\vec{\op}=(\op_1,\ldots,\op_m)$, $\vec{a}$ and $\vec{w}$ over $\setV$.
+\end{itemize}
+\end{definition}
+As outlined in the blueprint, the prover first commits to ``smaller'' RAMs $\Sbf=(\vec{a},\vec{v})$ and $\Sbf'=(\vec{a},\vec{v}')$
+where $\vec{v}=\vecT[\vec{a}]$ and $\vec{v}'=\vecT'[\vec{a}]$. The prover commits to $\Sbf$ and $\Sbf'$ by sending commitments
+$c_v$ and $c_v'$ to $\vec{v}$ and $\vec{v}'$. Then the prover and verifier execute the committed index lookup protocol to
+prove:
+\begin{equation}
+(c_T, c_a, c_v)\in \RLOOK\, \wedge\, (c_T', c_a, c_v')\in \RLOOK
+\end{equation}
+The verifier uses a random challenge $\chi\gets \F$ to reduce two instances of $\RLOOK$ to one instance
+$(c_T + \chi c_T', c_a, c_v + \chi c_v')\in \RLOOK$. Then, we show that
+RAMs $\vecT$ and $\vecT'$ are $\vec{a}$-identical using the protocol in Figure ~\ref{fig:a-identical}, described
+in Section ~\ref{subsec:proximity-ram}.
+All that remains is to prove is that the operation sequence $\vec{o}$ is consistent with small RAMs $\Sbf$ and $\Sbf'$.
+We check this using the argument in Appendix B~\cite{full-ver}, which is obtained by compiling the
+polynomial protocol for RAM in Appendix C~\cite{full-ver} into an argument of knowledge in the AGM.
+Specifically, the prover and the verifier set
+$c_S = (c_a, c_v)$, $c_S'=(c_a, c_v')$ and $c_o = (c_\op, c_a, c_w)$, and execute the argument of knowledge for
+showing $(c_S, c_o, c_S')\in \CLRAM$ (see Definition C.1~\cite{full-ver}). We provide the complete protocol
+listing in Figure ~\ref{fig:complete-listing}. The protocol in Figure ~\ref{fig:complete-listing} assumes pre-computed parameters
+for the tables $\vecT$ and $\vecT'$. The maintenance of these pre-computed parameters in the presence of updates
+is detailed in Section ~\ref{sec:update-protocol}.
+
+\begin{theorem}\label{thm:committed-ram}
+The protocol in Figure~\ref{fig:complete-listing} is a succinct argument of knowledge for the relation $\CRAM$ in
+the AGM, under the $Q$-DLOG assumption for the bilinear group $(\F,\Gone,\Gtwo,\GT,e,g_1,g_2)$.
+\end{theorem}
+
+\begin{figure}[t!]
+    \begin{mdframed}
+
+        \underline{Setup $(1^\secp,N,m, \vecT, \vecT')$}:
+        \begin{itemize}[leftmargin=1em]
+            \item $\srs = (\{\gone{\tau^i}\}_{i=0}^N, \{\gtwo{\tau^i}\}_{i=0}^N)$ for $\tau\gets \F$.
+            \item $W_2^i=\gtwo{\vpolyN(X)/(X-\xi^i)}$, $i\in [N]$ (needed by prover).
+            \item $\gone{\vpolyN(X)}, \gtwo{\vpolyN(X)}$ (known to both $\prover$ and $\verifier$).
+        \end{itemize}
+
+        \underline{Precompute $(\vecT, \vecT')$}:
+        \begin{itemize}[leftmargin=1em]
+            \item $W_1^i=\gtwo{(T(X)-T(\xi^i))/(X-\xi^i)}$, $i\in [N]$,
+            \item ${W_1^i}'=\gtwo{(T^*(X) - T^*(\xi^i))/(X-\xi^i)}$, $i\in [N]$.
+        \end{itemize}
+
+        {\bf Common Input}: $\srs$, $c_T, c_T', c_\op, c_a, c_w\in \Gone$.\\
+        {\bf Prover's Input}: Vectors $\vecT,\vecT',\vec{\op},\vec{a},\vec{w}$ and their encoding polynomials.\\
+
+        {\bf Round 1}: Commit to sub RAMs.
+        \begin{enumerate}[leftmargin=1em, label=\arabic*.]
+            \item $\prover$ computes $\vec{v}=\vecT[\,\vec{a}\,]$, $\vec{v}'=\vecT'[\,\vec{a}\,]$ and the encoding
+            polynomials $v(X)$ and $v^*(X)$.
+            \item $\prover$ sends $c_v = \gone{v(X)}$, $c_v'=\gone{v^*(X)}$.
+            \item $\verifier$ sends $\chi\gets \F$.
+        \end{enumerate}
+
+        {\bf Round 2}: Execute committed index lookup.
+        \begin{enumerate}[leftmargin=1em, label=\arabic*.]
+            \item $\prover$ and $\verifier$ compute $\hat{c}_T=c_T + \chi c_T'$, $\hat{c}_v=c_v + \chi c_v'$.
+            \item $\prover$ computes $\hat{\vec{T}} = \vecT + \chi \vecT'$, $\hat{\vec{v}}= \vec{v} + \chi \vec{v}'$.
+            \item $\prover$ and $\verifier$ execute committed index lookup argument in Fig ~\ref{fig:committed-index-lookup},
+            with $(\hat{c}_T,c_a,\hat{c}_v)$ as the common input and $(\hat{\vec{T}}, \vec{a},\hat{\vec{v}})$ as prover's input.
+        \end{enumerate}
+
+        {\bf Round 3}: Prove RAMs are $\vec{a}$-identical.
+        \begin{enumerate}[leftmargin=1em, label=\arabic*.]
+            \item $\prover$ and $\verifier$ execute argument in Fig ~\ref{fig:a-identical} with common input
+            $(c_T,c_T',c_a)$ and prover's input as $(\vecT,\vecT',\vec{a})$.
+        \end{enumerate}
+
+        {\bf Round 4}: Prove sub RAMs are memory-consistent with update.
+        \begin{enumerate}[leftmargin=1em, label=\arabic*.]
+        \item $\prover$ and $\verifier$ execute argument in Fig 11~\cite{full-ver} %~\ref{fig:covering-protocol}
+        to check $(c_S, c_o, c_S')\in \CLRAM$ with $c_S = (c_a, c_v)$, $c_S'=(c_a, c_v')$ and
+        $c_o=(c_\op,c_a,c_w)$.
+        \item $\verifier$ accepts if all sub-protocols accept.
+        \end{enumerate}
+    \end{mdframed}
+    \caption{Our batching-efficient RAM protocol}
+    \label{fig:complete-listing}
+\end{figure}
+
+\section{Fast Lookups from Approximate Pre-Processing}\label{sec:update-protocol}
+\input{update-protocol}
