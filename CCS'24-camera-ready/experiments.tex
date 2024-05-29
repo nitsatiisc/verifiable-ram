@@ -95,14 +95,14 @@ of lookup argument Caulk ~\cite{CCS:ZBKMNS22}. We make our implementation availa
 %We later plan to
 %make the implementation available as open-source project.
 
-\smallskip
+\medskip
 
 \noindent{\bf Experimental Test-bed.} All the benchmarks were run single-threaded on a commodity configuration featuring a
 $2.1GHz$ Intel-I5 processor, $16$ GB memory running Ubuntu Linux 22.04. The implementation was compiled using {\tt --release}
 flag in Rust. Our protocol was instantiated for BLS12-381 curve, using the scheme CQ ~\cite{EPRINT:EagFioGab22}
 as the underlying sub-vector argument.
 
-\smallskip
+\medskip
 
 \noindent{\bf Online Proof Generation.} In Figure ~\ref{fig:batch-ram-proving-time}, we benchmark the time
 to prove a batch of $m=2^{10}$ updates on a table of size $N=2^{20}$. Here, the values on the $x$-axis denote
@@ -113,7 +113,7 @@ under a minute till the two table differ in almost $2\times 10^5$ positions. In 
 pre-processing time from table ~\ref{tbl:offline-proving-time}, the graph in Figure ~\ref{fig:batch-ram-proving-time}
 determines how the offline parameter generation should be scheduled to achieve optimal performance on average.
 
-\smallskip
+\medskip
 
 \noindent{\bf Offline Pre-Processing.} In Table ~\ref{tbl:offline-proving-time} we provide the time to compute
 table-specific parameters as a function of table size. This is the most computationally intensive step in our
@@ -137,7 +137,7 @@ made an order of magnitude more efficient by leveraging parallel implementation 
 size of the table and the number of updates in a batch. For the instantiation of our scheme with BLS12-381 curve,
 we incur a proof size of $4.4KB$ while the verification takes around $15ms$.
 
-\smallskip
+\medskip
 
 \noindent{\bf Fast Update Benchmarks.} We also benchmark the efficiency of the algorithm to compute
  scalar coefficients in Lemma ~\ref{lem:sum-computation}, required to assemble the encoded quotients from pre-computed quotients.
@@ -147,7 +147,7 @@ In the table, we vary the sizes of set $I$ in Lemma ~\ref{lem:sum-computation} i
 and set $K=2^7|I|$. %i.e, we compare the two methods to sustain $\approx 100$ online proofs.
 We clearly see $5\times-20\times$ advantage over the naive computation.
 
-\smallskip
+\medskip
 
 \noindent{\bf Continuity.} To maintain {\em continuity} of the system~(this is particularly important for applications such as rollups), we must carefully
 align the online prover performance curve with the cost of offline computation.  As an example, suppose $\vec{T}_0$

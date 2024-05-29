@@ -90,7 +90,7 @@ The blueprint for the above approach is illustrated in Figure ~\ref{fig:blueprin
 \subsection{Batching-Efficient RAM: Components}\label{subsec:batching-efficient-ram-components}
 We now elaborate on the key technical components in realizing the above blueprint.
 
-\smallskip
+\medskip
 
 \noindent{\bf Committed Index Lookup.} To limit the size of the RAM on which we use memory-checking techniques,
 our first step is to isolate sub-tables of RAMs $\vecT$ and
@@ -108,7 +108,7 @@ depends on {\em expensive} table-specific pre-processing. This is acceptable whe
 static, but is infeasible in our setting requiring updatable tables. This motivates our next technical
 component.
 
-\smallskip
+\medskip
 
 \noindent{\bf Fast Lookup from Approximate Setup.} We build upon the rich body of work on polynomial protocols enabling efficient lookups from static tables~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:ZGKMR22,EPRINT:EagFioGab22}, which rely on expensive table-dependent pre-computation
 to optimise online proving performance. We make the first attempt towards breaking this rigid dependence.
@@ -125,7 +125,7 @@ prover effort on average by using parameters for $\vecTbase$ till the current ta
 at most $\sqrt{mN}$ from $\vecTbase$, beyond which we recompute full parameters for the current table with
 $O(N\log N)$ prover effort. The cycle then repeats with current table as the base table.
 
-\smallskip
+\medskip
 
 \noindent{\bf Naive Approaches are Inadequate.} We notice that the aforementioned constructions of lookup arguments require linear combination of
 encoded quotients of the form $\gany{(T(X)-T(\xi^i))/(X-\xi^i)}$ for upto $m$ values of $i$ during the proof generation.
@@ -139,7 +139,7 @@ is now potentially ``lagging'' by $\delta$ updates, so we would need $\Omega(m\d
 with $\delta$, and is clearly unsustainable for reasonable values of $\delta$. In Section ~\ref{sec:update-protocol}, we present an efficient method
 to directly compute linear combination of upto $O(m)$ encoded quotients of the form $\gany{(T(X)-T(\xi^i))/(X-\xi^i)}$.
 
-\smallskip
+\medskip
 
 \noindent{\bf Localizing changes in RAMs.} While the above two components allow us to reliably extract sub-RAMs
 corresponding to indices in vector $\vec{a}$, we still need to prove that RAMs are identical outside indices in
@@ -150,7 +150,7 @@ this involves working with polynomials with degree $O(N)$, which is expensive.
 In Section ~\ref{subsec:proximity-ram} we show a polynomial protocol for the above relation which requires only $O(m\log^2 m)$ prover effort. The protocol
 appears in Figure ~\ref{fig:a-identical}.
 
-\smallskip
+\medskip
 
 \noindent{\bf Polynomial Protocol for Memory Checking.} To complete the verification, we need to show that
 the smaller RAMs, $\Sbf=(\vec{a},\vec{v})$ and $\Sbf'=(\vec{a},\vec{v}')$ extracted from larger RAMs $\vecT,\vecT'$
@@ -164,7 +164,7 @@ among them such as concatenation, permutation and monotonicity as polynomial ide
 simple and implementation friendly, and helps in realizing a ``circuit-free'' overall construction. Complete
 polynomial protocol for memory checking appears in Figure 11, while constituent protocols appear in Figures 9, 8 and 10 of the full version of the paper~\cite{full-ver}.
 
-\smallskip
+\medskip
 
 \noindent{\bf Efficiency.} We conclude the overview with a discussion of efficiency achieved by our scheme, and
 how different components discussed in this section contribute to the overall efficiency. The asymptotic performance
@@ -195,7 +195,7 @@ We believe that parallel implementations can
 substantially speed up parameter re-computation as their cost is dominated by FFTs over group polynomials, which
 are highly parallelizable.
 
-\smallskip
+\medskip
 
 \noindent{\bf Continuity.} To support applications such as rollups, we also consider it imperative to ensure that online proof generation does not halt during offline parameter re-generation. In other words, offline parameter re-generation should not hinder the operational continuity of the system. In our scheme, we can ensure this by carefully overlapping the offline computation with online proof generation such that the system can \textit{instantly} switch to using the more recently generated parameters before the online proving time becomes prohibitive. We present more concrete discussions around this scheduling at the end of Section~\ref{sec:experiments}. We note that prior works~\cite{USENIX:OWWB20,CCS:CFHKKO22} have not addressed this issue of continuity in detail. To the best of our knowledge, we are the first to highlight the issue and present a discussion on a viable approach.
 

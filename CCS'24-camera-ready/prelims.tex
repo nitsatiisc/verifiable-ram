@@ -1,6 +1,6 @@
 This section presents notations and preliminary background material used in the rest of the paper.
 
-\smallskip
+\medskip
 
 \noindent\textbf{Notation.} Throughout the paper, we assume a bilinear group generator $\bg$ which on input $\lambda$ outputs
 parameters for the protocols. Specifically $\bg(1^\secp)$ outputs $(\F,\Gone,\Gtwo,\GT, e, g_1, g_2,g_t)$
@@ -16,7 +16,7 @@ to denote group elements $x\cdot g_1$ and $x\cdot g_2$ respectively for $x\in \F
 that all the setup algorithms for the protocols invoke $\bg$ to generate descriptions of groups and fields
 over which the protocol is instantiated. We use $[n]$ to denote the set of integers $\{1,\ldots,n\}$.
 
-\smallskip
+\medskip
 
 \noindent{\bf Lagrange Polynomials.}
 %\chaya{move to here from sec 6: Lagrange polynomial, vanishing polynomial, roots of unity}
@@ -25,7 +25,7 @@ Let $\{\mu_i(X)\}_{i=1}^N$ be the associated
 Lagrange basis polynomials over the set $\setN$; that is, $\mu_i(X) = \prod_{j\neq i} \frac{X-\xi^j}{\xi^{i}-\xi^j}$.
 We denote by $Z_{\setN}$ the vanishing polynomial of $\setN$;  $Z_{\setN}(X)=X^N-1$.
 
-\smallskip
+\medskip
 
 \noindent{\bf Formal Derivatives of Polynomials.} For a polynomial $f(X) = \sum_{i=0}^{d}a_iX^i \in \F[X]$, we define its formal derivative  to be the polynomial $f'(X) = \sum_{i=1}^{d}ia_iX^{i-1}$.
 %\[f'(X) = \sum_{i=1}^{d}ia_iX^{i-1}\]
@@ -38,11 +38,11 @@ We use the notation $b\gets \argoutput{\prover}{\verifier}{w}{x}$ to denote $\ve
 protocol involving $\prover$ and $\verifier$ with $w$ as $\prover$'s input and $x$ as the common input.
 The \emph{knowledge-soundness} property says that if the verifier is convinced, then an efficient extractor algorithm given oracle access to the prover outputs a witness $w$ such that $(x,w)\in \R$. An argument system is \emph{succinct} if the communication complexity and the complexity of $\verifier$ is polylogarithmic in the size of the witness. We provide formal definitions in Appendix A.2 of full version of the paper~\cite{full-ver}. %~\ref{sec:aok}.
 
-\smallskip
+\medskip
 
 \noindent\textbf{Fiat-Shamir.} An interactive protocol is \emph{public-coin} if the verifier's messages are uniformly random strings. Public-coin protocols can be transformed into non-interactive arguments in the Random Oracle Model (ROM) by using the Fiat-Shamir~\cite{C:FiaSha86} heuristic to derive the verifier's messages as the output of a Random Oracle. 
 
-\smallskip
+\medskip
 
 \noindent{\bf Modular Approach.}
 A modular approach for designing efficient succinct arguments consists of two steps; constructing an information theoretic protocol in an idealized model, and then compiling the information-theoretic protocol via a cryptographic compiler to obtain an argument system. 
@@ -59,7 +59,7 @@ trusted setup. We use $\srs = (\srs_1,\srs_2)$ to denote the structured referenc
 that the $\srs$ has degree $Q$ if all the elements of $\srs_i$, $i=1,2$ are of the form $[f(x)]_i$ for a
 polynomial $f\in \F_{<Q}[X]$.
 
-\smallskip
+\medskip
 
 \noindent{\bf Algebraic Group Model.} 
 We analyze security of our protocols in the Algebraic Group Model (AGM) introduced
@@ -74,7 +74,7 @@ for $i\in \{1,2\}$, whenever $\Adv$ outputs an element $A\in \G_i$, it is accomp
 %\chaya{do we use this in proofs?}Following~\cite{C:FucKilLos18}, we write $[A]$ to denote a group element enhanced with its representation; $[A] = (A,v_1,\ldots,v_k)$.
 %AGM is a useful framework for analyzing security of succinct non-interactive arguments of knowledge (SNARKs) obtained from interactive protocols that are described as {\em polynomial protocols}. 
 
-\smallskip
+\medskip
 
 \noindent{\bf Real and Ideal Pairing Checks}: For an algebraic adversary $\Adv$ interacting in a protocol with a degree $Q$ SRS over a bilinear group, the verifier
 can use the pairing $e:\Gone\times \Gtwo\rightarrow \GT$ to perform ``ideal check'' of the form $(R_1\cdot T_1)\cdot (R_2\cdot T_2)\equiv 0$, where $R_1,R_2$ are

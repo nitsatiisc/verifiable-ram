@@ -160,14 +160,14 @@ between vectors $\vecTbase$ and $\vecT$.
     \end{gather}
     So, to compute $a_i$ and $b_j$, it suffices to compute {\em reciprocal sums} efficiently. Our next lemma claims that
     such reciprocal sums can be computed efficiently.
-    We defer the full proof of Lemma ~\ref{lem:sum-computation} to the Appendix of full version of the paper~\cite{full-ver}, but illustrate the key ideas in the proof.
+    
     %Our requirement is now to bound the number of field operations for $e_i$ and for $b_j$. For this, we invoke the following lemma with the proof in the appendix.
     \begin{lemma}\label{lem:sum-computation}
     Let $I\subset K\subset [N]$ and let $a_i$ for all $i \in \setind$ and $b_j$ for all $j \in K$ be as described above.
     Then, $a_i$ for all $i \in I$ and $b_j$ for all $j \in K$ can be computed in $O(|K|\log^2|K|)\, \mathbb{F}$ operations.
     \end{lemma}
     \begin{proof}[Proof-Sketch]
-        We sketch the proof here for $a_i$.
+        We provide a very high-level overview of the proof idea for $a_i$.
         First, we mention that the special case of the lemma when $d_j=1$ for all $j\in K$ admits an efficient computation due to the following identity
         proved in Lemma D.1 of the full version of the paper~\cite{full-ver}.
         \begin{equation*}
@@ -176,34 +176,33 @@ between vectors $\vecTbase$ and $\vecT$.
         for $Z_K(X)=\prod_{i\in K}(X-\xi^i)$. The polynomial $Z_K$ can be computed in $O(|K|\log^2|K|)$ and subsequent evaluations of its first two
         derivatives can also be evaluated on the set $\{\xi^i: i\in I\}$ with the same complexity. However, to deal with arbitrary values of $d_j$ we
         need more ingenuity. We will {\em imagine} $d_j$ to be $p(\xi^j)$ for some polynomial $p(X)$. Moreover, we demand that $p(\xi^j)=0$ for $j\not\in K$.
-        We will not compute such a polynomial $p$, as it has degree $O(N)$, but view it as an ``oracle'' which we can hopefully query at the points we need.
-        Then it can be seen that $a_i=g_i(\xi^i) - r_i(\xi^i)$ for rational functions $g_i(X)$ and $r_i(X)$ defined by:
-        \begin{align}\label{eq:rat-fun-f}
-        g_i(X) =\sum_{j\in [N]\setminus i}\frac{p(X)}{X-\xi^j},\quad
-        r_i(X) =\sum_{j\in [N]\setminus i} \frac{p(X)-p(\xi^j)}{X-\xi^j}
-        \end{align}
-        Now, $g_i(\xi^i)$ for $i\in I$ turns out to be (using the special case above):
-        $$p(\xi^i)\sum_{j\in K\setminus \{i\}} 1/(\xi^i-\xi^j)=d_i(Z_K''(\xi^i)/Z_K'(\xi^i))/2$$
-        Defining $u(X,Y)=(p(X)-p(Y))/(X-Y)$, we can write $r_i(\xi^i)$ as:
-        \begin{equation}
-            r_i(X) = \sum_{j\in [N]}u(X,\xi^j) - u(X,\xi^i)
-        \end{equation}
-        Observe that $u(X,X)=p'(X)$ and so $u(X,X)$ gives the formal derivative of polynomial $p(X)$. We get
-        $r_i(\xi^i)=r(\xi^i)-p'(\xi^i)$ for all $i\in I$, where $r(X)=\sum_{j\in [N]}u(X,\xi^j)$. Fortunately,
-        $r(X)$ is simply $Nu(X,0)=N(p(X) - p(0))/X$, a fact that follows from uni-variate sum-check. The problem
-        thus reduces to being able to compute derivatives $p'(\xi^i)$ for $i\in I$ and the value $p(0)$. Before
-        concluding the proof-sketch, we briefly highlight the structure of the polynomial $p(X)$. Since $p(X)$
-        vanishes for $p(\xi^i)$ for $i\not\in K$, it can we written as the product $\widehat{Z}_K(X)q(X)$ where
-        $\widehat{Z}_K$ is the vanishing polynomial of ``complementary'' roots of unity $\{\xi^i: i\not\in K\}$
-        and $q$ is a low-degree ($<K$) polynomial. Assuming we can interpolate $q(X)$, we can write:
-        \[ p'(\xi^i) = \widehat{Z}_K(\xi^i)q'(\xi^i) + \widehat{Z}_K'(\xi^i)q(\xi^i) \]
-        In the above expression, we require evaluations of high-degree polynomials $\widehat{Z}_K(X)$ and $\widehat{Z}_K'(X)$
-        at $\xi^i$, $i\in I$. This is discussed in Lemma D.3 and other related lemmas in Appendix D.2 of full version of the paper~\cite{full-ver},
-        and motivates the at times tedious algebra there. We conclude the proof-sketch, deferring the missing details to the full
-        proof in Appendix D.2 of full version of the paper~\cite{full-ver}.
-    \end{proof}
-
-    From the Lemma ~\ref{lem:sum-computation}, we conclude that the scalars $a_i,i\in I$ and $b_j, j\in K$ can be computed in
+        We will not compute such a polynomial $p$, as it has degree $O(N)$, but view it as an ``oracle'' which we can hopefully query at the points we need. We defer the detailed proof to the full version of the paper~\cite{full-ver}. 
+%        Then it can be seen that $a_i=g_i(\xi^i) - r_i(\xi^i)$ for rational functions $g_i(X)$ and $r_i(X)$ defined by:
+%        \begin{align}\label{eq:rat-fun-f}
+%        g_i(X) =\sum_{j\in [N]\setminus i}\frac{p(X)}{X-\xi^j},\quad
+%        r_i(X) =\sum_{j\in [N]\setminus i} \frac{p(X)-p(\xi^j)}{X-\xi^j}
+%        \end{align}
+%        Now, $g_i(\xi^i)$ for $i\in I$ turns out to be (using the special case above):
+%        $$p(\xi^i)\sum_{j\in K\setminus \{i\}} 1/(\xi^i-\xi^j)=d_i(Z_K''(\xi^i)/Z_K'(\xi^i))/2$$
+%        Defining $u(X,Y)=(p(X)-p(Y))/(X-Y)$, we can write $r_i(\xi^i)$ as:
+%        \begin{equation}
+%            r_i(X) = \sum_{j\in [N]}u(X,\xi^j) - u(X,\xi^i)
+%        \end{equation}
+%        Observe that $u(X,X)=p'(X)$ and so $u(X,X)$ gives the formal derivative of polynomial $p(X)$. We get
+%        $r_i(\xi^i)=r(\xi^i)-p'(\xi^i)$ for all $i\in I$, where $r(X)=\sum_{j\in [N]}u(X,\xi^j)$. Fortunately,
+%        $r(X)$ is simply $Nu(X,0)=N(p(X) - p(0))/X$, a fact that follows from uni-variate sum-check. The problem
+%        thus reduces to being able to compute derivatives $p'(\xi^i)$ for $i\in I$ and the value $p(0)$. Before
+%        concluding the proof-sketch, we briefly highlight the structure of the polynomial $p(X)$. Since $p(X)$
+%        vanishes for $p(\xi^i)$ for $i\not\in K$, it can we written as the product $\widehat{Z}_K(X)q(X)$ where
+%        $\widehat{Z}_K$ is the vanishing polynomial of ``complementary'' roots of unity $\{\xi^i: i\not\in K\}$
+%        and $q$ is a low-degree ($<K$) polynomial. Assuming we can interpolate $q(X)$, we can write:
+%        \[ p'(\xi^i) = \widehat{Z}_K(\xi^i)q'(\xi^i) + \widehat{Z}_K'(\xi^i)q(\xi^i) \]
+%        In the above expression, we require evaluations of high-degree polynomials $\widehat{Z}_K(X)$ and $\widehat{Z}_K'(X)$
+%        at $\xi^i$, $i\in I$. This is discussed in Lemma D.3 and other related lemmas in Appendix D.2 of full version of the paper~\cite{full-ver},
+%        and motivates the at times tedious algebra there. We conclude the proof-sketch, deferring the missing details to the full
+%        proof in Appendix D.2 of full version of the paper~\cite{full-ver}.
+	\end{proof}
+    From Lemma ~\ref{lem:sum-computation}, we conclude that the scalars $a_i,i\in I$ and $b_j, j\in K$ can be computed in
     time $O(|K|\log^2 |K|)$, which proves the bound in Theorem ~\ref{thm:approx-setup}.
     %have shown that the field operations needed to get $e_i$ and $b_j$ and thus $\elttwo{\Qcachepolytwo{X}}$ is $O(|K|\log^2|K|)$. \\
 

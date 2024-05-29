@@ -4,7 +4,7 @@ extremely cheap to verify, which makes them useful for {\em Verifiable Computati
 client (e.g., a mobile phone), can outsource an expensive computation to an untrusted server, and later
 verify the correctness of the computation at a minimal cost.
 
-\smallskip
+\medskip
 
 \noindent{\bf Modeling RAM in Verifiable Computation.} It turns out that arithmetic circuit-based representations are inefficient in expressing relations involving the result of a program execution on memory/state. Such relations frequently arise in the context of verifiable computation, in scenarios that require proving the correctness of query execution against a database, inference from a decision tree, or updates on a table of account balances~(e.g., when a batch of transactions, such as account transfers, is applied to the table).
 
@@ -18,7 +18,7 @@ where verifiable update of the RAM state is required for small batches of update
 %{\em persistence} - which is the ability to persist the RAM state across several computations, and {\em batching} -
 %where verifiable update of the RAM state is required for small batches of updates. 
 
-\smallskip
+\medskip
 
 \noindent{\bf Application to Blockchain Rollups.} Batching-efficient RAM is especially relevant in the context of blockchain {\em rollups} ~\cite{rollup},
 an umbrella term for recent efforts to scale blockchains by moving expensive computation off the blockchain to the so-called {\em layer two}~(or L2) chains. The blockchain only needs to verify succinct proofs attesting to the correctness of the off-chain computation. This approach is popularly called \textit{rollup} as it allows verifying the result of several (rolled-up) transactions modifying the L2 state, as part of one transaction verified on the main chain.
@@ -42,9 +42,10 @@ as $v_i := \vecT[\,i\,]$, and {\em stores} expressed as $\vecT[\,i\,]=v_i$.
 We think of addresses $i\in [0,N]$ for some $N\in \mathbb{Z}$ while the
 values $v_i\in \F$ for some finite field $\F$. In our construction, we represent both the RAM and operations on it
 as polynomials, and use appropriate polynomial commitment schemes to obtain succinct commitments (digests) to them.
-In this paper, we do not require commitments to be {\em hiding}, as our focus is on succinctness.
+We do not require commitments to be {\em hiding}, as our focus is on succinctness.
 We consider privacy as an orthogonal goal, one we believe is easily achievable
-via small adaptations to our construction.\smallskip
+via small adaptations to our construction. We summarize our contributions below.
+
 
 
 \begin{comment}
@@ -67,7 +68,7 @@ validity of the state update is verified by a main-chain transaction. In later s
 performance achieved when instantiated using our primitive.
 \end{comment}
 
-We summarize our contributions below.
+
 \begin{itemize}[leftmargin=2em]
 	\item As our first contribution, we propose {\em update friendly lookup arguments}, which addresses
 	the strict dependence of recent constructions on table-specific pre-processing parameters. Our
@@ -93,7 +94,7 @@ We summarize our contributions below.
 
 We present a brief summary of our techniques below. A more detailed technical overview appears in Section~\ref{sec:tech-overview}.
 
-\smallskip
+\medskip
 
 \noindent{\bf Update-friendly Lookup Arguments.} Our starting point is the recent line of works on lookup arguments which prove
 that a vector of size $m$ appears as
@@ -129,7 +130,7 @@ states the precise result.
 For the constructions based on~\cite{CCS:ZBKMNS22,EPRINT:PosKat22}, we set $f(m)=m^2$ in the above,
 while for~\cite{EPRINT:EagFioGab22,PKC:CFFLL24}, we have $f(m)=m\log m$.
 
-\smallskip
+\medskip
 
 \noindent{\bf Committed Index Lookup}: We augment the sub-vector relation in prior lookup arguments which
 considers whether each entry of a given vector appears in the target vector to one that also identifies
@@ -143,7 +144,7 @@ within a certain bound. Lemma~\ref{lem:generic-transformation} yields a construc
 efficient constructions of arguments for committed index lookups from
 ~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:ZGKMR22,EPRINT:EagFioGab22,PKC:CFFLL24}. In Appendix E of the full version of the paper~\cite{full-ver}, we also present an explicit (non-black-box) adaptation of~\cite{EPRINT:PosKat22} to obtain a committed index lookup, which again incurs costs comparable to a single instance of the underlying sub-vector protocol.
 
-\smallskip
+\medskip
 
 
 \noindent{\bf Batching-Efficient RAM from Lookup Arguments.}
