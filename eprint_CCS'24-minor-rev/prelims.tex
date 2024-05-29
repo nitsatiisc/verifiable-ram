@@ -125,11 +125,11 @@ version of $\KZGopen$ is described as follows:
 	\item $\KZGopen$ on input $(\srs,p(X),\vec{\alpha})$, where $p(X) \in \F_{\leq d}[X]$ and $\vec{\alpha}\in\F^n$,
 	outputs $(\vec{v}, \pi)$ with $\vec{v}\in \F^n$ such that $v_i=p(\alpha_i)$ and $\pi=\eltone{q(\tau)}$ where
 	\[ q(X)=\frac{p(X)-r(X)}{a(X)} \]
-	In the above, $a(X)=(X-\alpha_1)\cdots(X-\alpha_n)$, while $q(X)$ and $r(X)$ are the quotient and remainder polynomials when
+	In the above equation, $a(X)=(X-\alpha_1)\cdots(X-\alpha_n)$, while $q(X)$ and $r(X)$ are the quotient and remainder polynomials when
 	 $p(X)$ is divided by $a(X)$.
 	%Note that the polynomials $a(X)$ and $r(X)$ can be computed by the verifier since $\{\alpha_i,v_i\}_{i\in [n]}$ are known and
 	%$a(X)=(X-\alpha_1)\cdots(X-\alpha_n)$ and $r(\alpha_i)=v_i$ for all $i\in [n]$ such that $0\leq \deg(r(X)) \leq n$.
-	\item $\KZGverify$ on input $(\srs,C,\vec{v}, \vec{\alpha}, \pi)$, outputs $1$ if the following equations hold, and $0$ otherwise.
+	\item $\KZGverify$ on input $(\srs,C,\vec{v}, \vec{\alpha}, \pi)$, outputs $1$ if the following equation is satisfied, and $0$ otherwise.
 	\begin{align*}
 		e(C-\eltone{r(\tau)}, \elttwo{1}) &= e(\pi, \elttwo{a(\tau)})
 	\end{align*}
