@@ -83,7 +83,7 @@ We summarize our contributions below.
 	with $N$ being the size of the RAM. Our dependence on the RAM size is sublinear, in contrast to the linear complexity
 	inherent in recent works on batching-efficient RAM using RSA accumulators~\cite{USENIX:OWWB20,CCS:CFHKKO22} or using generic memory checking techniques~\cite{NDSS:WSRBW15,USENIX:BCTV14,C:BCGTV13,SP:ZGKPP18}. All of our protocols are public-coin, and can be made non-interactive using standard techniques~\cite{C:FiaSha86}. 
 	
-	\item We implement our scheme in Rust\footnote{\url{https://anonymous.4open.science/r/updatableRAM/}}.
+	\item We implement our scheme in Rust\footnote{\url{https://github.com/nitsatiisc/caulk/tree/updateable-ram}}.
 	Experimentally, we show that our scheme performs significantly better than prior works,
 	and is eminently deployable on a commodity hardware.
 \end{itemize}
