@@ -1,0 +1,105 @@
+This is BibTeX, Version 0.99d (TeX Live 2022)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main.aux
+The style file: plain.bst
+Database file #1: crypto_crossref.bib
+Warning--string name "ccs22" is undefined
+--line 10595 of file crypto_crossref.bib
+Warning--string name "ccs22" is undefined
+--line 12651 of file crypto_crossref.bib
+Warning--string name "crypto19-1" is undefined
+--line 94762 of file crypto_crossref.bib
+Warning--string name "crypto13-2" is undefined
+--line 99448 of file crypto_crossref.bib
+Warning--string name "crypto02" is undefined
+--line 103390 of file crypto_crossref.bib
+Warning--string name "crypto87" is undefined
+--line 109023 of file crypto_crossref.bib
+Warning--string name "ieeesp18" is undefined
+--line 255978 of file crypto_crossref.bib
+Warning--string name "ndss15" is undefined
+--line 301656 of file crypto_crossref.bib
+Warning--string name "usenix20" is undefined
+--line 436039 of file crypto_crossref.bib
+Database file #2: main.bib
+A bad cross reference---entry "USENIX:OWWB20"
+refers to entry "", which doesn't exist
+A bad cross reference---entry "CCS:CFHKKO22"
+refers to entry "", which doesn't exist
+A bad cross reference---entry "C:Merkle87"
+refers to entry "", which doesn't exist
+A bad cross reference---entry "C:CamLys02"
+refers to entry "", which doesn't exist
+A bad cross reference---entry "C:BonBunFis19"
+refers to entry "", which doesn't exist
+A bad cross reference---entry "CCS:ZBKMNS22"
+refers to entry "", which doesn't exist
+A bad cross reference---entry "C:BCGTV13"
+refers to entry "", which doesn't exist
+A bad cross reference---entry "NDSS:WSRBW15"
+refers to entry "", which doesn't exist
+A bad cross reference---entry "SP:ZGKPP18"
+refers to entry "", which doesn't exist
+Warning--I didn't find a database entry for ""
+Warning--empty booktitle in C:BCGTV13
+Warning--empty year in C:BCGTV13
+Warning--empty booktitle in C:BonBunFis19
+Warning--empty year in C:BonBunFis19
+Warning--empty booktitle in C:CamLys02
+Warning--empty year in C:CamLys02
+Warning--empty booktitle in CCS:CFHKKO22
+Warning--empty year in CCS:CFHKKO22
+Warning--empty journal in ZkSync
+Warning--empty year in ZkSync
+Warning--empty booktitle in C:Merkle87
+Warning--empty year in C:Merkle87
+Warning--empty booktitle in USENIX:OWWB20
+Warning--empty year in USENIX:OWWB20
+Warning--empty booktitle in NDSS:WSRBW15
+Warning--empty year in NDSS:WSRBW15
+Warning--empty booktitle in CCS:ZBKMNS22
+Warning--empty year in CCS:ZBKMNS22
+Warning--empty booktitle in SP:ZGKPP18
+Warning--empty year in SP:ZGKPP18
+You've used 17 entries,
+            2118 wiz_defined-function locations,
+            592 strings with 7079 characters,
+and the built_in function-call counts, 6830 in all, are:
+= -- 648
+> -- 354
+< -- 9
++ -- 140
+- -- 122
+* -- 427
+:= -- 1043
+add.period$ -- 55
+call.type$ -- 17
+change.case$ -- 112
+chr.to.int$ -- 0
+cite$ -- 37
+duplicate$ -- 267
+empty$ -- 516
+format.name$ -- 122
+if$ -- 1477
+int.to.chr$ -- 0
+int.to.str$ -- 17
+missing$ -- 11
+newline$ -- 92
+num.names$ -- 34
+pop$ -- 196
+preamble$ -- 1
+purify$ -- 95
+quote$ -- 0
+skip$ -- 230
+stack$ -- 0
+substring$ -- 359
+swap$ -- 103
+text.length$ -- 9
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 68
+warning$ -- 20
+while$ -- 59
+width$ -- 19
+write$ -- 171
+(There were 9 error messages)

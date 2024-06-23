@@ -1,0 +1,1192 @@
+\appendix
+\input{app-prelims}
+\section{Argument for RAM From Polynomial Protocols}\label{sec:poly-proto-ram-app}
+In this section, we give a self-contained argument of knowledge for membership in the language
+$\LRAM{I}{m}{m}$ introduced in Section \ref{sec:model-for-ram}. We first consider the polynomial encoding
+of different RAM artefacts.
+\subsection{Polynomial Encoding}\label{subsec:poly-encoding}
+%The aim of this section is to encode artefacts such as RAM state, operations and transcripts as polynomials, and
+%translate checking memory consistency (equivalently, checking membership in $\LRAM{I}{n}{m}$) to checking polynomial identities
+%over the encoded polynomials. For
+%simplicity and its usefulness later, we consider the case $m=n$, and accordingly check the membership in the language $\LRAM{I}{m}{m}$.
+Let $k=3m$ and let $\omega$ be a primitive $k^{th}$ root of unity in $\F$.
+Let $\nu=\omega^3$, and thus $\nu$ is a primitive $m^{th}$ root of unity in $\F$ (We assume, these roots exist in $\F$).
+We recall $\setV$ as the subgroup consisting of $m^{th}$ roots of unity with associated Lagrange basis polynomials
+$\{\tau_i(X)\}_{i\in [m]}$, while we additionally introduce the set $\setH$ of $k^{th}$ roots of unity with
+$\{\lambda_i(X)\}_{i\in [k]}$ as the associated Lagrange polynomials.
+\begin{gather}\label{eq:interpolation-sets}
+\setH = \{\omega,\ldots,\omega^k\},\quad \setV = \{\nu,\ldots,\nu^m\}
+\end{gather}
+As before, we define the encoding of vectors in $\vec{f}\in \F^k$ as $\enc{f}{\setH}=\sum_{i\in [k]}f_i\lambda_i(X)$.
+%Let $\{\lambda_i(X)\}_{i=1}^k$ be lagrange basis polynomials
+%for the set $\setH$ and $\{\tau_i(X)\}_{i=1}^m$ be the lagrange polynomials for the set $\setV$ satisfying
+%$\lambda_i(\omega^j)=\delta_{ij}$ for $i,j\in [k]$ and $\tau_i(\nu^j)=\delta_{ij}$ for $i,j\in [m]$.
+%We use $\setH$ to encode a vector $\vec{f}=(f_1,\ldots,f_k)$ of size $k$ as the polynomial $f(X)\in \F_{<k}[X]$ such that $f(\omega^i)=f_i$ for $i\in [k]$.
+%Similarly, we use $\setV$ to encode a vector
+%$\vec{g}=(g_1,\ldots,g_m)$ of size $m$ as the polynomial $g(X)\in F_{<m}[X]$ such that $g(\nu^i)=g_i$ for $i\in [m]$. We use
+%the notation $\enc{f}{\setH}$ and $\enc{g}{\setV}$ to denote polynomial encodings of vectors $\vec{f}\in \F^k$ and $\vec{g}\in \F^m$
+%respectively.
+%In the other direction, for a polynomial $f(X)\in \F[X]$,
+%we use $\vec{f}_{|_\setH}$ and $\vec{f}_{|_\setV}$ to denote the vectors $(f(\omega^1),\ldots,f(\omega^k))$ and $(f(\nu^1),\ldots,f(\nu^m))$ respectively.
+%The encoding of vectors as polynomials can be succinctly described using lagrange basis polynomials.
+%Then we have $\enc{f}{\setH}=\sum_{i=1}^k f_i\lambda_i(X)$ and $\enc{g}{\setV}=\sum_{i=1}^m g_i\tau_i(X)$.
+We canonically extend the encoding of vectors to encode RAM, operations and transcripts by encoding their component vectors.
+Thus, for a RAM $\vecT=(\vec{a},\vec{v})\in \RAM{I}{m}$, we define its encoding
+$\wt{T}=(a(X),v(X))$ where $a(X),v(X)\in \F_{<m}[X]$ encode vectors $\vec{a}, \vec{v}$ respectively.
+Given an operation sequence
+$\vec{o}=(o_1,\ldots,o_m)$ with $o_i=(\bar{\op}_i,\bar{a}_i,\bar{v}_i)$ we encode $\vec{o}$ as
+$\wt{O}$ $=$ $(\bar{\op}(X)$ ,$\bar{a}(X)$ ,$\bar{v}(X))$
+where $\bar{\op}(X)$ encodes the
+vector $\vec{\op}=(\bar{\op}_1,\ldots,\bar{\op}_m)$, $\bar{a}(X)$ encodes the vector $(\bar{a}_1,\ldots,\bar{a}_m)$ and
+$\bar{v}(X)$encodes the vector $(\bar{v}_1,\ldots,\bar{v}_m)$.
+Finally, a transcript $\tr=(\vec{t},\vec{\op},\vec{A},\vec{V})$ for tuples $(\vecT,\vec{o},\vecT')$ where $\vecT,\vecT'$ are RAMs of size $m$,
+and $\vec{o}$ is an operation sequence of size $m$ is encoded as $\wt{\tr}$ $=$ $(t(X)$, $\op(X)$, $A(X)$, $V(X))$
+where the polynomials $t(X),\op(X),V(X)$ and $A(X)$ encode the respective vectors in $\F^k$ (See Section \ref{sec:model-for-ram}).
+
+\subsection{Relations over Polynomial Encodings}\label{subsec:encoded-relations}
+In this section, we describe polynomial checks for two important relations we need in subsequent sections, viz,
+(i) checking concatenation of vectors and (ii) checking monotonicity and load-store consistency of a transcript.
+The lemma below specifies the polynomial identities for verifying
+that vector $\vec{v}\in \F^k$ is concatenation of vectors $\vec{a},\vec{b},\vec{c}$ in $\F^m$.
+
+\begin{lemma}\label{lem:vec-concatenation}
+Let $\vec{a},\vec{b},\vec{c}\in \F^m$  and $v\in \F^k$ be vectors encoded by polynomials
+$a(X),b(X),c(X)$ and $v(X)$ respectively. Then,
+\begin{align}
+    a(X^3) - v(X)  &= 0  \quad \text{ mod $Z(X)$ } \tag{A1}\label{eq:A1}\\
+    b(X^3) - v(\omega^m X)  &= 0   \quad \text{ mod $Z(X)$ } \tag{A2}\label{eq:A2}\\
+    c(X^3) - v(\omega^{2m} X) &= 0 \quad \text{ mod $Z(X)$ } \tag{A3}\label{eq:A3}
+\end{align}
+for $Z(X)=\prod_{i=1}^m (X-\omega^i)$ if and only if $\vec{v}=\vec{a}||\vec{b}||\vec{c}$.
+\end{lemma}
+\begin{proof}
+    Assume that the polynomial identities hold. Substituting $X=\omega^i$ for $i\in [m]$ in above equations implies
+    for $i\in [m]$: $a_i=v_i$ (Eq \eqref{eq:A1}), $b_i=v_{m+i}$ (Eq \eqref{eq:A2}) and $c_i=v_{2m+i}$ (Eq \eqref{eq:A3}),
+    which together imply $\vec{v}=\vec{a}||\vec{b}||\vec{c}$. Converse follows by observing that $\vec{v}=\vec{a}||\vec{b}||\vec{c}$
+    implies that $v(X) = a(X^3)$, $v(\omega^m X)=b(X^3)$ and $v(\omega^{2m} X)=c(X^3)$ holds for all $X=\omega^i, i\in [m]$.
+    Thus, the equalities hold modulo the polynomial $Z(X)$ as defined above.
+\end{proof}
+
+
+Next, we specify polynomial checks on the encoding of a transcript to ensure it satisfies address-ordering and load-store consistency.
+Let $N$ be an upper bound on the values of $\vec{A}$, i.e, the index set $\setind\subseteq [N]$.
+Let $\tr=(\vec{t},\vec{\op},\vec{A},\vec{V})$ be a transcript encoded as
+$\wt{\tr}=(t(X),\op(X),A(X),V(X))$. Recall that we need to check two conditions on $\tr$, viz, (i) {\em monotonicty}:
+the transcript is sorted by address and timestamp respectively, i.e, $A_i\leq A_{i+1}$ for all $i < k$ and
+$t_i < t_{i+1}$ whenever $A_i=A_{i+1}$, (ii) {\em load-store consistency}: whenever $\op_{i+1}=0$ and $A_i=A_{i+1}$,
+we have $V_i=V_{i+1}$.
+To do so, we exhibit disjoint sets $I_1,I_2$ with $I_1\uplus I_2=[k-1]$ such that: (i) for all
+$i\in I_1$, $A_i < A_{i+1}$, (ii) for all $i\in I_2$, $(A_i = A_{i+1})\wedge (t_i < t_{i+1})$ and (iii) for all $i\in I_2$,
+$(\op_i=1)\vee (V_i = V_{i+1})$.
+Note that the conditions on the sets $I_1$ and $I_2$ ensures monotonicity.
+Moreover, it can be seen that load-store consistency requirements are satisfied for all $i\in I_1$ (as $A_i\neq A_{i+1}$).
+Similarly,load-store consistency also holds for all $i\in I_2$.
+It remains to exhibit the sets and show that they satisfy the above invariants using polynomials, as in the following
+lemma:
+\begin{lemma}\label{lem:addr-ordered-transcript}
+Let $\wt{\tr}$ be a polynomial encoding of transcript $\tr$ of size $k$, given by polynomials $t(X),\op(X),A(X)$ and $V(X)$,
+with index set $[N]$. Then assuming $kN<|\F|$, $\tr$ is address ordered and satisfies load-store consistency if and only if there exist polynomials
+$Z_1,Z_2,\delta_T,\delta_A$
+such that the following hold:
+\begin{align}%\label{eq:loadstore-consitency-constraints}
+    & A(\omega X) - A(X) - \delta_A(X)= 0 \text{ mod }\, \mathbb{Z}_1(X) \tag{C1} \label{eq:C1} \\
+    & A(\omega X) - A(X) = 0  \text{ mod } Z_2(X) \tag{C2} \label{eq:C2} \\
+    & t(\omega X) - t(X) - \delta_T(X) = 0  \text{ mod } Z_2(X) \tag{C3} \label{eq:C3} \\
+    & (\op(X) - 1)(V(\omega X) - V(X)) = 0  \text{ mod } Z_2(X) \tag{C4} \label{eq:C4} \\
+    & Z_1(X)\cdot Z_2(X)\cdot (X-1) = \mathbb{Z}_\setH(X) \quad  \tag{C5} \label{eq:C5} \\
+    & 1\leq A(\omega^i) \leq N  \quad \tag{C6} \label{eq:C6} \\
+    & 1\leq t(\omega^i) \leq N, 1\leq \delta_A(\omega^i)\leq N,\ 1\leq \delta_T(\omega^i)\leq N \text{ for } i\in [k] \tag{C7} \label{eq:C7}
+\end{align}
+\end{lemma}
+\begin{proof}
+    Suppose there exist polynomials $Z_1(X),Z_2(X),\delta_T(X)$ and $\delta_A(X)$ satisfying above identities. From Equation
+    ~\eqref{eq:C5}, we conclude that their exist sets $I_1,I_2$ with $I_1\uplus I_2=[k-1]$ such that $Z_b(X)$, $b\in \{1,2\}$ is the
+    vanishing polynomial of the set $\{\omega^i: i\in I_b\}$. We now note that the following are true for $i\in I_1$:
+    \begin{itemize}[leftmargin=1em]
+        \item $A(\omega^{i+1})-A(\omega^i)=\delta_A(\omega^i)$. Since $1\leq \delta_A(\omega^i)\leq N$, this ensures $A_i < A_{i+1}$ for the vector $\vec{A}$ encoded
+        by $A(X)$. We note that $kN < |\F|$ implies there is no overflow modulo the field characteristic.
+    \end{itemize}
+    Similarly, it can be seen that for $i\in I_2$, we must have (i) $A_i=A_{i+1}\wedge t_i < t_{i+1}$
+    and (ii) $\op_i=1\,\vee\,V_i=V_{i+1}$. Together these imply that the encoded transcript is address-ordered.
+\end{proof}
+
+Protocols facilitating the checks mentioned in Lemma~\ref{lem:vec-concatenation} and Lemma~\ref{lem:addr-ordered-transcript} are presented in Figure \ref{fig:concatenation} and \ref{fig:encoded-relations} respectively.
+
+\begin{figure}[htbp]
+	\begin{mdframed}
+		{
+			{\bf Common Input}: Commitments $c_a$, $c_b$, $c_c$, $c_v$, and $\gone{Z}$ (to the polynomial
+			$Z(X)=\prod_{i=1}^m (X-\omega^i)$). \\
+			{\bf Prover's Input}: Vectors $\vec{a},\vec{b},\vec{c}\in\F^m$ and $\vec{v}\in \F^k$.
+			\begin{enumerate}[leftmargin=1em, label=\arabic*.]
+				\item $\verifier$ sends $\gamma\gets \F$.
+				\item $\prover$ computes:
+				\begin{align}
+					& h(X) = a(X) + \gamma b(X) + \gamma^2 c(X),\\
+					& Q(X) = (h(X^3) - v(X) - \gamma v(\omega^m X) - \gamma^2 v(\omega^{2m} X))/Z(X).
+				\end{align}
+				\item $\prover$ sends commitment $\gone{Q}$ = $\gone{Q(X)}$.
+				\item $\verifier$ sends $s\gets\F$.
+				\item $\prover$ sends evaluations $\val{s}{v}=v(s)$, $\val{\omega^m s}{v}=v(\omega^m s)$,
+				$\val{\omega^{2m}s}{v}=v(\omega^{2m} s)$, $\val{s^3}{h}=h(s^3)$, $\val{s}{Q}=Q(s)$ and $\val{s}{Z}=Z(s)$.
+				\item $\verifier$ sends $r\gets\F$.
+				\item $\prover$ computes $\kzg$ proofs:
+				\begin{itemize}[leftmargin=1em]
+					\item $\Pi_v=\kzgprove(\srs,v,(s,\omega^m s, \omega^{2m}s))$.
+					\item $\Pi_h=\kzgprove(\srs,h,s^3)$.
+					\item $\Pi_f=\kzgprove(\srs,f,s)$ where $f(X)=Z(X) + rQ(X)$.
+				\end{itemize}
+				\item $\prover$ sends $\Pi_v$, $\Pi_h$ and $\Pi_f$.
+				\item $\verifier$ Computes commitments $\gone{h}$ and $\gone{f}$ using homomorphism.
+				\item $\verifier$ checks:
+				\begin{itemize}[leftmargin=1em]
+					\item $\kzgverify(\srs,\gone{v}, \vec{e}_v, \vec{p}_v, \Pi_v)$ where
+					$\vec{p}_v$ = $(s,\omega^m s, \omega^{2m}s)$ and $\vec{e}_v$ = $(\val{s}{v}, \val{\omega^m s}{v}, \val{\omega^{2m} s}{v})$.
+					\item $\kzgverify(\srs,\gone{h},  \val{s^3}{h}, s^3,\Pi_h)$.
+					\item $\kzgverify(\srs,\gone{f},  \val{s}{Z} + r\val{s}{Q}, s,\Pi_f)$.
+					\item $\val{s}{Q}\cdot \val{s}{Z} = \val{s^3}{h}-\val{s}{v}-\gamma \val{\omega^m s}{v}-\gamma^2\val{\omega^{2m}s}{v}$.
+				\end{itemize}
+				\item $\verifier$ outputs accept if all the above checks succeed, else it rejects.
+			\end{enumerate}
+		}
+	\end{mdframed}
+	%\vspace*{-5mm}
+	\caption{Check concatenation over committed vectors.}
+	\label{fig:concatenation}
+\end{figure}
+
+\begin{figure}[htbp]
+
+    \begin{mdframed}
+    {
+            {\bf Common Input}: Commitments $c_t$, $c_{op}$, $c_A$ and $c_V$ to $\vec{t},\vec{op},\vec{A}$ and $\vec{V}$ constituting the transcript $\tr$.
+
+            {\bf Prover's Input}: $\tr=(\vec{t}, \vec{op}, \vec{A}, \vec{V})$ and its polynomial encoding $\wt{\tr}=(t(X), \op(X), A(X), V(X))$.
+        \begin{enumerate}[leftmargin=1em, label=\arabic*]
+            \item Prover determines sets $I_1, I_2$ as described in Appendix A.2.
+            \item Prover computes polynomials $Z_1(X)$, $Z_2(X)$, $\delta_T(X)$, $\delta_A(X)$.
+            \item $\prover$ sends $\gone{Z_1(X)}$, $\gone{Z_2(X)}$, $\gone{\delta_T(X)}$, $\gone{\delta_A(X)}$.
+            \item $\verifier$ sends $\gamma\gets \F$.
+            \item $\prover$ computes:
+            $$Q_1(X) =  (A(\omega X) - A(X) - \delta_A(X)) / \Z_1(X)$$
+            $$Q_2(X) =  [(A(\omega X) - A(X))+\gamma(t(\omega X) - t(X) - \delta_T(X))+$$
+            $$ \gamma^2 (\op(X) - 1)(V(\omega X) - V(X))] / Z_2(X) $$
+
+
+            \item $\prover$ sends commitments $\gone{Q_1(X)}$, $\gone{Q_2(X)}$.
+            \item $\verifier$ sends $s\gets\F$.
+            \item $\prover$ sends evaluations $\val{s}{A}=A(s)$, $\val{\omega s}{A}=A(\omega s)$, $\val{s}{\delta_A} = \delta_A(s)$, $\val{s}{t}=t(s)$, $\val{\omega s}{t}=t(\omega s)$, $\val{s}{\delta_T} = \delta_T(s)$, $\val{s}{\op}=\op(s)$, $\val{s}{V}=V(s)$, $\val{\omega s}{V}=V(\omega s)$, $\val{s}{Q_1}=Q_1(s)$, $\val{s}{Q_2}=Q_2(s)$, $\val{s}{Z_1}=Z_1(s)$, $\val{s}{Z_2}=Z_2(s)$.
+            \item $\verifier$ checks:
+            \begin{itemize}
+                \item $\val{s}{Q_1}\cdot \val{s}{Z_1} = (\val{\omega s}{A} - \val{s}{A} - \val{s}{\delta_A})$.
+                \item  $\val{s}{Q_2}\cdot \val{s}{Z_2} = (\val{\omega s}{A} - \val{s}{A})+\gamma (\val{\omega s}{t} - \val{s}{t} - \val{s}{\delta_T})+\gamma^2 (\val{s}{\op}-1)(\val{\omega s}{V} - \val{s}{V}) $.
+                \item $\val{s}{Z_1} \cdot \val{s}{Z_2}=s^{3m}-1$.
+            \end{itemize}
+            \item $\verifier$ sends $r_1, r_2\gets\F$.
+            \item $\prover$ computes:
+            \begin{itemize}
+                \item $\Phi_{ws}(X)= A(X)+r_1 t(X) +r_1^2 V(X)$.
+                \item $\Phi_s(X)=A(X)+r_2 \delta_A(X)+r_2^2 t(X)+ r_2^3 \delta_T(X)+r_2^4 \op(X) +r_2^5 V(X)+r_2^6 Q_1(X)+ r_2^7 Q_2(x)+r_2^8 Z_1(X)+r_2^9 Z_2(X)$.
+                \item $\prover$ computes $\Pi_{\omega s} = \KZGopen(\srs, \Phi_{\omega s}(X), \omega s)$.
+                \item $\prover$ computes $\Pi_{s} = \KZGopen(\srs, \Phi_{s}(X),s)$.
+
+            \end{itemize}
+            \item $\prover$ sends $\Pi_{\omega s}, \Pi_{s}$.
+            \item $\verifier$ computes:
+            \begin{itemize}
+                \item $[\Phi_{\omega s}(X)]_1= c_A +r_1 c_t + r_1^2 c_V$.
+                \item $[\Phi_{s}(X)]_1= c_A +r_2 [\delta_A(X)]_1 + r_2^2 c_t +r_2^3 [\delta_T(X)]_1 +r_2^4 c_{\op} +r_2^5 c_V +r_2^6 [Q_1(X)]_1 +r_2^7 [Q_2(X)]_1 +r_2^8 [Z_1(X)]_1 + r_2^9 [Z_2(X)]_1 $.
+                \item $V_{ws}= \val{\omega s}{A}+r_1 \val{\omega s}{t}+ r_1^2 \val{\omega s}{V}$.
+                \item $V_s=\val{s}{A}+r_2 \val{s}{\delta_A}+r_2^2 \val{s}{t}+r_2^3 \val{s}{\delta_T}+r_2^4 \val{s}{\op}
+                +r_2^5 \val{s}{V} +r_2^6 \val{s}{Q_1} +r_2^7 \val{s}{Q_2}+r_2^8 \val{s}{Z_1} +r_2^9 \val{s}{Z_2}$.
+            \end{itemize}
+            \item $\verifier$ checks:
+            \begin{itemize}
+                \item $\KZGverify(\srs, \gone{\Phi_{ws}}, V_{ws}, \omega s, \Pi_{\omega s})$.
+                \item $\KZGverify(\srs, \gone{\Phi_{s}}, V_{s}, s, \Pi_{s})$.
+            \end{itemize}
+
+            \item $\prover$ and $\verifier$ invoke sub-vector arguments $(\subvecprover,\subvecverifier)$ (eg. ~\cite{EPRINT:EagFioGab22})
+            to prove that $(\srs,c_A,c_I)$, $(\srs,c_t,c_I)$, $(\srs,\gone{\delta_A(X)},c_I)$ and $(\srs,\gone{\delta_T(X)},c_I)$
+            are in $\RSVEC$.
+
+            \item $\verifier$ accepts if all checks succeed and the sub-vector arguments accept. Otherwise it rejects.
+        \end{enumerate}
+    }
+    \end{mdframed}
+
+    \caption{Check that transcript is address ordered and load-store consistent.}
+    \label{fig:encoded-relations}
+\end{figure}
+
+\section{Succinct Argument for Verifiable RAM}\label{sec:poly-proto-ram}
+The polynomial encodings in the previous section can be used to polynomial protocol for
+checking the membership in the language $\LRAM{I}{m}{m}$ for $m\in \N$. The polynomial protocol can be subsequently
+be compiled into a succinct argument using an extractable polynomial commitment scheme.
+In this section, we use $\kzg$ polynomial commitment scheme to obtain a succinct argument for checking membership in $\LRAM{I}{m}{m}$
+in the Algebraic Group Model (AGM).
+At a high level, to prove $(\vecT,\vec{o},\vecT')\in \LRAM{I}{m}{m}$, the prover
+constructs time ordered transcript $\tr$ and then permutes it to obtain the address sorted transcript $\tr^\ast$.
+It then sends the polynomial encodings of $\vecT,\vec{o},\vecT',\tr$ and $\tr^\ast$ to the verifier, who verifies that:
+\begin{enumerate}[leftmargin=2em]
+    \item The time ordered transcript is correctly constructed, i.e, $\tr=\TOT(\vecT,\vec{o},\vecT')$.
+     This is achieved using the protocol in Figure~\ref{fig:time-ordered-transcript}.
+    \item The transcript $\tr^\ast$ is a permutation of the transcript $\tr$, i.e, $\tr^\ast=\sigma(\tr)$ for some permutation $\sigma$ of $[k]$.
+    The protocol for this check appears in Figure~\ref{fig:permutated-transcripts}.
+    \item The transcript $\tr^\ast$ is address ordered and satisfies load-store consistency. We describe the protocol
+    to check this property of transcripts in Figure~\ref{fig:encoded-relations}.
+\end{enumerate}
+We check above conditions over commitments. Let $\srs$ denote a $\kzg$ setup over a bi-linear group, with
+prime order groups $\Gone, \Gtwo$ and $\GT$. We canonically commit to RAM, operation sequences and transcripts by committing to their
+polynomial encodings. Commitment of an encoding represented as tuple of polynomials is simply the tuple consisting of commitments of the component
+polynomials. We now define
+the relation $\CLRAM$ below, and present a succinct argument for the same.
+\begin{definition}\label{defn:committed-vram}
+Let $\CLRAM$ consist of tuples $((c_T, c_o, c_T')$, $(\vecT, \vec{o},\vecT'))$ where $c_T$ $=$ $\kzgcommit(\srs, \wt{T})$,
+$c_T'$ $=$ $\kzgcommit(\srs, \wt{T'})$,
+$c_o$ $=$ $\kzgcommit(\srs,\wt{O})$ commit to $\vecT$, $\vecT'$ and $\vec{o}$ with $(\vecT,\vec{o},\vecT')\in \LRAM{I}{m}{m}$.
+\end{definition}
+\noindent In the above definition we have $c_T=(c_a,c_v)$ where $c_a$ and $c_v$ are $\kzg$ commitments to polynomials $a(X)$ and $v(X)$ in
+the encoding $\wt{T}=(a(X), v(X))$. Similarly we parse $c_T'=(c_a', c_v')$ and $c_o=(\bar{c}_\op, \bar{c}_a, \bar{c}_v)$ (see Appendix
+\ref{subsec:poly-encoding} for polynomial encodings).
+For proving relation~\ref{defn:committed-vram}, prover's input consists of initial RAM state $\vecT=(\vec{a},\vec{v})$,
+final RAM state $\vecT'=(\vec{a'},\vec{v'})$, operation sequence $\vec{o}=(o_1,\ldots,o_m)$ with $o_i=(\bar{\op}_i,\bar{a}_i,\bar{v}_i)$,
+time-ordered transcript $\tr=(\vec{t},\vec{\op},\vec{A},\vec{V})$ and address-ordered transcript $\tr^\ast=(\vec{t^\ast},\vec{\op^\ast},
+\vec{A^\ast},\vec{V^\ast})$ obtained from $\tr$ using a permutation $\sigma:[k]\rightarrow [k]$.
+Verifier's input consists of the commitments $c_T, c_o$ and $c_T'$ as described above.
+
+The prover starts the protocol by sending commitments $c_\tr$ and $c^\ast_\tr$ to the transcripts $\tr$ and $\tr^\ast$ respectively.
+To show that $\tr$ is correctly formed, the prover needs to prove the concatenations:
+(i) $\vec{\op}=0^m||(\bar{\op}_1,\ldots,\bar{\op}_m)||0^m$, (ii) $\vec{A}=\vec{a}||(\bar{a}_1,\ldots,\bar{a}_m)||\vec{a'}$
+and (iii) $\vec{V}=\vec{v}||(\bar{v}_1,\ldots,\bar{v}_m)||\vec{v'}$. Note that the time-stamp column $\vec{t}$ is implicitly assumed
+to be $(1,\ldots,k)$.
+The verifier checks the concatenations using Lemma \ref{lem:vec-concatenation}.
+It uses a random challenge $\beta$ to reduce the three concatenations to one concatenation, and uses another challenge $\gamma$
+to reduce the three polynomial checks in Lemma \ref{lem:vec-concatenation} to a single check.
+The complete polynomial protocol is detailed in Figure \ref{fig:time-ordered-transcript}.
+
+
+\begin{table*}[bt]
+    \begin{tabular}{|l|l|l|l|l|}
+        \hline
+        {\bf Component  }                                                                                      & {\bf Protocol} & {\bf Prover Work}      & {\bf Verifier Work} & {\bf Communication}   \\ \hline
+        Concatenation of transcripts                                                                    & Figure ~\ref{fig:time-ordered-transcript}    & $O(m \log m)\,\F,\, O(m)\,\Gone$      & $2P$            & $4\Gone$, $6\F$         \\ \hline
+        Permutation of transcripts                                                                      & Figure ~\ref{fig:permutated-transcripts}   & $O(m \log m)\,\F,\, O(m)\,\Gone$       & $2P$            & $4\Gone$, $5\F$         \\ \hline
+        \begin{tabular}[c]{@{}l@{}}Memory consistency \& \\ address ordering of transcript\end{tabular} & Figure ~\ref{fig:encoded-relations}    & $O(m \log m)\,\F,\, O(m)\,\Gone$       & $6P$            & $20\Gone$,$19\F$        \\ \hline
+        \rowcolor{lightgray}
+        Polynomial Protocol for RAM                                                                     & Figure ~\ref{fig:covering-protocol}   & $O(m \log m)\,\F,\, O(m)\,\Gone$      & $7P$            & $36\Gone$, $30\F$       \\ \hline
+
+    \end{tabular}
+    \caption{Efficiency parameters for components of polynomial protocol for RAM. Here $m$ denotes both the size of
+    the RAM and number of operations (the special case we consider). $P$ denotes a pairing evaluation, while $\Gone$
+    $\Gtwo$ and $\F$ denote the groups and the scalar field of the bilinear group used for instantiating the protocol.
+    }
+    \label{tbl:components-poly-ram}
+    \vspace*{-5mm}
+\end{table*}
+
+
+%\begin{tcolorbox}
+\begin{figure}[htbp]
+
+    \begin{mdframed}
+    {
+            {\bf Common Input}: Commitments $c_T=(c_a,c_v)$, $c_o=(\bar{c}_\op, \bar{c}_a, \bar{c}_v)$, $c_T'=(c_a', c_v')$
+        and $c_\tr=(c_t, c_\op, c_A, c_V)$ to $\vecT,\vec{o},\vecT'$ and $\tr$(which is supposed to be the time ordered transcript) respectively. Commitment $\gone{Z(X)}$ to the polynomial
+        $Z(X)=\prod_{i=1}^m (X-\omega^i)$.\\
+    {\bf Prover's Input}: $\tr, \vecT, \vecT', \vec{o}$ and their polynomial encodings, $Z(X)$.
+        \begin{enumerate}[leftmargin=1em, label=\arabic*.]
+            \item $\verifier$ sends $\beta,\gamma\gets \F$.
+            \item $\prover$ computes:
+            \begin{align}\label{eq:poly-constraints}
+            & G_1(X) = a(X) + \beta v(X),\, G_2(X) = \bar{a}(X) + \beta \bar{v}(X) + \beta^2 \bar{\op}(X) \tag{A1} \\
+            & G_3(X) = a^*(X) + \beta v^*(X),\, G(X) = A(X) + \beta V(X) + \beta^2 \op(X) \tag{A2} \\
+            & H(X) = G_1(X) + \gamma G_2(X) + \gamma^2 G_3(X), \tag{A3} \\
+            & Q(X) = [(H(X^3) - G(X) - \gamma G(\omega^m X) - \gamma^2 G(\omega^{2m} X))]/Z(X) \tag{A4}
+            \end{align}
+            \item $\prover$ sends commitment $\gone{Q}$ to $Q(X)$.
+            \item $\verifier$ sends $s\gets\F$.
+            \item $\prover$ sends evaluations $\val{s}{G}=G(s)$, $\val{\omega^m s}{G}=G(\omega^m s)$,
+            $\val{\omega^{2m}s}{G}=G(\omega^{2m} s)$, $\val{s^3}{H}=H(s^3)$, $\val{s}{Q}=Q(s)$ and $\val{s}{Z}=Z(s)$.
+            \item $\verifier$ sends $r\gets\F$.
+            \item $\prover$ sends $\kzg$ proofs:
+            \begin{itemize}[leftmargin=1em]
+                \item $\Pi_G=\kzgprove(\srs,G(X),(s,\omega^m s, \omega^{2m}s))$.
+                \item $\Pi_H=\kzgprove(\srs,H(X),s^3)$.
+                \item $\Pi_F=\kzgprove(\srs,F(X),s)$ where $F(X)=Z(X) + rQ(X)$.
+            \end{itemize}
+            \item $\verifier$ computes $\gone{G(X)},\gone{H(X)}$ and $\gone{F(X)}$ using homomorphism.
+            \item $\verifier$ checks:
+            \begin{itemize}[leftmargin=1em]
+                \item $\kzgverify(\srs,\gone{G}, (\val{s}{G}, \val{\omega^m s}{G}, \val{\omega^{2m} s}{G}),\\(s,\omega^m s, \omega^{2m}s),\Pi_G)$.
+                \item $\kzgverify(\srs,\gone{H}, \val{s^3}{H}, s^3, \Pi_H)$.
+                \item $\kzgverify(\srs,\gone{F}, \val{s}{Z} + r\val{s}{Q}, s, \Pi_F)$.
+                \item $\val{s}{Q}\cdot \val{s}{Z} = \val{s^3}{H}-\val{s}{G}-\gamma \val{\omega^m s}{G}-\gamma^2\val{\omega^{2m}s}{G}$.
+            \end{itemize}
+            \item $\verifier$ accepts if all the above checks succeeds, otherwise it rejects.
+        \end{enumerate}
+    }
+    \end{mdframed}
+%    \vspace*{-5mm}
+    \caption{Check the correctness of time-ordered transcript.}
+    \label{fig:time-ordered-transcript}
+\end{figure}
+%\end{tcolorbox}
+
+Next, we show a polynomial protocol for proving that the transcript $\tr^\ast$ is a permutation of the transcript $\tr$.
+We first recall the permutation argument for vectors from ~\cite{EPRINT:GabWilCio19}.
+\begin{lemma}[Permutation Check \cite{EPRINT:GabWilCio19}]\label{lem:perm-argument}
+Let $f(X), g(X)$ be polynomials in $\F[\,X\,]$. Then, the vectors $\vec{f}, \vec{g}\in \F^k$ encoded by the polynomials
+are permutations of each other if and only if with overwhelming probability over the choice of $\alpha\gets \F$,
+there exists a polynomial $z(X)$ satisfying the polynomial constraints:
+
+\begin{align}
+    \lambda_1(X)(z(X) -1) &= 0 \text{ mod } Z_\setH(X) \tag{B1} \label{eq:B1} \\
+    (\alpha - g(X))z(\omega X) &= (\alpha - f(X))z(X) \text{ mod } Z_\setH(X) \tag{B2} \label{eq:B2}
+\end{align}
+
+\end{lemma}
+The polynomial protocol in Figure \ref{fig:permutated-transcripts} essentially invokes the above argument on
+the random linear combination of the columns of the respective transcripts.
+%\begin{tcolorbox}
+\begin{figure}[htbp]
+
+    \begin{mdframed}
+    {
+            {\bf Common Input}: Commitments $c_\tr=(c_t,c_\op,c_A, c_V)$ and $c_\tr^\ast=(c_t^\ast,c_\op^\ast, c_A^\ast, c_V^\ast)$
+        of transcripts $\tr$ and $\tr^\ast$ respectively.\\
+    {\bf Prover's Input}: Transcripts $\tr, \tr^{*}$ and their polynomial encodings, permutation $\sigma$ such that $\tr^{*}=\sigma(\tr)$.
+        \begin{enumerate}[leftmargin=1em, label=\arabic*]
+            \item $\verifier$ sends $\alpha,\beta, \chi\gets \F$.
+            \item $\prover$ computes $f(X)=t(X) + \beta \op(X) + \beta^2 A(X) + \beta^3 V(X)$, $g(X) = t^\ast(X) + \beta \op^\ast(X)$
+            $+ \beta^2 A^\ast(X) + \beta^3 V^\ast(X)$. It then computes polynomials $z(X),q(X)$ as:
+            \begin{itemize}[leftmargin=1em]
+                \item Interpolate polynomial $z(X)$ of degree $k-1$ such that $z(\omega)=1$ and
+                $z(\omega^{i+1})=\prod_{j=1}^i (\alpha - f(\omega^j))/(\alpha - g(\omega^j))$ for $1\leq i\leq k-1$.
+                \item Compute $q(X) = ((\alpha - g(X))z(\omega X) - (\alpha - f(X))z(X) + \chi\lambda_1(X)(z(X) - 1))/\mathbb{Z}_{\setH}(X)$.
+            \end{itemize}
+            \item $\prover$ sends commitments $\gone{z(X)}$ and $\gone{q(X)}$ to polynomials $z(X)$ and $q(X)$ respectively.
+            \item $\verifier$ computes commitments $[f]_1, [g]_1$ by homomorphism.
+            \item $\verifier$ checks that $q(X)Z_\setH(X)$ = $(\alpha - g(X))z(\omega X)-(\alpha - f(X))z(X) + \chi\lambda_1(X)(z(X) - 1)$
+            by requesting evaluations and $\kzg$ proofs of polynomials $f,g, q, z$ at a random point, say $s$ and evaluation and $\kzg$ proof of $z$ at $\omega s$.
+            \item $\verifier$ accepts if all the checks succeed, else it rejects.
+        \end{enumerate}
+    }
+    \end{mdframed}
+%    \vspace*{-5mm}
+    \caption{Check that transcripts are permutations of each other.}
+    \label{fig:permutated-transcripts}
+\end{figure}
+
+Finally, we see that Lemma~\ref{lem:addr-ordered-transcript} implies a polynomial protocol to check that the transcript
+$\tr^\ast$ is address ordered and satisfies load-store consistency, which
+essentially involves the prover identifying sets
+$I_1, I_2$ as described in Appendix \ref{subsec:encoded-relations} and sending auxiliary polynomials $Z_1(X),Z_2(X),\delta^\ast_A(X)$ and $\delta^\ast_T(X)$ to the verifier.
+The verifier then checks the identities (C1)-(C6) in Lemma \ref{lem:addr-ordered-transcript}.
+The range checks in (C7) can be checked using polynomial protocols in sub-vector lookup arguments such as
+~\cite{EPRINT:PosKat22,EPRINT:EagFioGab22,PKC:CFFLL24,PKC:ZSG24}.
+The protocol (compiled using KZG commitments in AGM) can be found in Figure~\ref{fig:encoded-relations}.
+The overall protocol for $\CLRAM$ which combines invokes protocols in Figures~\ref{fig:time-ordered-transcript},\ref{fig:permutated-transcripts}
+and \ref{fig:encoded-relations} as sub-protocols is presented in Figure~\ref{fig:covering-protocol}.
+\begin{figure}[htbp]
+
+    \begin{mdframed}
+    {
+            {\bf Common Input}: Commitments $c_T=(c_a,c_v)$, $c_o=(\bar{c}_\op, \bar{c}_a, \bar{c}_v)$, $c_T'=(c_a', c_v')$.
+
+            {\bf Prover's Input}: $ \vecT, \vecT', \vec{o}$ and their polynomial encodings.
+        \begin{enumerate}[leftmargin=1em, label=\arabic*.]
+            \item $\prover$ computes:
+            \begin{itemize}
+                \item $\tr$, which is the time ordered transcript corresponding to $\vecT, \vec{o}, \vecT'$, and its polynomial encoding.
+                \item $Z(X)=\prod_{i=1}^m (X-\omega^i)$.
+                \item $c_\tr=(c_t, c_\op, c_A, c_V)$ which is the commitment of $\tr$.
+                \item $[Z(X)]_1$.
+            \end{itemize}
+
+            \item $\prover$ sends  $c_\tr=(c_t, c_\op, c_A, c_V)$ and $[Z(X)]_1$.
+            \item $\prover$ and $\verifier$ run the protocol for checking correctness of time ordered transcript as in Figure~\ref{fig:time-ordered-transcript}.
+            \item $\prover$ computes the address ordered transcript $\tr^{*}$ from the time ordered transcript $\tr$ by permuting suitably. It also computes its polynomial encoding.
+            \item $\prover$ computes the permutation $\sigma$ such that $\tr^{*}= \sigma(\tr)$ (this is computed along with the $\tr^{*}$).
+            \item $\prover$ computes the commitment $c_\tr^\ast=(c_t^\ast,c_\op^\ast, c_A^\ast, c_V^\ast)$ of $\tr^{*}$.
+            \item $\prover$ sends  $c_\tr^\ast$.
+            \item $\prover$ and $\verifier$ run the protocol for checking that the two transcripts are permutations of each other
+            as in Figure~\ref{fig:permutated-transcripts}.
+            \item $\prover$ and $\verifier$ run  the protocol for checking the constraints given in Lemma~\ref{lem:addr-ordered-transcript}
+            as in Figure~\ref{fig:encoded-relations}.
+            \item $\verifier$ accepts if all the three sub-protocols accept. $\verifier$ rejects otherwise.
+        \end{enumerate}
+    }
+    \end{mdframed}
+%    \vspace*{-5mm}
+    \caption{Overall protocol for the relation $\CLRAM$}
+    \label{fig:covering-protocol}
+\end{figure}
+
+\smallskip
+
+\noindent{\bf Efficiency.}
+We provide a break-up of costs incurred by different components involved in construction
+of RAM based on memory-checking techniques in Table ~\ref{tbl:components-poly-ram}. To reduce pairing
+checks we use standard technique of batching pairing checks involving common generators. In addition, to reduce
+communication, instead of naively invoking four instances of sub-vector argument in Step 15 of the protocol
+in Figure~\ref{fig:encoded-relations}, we concatenate the four vectors using a variant of protocol for
+concatenation of vectors in Figure~\ref{fig:concatenation}, and then use the sub-vector argument to show that
+the concatenated vector is a sub-vector of the vector $(1,\ldots,N)$. For CQ~\cite{EPRINT:EagFioGab22} based instantiation,
+this reduces the total communication of this
+check from $4\times (8\Gone + 3\F)$ to $(4\Gone+6\F) + (8\Gone + 3\F)$, a saving of $\approx 20\Gone$. The reported
+overheads in Table ~\ref{tbl:components-poly-ram} take into account such optimizations.
+
+\section{Proof of Lemma ~\ref{lem:sum-computation}}
+%Recall the statement of lemma \ref{lem:sum computation}. We want to compute $e_i$ for all $i \in \setind$ and $b_j$ for all $j \in K$ in $O(|K|\log^2|K|)$ $\mathbb{F}$ operations.\\\\
+Before starting the proof, we collect some preliminaries which will be useful in the proof.
+
+\subsection{Computational Algebra Preliminaries}\label{subsec:comp-algebra-app}
+Let $\F$ be a finite field of prime order $p$ and $\G$ be a cyclic additive group of order $p$ with generator $g$. For $s \in \F$, we use
+the notation $\elt{s}$ to denote the group element $s\cdot g$. Assume that $\F$ contains $n^{th}$ root of unity $\xi$
+satisfying $\xi^n=1$ for large $n$ (All polynomial degrees are assumed less than $n$).
+
+\begin{fact}[\textsf{Fast Evaluation}]\label{fc:fft}
+Let $f\in \F[X]$ be a polynomial of degree $<d$ and $(\xi_1,\ldots,\xi_r)\in \F^r$ be distinct points in $\F$.
+Then the vector $(f(\xi_1),\ldots,f(\xi_r))$ can be computed in $O((d+r)\log (d+r))$ $\F$ operations if $\xi_1,\ldots,\xi_r$ form roots
+of unity, and in $O((d+r)\log^2(d+r))$ $\F$ operations otherwise.
+\end{fact}
+
+\begin{fact}[\textsf{Fast Interpolation}]\label{fc:ifft}
+Let $\xi_1,\ldots,\xi_d$ be distinct points in $\F$ and $(v_1,\ldots,v_d)\in \F^d$. Then $(f_0,\ldots,f_{d-1})\in \F^d$
+can be computed in $O(d\log^2 d)$ operations in $\F$ such that $f(\xi_i)=v_i$ for all $i\in [d]$ where
+$f(X)=\sum_{i=0}^{d-1}f_iX^i$.
+\end{fact}
+
+\begin{fact}[\textsf{Fast Multiplication}]\label{fc:mult}
+Let $\xi_1,\ldots,\xi_r$ be distinct points in $\F$. Then coefficients of $f(X)=\prod_{i=1}^r (X-\xi_i)$
+can be computed in $O(r\log^2 r)$ operations in $\F$.
+\end{fact}
+
+\begin{fact}[\textsf{Multi KZG proofs} ~\cite{EPRINT:FeiKho23}]\label{fc:multkzg}
+Let $\{\elt{x^i}\}_{i=1}^d$ be given for some $x\in \F$. Then for set of $r$ distinct points $\xi_1,\ldots,\xi_r$,
+and a polynomial $f(X)\in \F[X]$ of degree $<d$,the vector $(\elt{h_1(x)},\ldots,\elt{h_r(x)})$,
+where $h_i(X) = (f(X) - f(\xi_i))/(X - \xi_i)$ can be computed in
+$O((r+d)\log(r+d))$ group and field operations when $\xi_1,\ldots,\xi_r$ are roots of unity, and in
+$O(rlog^2 r + d\log d)$ group and field operations otherwise.
+\end{fact}
+
+\begin{fact}[\textsf{Lagrange Polynomials}]\label{fc:lagrange}
+Let $\mathbb{S}=\{\xi_1,\ldots,\xi_r\}$ be a set of $r$ distinct points and let $\tau_1(X),\ldots,\tau_r(X)$ be
+the corresponding lagrange polynomials of degree $r-1$ each. Let $Z_{\mathbb{S}}(X)=\prod_{i=1}^r (X-\xi_r)$ denote the vanishing polynomial
+for $\mathbb{S}$. Then we have:
+\begin{gather*}
+    \sum_{i=1}^r \tau_i(X) = 1 \\
+    \tau_i(X) = \frac{Z_{\mathbb{S}}(X)}{Z_{\mathbb{S}}'(\xi_i)(X-\xi_i)} \text{ for all } i\in [r]
+\end{gather*}
+\end{fact}
+
+\noindent{\bf Formal Derivative}: For a polynomial $p(X) \in \F[X]$, we define the formal derivative of $p(X)$ as the polynomial
+$u(X,X)$ where $u(X,Y)=\frac{p(X)-p(Y)}{X-Y}$. It can be seen that $u(X,X)$ equals the polynomial $p'(X)$ obtained by differentiating
+$p(X)$ according to regular rules of calculus. Thus, this definition agrees with the one given earlier in the preliminaries.
+%Let us denote the formal derivative of $p(X)$ as $p^f(X)$.\\
+%Then, $p^f(X)= u(X,X)$ where $u(X,Y)=\frac{p(X)-p(Y)}{X-Y}$\\\\
+%It is well known that the formal derivative of a polynomial satisfies all the properties that we want the derivative of a polynomial to satisfy, like linearity, product rule, quotient rule etc.\\\\
+%As a result, the formal derivative $p^f(X)$ defined as above can be computed from $p(X)$ in the \textit{usual} way, that is $\frac{d}{dx}X^k=k X^{k-1}$ and extend using linearity of derivative.\\
+%Henceforth, we will represent the formal derivative of $p(X)$ as $p'(X)$ and because of the above statements, we will compute it in the usual way and freely use all the properties of derivatives on it.\\
+
+\subsection{Some Useful Results}\label{subsec:sub-results}
+We state and prove some facts which are used later throughout the proof.
+
+\begin{lemma}\label{lem:sumtoder}
+For $K\subset [N]$, define $H_K$ to be $\{\xi^i:i \in K\}$. Let $p(X)$ be the vanishing polynomial of $H_{K}$.
+Let $p'(X)$ and $p''(X)$ denote the formal first derivative and second derivative of $p(X)$ respectively.
+Then, $p''(\xi^i)/p'(\xi^i)=2 \cdot \sum_{j\in K\setminus \{i\}} 1/(\xi^i-\xi^j)$ for all $i \in K$
+\end{lemma}
+
+\begin{proof}
+    Observe that $p'(X)=\sum_{i\in K}\prod_{j\in K\setminus \{i\}}(X-\xi^j)$ and \\
+    $p''(X)=\sum_{i\in K}\sum_{j\in K\setminus \{i\}}\prod_{k\in K\setminus \{i,j\}}(X-\xi^k)$. Thus for $r\in K$,
+    we have:
+    \begin{align*}
+        p'(\xi^r) &= \prod_{j \in K \setminus \{r\}}(\xi^r-\xi^j), \\
+        p''(\xi^r)&=\sum_{j\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,j\}} (\xi^r-\xi^k)
+        +\sum_{i\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,i\}} (\xi^r-\xi^k)
+    \end{align*}
+    Note that only non-zero products in the expansion of $p''(\xi^r)$ occur when $i=r$ or $j=r$, resulting in the two summands for the same in the above equation.
+    Moreover, we notice that both summands are the same, giving us $p''(\xi^r)=2\sum_{i\in K\setminus \{r\}}\prod_{k\in \setminus \{r,i\}}(\xi^r-\xi^k)$. One may
+    now verify that $p'(\xi^r)/p''(\xi^r)$ gives the desired result claimed in the lemma.
+\end{proof}
+%To compute $p''(\xi^r)$, note that $p''(X)$ is a (double) sum of many products. When one substitutes $\xi^r$ in a product, the product is non zero if and only if $r=i\, \text{or}\, r=j$\\\\
+
+%    Putting $\xi^r$ gives:
+%    $$ p''(\xi^r)=\sum_{j\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,j\}} (\xi^r-\xi^k)+$$
+%    $$ \sum_{i\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,i\}} (\xi^r-\xi^k) $$
+%    But this is just,
+%    $$2\cdot \sum_{j\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,j\}} (\xi^r-\xi^k) $$
+
+%    Now, we are left to show that $\frac{\frac{p''(\xi^r)}{2}}{p'(\xi^r})=\sum_{j\in K\setminus \{r\}} 1/(\xi^r-\xi^j)$, or
+%    $$\sum_{j\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,j\}} (\xi^r-\xi^k)=\prod_{j \in K \setminus \{r\}}(\xi^r-\xi^j) \sum_{j\in K\setminus \{r\}} 1/(\xi^r-\xi^j)$$
+
+%    But we observe that:
+%    $$\sum_{j\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,j\}} (\xi^r-\xi^k)=\sum_{j\in K\setminus \{r\}}\frac{\prod_{k\in K\setminus \{r\}} (\xi^r-\xi^k)}{(\xi^r-\xi^j)}$$
+
+%    But $\prod_{k\in K\setminus \{r\}} (\xi^r-\xi^k)$ is independent of $j$, so it can be pulled outside the sum:
+%    $$\sum_{j\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,j\}} (\xi^r-\xi^k)=\prod_{k\in K\setminus \{r\}} (\xi^r-\xi^k) \sum_{j\in K\setminus \{r\}} 1/(\xi^r-\xi^j) $$
+%    But $k$ is just a dummy variable. We can replace $k$ by $j$ on the RHS:
+%    $$\sum_{j\in K\setminus \{r\}}\prod_{k\in K\setminus \{r,j\}} (\xi^r-\xi^k)=\prod_{j\in K\setminus \{r\}} (\xi^r-\xi^j) \sum_{j\in K\setminus \{r\}} 1/(\xi^r-\xi^j) $$
+%    This completes the proof.
+%\end{proof}
+
+\begin{comment}
+    ************ ALTERNATIVE PROOF **************
+    \textbf{An alternative proof of \ref{lem:sumtoder}}:\\
+    An alternative proof is possible by inducting on the cardinality of $K\subset N$.\\
+    The base case where $K$ has one element, say $i$ is trivial. This is because in that case $p$ is a linear polynomial $X-\xi^i$ and LHS=$\frac{p''}{p'}=\frac{0}{1}=0$ and on RHS we are summing over the empty set so the sum is $0$.\\\\
+    Now let $|K|=k$ and the elements of $K$ be $a_1, a_2, \cdots, a_k$.
+    Consequently $p(X)=\prod_{i \in K}(X-\xi^i)$\\
+    We assume that the result holds for this case. Thus,
+    $$p''(\xi^i)/p'(\xi^i)=2 \cdot \sum_{j\in K\setminus \{i\}} 1/(\xi^i-\xi^j)$$ for all $i \in K$.\\
+    Suppose we introduce another element in the set $K$, call it $\alpha$
+    The vanishing polynomial for the new $K$(call it $K')$ is $q(X)=p(X)(X-\xi^{\alpha})$\\
+    Then by the product rule for derivatives, we have:
+    $$q'(X)=p'(X)(X-\xi^{\alpha})+p(X)$$ and
+    $$q''(X)=2p'(X)+p''(X)(X-\xi^{\alpha})$$
+
+    It suffices to show that $$\frac{q''(\xi^i)}{q'(\xi^i)}=2\sum_{j\in K'\setminus \{i\}}\frac{1}{\xi^i-\xi^j}$$
+    for all $i \in K'$\\
+    For this we make 2 cases:\\
+    \textbf{Case 1-}$i \in K$
+    Then
+    $$q'(\xi^i)=p'(\xi^i)(\xi^i-\xi^{\alpha})$$ and
+    $$q''(\xi^i)=2p'(\xi^i)+p''(\xi^i)(\xi^i-\xi^{\alpha})$$
+    This used that $p(\xi^i)=0$\\
+    Thus, $$\frac{q''(\xi^i)}{q'(\xi^i)}=\frac{2p'(\xi^i)+p''(\xi^i)(\xi^i-\xi^{\alpha})}{p'(\xi^i)(\xi^i-\xi^{\alpha})}$$
+    Dividing numerator and denominator by $p'(\xi^i)(\xi^i-\xi^{\alpha})$ gives:
+    $$\frac{q''(\xi^i)}{q'(\xi^i)}=\frac{2}{\xi^i-\xi^\alpha}+\frac{p''(\xi^i)}{p'(\xi^i)}$$
+    By induction hypothesis this becomes:
+    $$\frac{q''(\xi^i)}{q'(\xi^i)}=\frac{2}{\xi^i-\xi^\alpha}+2 \cdot \sum_{j\in K\setminus \{i\}} 1/(\xi^i-\xi^j)$$
+    Note that $$\frac{1}{\xi^i-\xi^\alpha}+ \sum_{j\in K\setminus \{i\}} 1/(\xi^i-\xi^j)=\sum_{j\in K'\setminus \{i\}}\frac{1}{\xi^i-\xi^j}$$
+    Using that $K'=K \cup \{\alpha\}$\\
+    Thus, $$\frac{q''(\xi^i)}{q'(\xi^i)}=2\sum_{j\in K'\setminus \{i\}}\frac{1}{\xi^i-\xi^j}$$ which completes case 1. \\\\
+    \textbf{Case 2-}$i=\alpha$. Then
+    $$q'(\xi^{\alpha})=p(\xi^{\alpha})$$ and
+    $$q''(\xi^{\alpha})=2p'(\xi^{\alpha})$$
+    These we get by replacing $X$ by $\xi^{\alpha}$ in the expressions of $q', q''$
+    So, it is sufficient to prove that:
+    $$\frac{2p'(\xi^{\alpha})}{p(\xi^{\alpha})}=2\sum_{j\in K'\setminus \{\alpha\}}\frac{1}{\xi^{\alpha}-\xi^j}$$
+
+    But $$p(\xi^{\alpha})=\prod_{i \in K}(\xi^{\alpha}-\xi^i)=\prod_{i \in K'\setminus \{\alpha\}}(\xi^{\alpha}-\xi^i)$$ and $$p'(\xi^{\alpha})=\sum_{j \in K} \prod_{i \in K \setminus \{j\}}(\xi^{\alpha}-\xi^i)=\sum_{j \in K'\setminus \{\alpha\}} \prod_{i \in K' \setminus \{j, \alpha\}}(\xi^{\alpha}-\xi^i)$$
+    But now, note that $$\sum_{j \in K'\setminus \{\alpha\}} \prod_{i \in K' \setminus \{j, \alpha\}}(\xi^{\alpha}-\xi^i)=\prod_{i \in K' \setminus \{ \alpha\}}(\xi^{\alpha}-\xi^i)\sum_{j \in K'\setminus \{\alpha\}}\frac{1}{\xi^{\alpha}-\xi^j}$$
+    So, $$\frac{2p'(\xi^{\alpha})}{p(\xi^{\alpha})}=\frac{2\cdot \prod_{i \in K' \setminus \{ \alpha\}}(\xi^{\alpha}-\xi^i)\sum_{j \in K'\setminus \{\alpha\}}\frac{1}{\xi^{\alpha}-\xi^j}}{\prod_{i \in K'\setminus \{\alpha\}}(\xi^{\alpha}-\xi^i)}=$$\\
+    $$=2\cdot\sum_{j \in K'\setminus \{\alpha\}}\frac{1}{\xi^{\alpha}-\xi^j}$$
+
+    This completes the proof of case 2 and thus the proof of the lemma.
+\end{comment}
+
+\begin{lemma}[Sumcheck]\label{lem:sumcheck}
+Let $u(X,Y)$ be a bi-variate polynomial over a finite field $\F$ with degree less than $N$ in each of the variables and
+$\nroots$ be defined as the group of $N^{\text{th}}$ roots of unity $(N<<|\F|)$
+with generator $\xi \in \F$. Then $\sum_{i\in [N]}u(X,\xi^i)= Nu(X,0)$
+\end{lemma}
+
+\begin{proof}
+    For some $d<N$, we write $u(X,Y)=a_0+a_1 Y+ a_2 Y^2+\cdots+ a_d Y^d$
+    where each $a_i$ is a polynomial in $X$ of degree less than $N$.
+    Now we write the sum:
+    \begin{align*}
+        \sum_{i\in [N]}u(X,\xi^i) &= N a_0+a_1(\xi+\xi^2+\cdots+\xi^N) \\
+        &\, +a_2(\xi^2+\xi^4+\cdots+\xi^{2N})+ \cdots + a_d(\xi^d+\cdots +\xi^{Nd})
+    \end{align*}
+    But for any $\alpha=\xi^k$ for $k<N$, $\alpha+\alpha^2+\cdots \alpha^N=0$. Thus, all terms vanish except the first term
+    and hence $\sum_{i\in [N]}u(X,\xi^i)=N a_0$.
+    The lemma follows by observing that $a_0=u(X, 0)$.
+\end{proof}
+
+\begin{lemma}\label{lem:zk-hat}
+Let $Z_\nroots(X)$ be the vanishing polynomial for $\nroots$, let $\widehat{Z}_K(X)$ and  $Z_K(X)$ be the vanishing polynomials for $H_{[N]\setminus K}$ and $H_K$ respectively.
+Let $\mu_1(X),\ldots,\mu_N(X)$ be Lagrange polynomials for the set $\nroots=\{\xi,\ldots,\xi^N\}$. Then:
+\begin{gather}
+    \widehat{Z}_K(X) = \sum_{j\in K}\frac{Z_\nroots'(\xi^j)}{Z_K'(\xi^j)}\mu_j(X), \\
+    \widehat{Z}_K'(X)= \sum_{j\in K}\frac{Z_\nroots'(\xi^j)}{Z_K'(\xi^j)}\mu_j'(X)
+\end{gather}
+\end{lemma}
+We use the following standard observation:
+\begin{fact}
+    If polynomials $f,g$ of degree $<N$ agree on $N$ points, then they are equal as polynomials, that is, $f(X)=g(X)$
+\end{fact}
+
+\begin{proof}
+    Note that the second equation follows from the first by linearity of derivatives, so it suffices to prove the first equation.
+    Both the sides of the identity are polynomials of degree $<N$, so it suffices to show their evaluations are identical over $N$ distinct points.
+    In particular we show their evaluations are identical over $\nroots$.
+    Consider evaluating LHS and RHS at $\xi^i$ for $i \in [N]\setminus K$.
+    The left side is $0$ by definition of $\hat{Z}_K(X)$, while the right hand side is zero by the properties of Lagrange polynomials.
+    Now consider evaluations LHS and RHS at $\xi^i$ for $i \in K$.
+    The RHS is $\frac{Z_\nroots'(\xi^i)}{Z_K'(\xi^i)}$ by properties of Lagrange polynomials, while the
+    LHS is $\prod_{j \in [N]\setminus K} (\xi^i-\xi^j)$\\
+    Multiplying dividing by $\prod_{ j \in K \setminus \{i\}}(\xi^i-\xi^j)$ gives:
+    $$LHS = \frac{\prod_{j \in [N] \setminus \{i\}} (\xi^i-\xi^j)}{\prod_{j \in K \setminus \{i\}}(\xi^i-\xi^j)}$$
+    Which is $\frac{Z_\nroots'(\xi^i)}{Z_K'(\xi^i)}$, the same as the right hand side.
+    This proves the claim.
+\end{proof}
+
+\begin{lemma}\label{lem:lamda-deriv}
+Let $\mu_1,\ldots,\mu_N$ be the lagrange polynomials for the set $\nroots=\{\xi^i:i\in [N]\}$
+of the $N^{th}$ roots of unity. Then we have:
+\begin{equation*}
+    \mu_i'(\xi^j) = \begin{cases}
+                        \frac{(N-1)}{2\xi^{i}}  \text{ if } j=i\\
+                        \frac{\xi^i}{\xi^j(\xi^j-\xi^i)} \text{ otherwise }
+    \end{cases}
+\end{equation*}
+\end{lemma}
+
+\begin{proof}
+    First, let us assume that $i \neq j$.
+    We know that $\mu_i(X)= \frac{Z_H(X)}{Z_H'(\xi^i)(X-\xi^i)}$.
+    Thus, by applying quotient rule(we can apply quotient rule because $\mu_i$ is defined at $\xi^j$ as $j\neq i$):
+    $$\mu_i'(X) \cdot Z_H'(\xi^i)= \frac{(X-\xi^i)(N\cdot X^{N-1})-(X^N-1)}{(X-\xi^i)^2}$$
+    Substituting $X$ by $\xi^j$, we get:
+    $$\mu_i'(\xi^j) \cdot \frac{N}{\xi^i}= \frac{N(\xi^j-\xi^i)}{\xi^j (\xi^j-\xi^i)^2}$$
+    Thus, we get:
+    $$\mu_i'(\xi^j)=\frac{\xi^i}{\xi^j(\xi^j-\xi^i)}$$
+    For the scenario where $i=j$, we have:
+    \begin{align*}
+    \mu_i(X) &= \frac{\prod_{j \in [N] \setminus \{i\}}(X-\xi^j)}{Z_H'(\xi^i)}\\
+    \implies \mu_i(X)\cdot Z_H'(\xi^i) &= \prod_{j \in [N] \setminus \{i\}}(X-\xi^j)\\    
+    \end{align*} 
+	Differentiating the above equation on both sides, we get:
+	\[\mu_i'(X) \cdot \frac{N}{\xi^i} = \sum_{j \in [N] \setminus \{i\}}\prod_{k \in [N]\setminus\{i,j\}}(X-\xi^k)\]  
+%    Now consider $i=j$:
+%    Then, $\mu_i(X)=\frac{\prod_{j \in [N] \setminus \{i\}}(X-\xi^j)}{Z_H'(\xi^i)}$\\
+%    Thus,  $\mu_i(X)\cdot Z_H'(\xi^i)=\prod_{j \in [N] \setminus \{i\}}(X-\xi^j)$\\
+%    Thus, $\mu_i'(X) \cdot \frac{N}{\xi^i}=\sum_{j \in [N] \setminus \{i\}}\prod_{k \in [N]\setminus\{i,j\}}(X-\xi^k)$\\
+    Substituting $X=\xi^i$ in the above equation yields:
+    \begin{align*}
+        \mu_i'(\xi^i) \cdot \frac{N}{\xi^i} &= \sum_{j \in [N] \setminus \{i\}}\prod_{k \in [N]\setminus\{i,j\}}(\xi^i-\xi^k) \\
+        &=\sum_{j \in [N] \setminus \{i\}}\frac{\prod_{k \in [N]\setminus\{i\}}(\xi^i-\xi^k)}{\xi^i-\xi^j} \\
+        &= \prod_{k \in [N]\setminus\{i\}}(\xi^i-\xi^k)\sum_{j\in [N]\setminus \{i\}}\frac{1}{\xi^i-\xi^j} \\
+        &=Z_H'(\xi^i)\sum_{j\in [N]\setminus \{i\}}\frac{1}{\xi^i-\xi^j}\\
+        &= N/\xi^i\sum_{j\in [N]\setminus \{i\}}\frac{1}{\xi^i-\xi^j}
+    \end{align*}
+    We divide on both sides by $N/\xi^i$ in the above, and use Lemma ~\ref{lem:sumtoder} to obtain:
+    \begin{align*}
+        \mu_i'(\xi^i) &= \sum_{j\in [N]\setminus \{i\}}\frac{1}{\xi^i-\xi^j} =\frac{Z_H''(\xi^i)}{2 Z_H'(\xi^i)}
+        =\frac{N-1}{2\xi^i}
+    \end{align*}
+
+\end{proof}
+
+\begin{lemma}\label{lem:tau}
+Let $K\subseteq \N$ be a set of cardinality $k$ and $\mathcal{X}=\{x_j:j\in K\}$ be a set
+where $x_j$ for $j\in K$ are distinct elements of $\F$. Let $Z_\mathcal{X}(X)=z_k X^k+\cdots+z_0$ denote the vanishing polynomial of $\mathcal{X}$
+and $\{\tau_j(X)\}_{j\in K}$ denote the Lagrange polynomials such that $\tau_i(x_j)=\delta_{ij}$ for $i,j\in K$. Then for all $j\in K$,
+we have $\tau_j'(x_j)=F_K(x_j)/Z_\mathcal{X}'(x_j)$ where the polynomial
+$F_K(X)$ is defined as
+\[F_K(X)=\binom{k}{2}z_k X^{k-2}+\cdots+\binom{2}{2}z_2=\sum_{j=2}^k z_j\binom{j}{2}X^{j-2} \]
+\end{lemma}
+\begin{proof}
+    For $j\in K$ we have: 
+    \[\tau_j(X)=\frac{Z_\mathcal{X}(X)}{(X-x_j)Z_\mathcal{X}'(x_j)}= \frac{1}{Z_\mathcal{X}'(x_j)}\frac{Z_\mathcal{X}(X)}{X-x_j}\] 
+    by definition of Lagrange polynomials. By long division of $Z_\mathcal{X}(X)$ by $(X-x_j)$, we have:
+    \begin{align*}
+        \tau_j(X) &= \frac{1}{Z_\mathcal{X}'(x_j)}\big(z_k X^{k-1} + (x_jz_k + z_{k-1})X^{k-2} + \cdots\\
+        & \quad + (x_j^{k-1}z_k + \cdots + z_1)\big)\\
+        &= \frac{1}{Z_\mathcal{X}'(x_j)}\sum_{p=0}^{k-1} \left(\sum_{q=p+1}^k z_q x_j^{q-p-1}\right)X^p
+    \end{align*}
+    Differentiating both sides, we have:
+    \begin{align*}
+    \tau_j'(X) &= \frac{1}{Z_\mathcal{X}'(x_j)}\sum_{p=0}^{k-1} \left(\sum_{q=p+1}^{k}z_q x_j^{q-p-1}\right)p X^{p-1}\\
+%    In this step we just differentiated $X^p$ to get $p X^{p-1}$
+    &= \frac{1}{Z_\mathcal{X}'(x_j)}\sum_{p=1}^{k-1} p  \sum_{q=p+1}^{k}z_q x_j^{q-p-1} X^{p-1}
+    \end{align*}
+    Substituting $X=x_j$, we get:
+    \begin{align*}
+    \tau_j'(x_j) &= \frac{1}{Z_\mathcal{X}'(x_j)} \sum_{p=1}^{k-1} p \sum_{q=p+1}^k z_q x_j^{q-2}\\
+    &= \frac{1}{Z_\mathcal{X}'(x_j)}\sum_{q=2}^k z_q x_j^{q-2} \sum_{p=1}^{q-1} p\\
+%    
+%    Here, we reversed the order of the sum. $p$ going from 1 to $k-1$ and $q$ going from $p+1$ to $k$ is same as $q$ going from $2$ to $k$ and $p$ going from 1 to $q-1$
+%    $$\tau_j'(x_j)
+    &= \frac{1}{Z_\mathcal{X}'(x_j)}\sum_{q=2}^k z_q \binom{q}{2} x_j^{q-2}\\
+%	\end{align*}
+%%    Here we used that $\sum_{p=1}^{q-1}p=\frac{q(q-1)}{2}=\binom{q}{2}$
+%	Replacing $q$~(which is a dummy variable) by $j$ above, we get
+%	\begin{align*}
+%		\tau_j'(x_j) &= \frac{1}{Z_\mathcal{X}'(x_j)}\sum_{j=2}^k z_j \binom{j}{2} x_j^{j-2}\\
+		& = \frac{F_K(x_j)}{Z_\mathcal{X}'(x_j)}
+	\end{align*}
+	This completes the proof.
+%
+%    But $q$ is just a dummy variable. We might as well replace $q$ by $j$
+%
+%    Thus, $$\tau_j'(x_j)= \frac{1}{Z_\mathcal{X}'(x_j)}\sum_{j=2}^k z_j \binom{j}{2} x_j^{j-2} $$
+%    If we compare this to the definition of $F_K(X)$ given in the lemma statement, we get:
+%    $$\tau_j'(x_j)= \frac{F_K(x_j)}{Z_\mathcal{X}'(x_j)}$$
+\end{proof}
+
+\begin{comment}
+    \subsection{Brief Proof Summary of lemma \ref{lem:sum-computation}}\label{subsec:sum-computational}
+    What we want to compute is a sum over the set $K$ for all $i \in I$ or a sum over the set $I$ for all $j \in K$. Let us give a sketch for the first case.
+
+    We interpolate a polynomial $p$ in such a way that its evaluations at $\nroots$ correspond to the numerators of the required sum. We take the full $\nroots$ and not subsets of it so that we can apply sumcheck easily later.
+    Next we introduce some rational functions. These will be very useful to reduce the sum we need to compute to an evaluation of the rational functions at some points.
+    These evaluations can be reduced to evaluations of polynomials using the simple form of $Z_{\nroots}$. By introducing some more polynomials and using formulas for sumcheck, finally, the entire task can be reduced to calculating $p(0)$ and $p'(X)$ at certain points.
+
+    The polynomial $p$ turns out to be a product of polynomials: $p(X)=\widehat{Z}_K(X)\cdot q(X)$ and so the next step is to get the evaluations of $\widehat{Z}_K(X)$ and $q(X)$ at those points.
+    For this, some further lemmas are used to get evaluations of $q(X)$ at degree $q$ many points and thus $q(X)$ is obtained by interpolation.
+    Next $q(0)$ can be computed and thus $p(0)$ is also computed.
+    $Z_K(X)$ and $q'(X)$ can also be computed easily(details in the proof)\\
+    This leaves computation of $\widehat{Z}_K(X)$ at those points as the main task. For this another lemma is needed related to derivatives of Lagrange polynomials.
+    Eventually the task reduces to needing to compute something which can be computed efficiently using another lemma.\\
+    Finally, every single step involves a reduction which can be done in the number of operations allowed in the statement of the lemma. So, we get what we want.\\\\
+    For the second case, the proof is very similar, except for some interchanging of $I$ and $K$, and interchanging of $i$ and $j$. \\
+    This completes a brief summary of the proof.
+\end{comment}
+
+\subsection{Proof of lemma ~\ref{lem:sum-computation}}\label{subsec:sum-computation}
+
+\begin{proof}
+
+    We only present the detailed proof for the computation of $a_i$ for all $i \in \setind$. We then briefly mention the modifications needed to compute $b_j$ for all $j \in K$.
+    
+    \smallskip
+    
+    \noindent{\bf Computing $a_i$. } Recall that for each $i \in \setind$, we have:
+    \begin{equation}\label{eq:ei}
+    a_i = \sum_{j\in K\setminus \{i\}} \frac{d_j}{\xi^i - \xi^j}
+    \end{equation}
+    Also recall that $\setind \subset K$ in this case.
+    To compute $a_i$, we first define a polynomial $p(X)$ of degree at most $N-1$ such that
+    $p(\xi^j)=d_j$ for $j\in K$ and $p(\xi^j)=0$ for $j \in [N]\setminus K$.
+    Then, the vanishing polynomial of $H_{[N]\setminus K}$ divides $p(X)$ and
+    there exists a polynomial $q(X)$ of degree at most $|K|-1$ such that:
+    \begin{equation}\label{eq:px}
+    p(X) = \hat{Z}_K(X)\cdot q(X)
+    \end{equation}
+    where $\hat{Z}_K(X)=\prod_{i\in [N]\setminus K}(X-\xi^i)$ is the vanishing polynomial of $H_{[N]\setminus K}$. Now, we introduce the rational functions:
+    \begin{gather}\label{eq:fgr}
+    f_i(X) = \sum_{j\in [N]\setminus \{i\}}\frac{p(\xi^j)}{X-\xi^j}, i\in \setind \\
+    g_i(X) = \sum_{j\in [N]\setminus \{i\}}\frac{p(X)}{X-\xi^j}, i\in \setind \\
+    r_i(X) = \sum_{j\in [N]\setminus \{i\}}\frac{p(X) - p(\xi^j)}{X-\xi^j}, i\in \setind
+    \end{gather}
+    Note that, by the definition of $p(X)$, $f_i(\xi^i)=a_i \,\forall i$. Thus, it suffices to compute $f_i(\xi^i)$ for all $i \in I$. Since $f_i(X) = g_i(X) - r_i(X)$ for $i\in I$, we have that
+    $a_i=g_i(\xi^i)-r_i(\xi^i)$.
+    Thus, we need to compute $g_i(\xi^i)$ and $r_i(\xi^i)$ for all $i \in I \subset K$.
+    \begin{align*}
+        g_i(\xi^i) &= p(\xi^i)\sum_{j\in [N]\setminus \{i\}} \frac{1}{\xi^i-\xi^j} \\
+        &= \frac{p(\xi^i)Z_{\nroots}''(\xi^i)}{2 Z_{\nroots}'(\xi^i)} \quad \text{(from lemma \ref{lem:sumtoder})} \\
+        &= \frac{(N-1)d_i}{2\xi^i}
+    \end{align*}
+	In the above, we used $Z_H(X)=X^N-1$ and that $p(\xi^i)=d_i$. In other words, $g_i(\xi^i)$ for all $i$ can be obtained in $O(|\setind|)$ operations. Therefore, it suffices to compute $r_i(\xi^i)$ for all $i \in I$ efficiently. To this end, we write $r_i(X)$ as:
+    \[r_i(X) = \sum_{j\in [N]}\frac{p(X)-p(\xi^j)}{X-\xi^j} - \frac{p(X)-p(\xi^i)}{X-\xi^i}\]
+    By defining the bi-variate polynomial 
+    \[u(X,Y)=(p(X) - p(Y))/(X-Y)\]
+    we get
+    \[r_i(X)= \sum_{j\in [N]}u(X,\xi^j) - u(X,\xi^i)\]
+    Defining $r(X)=\sum_{j\in [N]}u(X,\xi^j)$, we have:
+    $$r_i(X)=r(X)-u(X, \xi^i)$$
+    Substituting $X = \xi^i$ in the above, we have: 
+    $$r_i(\xi^i)=r(\xi^i) - u(\xi^i,\xi^i) = r(\xi^i) - p'(\xi^i)$$
+    where $p'(\xi^i) =  u(\xi^i,\xi^i)$ by the definition of formal derivative. Now, using $r(X)=N u(X,0)$~(Lemma \ref{lem:sumcheck}), we have: 
+    \[r(X)=N \frac{(p(X) - p(0))}{X}\] 
+    Finally, substituting $X = \xi^i$ above, we have:
+    $$r(\xi^i)=N \frac{(d_i - p(0))}{\xi^i}$$
+    Thus, it remains to compute $p(0)$ and $p'(\xi^i)$ efficiently for each $i\in \setind$.
+    
+    \smallskip
+    
+    \noindent{\bf Computing the polynomial $q(X)$.} Recall from Equation~\eqref{eq:px} that
+    \[q(\xi^j) = \frac{p(\xi^j)}{\widehat{Z}_K(\xi^j)}\]
+	for all $j\in K$. Furthermore, by Lemma~\ref{lem:zk-hat}, we have: 
+	\[\hat{Z}_K(\xi^j)=\frac{Z_{\nroots}'(\xi^j)}{Z_K'(\xi^j)}=\frac{\frac{N}{\xi^j}}{Z_K'(\xi^j)}\]
+	for each $j\in K$. Observe that, given the set $K$, we can compute the polynomial $Z_K(X)$ in $O(|K|\log^2 |K|)$ operations using the fast multiplication, and we can then obtain $Z_K'(X)$ in additional $O(|K|)$ operations. Finally, $Z_K'(\xi^j)$ can be evaluated for $j\in K$ in additional $O(|K|\log^2 |K|)$ operations. Thus we can efficiently compute $q(\xi^j)$ for all $j\in K$  $O(|K|\log^2 |K|)$ operations. Since degree of $q(X)$ is strictly less than $|K|$, we can further interpolate to obtain the polynomial $q(X)$ in $O(|K|\log^2 |K|)$ field operations.
+    
+    \smallskip
+    
+    \noindent{\bf Computing $p(0)$.} From Equation~\eqref{eq:px}, we have
+    \[p(0)=\widehat{Z}_K(0)\cdot q(0)\]
+    Additionally, since we have 
+    \[\hat{Z}_K(0)=\frac{Z_H(0)}{Z_K(0)}=\frac{-1}{Z_K(0)}\]
+    this enables us to compute $p(0)$ since $q(0)$ and $Z_K(0)$ are just the constant terms of the known polynomials $q(X)$ and $Z_K(X)$. 
+    
+    \smallskip
+    
+    \noindent{\bf Computing $p'(\xi^i)$.} We now show how to compute $p'(\xi^i)$ for each $i\in I$. Using the  product rule for derivatives, we have: \[p'(X)=q(X) \hat{Z}_K'(X)+q'(X) \hat{Z}_K(X)\]
+    We have shown how to compute $q(\xi^i)$ and $\hat{Z}_K(\xi^i)$ in $O(|K|\log^2 |K|)$ field operations. By differentiating the polynomial $q(X)$ from earlier, we obtain $q'(X)$. Then, by fast evaluation, we get evaluations of $q'(X)$ at $\xi^i$ for all $i \in I$, again in $O(|K|\log^2 |K|)$ field operations. So it only remains to evaluate $\hat{Z}_K'(\xi^i)$ for each $i\in I$, which we show next.    
+%%    Let $p(X)=\widehat{Z}_K(X)\cdot q(X)$
+%%    as in Equation \eqref{eq:px} and let $Z_K(X)$ be the vanishing polynomial for $H_K$.
+%%    Note that $Z_K(X) \cdot \hat{Z}_K(X)=X^N-1$ and also that
+%%    $Z_\nroots'(\xi^j)= \frac{N}{\xi^j} $.
+%%    Also, $Z_K(X)$ can be computed by fast multiplication in $O(|K|\log^2 |K|)$ operations and then it can be differentiated monomial by monomial to get $Z_K'(X)$.\\
+%%    \textbf{Then, fast evaluation gives $Z_K'(X)$ at $\{\xi^j:j\in K\}$ in $O(|K|\log^2 |K|)$ operations}\\
+%%    Recall from Lemma \ref{lem:zk-hat} that $\hat{Z}_K(\xi^j)=\frac{Z_{\nroots}'(\xi^j)}{Z_K'(\xi^j)}$ and
+%%    thus $\hat{Z}_K(\xi^j)=\frac{\frac{N}{\xi^j}}{Z_K'(\xi^j)}$ for all $j \in K$.
+%%    Further recalling from \eqref{eq:px} that $q(\xi^j)=\frac{p(\xi^j)} {\hat{Z}_K(\xi^j)}=\frac{d_j}{\widehat{Z}_K(\xi^j)}$ enables us to compute
+%%    $q(\xi^j)$ for all $j \in K$.
+%%    As degree of $q(X)$ is strictly less than $|K|$ we can interpolate to get $q(X)$ in $O(|K|\log^2 |K|)$ field operations.
+%%    By differentiating monomial by monomial, we get $q'(X)$ and by fast evaluation we get evaluations of $q'(X)$ at $\xi^i$ for all $i \in I$, again in $O(|K|\log^2 |K|)$ field operations.
+%
+%%    Since $p(0)=q(0)\cdot \hat{Z}_K(0)$, and
+%    
+%
+%%    \textbf{Now it remains to compute $p'(X)$ at $\{\xi^i:i \in I\}=H_I$.}
+%    
+%
+%%    Thus, to get $p'(X)$ at $H_I$, we need $q, q', \hat{Z}_K$ and $\hat{Z}_K'$ at $H_I$. Out of which, we already have the evaluations for $q, q', \hat{Z}_K$.
+%%
+%%    \textbf{Thus, it suffices to obtain
+%        $\hat{Z}_K'(X)$ at the set $H_I$}
+	From the second equation of Lemma~\ref{lem:zk-hat}, we have:
+    $$  \widehat{Z}_K'(\xi^i) = \sum_{j\in K\setminus \{i\}} \frac{Z_\nroots'(\xi^j)}{Z_K'(\xi^j)}\mu_j'(\xi^i) + \frac{Z_\nroots'(\xi^i)}{Z_K'(\xi^i)}\mu_i'(\xi^i)$$
+
+    Using Lemma \ref{lem:lamda-deriv}, this becomes:
+    $$ \widehat{Z}_K'(\xi^i)= N\xi^{-i}\sum_{j\in K\setminus \{i\}}\frac{1}{Z_K'(\xi^j)(\xi^i-\xi^j)} + \frac{N(N-1)}{2\xi^{2i}Z_K'(\xi^i)}$$
+    In other words, it suffices to efficiently compute $\varphi_i$ for all $i \in I$, where
+   	$$\varphi_i=\sum_{j\in K\setminus \{i\}}\frac{1}{Z_K'(\xi^j)(\xi^i-\xi^j)}$$. To this end, we define the following polynomial:
+    $$ \Phi_i(X) = \sum_{j\in K\setminus \{i\}} \frac{1}{Z_K'(\xi^j)(X-\xi^j)} $$
+%    Thus, it suffices to evaluate $\varphi_i=\Phi_i(\xi^i)$ efficiently for each  $i \in I$. 
+%    at $X=\xi^i$. It is clear that $\varphi_i=\Phi_i(\xi^i)$.
+    Let $\{\eta_i(X)\}_{i\in K}$ be the set of Lagrange polynomials for the set $H_K = \{\xi^i:i\in K\}$.
+    Then, since $\frac{\eta_j(X)}{Z_K(X)}=\frac{1}{Z_K'(\xi^j)(X-\xi^j)}$, $\Phi_i(X)$ can be rewritten as:
+    \begin{align*}
+        \Phi_i(X)&=\sum_{j\in K\setminus \{i\}} \frac{\eta_j(X)}{Z_K(X)}\\
+        &= \sum_{j\in K\setminus \{i\}} \frac{\eta_j(X)/(X-\xi^i)}{Z_K(X)/(X-\xi^i)}
+    \end{align*}
+    Substituting $X=\xi^i$ in the above, we have:
+%    $$\varphi_i = \Phi_i(\xi^i) = \left(\sum_{j\in K\setminus \{i\}}\frac{\eta_j(X)/(X-\xi^i)}{Z_K(X)/(X-\xi^i)}\right)(\xi^i)$$
+%    This can be simplified as:    
+    \begin{align*}\varphi_i = \Phi_i(\xi^i) &= \left(\sum_{j\in K\setminus \{i\}}\frac{\eta_j(X)/(X-\xi^i)}{\prod_{k \in K \setminus \{i\}}(X-\xi^k)}\right)(\xi^i)\\
+    &= \sum_{j\in K\setminus \{i\}}\left(\frac{\eta_j(X)/(X-\xi^i)}{\prod_{k \in K \setminus \{i\}}(X-\xi^k)}\right)(\xi^i)\\
+    &= \sum_{j\in K\setminus \{i\}}\frac{\left(\eta_j(X)/(X-\xi^i)\right)(\xi^i)}{\left(\prod_{k \in K \setminus \{i\}}(X-\xi^k)\right)(\xi^i)}\\
+    &= \frac{1}{Z_K'(\xi^i)}\sum_{j\in K\setminus \{i\}}\left(\eta_j(X)/(X-\xi^i)\right)(\xi^i)
+    \end{align*}
+	Now, note that for all $j \neq i$, $\left(\eta_j(X)/(X-\xi^i)\right)(\xi^i)$ is just the evaluation of the polynomial $\frac{\eta_j(X)-\eta_j(\xi^i)}{X-\xi^i}$ at the point $\xi^i$. 
+%	Since $\eta_j$ is a (Lagrange) polynomial, 
+	This is just $\eta_j'(\xi^i)$ by definition of formal derivative of the polynomial $\eta_j(X)$. Thus, we get:
+    $$\varphi_i =\Phi_i(\xi^i) =  \frac{1}{Z_K'(\xi^i)}\sum_{j\in K\setminus \{i\}}\eta_j'(\xi^i)$$
+   Using that fact that $\sum_{j\in K}\eta_j(X) = 1$~(and hence,  $\sum_{j\in K}\eta'_j(X) = 0$), we have
+    $$\sum_{j\in K\setminus \{i\}}\eta_j'(\xi^i)= \sum_{j\in K}\eta_j'(\xi^i)-\eta_i'(\xi^i)=-\eta_i'(\xi^i)$$
+%    using that the sum of Lagrange polynomials is the constant $1$
+	Thus, we get:
+    $$\varphi_i = \frac{-\eta_i'(\xi^i)}{Z_K'(\xi^i)}$$
+    At this point, it suffices to efficiently compute $\eta_i'(\xi^i)$ for $i\in \setind$. For this, we can use Lemma~\ref{lem:tau}, with $\mathcal{X} = H_K = \{\xi^j: j\in K\}$ and $Z_{\mathcal{X}}(X)=Z_K(X)$ as the vanishing polynomial of $\mathcal{X}$, to obtain:
+%
+%    For this recall Lemma \ref{lem:tau} and observe that in our setting $\mathcal{X}$ is just $H_K$, $x_j$ are $\xi^j$ and $Z_\mathcal{X}(X)$ which is the vanishing polynomial of $\mathcal{X}=H_K$ is just $Z_K(X)$. The $\eta_i$ in the lemma are the Lagrange polynomials corresponding to $\mathcal{X}=H_K$ so they are same as the $\eta_i$ in our setting\\\\
+%    Thus, we get:
+    $$\eta_i'(\xi^i)=\frac{F_K(\xi^i)}{Z_K'(\xi^i)}$$
+    where $F_K(X)=\sum_{j=2}^k z_j\binom{j}{2}X^{j-2}$ as defined in Lemma~\ref{lem:tau}. Hence, it suffices to compute $F_K(\xi^i)$ for all $i \in I$, where $z_0,\ldots,z_k$ are the coefficients of the polynomial $Z_K(X)$ computed earlier. This concludes the proof of computation of $a_i$ for $i\in \setind$. 
+
+%    From the definition $F_K$ (Lemma ~\ref{lem:tau}), it can be computed once we know
+%    coefficients  $z_0, z_1, z_2, \cdots, z_k$ of the polynomial $Z_K(X)$.
+%    But, we know the polynomial $Z_K$ (via fast multiplication) hence we know $z_0, z_1, \cdots, z_{k}$. Thus, we can easily compute $F_K(X)$.
+%
+%    Now, by fast evaluation, we can get $F_K(\xi^i)$ for all $i \in I$ as required. This will take $O(|K| \log^2|K|)$ field operations.
+
+%    This completes the proof for $a_i$ (Note that in the proof we throughout used that $|\setind| \leq |K|$ so that the various $O(|\setind|)$ operations do not contribute to the final complexity).
+
+	
+	\smallskip
+	
+	\noindent{\bf Modifications for Computing $b_j$ for $j\in K$.} For computing $b_j$, we proceed as in the case of $a_i$, with the roles of sets $I$ and $K$ swapped~(all of the corresponding lemmas can be modified accordingly). The only additional technical subtlety arises when we need to compute $\varphi_j=\Phi_j(\xi^j)$ for all $j \in K$, where the polynomial $\Phi_j(X)$ is defined as:
+	\[\Phi_j(X)=\sum_{i\in I\setminus \{j\}} \frac{\eta_i(X)}{Z_I(X)}\] 
+%    
+%    
+%    For the case of $b_j$, notice first that it is very similar to the case of $a_i$ except that the roles of $\setind$ and $K$ are reversed and $i$ and $j$ are reversed.
+%
+%    First of all define $c_i$ for $i$ outside $\setind$ to be 0. For $i \in \setind$, $c_i$ is given by the specific lookup argument and so is known.
+%    Next, define polynomial $p$ of degree atmost $N-1$ such that $p(\xi^i)=c_i$ for all $i \in [N]$.
+%    From here on, we proceed exactly as we did for the $a_i$ case, replacing every instance of $\setind$ with $K$, every $K$ with $\setind$, every $i$ with $j$ and every $j$ with $i$.
+%    All the required lemmas are also modified appropriately in this way.
+%
+%    We reach till
+%    $$\Phi_j(X)=\sum_{i\in I\setminus \{j\}} \frac{\eta_i(X)}{Z_I(X)}$$
+%    and we need to compute $\varphi_j=\Phi_j(\xi^j)$ for all $j \in K$.\\
+	Now, we consider two cases: $j\in I$ and $j\in K \setminus I$. We handle the second case first. For each $j \in K\setminus I$, we can very easily compute $\varphi_j=\Phi_j(\xi^j)$ as
+    \begin{align*}
+        \Phi_j(\xi^j)&=\sum_{i\in I\setminus \{j\}} \frac{\eta_i(\xi^j)}{Z_I(\xi^j)}\\
+        &=\frac{1}{Z_I(\xi^j)} \sum_{i\in I}\eta_i(\xi^j)\\
+        &=\frac{1}{Z_I(\xi^j)}
+    \end{align*}
+	This is efficiently computed by evaluating $Z_I(\xi^j)$ for each $j\in K$ in $O(|K|\log^2|K|)$ operations. Next, we consider the case where $j\in I$. For this, we can again proceed as in the analysis for computing $a_i$~(with the roles of sets $I$ and $K$ swapped) till we need to compute 
+%
+%    \textbf{So, it suffices to compute $\varphi_j$ for all $j \in \setind$}
+%
+%    Now, again continue exactly as in the $a_i$ case until we reach:
+    $$\varphi_j =\Phi_j(\xi^j) = \frac{-\eta_j'(\xi^j)}{Z_I'(\xi^j)}$$
+    for all $j \in \setind$. First of all, note that during the prior computation to reach this stage, we would have already computed $Z_I'(\xi^j)$ for all $j\in K$, and thus, for all $j\in \setind\subset K$.  
+%    Note that $Z_I'(\xi^j)$ we would have already computed for all $j \in \setind$ by the time we reach this stage \\
+	Next, observe that we also computed $\eta_i'(\xi^i)$ for $i\in \setind$ during the computation of $a_i$.
+%    \textbf{So, it suffices to compute $-\eta_j'(\xi^j)$ for all $j \in \setind$\\}
+%    But we computed $\eta_i'(\xi^i)$ for $i\in \setind$ during the computation of $a_i$. We reuse whatever we got!
+    This completes the computation of $b_j$ for all $j \in K$, and finishes the proof of lemma \ref{lem:sum-computation}.
+\end{proof}
+
+
+%\section{Reducing indexed lookups to subvector lookups}\label{sec:generic-transformation-app}
+%We give the proof of Lemma ~\ref{lem:generic-transformation} here.
+%\begin{proof}[Proof of Lemma ~\ref{lem:generic-transformation}]
+%Assume that there exists $i\in [m]$ such that $v_i\neq \vec{t}[\,a_i\,]$.
+% We bound the probability
+%that the check $\vec{v} + \gamma \vec{a}\leq \vec{t}+\gamma \vec{I}_n$ succeeds for
+%$\gamma\gets \F$ chosen uniformly. The probability is clearly upper bound by the probability
+%that $v_i + \gamma a_i\in \vec{t}+\gamma \vec{I}_n$, or $v_i+\gamma a_i=t_j + \gamma j$ for
+%some $j\in [n]$, or $v_i + \gamma (a_i - j)=t_j$. We note that for $a_i\neq j$ (by assumption),
+%the left hand side is uniform in $\F$, and hence occurs in $\vec{t}$ with probability at most
+%$n/|\F|$. This concludes the proof of the lemma.
+%\end{proof}
+
+\begin{comment}
+Let us say we have a subvector lookup argument $L$ which takes as input two vectors say $a, b$ and determines whether $b$ is a subvector of $a$. It outputs $1$ if $b$ is a subvector of $a$ and $0$ if $b$ is not a subvector of $a$.
+Recall that $b$ is said to be a subvector of $a$ if every element of $b$ is in $a$\\
+Indexed lookup argument $L'$ takes in 3 vectors $a, b, c$ where $c$ is a vector of indices with $|b|=|c|$ and checks that $b$ is a subvector of $a$ and that $a[c_i]=b_i$ for all $i$. That is, it does $L(a, b)$ first and further checks that $a$ restricted to the indices in $c$(in a particular order) gives $b$(in that particular order).
+If $b$ is a subvector of $a$ and $a[c_i]=b_i$ for all $i$ then it outputs $1$ else it outputs $0$.\\
+
+\textbf{Note:} Given $a,b$ with $b$ subvector of $a$, there will always exist a $c$ with $|c|=|b|$ such that $a[c_i]=b_i$ for all $i$. The $c$ may not be unique though. \\\\
+So, we are given $T, v, a$ with $|a|=|v|$ and we want to compute $L'(T, v, a)$ using $L(\cdot, \cdot)$.
+Let $|T|=N$. Let $|v|=m=|a|$.
+Procedure to compute $L'(T, v, a)$ is as follows:
+\begin{itemize}
+    \item First compute $L([N], a)$. This checks that $a$ is indeed a vector of indices. Call the output of this as $b_1$
+    \item Next compute $L(T, v)$. This checks that $v$ is indeed a subvector of $T$. Call the output of this as $b_2$
+    \item Choose a $\gamma$ uniformly at random from $\F^*$
+    \item Compute $L(T+\gamma[N], v+\gamma a)$ which checks that $v+\gamma a$ is a subvector of $T+\gamma [N]$. Call the output $b_3$.
+    \item $L'(T, v, a)$ is then computed as $b_1 \wedge b_2 \wedge b_3$
+\end{itemize}
+This procedure works for any $T,v,a$ with $|v|=|a|$. So, this gives a procedure for calculating $L'(\cdot, \cdot, \cdot)$.
+
+\begin{lemma}\label{lem:reduction}
+Let the procedure for getting $L'(\cdot, \cdot, \cdot)$ be as above. Then, if $L(\cdot, \cdot)$ is a valid subvector lookup argument then the procedure yields a valid indexed lookup argument $L'(\cdot, \cdot, \cdot)$ with an error probability upper bounded by $\frac{O(1)}{|\F|}$.
+\end{lemma}
+
+\begin{proof}
+    To show that the procedure yields a valid indexed lookup argument $L'(T, v, a)$, we need to show the following:
+    \begin{enumerate}
+
+        \item If $v$ is indeed a subvector of $T$ with $T$ restricted to $a$ giving $v$, then $b_1=b_2=b_3=1$ with probability lower bounded by $1-\frac{O(1)}{|\F|}$
+        \item If either $v$ is not a subvector of $T$ or if $v$ is a subvector of $T$ but restriction of $T$ to $a$ is not $v$, then at least one of $b_1, b_2, b_3$ is $0$ with probability lower bounded by $1-\frac{O(1)}{|\F|}$
+    \end{enumerate}
+
+    For (1), suppose $v$ is a subvector of $T$ with $T$ restricted to $a$ giving $v$. Then $L(T, v)=b_2=1$.
+    Moreover, $a$ is a subvector of $[N]$(else restricting $T$ to $a$ won't even make sense).
+    So, $L([N], a)=b_1=1$.
+    Lastly, since $v_i=T[a_i]$ for all $i \in m$, we have that for any $\gamma \in \F^{*}$,
+    $$T[a_i]+\gamma a_i=v_i+\gamma a_i$$ for all $i$ \\
+    But $T[a_i]+\gamma a_i$ is of course an element of $T+\gamma [N] $ for all $i \in [m]$.(Every $a_i \in [N]$).
+    So, $\{T[a_i]+\gamma a_i:i \in [m]\}$ is a subvector of $T+\gamma [N] $.
+    Thus, $\{v_i+\gamma a_i:i \in [m]\}$ is a subvector of $T+\gamma [N] $.
+    So, $v+\gamma a$ is a subvector of $T+\gamma [N] $.
+    Thus, $L(T+\gamma[N], v+\gamma a)=b_3=1$
+
+    This completes proof of (1).(In this case the probability is actually 1) \\\\
+    For proof of (2). if $v$ is not a subvector of $T$ then $L(T, v)=b_2=0$ with probability 1 and we are done.
+    So let us assume that $v$ is a subvector of $T$ and restriction of $T$ to $a$ is not $v$.
+    If $a$ is not a vector of indices (that is, some $a_i \notin [N]$) then $L([N], a)=b_1=0$ with probability 1 and we are done.
+    So, let us assume that $a$ is a vector of indices (of course by definition of $L'$, we have that $|a|=|v|=m$).\\
+    \textbf{It suffices to show that $L(T+\gamma[N], v+\gamma a)=b_3$ is 0 with probability lower bounded by $1-\frac{O(1)}{|\F|}$.}
+
+    Since $v$ is a subvector of $T$ there is a restriction of $T$ which gives $v$. Say the restriction is $b$. Then $|b|=|v|=m$ and $T[b_i]=v_i$ for all $i \in [m]$.
+    Moreover, by our assumption that restriction of $T$ to $a$ is not $v$, we have that $a \neq b$.
+    But $a\neq b$ implies there exists a $k \in [m]$ such that $a_k\neq b_k$.
+    As restriction of $T$ to $a$ is not $v$, there exists a $k \in [m]$ such that $T[a_k]\neq v_k$\\
+    Let $I=\{k \in [m]: T[a_k]\neq v_k\}$.
+    By the fact that restriction of $T$ to $a$ is not $v$ , $I \neq \phi$.
+    Also, $I \subset [N]$.
+    By well ordering principle, $I$ has a smallest element, say $i$.
+    Then for this $i$, $T[a_i]\neq v_i$. Moreover, as $v_i=T[b_i]$; $a_i \neq b_i$ \\
+
+    Let $\gamma$ be picked uniformly at random from $\F^*$.
+    Consider the vector $T+\gamma[N]$. Once $\gamma$ has been chosen, this is a fixed vector..
+    Also, consider the vector $v+\gamma a$. One of the elements in this vector is $v_i +\gamma a_i$.
+    We will upper bound the probability that this element is an element of the vector $T+\gamma[N]$. \\
+    $$\Pr[v_i +\gamma a_i \in T+\gamma[N]]=\Pr[\exists j \in [N] \ni v_i +\gamma a_i=T[j]+\gamma j]$$
+    But by union bound:
+    $$\Pr[\exists j \in [N] \ni v_i +\gamma a_i=T[j]+\gamma j] \leq \sum_{j=1}^N \Pr[v_i +\gamma a_i=T[j]+\gamma j]$$
+    Thus,
+    $$\Pr[v_i +\gamma a_i \in T+\gamma[N]] \leq \sum_{j=1}^N \Pr\left[\gamma = \frac{T[j]-v_i}{a_i-j}\right] $$
+
+    Let $M'$ be defined as $M'=\{j\in [N] \ni T[j]=v_i \}$.
+    Let $M$ be defined as $M' \cup \{a_i\}$. Clearly $M \subset [N]$.\\
+    But now, consider $\frac{T[j]-v_i}{a_i-j}$. For $j=a_i$ this is not defined. And for $j$ such that $T[j]=v_i$, this is 0. So, for such values of $j$, probability that $\gamma$ equals to it is $0$.
+    For other values of $j$, $\frac{T[j]-v_i}{a_i-j}$ is an element of $\F^{*}$ and since $\gamma$ is a random element of $F^{*}$, the probability that $\gamma$ equals to it is $\frac{1}{|\F|-1}$\\
+    In other words,
+    \begin{gather}
+        \Pr\left[\gamma = \frac{T[j]-v_i}{a_i-j}\right]=\frac{1}{|\F|-1}\, \forall j \in [N]\setminus M\\
+        \Pr\left[\gamma = \frac{T[j]-v_i}{a_i-j}\right]=0 \, \forall j \in M
+    \end{gather}
+
+    Thus, we get that:
+    $$\Pr[v_i +\gamma a_i \in T+\gamma[N]] \leq
+    \sum_{j \in [N]\setminus M} \Pr\left[\gamma = \frac{T[j]-v_i}{a_i-j}\right]+$$
+    $$\sum_{j \in M} \Pr\left[\gamma = \frac{T[j]-v_i}{a_i-j}\right]=\sum_{j \in [N]\setminus M} \Pr\left[\gamma = \frac{T[j]-v_i}{a_i-j}\right]$$
+    $$=\sum_{j \in [N]\setminus M} \frac{1}{|\F|-1}=\frac{|[N]\setminus M|}{|\F|-1} \leq \frac{N-2}{|\F|-1}$$
+    We used first that $[N]\setminus M$ and $M$ are disjoint and union is $[N]$, then we used the above equalities for $\Pr\left[\gamma = \frac{T[j]-v_i}{a_i-j}\right]$ and finally used that $|M| \geq 2$ as $M$ atleast contains $a_i$ and $b_i$.\\
+    So we have obtained:
+    $$\Pr[v_i +\gamma a_i \in T+\gamma[N]] \leq \frac{N-2}{|\F|-1}$$
+    All this was done for the smallest element $i$ of the set $I$.
+    For $v+\gamma a$ to be a subvector of $T+\gamma [N]$, we need that:
+    $$v_i +\gamma a_i \in T+\gamma[N]$$ for all $i \in I$.
+    But observe that,
+    $$\Pr[v_i +\gamma a_i \in T+\gamma[N] \, \text{for all} \, i \in I] \leq \Pr[v_i +\gamma a_i \in T+\gamma[N]] \leq \frac{N-2}{|\F|-1}$$
+    So, we have that $$\Pr[v_i +\gamma a_i \in T+\gamma[N] \, \text{for all} \,i \in I] \leq \frac{N-2}{|\F|-1}$$
+    So, the probability that $v+\gamma a$ is a subvector of $T+\gamma [N]$ is upper bounded by $\frac{N-2}{|\F|-1}$.
+    But $N <<|\F|$. So, $\frac{N-2}{|\F|-1}$ is $\frac{O(1)}{|\F|}$. \textbf{Thus, the error probability is upper bounded by $\frac{O(1)}{|\F|}$}.\\
+    So, with a probability of atleast $(1-\frac{N-2}{|\F|-1})$, $v+\gamma a$ is not a subvector of $T+\gamma [N]$.
+    So, $L(T+\gamma[N], v+\gamma a)=b_3$ is 0 with probability lower bounded by $1-\frac{O(1)}{|\F|}$. \\
+    This completes the proof of lemma \ref{lem:reduction}
+\end{proof}
+\end{comment}
+
+%%% complete protocol listing %%%
+%\begin{figure}[t!]
+%	\begin{mdframed}
+%		
+%		\underline{Setup $(1^\secp,N,m, \vecT, \vecT')$}:
+%		\begin{itemize}[leftmargin=1em]
+%			\item $\srs = (\{\gone{\tau^i}\}_{i=0}^N, \{\gtwo{\tau^i}\}_{i=0}^N)$ for $\tau\gets \F$.
+%			\item $W_2^i=\gtwo{(\ell(X) - i)/(X-\xi^i)}$, $i\in [N]$(needed by prover)
+%			\item $W_3^i=\gtwo{\vpolyN(X)/(X-\xi^i)}$, $i\in [N]$(needed by prover)
+%			\item $\gone{\ell(X)}, \gone{\vpolyN(X)}, \gtwo{\vpolyN(X)}$(known by both)
+%		\end{itemize}
+%		
+%		\underline{Precompute $(\vecT, \vecT')$}:
+%		\begin{itemize}[leftmargin=1em]
+%			\item $W_1^i=\gtwo{(T(X)-T(\xi^i))/(X-\xi^i)}$, $i\in [N]$,
+%			\item ${W_1^i}'=\gtwo{(T'(X) - T'(\xi^i))/(X-\xi^i)}$, $i\in [N]$.
+%		\end{itemize}
+%		
+%		{\bf Common Input}: $\srs$, $c_T, c_T', c_\op, c_a, c_w\in \Gone$.\\
+%		{\bf Prover's Input}: Vectors $\vecT,\vecT',\vec{\op},\vec{a},\vec{w}$ and their encoding polynomials.\\
+%		
+%		{\bf Round 1}: Commit to sub RAMs.
+%		\begin{enumerate}[leftmargin=1em, label=\arabic*.]
+%			\item $\prover$ computes $\vec{v}=\vecT[\,\vec{a}\,]$, $\vec{v}'=\vecT'[\,\vec{a}\,]$ and the encoding
+%			polynomials $v(X)$ and $v'(X)$.
+%			\item $\prover$ sends $c_v = \gone{v(X)}$, $c_v'=\gone{v'(X)}$.
+%			\item $\verifier$ sends $\chi\gets \F$.
+%		\end{enumerate}
+%		
+%		{\bf Round 2}: Execute committed index lookup.
+%		\begin{enumerate}[leftmargin=1em, label=\arabic*.]
+%			\item $\prover$ and $\verifier$ compute $C_T=c_T + \chi c_T'$, $C_V=c_v + \chi c_v'$.
+%			\item $\prover$ computes $P(X) = T(X) + \chi T'(X)$, $V(X)=v(X) + \chi v'(X)$.
+%			\item $\prover$ computes $I=\{a_i: i\in [m]\}$, $\setN_I=\{\xi^i: i\in I\}$.
+%			\item $\prover$ computes polynomials:
+%			\begin{itemize}[leftmargin=1em, label=-]
+%				\item Vanishing polynomial $Z_I(X)$ of $\setN_I$.
+%				\item Polynomial $h(X)=\sum_{i\in [m]}\xi^{a_i}\tau_i(X)$.
+%				\item Restrictions $P_I(X),\ell_I(X)$ of $P(X),\ell(X)$ on set $I$.
+%				\item $K(X)=\prod_{i\in [m]}(X-\xi^{a_i})$, $q(X)=K(X)/Z_I(X)$
+%				\item $D(X)= \sum_{i\in I}\frac{\Delta_i Z_I'(\xi^i)}{Z_\setN'(\xi^i)}\kappa_i(X)$ by interpolation as described in section 5.2
+%			\end{itemize}
+%			
+%			\item $\prover$ sends $c_p = \gone{P_I(X)}$, $c_z=\gone{Z_I(X)}$, $c_{z2}=\gtwo{Z_I(X)}$, $c_h=\gone{h(X)}$, $c_l = \gone{\ell_I(X)}$,
+%			$c_k = \gone{K(X)}$, $c_q = \gone{q(X)}$, $c_d=\gone{D(X)}$
+%			\item $\verifier$ sends $\gamma\gets \F$.
+%		\end{enumerate}
+%		
+%		{\bf Round 3}: Prover send aggregated quotients.
+%		\begin{enumerate}[leftmargin=1em, label=\arabic*.]
+%			\item $\prover$ computes $g(X)=P_I(X) + \gamma \ell_I(X) + \gamma^2 Z_I(X)$.
+%			\item $\prover$ computes $Q(X) = (g(h(X)) - v(X) -\gamma a(X))/Z_\setV(X)$.
+%			\item $\prover$ computes: $W = \sum_{i\in [m]} \frac{1}{Z_I'(\xi^i)} (W_1^i + \chi {W_1^i}' + \gamma W_2^i + \gamma^2 W_3^i)$.
+%			\item $\prover$ sends $W\in \Gtwo$, $c_Q=\gone{Q(X)}$.
+%			\item $\verifier$ computes $c_g = c_p + \gamma c_l + \gamma^2 c_z$, $C_G = C_T + \gamma\gone{\ell(X)}+\gamma^2\gone{\vpolyN(X)}$.
+%			\item $\verifier$ checks: $e(C_G - c_g, \gtwo{1})=e(c_z, W)$.
+%			\item $\verifier$ checks: $e(c_T-c_{T'}, c_{z2})=e(c_d, \gtwo{\vpolyN(X)})$
+%			\item $\verifier$ checks: $e(c_z, [1]_2)=e([1]_1, c_{z2})$
+%			\item $\verifier$ sends $\alpha\gets \F$.
+%		\end{enumerate}
+%		
+%		Continued in Figure ~\ref{fig:complete-listing-3}
+%	\end{mdframed}
+%	\caption{Batching-Efficient RAM Protocol}
+%	\label{fig:complete-listing-1}
+%\end{figure}
+%
+%\begin{figure}[t!]
+%    \begin{mdframed}
+%        \begin{center}
+%            Continued from Figure \ref{fig:complete-listing-1} %\moumita{merged the 2nd and 3rd figure.}
+%        \end{center}
+%        {\bf Round 4}: Prover sends evaluations.
+%        \begin{enumerate}[leftmargin=1em, label=\arabic*.]
+%            \item $\prover$ computes $\val{\alpha}{v}=v(\alpha)$, $\val{\alpha}{a}=a(\alpha)$, $\val{\alpha}{h}=h(\alpha)$, $\val{\alpha}{K}=K(\alpha)$,
+%            $\val{h(\alpha)}{g}=g(h(\alpha))$, $\val{\alpha}{Q}=Q(\alpha)$, $\val{\alpha}{q}=q(\alpha)$, $\val{\alpha}{Z}=Z_I(\alpha)$.
+%            \item $\prover$ sends $\val{\alpha}{v}$, $\val{\alpha}{a}$, $\val{\alpha}{h}$, $\val{\alpha}{K}$, $\val{h(\alpha)}{g}$, $\val{\alpha}{Q}$,
+%            $\val{\alpha}{q}$, $\val{\alpha}{Z}$
+%            \item $\prover$ computes polynomial $u(X)$ as in Section ~\ref{subsec:proximity-ram}
+%            and sends $c_u=\gone{u(X)}$.
+%            \item $\verifier$ checks $\val{\alpha}{Q}(\alpha^m-1)=\val{h(\alpha)}{g}-\val{\alpha}{v}-\gamma \val{\alpha}{a}$.
+%            \item $\verifier$ checks $\val{\alpha}{Z}\val{\alpha}{q}=\val{\alpha}{K}$.
+%            \item $\verifier$ sets $\beta=\val{\alpha}{K}-1$ and sends $\theta\gets\F$.
+%        \end{enumerate}
+%
+%        {\bf Round 5}: Check correctness of $K$.
+%        \begin{enumerate}[leftmargin=1em, label=\arabic*.]
+%            \item $\prover$ computes:
+%            \begin{align*}
+%                Q'(X) &= \big(u(\nu X)(1+\beta \tau_1(X))-u(X)(\alpha - h(X)) \\
+%                &\quad + \theta \tau_1(X)(u(X)-1)\big)/Z_\setV(X).
+%            \end{align*}
+%            \item $\prover$ sends $c_Q'=\gone{Q'(X)}$.
+%            \item $\verifier$ sends $x\gets \F$.
+%        \end{enumerate}
+%
+%        {\bf Round 6}: Prover sends more evaluations.
+%        \begin{enumerate}[leftmargin=1em, label=\arabic*.]
+%            \item $\prover$ computes $\val{x}{u}=u(x)$, $\val{\nu x}{u}=u(\nu x)$, $\val{x}{h}=h(x)$, $\val{x}{Q'}=Q'(x)$
+%            \item $\prover$ sends $\val{x}{u}$, $\val{\nu x}{u}$, $\val{x}{h}$, $\val{x}{Q'}$.
+%            \item $\verifier$ checks $\val{x}{Q'}(x^m-1)=\val{\nu x}{u}(1+\beta \tau_1(x))-\val{x}{u}(\alpha - \val{x}{h})$.
+%            \item $\verifier$ sends $r_a, r_h, r_q, r_v, r_K, r_Q, r_Z\gets \F$ and $r_h', r_u', r_Q'\gets \F$.
+%        \end{enumerate}
+%
+%        \begin{center}
+%            Continue in Figure ~\ref{fig:complete-listing-3}.
+%        \end{center}
+%
+%
+%    \end{mdframed}
+%    \caption{Batching-Efficient RAM Protocol: Continued}
+%    \label{fig:complete-listing-2}
+%\end{figure}
+%
+%\begin{figure}[t!]
+%    \begin{mdframed}
+%        \begin{center}
+%            Continued from Figure \ref{fig:complete-listing-2}
+%        \end{center}
+%        \item {\bf Round 7}: Check aggregated evaluation.
+%        \begin{enumerate}[leftmargin=1em, label=\arabic*.]
+%            \item $\prover$ computes:
+%            \begin{align*}
+%                \Phi_\alpha(X) &= r_a a(X)+ r_h h(X) + r_q q(X) + r_v v(X) \\
+%                &\quad + r_K K(X) + r_Q Q(X) + r_Z Z_I(X) \\
+%                \Phi_x(X) &= r_h' h(X) + r_u' u(X)+r_Q'Q'(X)
+%            \end{align*}
+%            \item $\prover$ computes $\Pi_\alpha = \KZGopen(\srs, \Phi_\alpha(X), \alpha)$.
+%            \item $\prover$ computes $\Pi_x = \KZGopen(\srs, \Phi_x(X), x)$.
+%            \item $\prover$ computes $\Pi_g = \KZGopen(\srs, g(X), \val{\alpha}{h})$.
+%            \item $\prover$ computes $\Pi_u = \KZGopen(\srs, u(X), \nu x)$.
+%            \item $\prover$ sends $\Pi_\alpha$, $\Pi_x$, $\Pi_g$ and $\Pi_u$.
+%            \item $\verifier$ computes:
+%            \begin{align*}
+%                \gone{\Phi_\alpha} &= r_a c_a + r_h c_h + r_q c_q + r_v c_v + r_z c_z + r_K c_K + r_Q c_Q. \\
+%                \gone{\Phi_x} &= r_h' c_h + r_u' c_u + r_Q' c_Q' \\
+%                V_{\alpha} &= r_a \val{\alpha}{a} + r_h \val{\alpha}{h} + r_q \val{\alpha}{q} + r_v \val{\alpha}{v} \\
+%                &\quad + r_z\val{\alpha}{Z} r_K \val{\alpha}{K} + r_Q \val{\alpha}{Q}. \\
+%                V_x &= r_h' \val{x}{h} + r_u' \val{x}{u}+r_Q' \val{x}{Q'}
+%            \end{align*}
+%            \item $\verifier$ checks:
+%            \begin{itemize}[leftmargin=1em]
+%                \item $\KZGverify(\srs, \gone{\Phi_\alpha}, V_\alpha, \alpha, \Pi_\alpha)$.
+%                \item $\KZGverify(\srs, \gone{\Phi_x}, V_x, x, \Pi_x)$.
+%                \item $\KZGverify(\srs, c_g, \val{h(\alpha)}{g}, \val{\alpha}{h}, \Pi_g)$.
+%                \item $\KZGverify(\srs, c_u,\val{\nu x}{u}, \nu x, \Pi_u)$.
+%            \end{itemize}
+%            \item $\prover$ and $\verifier$ set $c_S=(c_a, c_v)$, $c_S'=(c_a, c_v')$, $c_o=(c_\op, c_a, c_w)$.
+%            \item $\prover$ and $\verifier$ execute argument for $(c_S, c_o, c_S')\in \CLRAM$ \\
+%            (Section ~\ref{sec:poly-proto-ram}).
+%        \end{enumerate}
+%    \end{mdframed}
+%    \caption{Batching-Efficient RAM Protocol-Continued}
+%    \label{fig:complete-listing-3}
+%\end{figure}
+
+
+\input{app-CIlookup-caulkplus}
