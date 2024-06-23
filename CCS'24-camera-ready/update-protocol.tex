@@ -169,14 +169,15 @@ between vectors $\vecTbase$ and $\vecT$.
     \begin{proof}[Proof-Sketch]
         We provide a very high-level overview of the proof idea for $a_i$.
         First, we mention that the special case of the lemma when $d_j=1$ for all $j\in K$ admits an efficient computation due to the following identity
-        proved in Lemma D.1 of the full version of the paper~\cite{full-ver}.
+        proved in Lemma D.1 of the full version of the paper~\cite{full-ver}. For $Z_K(X)=\prod_{i\in K}(X-\xi^i)$, we have
         \begin{equation*}
-            \frac{Z_K''(\xi^i)}{Z_K'(\xi^i)} = 2\sum_{j\in K\setminus \{i\}}\frac{1}{\xi^i-\xi^j}
+            \frac{Z_K''(\xi^i)}{Z_K'(\xi^i)} = 2\sum_{j\in K\setminus \{i\}}\frac{1}{\xi^i-\xi^j}.
         \end{equation*}
-        for $Z_K(X)=\prod_{i\in K}(X-\xi^i)$. The polynomial $Z_K$ can be computed in $O(|K|\log^2|K|)$ and subsequent evaluations of its first two
+        The polynomial $Z_K$ can be computed in $O(|K|\log^2|K|)$ and its first two
         derivatives can also be evaluated on the set $\{\xi^i: i\in I\}$ with the same complexity. However, to deal with arbitrary values of $d_j$ we
-        need more ingenuity. We will {\em imagine} $d_j$ to be $p(\xi^j)$ for some polynomial $p(X)$. Moreover, we demand that $p(\xi^j)=0$ for $j\not\in K$.
-        We will not compute such a polynomial $p$, as it has degree $O(N)$, but view it as an ``oracle'' which we can hopefully query at the points we need. We defer the detailed proof to the full version of the paper~\cite{full-ver}. 
+        need more ingenuity. %We will {\em imagine} $d_j$ to be $p(\xi^j)$ for some polynomial $p(X)$, such that $p(\xi^j)=0$ for $j\not\in K$.
+        %We will not compute such a polynomial $p$, as it has degree $O(N)$, but view it as an ``oracle'' which we can hopefully query at the points we need. 
+        We defer the detailed proof to the full version of the paper~\cite{full-ver}. 
 %        Then it can be seen that $a_i=g_i(\xi^i) - r_i(\xi^i)$ for rational functions $g_i(X)$ and $r_i(X)$ defined by:
 %        \begin{align}\label{eq:rat-fun-f}
 %        g_i(X) =\sum_{j\in [N]\setminus i}\frac{p(X)}{X-\xi^j},\quad
