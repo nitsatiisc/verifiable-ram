@@ -1,0 +1,512 @@
+In this section, we formalize the notions of RAM, RAM operations and
+execution transcripts etc., and subsequently introduce relevant relations over them.
+We have earlier used a vector $\vecT\in \F^n$ to model a RAM of size $n$, where the $i^{th}$ entry $\vecT[\,i\,]$
+implicitly corresponds to index (address) $i$. Here, we will consider a generalisation that will be useful later.
+We will allow a RAM to explicitly associate a value $v\in \F$ to an index $a$ from an {\em index space}
+$\cal{I}\subseteq \F$, such that the association is unambiguous.
+\begin{definition}[RAM]\label{defn:RAM}
+    Given $n\in \N$, finite field $\F$ and a set $\cal{I}\subseteq \F$, a RAM of size $n$ over indices $\cal{I}$
+    is a tuple $T=(\vec{a},\vec{v})\in \mathcal{I}^n\times \F^n$ such that $\forall\, i,j\in [n]$  $v_i=v_j$ whenever $a_i=a_j$.
+    We think of $T$ as a table with vectors $\vec{a}$ and $\vec{v}$ denoting its columns. The set of all such
+    tables will be denoted by $\RAM{I}{n}$.
+    %\begin{align*}
+    %        T[\,a\,] = \begin{cases}
+    %                   v \text{ if } \, \exists i\in [n] \text{ s.t. } (a,v) = (a_i,v_i), \\
+     %                  \bot \text{ otherwise }
+    %                \end{cases}
+    %\end{align*}
+\end{definition}
+
+For a table $T=(\vec{a},\vec{v})\in \RAM{I}{n}$, we refer to tuples $(a_i,v_i)$, $i\in [n]$ as records of the table $T$.
+We use the access notation $v=T[a]$ to mean that $(a,v)$ is a record of $T$.
+Note that our definition allows identical records to be repeated. When we refer to a vector $\vecT\in \F^n$ as a RAM, we implicitly
+assume $T=(\setind_n,\vecT)$ where $\setind_n=(1,2,\ldots,n)$ and we have $\vecT[i]=t_i$.
+For a RAM $T\in \RAM{I}{n}$, a RAM operation is a three tuple $(\op,a,v)$ with $\op\in \{0,1\}$,
+$a\in \setind$ and $v\in \F$. An operation with $\op=0$ is called a {\em load} operation which denotes reading a value $v$
+mapped to index $a$ in the RAM. Similarly, an operation with $\op=1$ is called a {\em store} operation,
+which denotes associating the value $v$ with index $a$ in the RAM.
+We use $\RAMOp{I}$ to denote the set of all RAM operations with index set $\setind$.
+%We say than an operation
+%$(\op,a,v)\in \{0,1\}\times \setind\times \F$ is {\em admissible} with respect to RAM $T\in \RAM{I}{n}$ if
+%$T[\,a\,]=v$ whenever $\op=0$ (i.e, the operation loads a value which agrees with the value in the RAM at the specified index).
+
+\subsection{Correctness of RAM Update}\label{subsec:ram-update}
+The versatility of the RAM primitive stems from its updatability. While a load operation leaves the RAM unchanged, the store operation
+updates the value in the RAM associated with the referenced index. We model the update via the function
+$\Rupd{I}$ which takes RAM $T\in \RAM{I}{n}$, operation
+$o=(\op,a,v)\in \RAMOp{I}$ as inputs and returns an updated RAM $T'\in \RAM{I}{n}$.
+The updated RAM $T'=\Rupd{I}(T,o)$ satisfies
+$T'=T$ if $\op=0$ while for $\op=1$ it satisfies $T'[\,a\,]=v$  and $T'[\,x\,]=T[\,x\,]$ for $x\neq a$. The central problem
+in verifiable RAM protocols is to establish that a sequence of operations $\vec{o}=(o_1,\ldots,o_m)$ are correct with
+respect to the initial RAM state $T$ and the final RAM state $T'$. This involves ensuring
+that all load operations read the value which is consistent with updates to the RAM as a result of preceding
+store operations, and that $T'$ is the final state. We say that an operation $o=(\op,a,v)$ is {\em load-consistent}
+with respect to RAM $T$ if $v=T[a]$ whenever $o$ is a load operation (store operations are vacuously defined to be load-consistent).
+We formally define the notion of consistency below:
+
+\begin{definition}[Consistent Operations]\label{defn:consistent-operations}
+    Let $n\in \N$ and $T,T'\in \RAM{I}{n}$ for some index set $\setind$. We say that a sequence of operations
+    $\vec{o}=(o_1,\ldots,o_k)\in \RAMOp{I}^k$ over $\setind$ is {\em consistent} with RAM states
+    $T,T'$ if for all $i\in [k]$, $T_{i}=\Rupd{I}(T_{i-1},o_i)$ and operation $o_i$ is load-consistent with respect to $T_{i-1}$. Here
+    we assume $T_0=T$ and $T_k=T'$.
+\end{definition}
+
+For $m,n\in \N$, let $\LRAM{I}{m}{n}$ denote the language consisting of tuples $(T,\vec{o},T')$ with $T,T'\in \RAM{I}{n}$ and $\vec{o}\in (\RAMOp{I})^m$
+such that $\vec{o}$ is consistent with $T,T'$.
+Next, we formalize the folklore technique of checking correctness of RAM operations
+using {\em address-ordered transcripts}.
+
+\subsection{Consistency Check via Transcripts}\label{subsec:transcripts}
+A {\em transcript} is time-stamped sequence of operations executed on a RAM.
+More formally, given a RAM $T=(\vec{a},\vec{v})\in \RAM{I}{n}$,
+operation sequence $\vec{o}=(o_1,\ldots,o_m)$ with $o_i=(\bar{\op_i},\bar{a}_i,\bar{v}_i)\in \RAMOp{I}$ and RAM $T'=(\vec{a}', \vec{v}')\in \RAM{I}{n}$,
+the {\em time ordered transcript} for the tuple $(T,\vec{o},T')$ is given by the table $\tr$ with $k=2n+m$ rows and four columns
+$\tr = (\vec{t},\vec{\op},\vec{A},\vec{V})$  defined as follows: (i) $\vec{t}=\setind_{k}=(1,\ldots,k)$,
+(ii) $\vec{\op}=0^n||(\bar{\op}_1,\ldots,\bar{\op}_m)||0^n$,
+(iii) $\vec{A}=\vec{a}||(\bar{a}_1,\ldots,\bar{a}_m)||\vec{a}'$ and
+(iv) $\vec{V}=\vec{v}||(\bar{v}_1,\ldots,\bar{v}_m)||\vec{v}'$. The $i^{th}$ row of the table $\tr$ is
+$(t_i,\op_i,A_i,V_i)$ for $i\in [k]$. The first $n$ records in $\tr$ correspond to the contents of $T$,
+the next $m$ records correspond to the operations in $\vec{o}$ and final $n$
+records correspond to contents of $T'$. The timestamp column $\vec{t}$ is added to order operations with the same index.
+Notationally, we write $\tr=\TOT(T_0,\vec{\op},T_1)$.
+
+We call a transcript $\tr=(\vec{t},\vec{\op},\vec{A},\vec{V})$ to be {\em address ordered} if $A_i\leq A_{i+1}$ for $i\in [k-1]$ and
+$t_i < t_{i+1}$ whenever $A_i=A_{i+1}$. For a transcript $\tr=(\vec{t},\vec{\op},\vec{A},\vec{V})$ with $k$ records and a
+permutation $\sigma:[k]\rightarrow [k]$, we use $\sigma(\tr)$ to denote the transcript
+$(\sigma(\vec{t}),\sigma(\vec{\op}),\sigma(\vec{A}),\sigma(\vec{V}))$
+obtained by permuting the records of $\tr$ according to the permutation $\sigma$.
+An address ordered transcript for tuple $(T,\vec{o},T')$ is defined as $\tr^\ast=\sigma(\tr)$ where $\tr=\TOT(T,\vec{o},T')$ and $\sigma$ is
+a permutation such that $\tr^\ast$ is an address ordered. We denote it by $\tr^\ast=\AOT(T,\vec{o},T')$.
+We say that an address ordered transcript $\tr=(\vec{t},\vec{\op},\vec{A},\vec{V})$ satisfies {\em load-store correctness}
+if for all pairs of consecutive records $(t_i,\op_i,A_i,V_i)$ and $(t_{i+1},\op_{i+1},A_{i+1},V_{i+1})$ we have $V_{i+1}=V_i$
+whenever $\op_{i+1}=0$ (load operation) and
+$A_i=A_{i+1}$, i.e, a load operation does not change the value at an index.
+We formally state the folklore technique for enforcing memory consistency in our setting.
+\begin{lemma}\label{lem:consistency-check}
+Let $\F$ be a finite field, $m,n\in \N$ be positive integers and $\setind\subseteq \F$. Then $(T,\vec{o},T')\in \LRAM{I}{n}{m}$ if and only if
+    the address ordered transcript $\tr^\ast=\AOT(T,\vec{o},T')$ satisfies load-store correctness.
+\end{lemma}
+
+\subsection{Polynomial Encoding}\label{subsec:poly-encoding}
+The aim of this section is to encode artefacts such as RAM state, operations and transcripts as polynomials, and
+translate checking memory consistency (equivalently, checking membership in $\LRAM{I}{n}{m}$) to checking polynomial identities
+over the encoded polynomials. For
+simplicity and its usefulness later, we consider the case $m=n$, and accordingly check the membership in the language $\LRAM{I}{m}{m}$.
+Let $k=3m$ and let $\omega$ be the $k^{th}$ root of unity in $\F$.
+Let $\nu=\omega^3$, and thus $\nu$ is an $m^{th}$ root of unity in $\F$ (We assume, these roots exist in $\F$).
+We define sets $\setH$ and $\setV$ below consisting of $k^{th}$ and $m^{th}$ roots of unity respectively.
+\begin{gather}\label{eq:interpolation-sets}
+    \setH = \{\omega,\ldots,\omega^k\},\quad \setV = \{\nu,\ldots,\nu^m\}
+\end{gather}
+Let $\{\lambda_i(X)\}_{i=1}^k$ be lagrange basis polynomials
+for the set $\setH$ and $\{\tau_i(X)\}_{i=1}^m$ be the lagrange polynomials for the set $\setV$ satisfying
+$\lambda_i(\omega^j)=\delta_{ij}$ for $i,j\in [k]$ and $\tau_i(\nu^j)=\delta_{ij}$ for $i,j\in [m]$.
+We use $\setH$ to encode a vector $\vec{f}=(f_1,\ldots,f_k)$ of size $k$ as the polynomial $f(X)\in \F_{<k}[X]$ such that $f(\omega^i)=f_i$ for $i\in [k]$.
+Similarly, we use $\setV$ to encode a vector
+$\vec{g}=(g_1,\ldots,g_m)$ of size $m$ as the polynomial $g(X)\in F_{<m}[X]$ such that $g(\nu^i)=g_i$ for $i\in [m]$. We use
+the notation $\enc{f}{\setH}$ and $\enc{g}{\setV}$ to denote polynomial encodings of vectors $\vec{f}\in \F^k$ and $\vec{g}\in \F^m$
+respectively.
+In the other direction, for a polynomial $f(X)\in \F[X]$,
+we use $\vec{f}_{|_\setH}$ and $\vec{f}_{|_\setV}$ to denote the vectors $(f(\omega^1),\ldots,f(\omega^k))$ and $(f(\nu^1),\ldots,f(\nu^m))$ respectively.
+The encoding of vectors as polynomials can be succinctly described using lagrange basis polynomials.
+Then we have $\enc{f}{\setH}=\sum_{i=1}^k f_i\lambda_i(X)$ and $\enc{g}{\setV}=\sum_{i=1}^m g_i\tau_i(X)$.
+
+We extend the encoding of vectors to encode RAM, operations and transcripts.
+For a RAM $T=(\vec{a},\vec{v})\in \RAM{I}{m}$, we define its encoding
+$\wt{T}=(a(X),v(X))$ where $a(X),v(X)\in \F_{<m}[X]$ encode vectors $\vec{a}, \vec{v}$ respectively.
+Given an operation sequence
+$\vec{o}=(o_1,\ldots,o_m)$ with $o_i=(\bar{\op}_i,\bar{a}_i,\bar{v}_i)$ we encode $\vec{o}$ as $\wt{O}=(\bar{\op}(X),\bar{a}(X),\bar{v}(X))$
+where $\bar{\op}(X)$ encodes the
+vector $\vec{\op}=(\bar{\op}_1,\ldots,\bar{\op}_m)$, $\bar{a}(X)$ encodes the vector $(\bar{a}_1,\ldots,\bar{a}_m)$ and $\bar{v}(X)$
+encodes the vector $(\bar{v}_1,\ldots,\bar{v}_m)$.
+Finally, a transcript $\tr=(\vec{t},\vec{\op},\vec{A},\vec{V})$ for tuples $(T,\vec{o},T')$ where $T,T'$ are RAMs of size $m$, and $\vec{o}$ is an
+operation sequence of size $m$ is encoded as $\wt{\tr}$ $=$ $(t(X)$, $\op(X)$, $A(X)$, $V(X))$ where the polynomials
+encode the respective vectors in $\F^k$.
+
+\subsection{Relations over Polynomial Encodings}\label{subsec:encoded-relations}
+In this section, we describe polynomial checks for two important relations we need in subsequent sections, viz,
+(i) checking concatenation of vectors and (ii) checking monotonicity and load-store consistency of a transcript. Let
+$k,m$ be integers with $k=3m$ as in previous section. The lemma below specifies the polynomial checks for verifying
+that vector $\vec{v}\in \F^k$ is concatenation of vectors $\vec{a},\vec{b},\vec{c}$ in $\F^m$.
+
+\begin{lemma}\label{lem:vec-concatenation}
+Let $\vec{a},\vec{b},\vec{c}\in \F^m$  and $v\in \F^k$ be vectors encoded by polynomials
+$a(X),b(X),c(X)$ and $v(X)$ respectively. Then,
+{\small
+\begin{align}
+    a(X^3) - v(X)  &= 0  \quad \text{ mod $Z(X)$ } \tag{A1}\label{eq:A1}\\
+    b(X^3) - v(\omega^m X)  &= 0   \quad \text{ mod $Z(X)$ } \tag{A2}\label{eq:A2}\\
+    c(X^3) - v(\omega^{2m} X) &= 0 \quad \text{ mod $Z(X)$ } \tag{A3}\label{eq:A3}
+\end{align}
+}
+for $Z(X)=\prod_{i=1}^m (X-\omega^i)$ if and only if $\vec{v}=\vec{a}||\vec{b}||\vec{c}$.
+\end{lemma}
+\begin{proof}
+    Assume that the polynomial identities hold. Substituting $X=\omega^i$ for $i\in [m]$ in above equations implies
+    for $i\in [m]$: $a_i=v_i$ (Eq \eqref{eq:A1}), $b_i=v_{m+i}$ (Eq \eqref{eq:A2}) and $c_i=v_{2m+i}$ (Eq \eqref{eq:A3}),
+    which together imply $\vec{v}=\vec{a}||\vec{b}||\vec{c}$. Converse follows by observing that $\vec{v}=\vec{a}||\vec{b}||\vec{c}$
+    implies that $v(X) = a(X^3)$, $v(\omega^m X)=b(X^3)$ and $v(\omega^{2m} X)=c(X^3)$ holds for all $X=\omega^i, i\in [m]$.
+    Thus, the equalities hold modulo the polynomial $Z(X)$ as defined above.
+\end{proof}
+
+Next, we specify polynomial checks on the encoding of a transcript to ensure it satisfies address-ordering and load-store consistency.
+Let $\tr=(\vec{t},\vec{\op},\vec{A},\vec{V})$ be a transcript encoded as
+$\wt{\tr}=(t(X),\op(X),A(X),V(X))$. Recall that we need to check two conditions on $\tr$, viz (i) {\em monotonicty}:
+the transcript is sorted by address and timestamp respectively, i.e, $A_i\leq A_{i+1}$ for all $i < k$ and
+$t_i < t_{i+1}$ when $A_i=A_{i+1}$, (ii) {\em load-store consistency}: whenever $\op_{i+1}=0$ and $A_i=A_{i+1}$,
+we have $V_i=V_{i+1}$. To do so, we exhibit disjoint sets $I_1,I_2$ with $I_1\uplus I_2=[k]$ such that: (i) for all
+$i\in I_1$, $A_i < A_{i+1}$, (ii) for all $i\in I_2$, $(A_i = A_{i+1})\wedge (t_i < t_{i+1})$ and (iii) for all $i\in I_2$,
+$(\op_i=1)\vee (V_i = V_{i+1})$. We note that the conditions on the sets $I_1$ and $I_2$ ensures monotonicity.
+Moreover it can be seen that load-store consistency requirements are satisfied for all $i\in I_1$ (as $A_i\neq A_{i+1}$).
+Similarly,load-store consistency also holds for all $i\in I_2$.
+It remains to exhibit the sets and show that they satisfy the above invariants using polynomials, as in the following
+lemma:
+\begin{lemma}\label{lem:addr-ordered-transcript}
+Let $\wt{\tr}$ be a polynomial encoding of transcript $\tr$ of size $k$, given by polynomials $t(X),\op(X),A(X)$ and $V(X)$.
+Then for $kN<|\F|$, $\tr$ is address ordered and satisfies load-store consistency if and only if there exist polynomials
+ $Z_1,Z_2,\delta_T,\delta_A$
+such that the following hold:
+{\small
+\begin{align}%\label{eq:loadstore-consitency-constraints}
+& Z_2(X)(A(\omega X) - A(X) - \delta_A(X)) = 0 \text{ mod } \mathbb{Z}_\setH(X) \tag{C1} \label{eq:C1} \\
+& A(\omega X) - A(X) = 0  \text{ mod } Z_2(X) \tag{C2} \label{eq:C2} \\
+& t(\omega X) - t(X) - \delta_T(X) = 0  \text{ mod } Z_2(X) \tag{C3} \label{eq:C3} \\
+& (\op(X) - 1)(V(\omega X) - V(X)) = 0  \text{ mod } Z_2(X) \tag{C4} \label{eq:C4} \\
+& Z_1(X)\cdot Z_2(X) = \mathbb{Z}_\setH(X) \quad  \tag{C5} \label{eq:C5} \\
+& 1\leq A(\omega) < N  \quad \tag{C6} \label{eq:C6} \\
+& 1\leq t(\omega^i) < N, 1\leq \delta_A(\omega^i)<N,\ 1\leq \delta_T(\omega^i)<N \text{ for } i\in [k] \tag{C7} \label{eq:C7}
+\end{align}
+}
+\end{lemma}
+
+\section{Succinct Argument for Verifiable RAM}\label{sec:poly-proto-ram}
+The polynomial encodings in the previous section can be used to polynomial protocol for
+checking the membership in the language $\LRAM{I}{m}{m}$ for $m\in \N$. The polynomial protocol can be subsequently
+be compiled into a succinct argument using an extractable polynomial commitment scheme.
+In this section, we use $\kzg$ polynomial commitment scheme to obtain a succinct argument for checking membership in $\LRAM{I}{m}{m}$
+in the Algebraic Group Model (AGM).
+At a high level, to prove $(\vec{T},\vec{o},\vec{T'})\in \LRAM{I}{m}{m}$, the prover
+constructs time ordered transcript $\tr$ and then permutes it to obtain the address sorted transcript $\tr^\ast$.
+It then sends the polynomial encodings of $\vec{T},\vec{o},\vec{T'},\tr$ and $\tr^\ast$ to the verifier, who verifies that:
+\begin{enumerate}[leftmargin=1em]
+\item The time ordered transcript is correctly constructed, i.e, $\tr=\TOT(\vec{T},\vec{o},\vec{T'})$.
+\item The transcript $\tr^\ast$ is a permutation of the transcript $\tr$, i.e, $\tr^\ast=\sigma(\tr)$ for some permutation $\sigma$ of $[k]$.
+\item The transcript $\tr^\ast$ is address ordered and satisfies load-store consistency.
+\end{enumerate}
+In fact, we consider memebership in the above language under commitments. Let $\srs$ denote a $\kzg$ setup over a bilinear group, with
+prime order groups $\Gone, \Gtwo$ and $\GT$. We canonically commit to RAM, operation sequences and transcripts by committing to their
+polynomial encodings. Commitment of an encoding represented as tuple of polynomials is simply the tuple consisting of commitments of the component
+polynomials. We now define
+the relation $\CLRAM$ below, and present a succinct argument for the same.
+\begin{definition}\label{defn:committed-vram}
+Let $\CLRAM$ consist of tuples $((c_T, c_o, c_T'), (T, \vec{o},T'))$ where $c_T$ $=$ $\kzgcommit(\srs, \wt{T})$,
+$c_T'$ $=$ $\kzgcommit(\srs, \wt{T'})$,
+$c_o$ $=$ $\kzgcommit(\srs,\wt{O})$ commit to $T$, $T'$ and $\vec{o}$ with $(T,\vec{o},T')\in \LRAM{I}{m}{m}$.
+\end{definition}
+\noindent In the above definition we have $c_T=(c_a,c_v)$ where $c_a$ and $c_v$ are $\kzg$ commitments to polynomials $a(X)$ and $v(X)$ in
+the encoding $\wt{T}=(a(X), v(X))$. Similarly we parse $c_T'=(c_a', c_v')$ and $c_o=(\bar{c}_\op, \bar{c}_a, \bar{c}_v)$ (see Section
+\ref{subsec:poly-encoding} for polynomial encodings).
+For proving relation \ref{defn:committed-vram}, prover's input consists of initial RAM state $T=(\vec{a},\vec{v})$,
+final RAM state $T'=(\vec{a'},\vec{v'})$, operation sequence $\vec{o}=(o_1,\ldots,o_m)$ with $o_i=(\bar{\op}_i,\bar{a}_i,\bar{v}_i)$,
+time-ordered transcript $\tr=(\vec{t},\vec{\op},\vec{A},\vec{V})$ and address-ordered transcript $\tr^\ast=(\vec{t^\ast},\vec{\op^\ast},
+\vec{A^\ast},\vec{V^\ast})$ obtained from $\tr$ using a permutation $\sigma:[k]\rightarrow [k]$. Verifier's input consists of the
+commitments $c_T, c_o$ and $c_T'$ as described above.
+
+The prover starts the protocol by sending commitments $c_\tr$ and $c^\ast_\tr$ to the transcripts $\tr$ and $\tr^\ast$ respectively.
+To show that $\tr$ is correctly formed, the prover needs to prove the concatenations:
+(i) $\vec{\op}=0^m||(\bar{\op}_1,\ldots,\bar{\op}_m)||0^m$, (ii) $\vec{A}=\vec{a}||(\bar{a}_1,\ldots,\bar{a}_m)||\vec{a'}$
+and (iii) $\vec{V}=\vec{v}||(\bar{v}_1,\ldots,\bar{v}_m)||\vec{v'}$. Note that the time-stamp column $\vec{t}$ is implicitly assumed
+to be $(1,\ldots,k)$.
+The verifier checks the concatenations using Lemma \ref{lem:vec-concatenation}.
+It uses a random challenge $\beta$ to reduce the three concatenations to one concatenation, and uses another challenge $\gamma$
+to reduce the three polynomial checks in Lemma \ref{lem:vec-concatenation} to a single check.
+The complete polynomial protocol is detailed in Figure \ref{fig:time-ordered-transcript}.
+
+%\begin{tcolorbox}
+\begin{figure}[htbp]
+\centering
+\begin{mdframed}
+{\footnotesize
+\noindent{\bf Common Input}: Commitments $c_T=(c_a,c_v)$, $c_o=(\bar{c}_\op, \bar{c}_a, \bar{c}_v)$, $c_T'=(c_a', c_v')$
+and $c_\tr=(c_t, c_\op, c_A, c_V)$ to $T,o,T'$ and $\tr$ respectively. Commitment $\gone{Z}$ to the polynomial
+$Z(X)=\prod_{i=1}^m (X-\omega^i)$.
+\begin{enumerate}[leftmargin=2em]
+\item $\verifier\rightarrow\prover$: Verifier sends $\beta,\gamma\gets \F$.
+\item $\prover$ computes:
+\begin{align}\label{eq:poly-constraints}
+    & G_1(X) = a(X) + \beta v(X),\, G_2(X) = \bar{a}(X) + \beta \bar{v}(X) + \beta^2 \bar{\op}(X) \tag{A1} \\
+    & G_3(X) = a'(X) + \beta v'(X),\, G(X) = A(X) + \beta V(X) + \beta^2 \op(X) \tag{A2} \\
+    & H(X) = G_1(X) + \gamma G_2(X) + \gamma^2 G_3(X), \tag{A3} \\
+    & Q(X) = (H(X^3) - G(X) - \gamma G(\omega^m X) - \gamma^2 G(\omega^{2m} X))/Z(X) \tag{A4}
+\end{align}
+\item $\prover\rightarrow\verifier$: The prover sends commitment $\gone{Q}$ to $Q(X)$.
+\item $\verifier\rightarrow\prover$: Sends $s\gets\F$.
+\item $\prover\rightarrow\verifier$: Sends evaluations $\val{s}{G}=G(s)$, $\val{\omega^m s}{G}=G(\omega^m s)$,
+$\val{\omega^{2m}s}{G}=G(\omega^{2m} s)$, $\val{s^3}{H}=H(s^3)$, $\val{s}{Q}=Q(s)$ and $\val{s}{Z}=Z(s)$.
+\item $\verifier\rightarrow\prover$: Sends $r\gets\F$.
+\item $\prover\rightarrow\verifier$: Sends $\kzg$ proofs:
+\begin{itemize}[leftmargin=2em]
+\item $\Pi_G=\kzgprove(\srs,G,(s,\omega^m s, \omega^{2m}s))$.
+\item $\Pi_H=\kzgprove(\srs,H,s^3)$.
+\item $\Pi_F=\kzgprove(\srs,F,s)$ where $F(X)=Z(X) + rQ(X)$.
+\end{itemize}
+\item $\verifier$ computes: Compute commitments $\gone{G},\gone{H}$ and $\gone{F}$ using homomorphism. It then checks:
+\begin{itemize}[leftmargin=2em]
+\item $\kzgverify(\srs,\gone{G},(s,\omega^m s, \omega^{2m}s), (\val{s}{G}, \val{\omega^m s}{G}, \val{\omega^{2m} s}{G}),\Pi_G)$.
+\item $\kzgverify(\srs,\gone{H}, s^3, \val{s^3}{H},\Pi_H)$.
+\item $\kzgverify(\srs,\gone{F}, s, \val{s}{Z} + r\val{s}{Q}, \Pi_F)$.
+\item $\val{s}{Q}\cdot \val{s}{Z} =? \val{s^3}{H}-\val{s}{G}-\gamma \val{\omega^m s}{G}-\gamma^2\val{\omega^{2m}s}{G}$.
+\end{itemize}
+\item $\verifier$ outputs: Accept if all the above checks succeeds, otherwise it rejects.
+\end{enumerate}
+}
+\end{mdframed}
+\vspace*{-5mm}
+\caption{Protocol: Check correctness of time-ordered transcript}
+\label{fig:time-ordered-transcript}
+\end{figure}
+%\end{tcolorbox}
+
+Next, we show a polynomial protocol for proving that the transcript $\tr^\ast$ is a permutation of the transcript $\tr$.
+We first recall the permutation argument for vectors from ~\cite{EPRINT:GabWilCio19}.
+\begin{lemma}[Permutation Check \cite{EPRINT:GabWilCio19}]\label{lem:perm-argument}
+Let $f(X), g(X)$ be polynomials in $\F[\,X\,]$. Then, the vectors $\vec{f}, \vec{g}\in \F^k$ encoded by the polynomials
+are permutations of each other if and only if with overwhelming probability over the choice of $\alpha\gets \F$,
+there exists a polynomial $z(X)$ satisfying the polynomial constraints:
+{\small
+\begin{align}
+\lambda_1(X)(z(X) -1) &= 0 \text{ mod } Z_\setH(X) \tag{B1} \label{eq:B1} \\
+(\alpha - g(X))z(\omega X) &= (\alpha - f(X))z(X) \text{ mod } Z_\setH(X) \tag{B2} \label{eq:B2}
+\end{align}
+}
+\end{lemma}
+The polynomial protocol in Figure \ref{fig:permutated-transcripts} essentially invokes the above argument on
+the random linear combination of the columns of the respective transcripts.
+%\begin{tcolorbox}
+\begin{figure}[htbp]
+\centering
+\begin{mdframed}
+    {\footnotesize
+    \noindent{\bf Common Input}: Commitments $c_\tr=(c_t,c_\op,c_A, c_V)$ and $c_\tr^\ast=(c_t^\ast,c_\op^\ast, c_A^\ast, c_V^\ast)$
+    of transcripts $\tr$ and $\tr^\ast$ respectively.
+    \begin{enumerate}[leftmargin=2em]
+        \item $\verifier\rightarrow\prover$: Sends $\alpha,\beta, \chi\gets \F$
+        \item $\prover$ computes $f(X)=t(X) + \beta \op(X) + \beta^2 A(X) + \beta^3 V(X)$, $g(X) = t^\ast(X) + \beta \op^\ast(X)$
+        $+ \beta^2 A^\ast(X) + \beta^3 V^\ast(X)$. It then computes polynomials $z(X),q(X)$ as:
+        \begin{itemize}[leftmargin=1em]
+        \item Interpolate polynomial $z(X)$ of degree $k-1$ such that $z(\omega)=1$ and
+         $z(\omega^{i+1})=\prod_{j=1}^i (\alpha - f(\omega^j))/(\alpha - g(\omega^j))$ for $1\leq i\leq k$.
+        \item Compute $q(X) = ((\alpha - g(X))z(\omega X) - (\alpha - f(X))z(X) + \chi\lambda_1(X)(z(X) - 1))/\mathbb{Z}_{\setH}(X)$.
+        \end{itemize}
+        \item $\prover\rightarrow\verifier$: Sends commitments $\gone{z}$ and $\gone{q}$ to polynomials $z(X)$ and $q(X)$ respectively.
+        \item $\verifier$ computes: The verifier checks that $q(X)Z_\setH(X)$ = $(\alpha - g(X))z(\omega X)-(\alpha - f(X))z(X) + \chi\lambda_1(X)(z(X) - 1)$
+        by requesting evaluations and $\kzg$ proofs of polynomials $f,g$ and $q$ at a random point. It accepts if the check succeeds.
+    \end{enumerate}
+}
+\end{mdframed}
+\vspace*{-5mm}
+\caption{Protocol: Check permutation of transcripts}
+\label{fig:permutated-transcripts}
+\end{figure}
+%\end{tcolorbox}
+Finally, we see that Lemma \ref{lem:addr-ordered-transcript} implies a polynomial protocol to check that the transcript
+$\tr^\ast$ is address ordered and satisfies load-store consistency. We skip the formal protocol details, which
+essentially involves the prover identifying sets
+$I_1, I_2$ as described in Section \ref{subsec:encoded-relations} and sending auxiliary polynomials $Z_1(X),Z_2(X),\delta^\ast_A(X)$ and $\delta^\ast_T(X)$ to the verifier.
+The verifier then checks the identities (C1)-(C6) in Lemma \ref{lem:addr-ordered-transcript}.
+The range checks in (C7) can be checked using polynomial protocols in sub-vector lookup arguments such as Caulk+ ~\cite{EPRINT:PosKat22}, CQ
+~\cite{EPRINT:EagFioGab22}. For completeness, we also include a protocol for enforcing range checks using committed index lookup
+described in Section \ref{subsec:committed-index-lookup}.
+
+\begin{comment}
+\begin{enumerate}[leftmargin=2em]
+\item $\prover\rightarrow\verifier$: For the transcript $\tr^\ast=(\vec{t^\ast},\vec{\op^\ast},\vec{A^\ast},\vec{V^\ast})$,
+the prover computes encoding polynomials $\wt{\tr^\ast}=({t^\ast}(X),\op^\ast(X), A^\ast(X),V^\ast(X))$. Next, the prover
+computes sets $I_1$ and $I_2$ as in Section \ref{subsec:encoded-relations}, and then computes polynomials
+$Z_b(X)=\prod_{i\in I_b}(X-\omega^i)$ for $b=1,2$.
+The prover also interpolates polynomials $\delta^\ast_A(X)$ and $\delta^\ast_T(X)$ satisfying
+$\delta^\ast_A(\omega^i) = A^\ast_{i+1} - A^\ast_i$ for $i\in I_1$ and $\delta^\ast_T(\omega^i)=t^\ast_{i+1}-t^\ast_i$ for $i\not\in I_1$.
+The prover sends all the above polynomials to the verifier.
+\item $\verifier$ computes: The verifier checks relations (C1)-(C6) in Lemma \ref{lem:addr-ordered-transcript}. The range constraints
+in (C7) can be verified using polynomial protocols in sub-vector lookup arguments such as Caulk+ ~\cite{EPRINT:PosKat22}, CQ
+~\cite{EPRINT:EagFioGab22}.
+\end{enumerate}
+
+
+\subsection{Succinct Argument for Verifiable RAM}\label{subsec:succ-args}
+Polynomial protocols can be compiled into succinct arguments of knowledge using an extractable polynomial commitment scheme. At a
+high level the compilation involves the prover sending ``commitments'' to the message polynomials, whereas the verifier checks
+the polynomial identities probabilistically by requesting evaluation proofs of the polynomials at random points.
+We complile the polynomial protocol for RAM to a succinct argument of knowledge in the Algebraic Group Model (AGM)
+ using $\kzg$ as the extractable polynomial commitment scheme. We also leverage homomorphism of $\kzg$ scheme
+to avoid sending commitments and evaluations for polynomials which are linear combinations of previously committed polynomials.
+We now present an argument for verifiable RAM, which combines the polynomial protocols in this section, and instantiates
+them using $\kzg$ commitments. We make standard optimisations of batching several identity checks into one where applicable.
+Let $\srs=\{\gone{\tau^i},\gtwo{\tau^i}\}_{i=0}^d$
+denote the $\kzg$ setup parameters for degree $d\geq k$ for the bilinear group $\mathsf{BG}=(\Gone,\Gtwo,\gone{1},\gtwo{1},e)$. Let
+$\F=\F_p$ be the finite field where $p$ is the order of the groups.
+
+
+\begin{figure}[t]
+\begin{subfigure}{\linewidth}
+\centering
+{\footnotesize
+\begin{enumerate}[leftmargin=1em]
+    \item $\prover\rightarrow\verifier$: Send polynomial commitments $\gone{a(X)}$, $\gone{v(X)}$, $\gone{a'(X)}$, $\gone{v'(X)}$,
+    $\gone{\bar{\op}(X)}$, $\gone{\bar{a}(X)}, \gone{\bar{v}(X)}$, $\gone{\op(X)}$, $\gone{A(X)}$, $\gone{V(X)}$, $\gone{t^\ast(X)}$,
+    $\gone{\op^\ast(X)}$, $\gone{A^\ast(X)}$, $\gone{V^\ast(X)}$, $\gone{\delta_A^\ast(X)}$, $\gone{\delta_T^\ast(X)}$.
+    \item $\verifier\rightarrow\prover$: Send $\alpha,\beta,\gamma\gets \F$.
+    \item $\prover$ computes: Compute sets $I_1=\{i\in [k]: A^\ast_i\neq A^\ast_{i+1}\}$, and $I_2=[k]\setminus I_1$. Next, compute
+    polynomials:
+    \begin{align*}
+        &Z_1(X)=\prod_{i\in I_1}(X-\omega^i),\quad Z_2(X)=\prod_{i\in I_2}(X-\omega^i), \\
+        &H(X) = \begin{bmatrix} 1 & \gamma & \gamma^2 \end{bmatrix}
+        \begin{bmatrix}
+            a(X) & v(X) & 0 \\
+            a'(X) & v'(X) & 0 \\
+            \bar{a}(X) & \bar{v}(X) & \bar{\op}(X)
+        \end{bmatrix}
+        \begin{bmatrix}
+        1 \\
+        \beta \\
+        \beta^2
+        \end{bmatrix}, \\
+        &G(X) = A(X) + \beta V(X) + \beta^2 \op(X), \\
+        &Q(X) = \big(H(X^3) - G(X) - \gamma G(\omega^m X) - \gamma^2 G(\omega^{2m} X)\big)/Z(X), \\
+        &f(X) = G(X) + \beta^3 t(X),\, g(X) = A^{\ast}(X) + \beta V^{\ast}(X) + \beta^2 \op^{\ast}(X) + \beta^3 t^{\ast}(X), \\
+        &z(X) = \sum_{i=1}^k \lambda_i(X)\prod_{j=1}^{i-1} (\alpha - g(\omega^j))/(\alpha - f(\omega^j)), \\
+        &Q_1(X) = \frac{1}{\mathbb{Z}_\setH(X)}\Big( (\alpha - g(X))z(\omega X) - (\alpha - f(X))z(X) \\
+        &\qquad\qquad + \beta Z_2(X)(A^\ast(\omega X) - A^\ast(X) - \delta_A^\ast(X))\Big), \\
+        &Q_2(X) = \frac{1}{Z_2(X)}\Big((A^\ast(\omega X) - A^\ast(X))
+         + \beta(t^\ast(\omega X) - t^\ast(X)-\delta_T^\ast(X)) \\
+        &\qquad\qquad + \beta^2 (\op^\ast(X) - 1)(V^\ast(\omega X) - V^\ast(X))\Big)
+    \end{align*}
+    \item $\prover\rightarrow \verifier$: Send $\gone{Z_1(X)}$, $\gone{Z_2(X)}$, $\gone{Q(X)}$, $\gone{z(X)}$,
+    $\gone{Q(X)}$, $\gone{Q_1(X)}$, $\gone{Q_2(X)}$.
+    \item $\verifier\rightarrow\prover$: $s\gets \F$.
+    \item $\prover\rightarrow\verifier$: Send evaluations $\val{Z_1}{s}=Z_1(s)$, $\val{Z_2}{s}=Z_2(s)$,
+    $\val{G}{s}=G(s)$, $\val{Q}{s}=Q(s)$, $\val{Z}{s}=Z(s)$, $\val{A^\ast}{s}=A^\ast(s)$, $\val{V^\ast}{s}=V^\ast(s)$,
+    $\val{\op^\ast}{s}=\op^\ast(s)$, $\val{t}{s}=t(s)$, $\val{t^\ast}{s}=t^\ast(s)$, $\val{z}{s}=z(s)$, $\val{Q_1}{s}=Q_1(s)$,
+    $\val{Q_2}{s}=Q_2(s)$, $\val{H}{s^3}=H(s^3)$, $\val{G}{\omega^m s}=G(\omega^m s)$, $\val{\delta^\ast_A}{s}=\delta_A^\ast(s)$,
+    $\val{\delta_T^\ast}{s}=\delta_T^\ast(s)$
+    $\val{G}{\omega^{2m} s}=G(\omega^{2m} s)$,
+    $\val{A^\ast}{\omega s}=A^\ast(\omega s)$, $\val{V^\ast}{\omega s}=V^\ast(s)$, $\val{t^\ast}{\omega s}=t^\ast(\omega s)$,
+    $\val{z}{\omega s}=z(\omega s)$, $\val{A^\ast}{\omega}=A^\ast(\omega)$.
+
+    \item $\verifier\rightarrow\prover$: Send $r \gets \F$.
+    \item $\prover$ computes: Compute batched $\kzg$ proofs:
+    \begin{alignat*}{3}
+        &P_1 && &\quad=\quad  && &Z_1+r Z_2 + r^2 G + r^3 Q + r^4 Z + r^5 A^{\ast} + r^6 V^{\ast} + r^7 \op^{\ast} \\
+        & && & && &\quad  + r^8 t + r^9 t^{\ast} + r^{10} z + r^{11} Q_1 + r^{12} Q_2 + r^{13} \delta_A^{\ast} + r^{14} \delta_T^{\ast} \\
+        &P_2 && &\quad=\quad && &A^{\ast} + r V^{\ast} + r^2 z \\
+        &\Pi_s && &\quad=\quad && &\kzgprove(P_1, s) \\
+        &\Pi_{\omega s} && &\quad=\quad && &\kzgprove(P_2, \omega s) \\
+        &\Pi_{s^3} && &\quad=\quad && &\kzgprove(H, s^3) \\
+        &\Pi_{\{\omega^m s, \omega^{2m} s\}} && &\quad=\quad && &\kzgprove(G, (\omega^m s, \omega^{2m} s))
+    \end{alignat*}
+    \item $\prover\rightarrow \verifier$: Send $\Pi_s,\Pi_{\omega s}, \Pi_{s^3},\Pi_{\{\omega^m s, \omega^{2m} s\}}$ and
+    $\val{H}{s^3},\val{G}{\omega^m s}, \val{G}{\omega^{2m} s}$.
+
+    \item $\verifier$ computes: Compute commitments and evaluations for linear combinations.
+    \begin{align*}
+        \gone{G(X)} &= \gone{A(X)}+\beta\gone{V(X)}+\beta^2\gone{\op(X)}, \\
+        \gone{H(X)} &= \begin{bmatrix} 1 & \gamma & \gamma^2 \end{bmatrix}
+        \begin{bmatrix}
+            \gone{a(X)} & \gone{v(X)} & \gone{0} \\
+            \gone{a'(X)} & \gone{v'(X)} & \gone{0} \\
+            \gone{\bar{a}(X)} & \gone{\bar{v}(X)} & \gone{\bar{\op}(X)}
+        \end{bmatrix}
+        \begin{bmatrix}
+            1 \\
+            \beta \\
+            \beta^2
+        \end{bmatrix}, \\
+        \gone{P_1(X)} &= \gone{Z_1(X)}+r \gone{Z_2(X)} + r^2 \gone{G(X)} + r^3 \gone{Q(X)} + r^4 \gone{Z(X)} + r^5 \gone{A^{\ast}(X)} \\
+         &\qquad + r^6 \gone{V^{\ast}(X)} + r^7 \gone{\op^{\ast}(X)} + r^8 \gone{t(X)} + r^9 \gone{t^{\ast}(X)} + r^{10} \gone{z(X)} \\
+         &\qquad + r^{11} \gone{Q_1(X)} + r^{12} \gone{Q_2(X)} + r^{13} \gone{\delta_A^{\ast}(X)} + r^{14} \gone{\delta_T^{\ast}(X)}, \\
+        \gone{P_2(X)} &= \gone{A^\ast(X)} + r\gone{V^\ast(X)} + r^2\gone{z(X)},\\
+        \val{P_1}{s} &= \val{Z_1}{s}+r \val{Z_2}{s} + r^2 \val{G}{s} + r^3 \val{Q}{s} + r^4 \val{Z}{s} + r^5 \val{A^{\ast}}{s} \\
+         &\qquad + r^6 \val{V^{\ast}}{s} + r^7 \val{\op^{\ast}}{s} + r^8 \val{t}{s} + r^9 \val{t^{\ast}}{s} + r^{10} \val{z}{s} \\
+         &\qquad + r^{11} \val{Q_1}{s} + r^{12} \val{Q_2}{s} + r^{13} \val{\delta_A^{\ast}}{s} + r^{14} \val{\delta_T^{\ast}}{s}, \\
+        \val{P_2}{\omega s} &= \val{A^\ast}{s} + r\val{V^\ast}{s} + r^2\val{z}{s}. \\
+        \val{g}{s} &= \val{A^\ast}{s} + \beta \val{V^\ast}{s} + \beta^2 \val{\op^\ast}{s} + \beta^3 \val{t^\ast}{s}, \\
+        \val{f}{s} &= \val{G}{s} + \beta^3 \val{t}{s}.
+    \end{align*}
+
+    \item $\verifier$ checks polynomial identities at $s$:
+    \begin{alignat*}{3}
+        &\val{Q}{s}\val{Z}{s} && &\quad \stackrel{?}{=}\quad  && &\val{H}{s^3} - \val{G}{s} - \gamma \val{G}{\omega^m s} - \gamma^2 \val{G}{\omega^{2m} s} \\
+        &\val{Q_1}{s}(s^k-1) && &\quad \stackrel{?}{=}\quad && &(\alpha - \val{g}{s})\val{z}{\omega s} - (\alpha - \val{f}{s})\val{z}{s}
+        +\beta \val{Z_2}{s}(\val{A^\ast}{\omega s}-\val{A^\ast}{s}-\val{\delta_A^\ast}{s}). \\
+        &\val{Q_2}{s}\val{Z_2}{s} && &\quad \stackrel{?}{=}\quad && &(\val{A^\ast}{\omega s} - \val{A^\ast}{s}) + \beta (\val{t^\ast}{s} - \val{t}{s} - \val{\delta}{s}) \\
+        & && & && &\qquad + \beta^2 (\val{\op^\ast}{s} - 1)(\val{V^\ast}{\omega s}-\val{V^\ast}{s}) \\
+        &\val{Z_1}{s}\val{Z_2}{s} && &\quad \stackrel{?}{=}\quad && &s^k - 1 \\
+    \end{alignat*}
+    \item $\verifier$ checks evaluation proofs:
+    \begin{alignat*}{3}
+        &\kzgverify(\gone{P_1(X)},\val{P_1}{s},s, \Pi_s) && &\quad\stackrel{?}{=}\quad && &1 \\
+        &\kzgverify(\gone{P_2(X)},\val{P_2}{\omega s},\Pi_{\omega s}) && &\quad\stackrel{?}{=}\quad && &1 \\
+        &\kzgverify(\gone{H(X)},\val{H}{s^3},\Pi_{s^3}) && &\quad\stackrel{?}{=}\quad && &1 \\
+        &\kzgverify(\gone{G(X)},(\val{G}{\omega^m s},\val{G}{\omega^{2m} s}),
+        (\omega^m s, \omega^{2m} s), \Pi_{\{\omega^m s, \omega^{2m} s\}}) && &\quad\stackrel{?}{=}\quad && &1 \\
+        &\kzgverify(\gone{A^\ast(X)}, \val{A^\ast}{\omega}, \omega, \Pi_\omega) && &\quad\stackrel{?}{=}\quad && &1
+    \end{alignat*}
+    \item $\verifier$ enforces range checks: Invoke the lookup argument $\varPi_{\mathsf{lookup}}$ to check that
+    polynomials $\delta_A^\ast(X)$, $\delta_T^\ast(X)$ and $t^\ast(X)$ encode values in $[0,N]$.
+    \item $\verifier$ outputs: The verifier outputs accept (1) if all the preceeding checks pass, else it outputs reject (0).
+\end{enumerate}
+}
+\end{subfigure}
+\caption{Argument of Knowledge for Verifiable RAM}
+\label{fig:aok-vram}
+\end{figure}
+\end{comment}
+
+\begin{comment}
+Let $\LLconcat$ denote the language consisting of polynomial tuples $(a(X)$, $b(X)$, $c(X)$, $v(X))$ satisfying the identities
+in Lemma ~\ref{lem:vec-concatenation}. To check membership of $(T,\vec{o},T',\tr)$ in the language $\LTr$, let $\wt{T}=(a(X),v(X))$, $\wt{T'}=(a'(X),v'(X))$,
+$\wt{O}=(\bar{\op}(X),\bar{a}(X),\bar{v}(X))$ and $\wt{\tr}=(t(X),o(X),A(X),V(X))$ be the polynomial
+encodings of $T,T',\vec{o}$ and $\tr$ respectively.
+From the construction of time ordered transcript $\tr$ outlined
+in Section \ref{subsec:transcripts}, we see that the equivalent constraints on the encodings are given by:
+\begin{align*}\label{eq:tot-poly-constraints}
+t(X) &= \sum_{i=1}^k i\lambda_i(X) \quad (= \mathsf{Enc}(\setind_k)) \\
+(0, \bar{\op}(X), 0, o(X)) &\in \LLconcat \\
+(a(X), \bar{a}(X), a'(X), A(X)) &\in \LLconcat \\
+(v(X), \bar{v}(X), v'(X), V(X)) &\in \LLconcat
+\end{align*}
+
+We can probabilistically combine the different polynomial identities into one and obtain the following:
+\begin{lemma}
+    Let the polynomial $Z(X)=\prod_{i\in [m]}(X-\omega^i)$ and $\rho=\omega^m$ be as before.
+    Then, we have $(T,\vec{o},T',\tr)\in \LTr$ if and only if the encoding polynomials as defined above satisfy
+    the identity $G_\gamma(X) = 0  \text{ mod } Z(X)$ and $\evalH{t}=(1,\ldots,k)$ with overwhelming
+    probability over the choice of $\gamma\gets \F$. Here the polynomial $G_\gamma(X)$ is defined as:
+    \begin{multline*}
+        G_\gamma(X) = o(X) + \gamma(\bar{\op}(X^3) - o(\rho X)) + \gamma^2 o(\rho^2 X) \\
+        + \gamma^3(a(X^3) - A(X)) + \gamma^4(\bar{a}(X^3) - A(\rho X)) + \gamma^5(a'(X^3) - A(\rho^2 X)) \\
+        + \gamma^6(v(X^3) - V(X)) + \gamma^7(\bar{v}(X^3) - V(\rho X)) + \gamma^8(v'(X^3) - V(\rho^2 X))
+    \end{multline*}
+\end{lemma}
+
+Next, we consider the language $\Lperm$ consisting of pairs $(\tr, \tr^\ast)$ of $k$-length transcripts such
+that $\tr^\ast=\sigma(\tr)$ for some permutation $\sigma:[k]\rightarrow [k]$. We now describe constraints
+to check the same using polynomial encodings of the transcripts. Let encodings $\wt{\tr},\wt{\tr}^\ast$ be
+given by polynomials as below:
+\begin{align*}\label{eq:tr-encodings}
+\wt{\tr} &= (t(X),\op(X),A(X),V(X)) \\
+\wt{\tr}^\ast &= (t^\ast(X), \op^\ast(X), A^\ast(X), V^\ast(X))
+\end{align*}
+We need to show that for some $\sigma:[k]\rightarrow [k]$, $\evalH{p^\ast}=\sigma(\evalH{p})$ for $p\in \{t,\op,A,V\}$.
+Again, for $\gamma\gets \F$, with overwhelming probability it is equivalent to establishing that polynomial
+$f^\ast(X)=t^\ast(X)+\gamma \op^\ast(X) + \gamma^2 A^\ast(X) + \gamma^3 V^\ast(X)$ encodes a permutation of
+vector encoded by $f(X)=t(X)+\gamma \op(X) + \gamma^2 A(X) + \gamma^3 V(X)$. We recall the following variation
+of the grand product argument to show that two polynomials encode vectors which are permutations of each other.
+\end{comment}
+
+
+
+
+
+
+
