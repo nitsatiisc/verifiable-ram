@@ -69,13 +69,20 @@
     journal = {Royal Statistical Society. Journal. Series A: General},
 }
 
-@misc{jolt,
-      author = {Arasu Arun and Srinath Setty and Justin Thaler},
-      title = {Jolt: SNARKs for Virtual Machines via Lookups},
-      howpublished = {Cryptology ePrint Archive, Paper 2023/1217},
-      year = {2023},
-      note = {\url{https://eprint.iacr.org/2023/1217}},
-      url = {https://eprint.iacr.org/2023/1217}
+@inproceedings{jolt,
+	author = {Arun, Arasu and Setty, Srinath and Thaler, Justin},
+	title = {Jolt: SNARKs for Virtual Machines via Lookups},
+	year = {2024},
+	isbn = {978-3-031-58750-4},
+	publisher = {Springer-Verlag},
+	address = {Berlin, Heidelberg},
+	url = {https://doi.org/10.1007/978-3-031-58751-1_1},
+	doi = {10.1007/978-3-031-58751-1_1},
+	abstract = {Succinct Non-interactive Arguments of Knowledge (SNARKs) allow an untrusted prover to establish that it correctly ran some “witness-checking procedure” on a witness. A zkVM (short for zero-knowledge virtual machine) is a SNARK that allows the witness-checking procedure to be specified as a computer program written in the assembly language of a specific instruction set architecture (ISA).A front-end converts computer programs into a lower-level representation such as an arithmetic circuit or generalization thereof. A SNARK for circuit-satisfiability can then be applied to the resulting circuit.We describe a new front-end technique called Jolt that applies to a variety of ISAs. Jolt arguably realizes a vision called the lookup singularity, which seeks to produce circuits that only perform lookups into pre-determined lookup tables. The circuits output by Jolt primarily perform lookups into a gigantic lookup table, of size more than 2128, that depends only on the ISA. The validity of the lookups are proved via a new lookup argument described in a companion work called Lasso [STW23]. Although size-2128 tables are vastly too large to materialize in full, the tables arising in Jolt are structured, avoiding costs that grow linearly with the table size.We describe performance and auditability benefits of Jolt compared to prior zkVMs, focusing on the popular RISC-V ISA as a concrete example. The dominant cost for the Jolt prover applied to this ISA (on 64-bit data types) is equivalent to cryptographically committing to under eleven 256-bit field elements per step of the RISC-V CPU. This compares favorably to prior zkVM provers, even those focused on far simpler VMs.},
+	booktitle = {Advances in Cryptology – EUROCRYPT 2024: 43rd Annual International Conference on the Theory and Applications of Cryptographic Techniques, Zurich, Switzerland, May 26–30, 2024, Proceedings, Part VI},
+	pages = {3–33},
+	numpages = {31},
+	location = {Zurich, Switzerland}
 }
 
 
