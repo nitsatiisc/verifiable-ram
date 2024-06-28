@@ -1,4 +1,4 @@
-\newif\ifDraft
+%\newif\ifDraft
 %\Drafttrue % comment this out for submission
 \documentclass{llncs}
 %\documentclass[runningheads]{llncs}
@@ -23,8 +23,11 @@
 
 
 \begin{document}
-	
+	\let\oldaddcontentsline\addcontentsline
+	\def\addcontentsline#1#2#3{}
 	\maketitle
+	\def\addcontentsline#1#2#3{\oldaddcontentsline{#1}{#2}{#3}}
+%	\maketitle
 	
 	
 	
@@ -43,14 +46,13 @@
 
 	\end{abstract}
 	
-	\thispagestyle{plain}
-	
 	\pagestyle{plain}
 	
-	\newpage
+
+	\clearpage
 	\tableofcontents
 	
-	\newpage
+	\clearpage
 	
 \section{Introduction}\label{sec:introduction}
 

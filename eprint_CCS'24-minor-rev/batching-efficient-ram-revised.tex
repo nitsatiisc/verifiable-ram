@@ -40,7 +40,7 @@ in Figure~\ref{fig:committed-index-lookup} is an argument of knowledge for the r
     \begin{enumerate}[leftmargin=1em, label=\arabic*.]
     \item $\verifier$ sends $\gamma\gets \F$.
     \item $\prover$ and $\verifier$ compute: $\tilde{c}_t=\gamma c_I+c_t$, $\tilde{c}_v=\gamma c_a + c_v$.
-    \item $\prover$ computes: $\tilde{\vec{t}}=\gamma\vec{I}_N + \vec{t}$, $\tilde{\vec{v}}=\gamma\vec{a} + \vec{v}$.
+    \item $\prover$ computes: $\tilde{\vec{t}}=\gamma\vec{I} + \vec{t}$, $\tilde{\vec{v}}=\gamma\vec{a} + \vec{v}$.
     \item $\prover$ and $\verifier$ run sub-vector argument $(\subvecprover,\subvecverifier)$ with
     $(\srs,\tilde{c}_t,\tilde{c}_v)$ as the common input and $(\tilde{\vec{t}},\tilde{\vec{v}})$ as $\subvecprover$'s input.
     \item $\verifier$ outputs
