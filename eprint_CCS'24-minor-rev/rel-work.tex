@@ -22,9 +22,7 @@ While constructions using Merkle tree-based accumulators~(realized from collisio
 ability to batch proofs, those based on checking consistency using transcripts incur a linear overhead in the
 RAM size.
 
-\smallskip
-
-\noindent{\bf Batching-Efficient RAM.} There have been recent efforts~\cite{USENIX:OWWB20,CCS:CFHKKO22} on batching-efficient
+\paragraph{\bf Batching-Efficient RAM.} There have been recent efforts~\cite{USENIX:OWWB20,CCS:CFHKKO22} on batching-efficient
 realization of the RAM primitive~(see Table~\ref{tab:rel-work} for a summary of these schemes and the associated efficiency parameters). This is a natural setting in applications of verifiable
 computation, most notably in the context of blockchain {\em rollups}. Here, one is required
 to show that a batch of $m$ transactions correctly updates the state of a table of account balances, which
@@ -58,7 +56,7 @@ that would need to be expressed as a circuit is the verification of digital sign
 %compare our work with the prior approaches more elaborately in Section~\ref{sec:experiments}.
 
 
-\smallskip
+%\smallskip
 
 \begin{table*}[tb!]
 	\centering
@@ -90,7 +88,7 @@ that would need to be expressed as a circuit is the verification of digital sign
 	\vspace*{-5mm}
 \end{table*}
 
-\noindent{\bf Lookup Arguments.} There are several recently proposed constructions of lookup arguments which enable proving
+\paragraph{\bf Lookup Arguments.} There are several recently proposed constructions of lookup arguments which enable proving
 that a vector of size $m$ is a sub-vector of a larger~(predetermined) vector of size $N$~(see Table~\ref{tab:rel-work}
 for a summary of these schemes and the associated efficiency parameters).
 Of these, the very initial schemes~\cite{EPRINT:BowGriHop19,EPRINT:GabWil20,Halo2} incur proving costs
@@ -111,9 +109,7 @@ re-computing after each batch~(see Sections~\ref{sec:tech-overview} and~\ref{sec
 %Caulk~\cite{CCS:ZBKMNS22} provides with lookup arguments where a vector of size $m$ is proved to be a subvector of a large vector of size $N$, while maintaining privacy regarding the positions of the subvector (called \emph{position-hiding linkability}) where the prover complexity is $O(m^2+m\log N)$ with $O(N\log N)$ preprocessing and $O(N)$ storage. Caulk+~\cite{EPRINT:PosKat22} improves over Caulk to $O(m^2)$ prover complexity by removing the dependency on the size of the large vector $N$, and CQ~\cite{EPRINT:EagFioGab22}, using the ``logarithmic derivative based lookup" of \cite{Eag22,Hab22}, further improves it to $O(m\log m)$, while retaining the same $O(N\log N)$ preprocessing. Additional lookup arguments, namely cq+, cq++, zkcq+~\cite{pkc-lookup-mat} and locq~\cite{PKC:ZSG24} provides further improvements over CQ.
 %However, we aim to provide committed index lookup arguments that can `link' a set of indices in the vector of size $N$ to the `claimed' subvector of size $m$, that helps in ensuring that we can always `lookup' relevant indices from a committed vector. Additionally, note that the prior works provides lookup arguments for `static' tables, i.e. any `updates' to the large table requires $O(N\log N)$ recomputation each time in the prior works. Our work ensures a batching friendly preprocessing can be done whenever there are incremental changes to the vector of size $N$, and avoid performing the $O(N\log N)$ recomputation per update. This modification extends to the other works as well. We also present techniques to extend lookup argument \cite{EPRINT:EagFioGab22}, which uses homomorphic commitments, to provide a committed index lookup argument.
 
-\smallskip
-
-\noindent{\bf Lasso.} The second category of lookup arguments is exemplified by the recently proposed Lasso scheme~\cite{lasso,jolt},
+\paragraph{\bf Lasso.} The second category of lookup arguments is exemplified by the recently proposed Lasso scheme~\cite{lasso,jolt},
 which enables efficient lookups for tables with a decomposable structure.
 Informally, a table $\vecT:\{0,1\}^n\to \{0,1\}^k$ is said to have a decomposable structure if there exists
 a decomposition of the table $\vec{T}$ into $c$ sub-tables $\vecT_1,\ldots,\vecT_c:\{0,1\}^{n/c} \to\{0,1\}^\ell$ and a

@@ -4,12 +4,10 @@ extremely cheap to verify, which makes them useful for {\em Verifiable Computati
 client (e.g., a mobile phone), can outsource an expensive computation to an untrusted server, and later
 verify the correctness of the computation at a minimal cost.
 
-\smallskip
-
-\noindent{\bf Modeling RAM in Verifiable Computation.} It turns out that arithmetic circuit-based representations are inefficient in expressing relations involving the result of a program execution on memory/state. Such relations frequently arise in the context of verifiable computation, in scenarios that require proving the correctness of query execution against a database, inference from a decision tree, or updates on a table of account balances~(e.g., when a batch of transactions, such as account transfers, is applied to the table).
+\paragraph{\bf Modeling RAM in Verifiable Computation.} It turns out that arithmetic circuit-based representations are inefficient in expressing relations involving the result of a program execution on memory/state. Such relations frequently arise in the context of verifiable computation, in scenarios that require proving the correctness of query execution against a database, inference from a decision tree, or updates on a table of account balances~(e.g., when a batch of transactions, such as account transfers, is applied to the table).
 
 In the aforementioned examples, objects such as database tables, decision trees, and accounts tables can be naturally
-modelled as instances of addressable memory, or more generally, random access memory~(RAM), where one needs to prove that the RAM has been accessed/updated in accordance with the correct execution of the computation. There exists a rich and expanding body of work on efficiently modeling abstractions of RAM in verifiable computation. While a complete treatment of this vast body of work is beyond
+modeled as instances of addressable memory, or more generally, random access memory~(RAM), where one needs to prove that the RAM has been accessed/updated in accordance with the correct execution of the computation. There exists a rich and expanding body of work on efficiently modeling abstractions of RAM in verifiable computation. While a complete treatment of this vast body of work is beyond
 the scope of this paper (a fairly recent survey in \cite{WB15} is a good starting point), we mention two additional properties that are often demanded of the RAM primitive: {\em persistence} -- the ability to persist the RAM state across several computations, and {\em batching} --
 where verifiable update of the RAM state is required for small batches of updates. These properties are also the focus of this work.
 
@@ -18,9 +16,7 @@ where verifiable update of the RAM state is required for small batches of update
 %{\em persistence} - which is the ability to persist the RAM state across several computations, and {\em batching} -
 %where verifiable update of the RAM state is required for small batches of updates. 
 
-\smallskip
-
-\noindent{\bf Application to Blockchain Rollups.} Batching-efficient RAM is especially relevant in the context of blockchain {\em rollups}~\cite{rollup},
+\paragraph{\bf Application to Blockchain Rollups.} Batching-efficient RAM is especially relevant in the context of blockchain {\em rollups}~\cite{rollup},
 an umbrella term for recent efforts to scale blockchains by moving expensive computation off the blockchain to the so-called {\em layer two}~(or L2) chains. The blockchain only needs to verify succinct proofs attesting to the correctness of the off-chain computation. This approach is popularly called \textit{rollup} as it allows verifying the result of several (rolled-up) transactions modifying the L2 state, as part of one transaction verified on the main chain.
 This simultaneously improves scalability and lowers the cost (e.g., gas fees) per transaction due to succinct verification. We consider improving efficiency of rollups an important motivation for our work, but avoid precise details of a smart-contract based
 instantiation of our solution.
@@ -93,9 +89,7 @@ We summarize our contributions below.
 
 We present a brief summary of our techniques below. A more detailed technical overview appears in Section~\ref{sec:tech-overview}.
 
-\smallskip
-
-\noindent{\bf Update-friendly Lookup Arguments.} Our starting point is the recent line of works on lookup arguments which prove
+\paragraph{\bf Update-friendly Lookup Arguments.} Our starting point is the recent line of works on lookup arguments which prove
 that a vector of size $m$ appears as
 a sub-vector in a large fixed vector (table) of size $N$ with succinct proof sizes and verification, but most notably
 ensuring that prover runs in time sublinear in the size of the table ($N$). The pioneering work~\cite{CCS:ZBKMNS22}
@@ -129,9 +123,7 @@ states the precise result.
 For the constructions based on~\cite{CCS:ZBKMNS22,EPRINT:PosKat22}, we set $f(m)=m^2$ in the above,
 while for~\cite{EPRINT:EagFioGab22,PKC:CFFLL24}, we have $f(m)=m\log m$.
 
-\smallskip
-
-\noindent{\bf Committed Index Lookup}: We augment the sub-vector relation in prior lookup arguments which
+\paragraph{\bf Committed Index Lookup}: We augment the sub-vector relation in prior lookup arguments which
 considers whether each entry of a given vector appears in the target vector to one that also identifies
 the precise positions where the given vector appears in the target vector. When this relation is checked
 over commitments of the respective vectors; given vector, the target vector and the position vector, we call
@@ -142,10 +134,7 @@ also considered in~\cite{lasso}, but under a more restrictive assumption that th
 within a certain bound. Lemma~\ref{lem:generic-transformation} yields a construction of committed index lookup that uses (a single instance of) the underlying sub-vector protocol in a black-box manner. This immediately implies
 efficient constructions of arguments for committed index lookups from~\cite{CCS:ZBKMNS22,EPRINT:PosKat22,EPRINT:ZGKMR22,EPRINT:EagFioGab22,PKC:CFFLL24}. In Appendix~\ref{app:committed-index-lookup}, we also present an explicit (non-black-box) adaptation of~\cite{EPRINT:PosKat22} to obtain a committed index lookup, which again incurs costs comparable to a single instance of the underlying sub-vector protocol.
 
-\smallskip
-
-
-\noindent{\bf Batching-Efficient RAM from Lookup Arguments.}
+\paragraph{\bf Batching-Efficient RAM from Lookup Arguments.}
 Memory checking methods based on {\em address ordered transcripts}~\cite{NDSS:WSRBW15,USENIX:BCTV14,C:BCGTV13,SP:ZGKPP18}, which are popularly used in
 efficient RAM abstractions, incur a cost linear in the size of the RAM. This is prohibitive for efficient batching. As a key idea in this work, we invoke committed index lookup on
 the large RAMs, to verifiably extract smaller sub-RAMs, which correspond to indices actually involved in
@@ -174,7 +163,7 @@ Thus we have:
 \end{theorem}
 
 
-\noindent{\bf Polynomial Protocol for RAM.} There are several ways to implement the ordered transcript based
+\paragraph{\bf Polynomial Protocol for RAM.} There are several ways to implement the ordered transcript based
 memory consistency check on the smaller $O(m)$-sized RAMs, for example by expressing the same as an arithmetic
 circuit. However, for completeness, we also present an argument for RAM as an
 interactive {\em polynomial protocol}~\cite{Gabizon2019PLONKPO}, which is then compiled into an argument of knowledge using the $\kzg$~\cite{AC:KatZavGol10}

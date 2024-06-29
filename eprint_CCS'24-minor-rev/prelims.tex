@@ -16,9 +16,7 @@ to denote group elements $x\cdot g_1$ and $x\cdot g_2$ respectively for $x\in \F
 that all the setup algorithms for the protocols invoke $\bg$ to generate descriptions of groups and fields
 over which the protocol is instantiated. We use $[n]$ to denote the set of integers $\{1,\ldots,n\}$.
 
-\smallskip
-
-\noindent{\bf Lagrange Polynomials.}
+\paragraph{\bf Lagrange Polynomials.}
 %\chaya{move to here from sec 6: Lagrange polynomial, vanishing polynomial, roots of unity}
 We denote the $N$th root of unity by $\xi$ and define the subgroup $\setN$ as $\setN =\{\xi,\ldots,\xi^N\}$. 
 Let $\{\mu_i(X)\}_{i=1}^N$ be the associated
@@ -38,13 +36,9 @@ We use the notation $b\gets \argoutput{\prover}{\verifier}{w}{x}$ to denote $\ve
 protocol involving $\prover$ and $\verifier$ with $w$ as $\prover$'s input and $x$ as the common input.
 The \emph{knowledge-soundness} property says that if the verifier is convinced, then an efficient extractor algorithm given oracle access to the prover outputs a witness $w$ such that $(x,w)\in \R$. An argument system is \emph{succinct} if the communication complexity and the complexity of $\verifier$ is polylogarithmic in the size of the witness. We provide formal definitions in Appendix~\ref{sec:aok}.
 
-\smallskip
+\paragraph{\bf Fiat-Shamir.} An interactive protocol is \emph{public-coin} if the verifier's messages are uniformly random strings. Public-coin protocols can be transformed into non-interactive arguments in the Random Oracle Model (ROM) by using the Fiat-Shamir~\cite{C:FiaSha86} heuristic to derive the verifier's messages as the output of a Random Oracle. 
 
-\noindent\textbf{Fiat-Shamir.} An interactive protocol is \emph{public-coin} if the verifier's messages are uniformly random strings. Public-coin protocols can be transformed into non-interactive arguments in the Random Oracle Model (ROM) by using the Fiat-Shamir~\cite{C:FiaSha86} heuristic to derive the verifier's messages as the output of a Random Oracle. 
-
-\smallskip
-
-\noindent{\bf Modular Approach.}
+\paragraph{\bf Modular Approach.}
 A modular approach for designing efficient succinct arguments consists of two steps; constructing an information theoretic protocol in an idealized model, and then compiling the information-theoretic protocol via a cryptographic compiler to obtain an argument system. 
 Informally, the prover and the verifier interact where the prover provides oracle access to a set of polynomials, and the verifier accepts or rejects by checking certain identities over the polynomials output by the prover and possibly public polynomials known to the verifier. Such a protocol can be compiled into a succinct argument of knowledge by realizing the polynomial oracles using a \emph{polynomial commitment scheme}. A polynomial commitment scheme allows a prover to commit to polynomials, and later verifiably open evaluations at chosen points by giving evaluation proofs. This enables the verifier to probabilistically
 check polynomial identities at random points of $\F$. %We refer the reader to~\cite[Section 4.2]{Gabizon2019PLONKPO} for details on polynomial protocols and their compilation to SNARKs. 
@@ -59,9 +53,7 @@ trusted setup. We use $\srs = (\srs_1,\srs_2)$ to denote the structured referenc
 that the $\srs$ has degree $Q$ if all the elements of $\srs_i$, $i=1,2$ are of the form $[f(x)]_i$ for a
 polynomial $f\in \F_{<Q}[X]$.
 
-\smallskip
-
-\noindent{\bf Algebraic Group Model.} 
+\paragraph{\bf Algebraic Group Model.} 
 We analyze security of our protocols in the Algebraic Group Model (AGM) introduced
 in~\cite{C:FucKilLos18}. An adversary $\Adv$ is called \textit{algebraic} if every group element output by $\Adv$ is accompanied by a representation of that group element in terms of all the group elements that $\Adv$ has seen so far (input and output).
 In the AGM, an adversary $\Adv$ is restricted to be {\em algebraic}, which in our SRS-based protocol means a PPT algorithm satisfying the following:
@@ -74,9 +66,7 @@ for $i\in \{1,2\}$, whenever $\Adv$ outputs an element $A\in \G_i$, it is accomp
 %\chaya{do we use this in proofs?}Following~\cite{C:FucKilLos18}, we write $[A]$ to denote a group element enhanced with its representation; $[A] = (A,v_1,\ldots,v_k)$.
 %AGM is a useful framework for analyzing security of succinct non-interactive arguments of knowledge (SNARKs) obtained from interactive protocols that are described as {\em polynomial protocols}. 
 
-\smallskip
-
-\noindent{\bf Real and Ideal Pairing Checks}: For an algebraic adversary $\Adv$ interacting in a protocol with a degree $Q$ SRS over a bilinear group, the verifier
+\paragraph{\bf Real and Ideal Pairing Checks.} For an algebraic adversary $\Adv$ interacting in a protocol with a degree $Q$ SRS over a bilinear group, the verifier
 can use the pairing $e:\Gone\times \Gtwo\rightarrow \GT$ to perform ``ideal check'' of the form $(R_1\cdot T_1)\cdot (R_2\cdot T_2)\equiv 0$, where $R_1,R_2$ are
 vectors of polynomials over $\F$ and $T_1, T_2$ are public matrices over $\F$.
 Under the $Q$-DLOG assumption stated below, the aforementioned ideal check
@@ -136,7 +126,7 @@ version of $\KZGopen$ is described as follows:
 	Here, the verifier interpolates the polynomial $r(X)\in \F_{<n}[X]$ such that $r(\alpha_i)=v_i$.
 \end{itemize}
 
-\noindent\textbf{KZG for Vectors.} For $\vec{f}\in \F^N$, let $\enc{f}{\setN}$ denote the polynomial encoding of $\vec{f}$ over $\setN$ given by $\sum_{i=1}^N f_i\mu_i(X)$.
+\paragraph{\bf KZG for Vectors.} For $\vec{f}\in \F^N$, let $\enc{f}{\setN}$ denote the polynomial encoding of $\vec{f}$ over $\setN$ given by $\sum_{i=1}^N f_i\mu_i(X)$.
 We use KZG to commit to \emph{vectors} by committing to its polynomial encoding. In general a vector $\vec{g}$ of size $m$ is encoded by a polynomial $g(X)\in \F_{<m}[X]$
 which interpolates $\vec{g}$ over a subgroup $\setV$ consisting of $m^{th}$ roots of unity in some canonical order. We will explicitly state the subgroups for all sizes
 of vectors that we consider.
@@ -188,7 +178,7 @@ where there is a commitment to the indices where $\vec{v}$ appears in $\vec{t}$.
 
 \begin{definition}
 \label{defn:comm-index-lookup}
-We define the {\em committed index lookup} relation $\RLOOK$ to consist of tuples
+We define the {\em committed index lookup} relation $\RLOOK$ to consist of tuples of the form
 $((c_t,c_a,c_v),(\vec{t},\vec{a},\vec{v}))$ where $c_t,c_a,c_v\in \Gone$, $\vec{t}\in \F^N$, $\vec{a},\vec{v}\in \F^m$ such
 that $v_i = \vec{t}[a_i]=t_{a_i}$ for all $i\in [m]$ and $c_t = \kzgcommit(\srs, \enc{t}{\setN})$, $c_a=\kzgcommit(\srs,\enc{a}{\setV})$
 and $c_v=\kzgcommit(\srs,\enc{v}{\setV})$.

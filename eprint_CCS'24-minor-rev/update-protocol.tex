@@ -57,7 +57,8 @@ phase of our proof generation involves computing the sum in Equation \eqref{eq:e
 The following Theorem determines the efficiency of the online phase of our prover.
 \begin{theorem}\label{thm:approx-setup}
 Let $N,\xi$ be as defined previously. Given
-$\kzg$ proofs $\{W_i\}_{i=1}^N$ with $W_i=\gany{\Tbasepoly{X} - \Tbasepoly{\xi^i}/(X-\xi^i)}$, where
+$\kzg$ proofs $\{W_i\}_{i=1}^N$ with 
+\[W_i=\gany{\Tbasepoly{X} - \Tbasepoly{\xi^i}/(X-\xi^i)},\] where
 $\Tbasepoly{X}=\enc{T_{\mathsf{b}}}{\setN}$ encodes a vector $\vecTbase\in \F^N$, for any $I\subseteq [N]$, there exists an algorithm to compute $\gany{Q}$ as given in Equation ~\eqref{eq:enc-quotient}
 for polynomial $T(X)=\enc{T}{\setN}$ encoding the vector $\vecT\in \F^N$ using $O((\delta + |I|) \log^2 (\delta + |I|))$ $\F$-operations
 and $O(\delta + |I|)$ $\mathbb{G}$-operations. Here, $\delta$ denotes the hamming distance
