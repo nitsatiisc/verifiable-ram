@@ -1,0 +1,59 @@
+This is BibTeX, Version 0.99d
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main.aux
+Reallocating 'name_of_file' (item size: 1) to 6 items.
+The style file: plain.bst
+Reallocating 'name_of_file' (item size: 1) to 18 items.
+Reallocating 'name_of_file' (item size: 1) to 17 items.
+Reallocating 'name_of_file' (item size: 1) to 5 items.
+Database file #1: cryptobib/abbrev3.bib
+Reallocating 'str_pool' (item size: 1) to 130000 items.
+Reallocating 'str_pool' (item size: 1) to 195000 items.
+Database file #2: cryptobib/crypto.bib
+Database file #3: main.bib
+Warning--I didn't find a database entry for ""
+Warning--to sort, need author or key in caulk-implementation
+Warning--empty booktitle in compwithstate
+Warning--empty year in benes
+You've used 32 entries,
+            2118 wiz_defined-function locations,
+            14907 strings with 177869 characters,
+and the built_in function-call counts, 13910 in all, are:
+= -- 1353
+> -- 757
+< -- 28
++ -- 284
+- -- 250
+* -- 983
+:= -- 2170
+add.period$ -- 121
+call.type$ -- 32
+change.case$ -- 206
+chr.to.int$ -- 0
+cite$ -- 35
+duplicate$ -- 528
+empty$ -- 1042
+format.name$ -- 250
+if$ -- 3044
+int.to.chr$ -- 0
+int.to.str$ -- 32
+missing$ -- 21
+newline$ -- 171
+num.names$ -- 92
+pop$ -- 279
+preamble$ -- 1
+purify$ -- 174
+quote$ -- 0
+skip$ -- 436
+stack$ -- 0
+substring$ -- 692
+swap$ -- 227
+text.length$ -- 28
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 128
+warning$ -- 3
+while$ -- 127
+width$ -- 34
+write$ -- 382
+(There were 4 warnings)
