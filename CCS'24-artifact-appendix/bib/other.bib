@@ -1,0 +1,173 @@
+%! Author = nitin
+%! Date = 03/11/23
+
+@article{WB15,
+    author = {Walfish, Michael and Blumberg, Andrew J.},
+    title = {Verifying Computations without Reexecuting Them},
+    year = {2015},
+    journal = {Commun. ACM},
+    pages = {74–84}
+}
+
+@article{ZkSync,
+    author = {Matter Labs},
+    title = {zkSync: scaling and privacy engine for Ethereum},
+    url = {https://github.com/matter-labs/zksync}
+}
+
+
+@article{Gabizon2019PLONKPO,
+    title={PLONK: Permutations over Lagrange-bases for Oecumenical Noninteractive arguments of Knowledge},
+    author={Ariel Gabizon and Zachary J. Williamson and Oana-Madalina Ciobotaru},
+    journal={IACR Cryptol. ePrint Arch.},
+    year={2019},
+    volume={2019},
+    pages={953},
+    url={https://api.semanticscholar.org/CorpusID:201685538}
+}
+
+@misc{lasso,
+    author = {Srinath Setty and Justin Thaler and Riad Wahby},
+    title = {Unlocking the lookup singularity with Lasso},
+    howpublished = {Cryptology ePrint Archive, Paper 2023/1216},
+    year = {2023},
+    note = {\url{https://eprint.iacr.org/2023/1216}},
+    url = {https://eprint.iacr.org/2023/1216}
+}
+
+@misc{caulk-implementation,
+    author = {},
+    title = {Caulk},
+    howpublished = {https://github.com/caulk-crypto/caulk},
+    url = {https://github.com/caulk-crypto/caulk}
+}
+
+@misc{rollup,
+    author = {barryWhiteHat},
+    title ={rollup},
+    howpublished = {https://github.com/barryWhiteHat/roll\_up}
+}
+
+@misc{ark-groth-16,
+    author = {www.arkworks.com},
+    title = {ark-groth16},
+    url = {https://github.com/arkworks-rs/groth16}
+}
+
+@inproceedings{compwithstate,
+    author = {Braun, Benjamin and Feldman, Ariel J. and Ren, Zuocheng and Setty, Srinath and Blumberg, Andrew J. and Walfish, Michael},
+    title = {Verifying computations with state},
+    year = {2013},
+    address = {New York, NY, USA},
+    doi = {10.1145/2517349.2522733},
+    series = {SOSP '13}
+}
+
+@article{benes,
+    author = {Kingman, J. F. C.},
+    title = "{Mathematical Theory of Connecting Networks and Telephone Traffic}",
+    journal = {Royal Statistical Society. Journal. Series A: General},
+}
+
+@inproceedings{jolt,
+	author = {Arun, Arasu and Setty, Srinath and Thaler, Justin},
+	title = {Jolt: SNARKs for Virtual Machines via Lookups},
+	year = {2024},
+	isbn = {978-3-031-58750-4},
+	publisher = {Springer-Verlag},
+	address = {Berlin, Heidelberg},
+	url = {https://doi.org/10.1007/978-3-031-58751-1_1},
+	doi = {10.1007/978-3-031-58751-1_1},
+	abstract = {Succinct Non-interactive Arguments of Knowledge (SNARKs) allow an untrusted prover to establish that it correctly ran some “witness-checking procedure” on a witness. A zkVM (short for zero-knowledge virtual machine) is a SNARK that allows the witness-checking procedure to be specified as a computer program written in the assembly language of a specific instruction set architecture (ISA).A front-end converts computer programs into a lower-level representation such as an arithmetic circuit or generalization thereof. A SNARK for circuit-satisfiability can then be applied to the resulting circuit.We describe a new front-end technique called Jolt that applies to a variety of ISAs. Jolt arguably realizes a vision called the lookup singularity, which seeks to produce circuits that only perform lookups into pre-determined lookup tables. The circuits output by Jolt primarily perform lookups into a gigantic lookup table, of size more than 2128, that depends only on the ISA. The validity of the lookups are proved via a new lookup argument described in a companion work called Lasso [STW23]. Although size-2128 tables are vastly too large to materialize in full, the tables arising in Jolt are structured, avoiding costs that grow linearly with the table size.We describe performance and auditability benefits of Jolt compared to prior zkVMs, focusing on the popular RISC-V ISA as a concrete example. The dominant cost for the Jolt prover applied to this ISA (on 64-bit data types) is equivalent to cryptographically committing to under eleven 256-bit field elements per step of the RISC-V CPU. This compares favorably to prior zkVM provers, even those focused on far simpler VMs.},
+	booktitle = {Advances in Cryptology – EUROCRYPT 2024: 43rd Annual International Conference on the Theory and Applications of Cryptographic Techniques, Zurich, Switzerland, May 26–30, 2024, Proceedings, Part VI},
+	pages = {3–33},
+	numpages = {31},
+	location = {Zurich, Switzerland}
+}
+
+
+@inproceedings{PKC:CFFLL24,
+	author       = {Matteo Campanelli and
+	Antonio Faonio and
+	Dario Fiore and
+	Tianyu Li and
+	Helger Lipmaa},
+	title        = {Lookup Arguments: Improvements, Extensions and Applications to Zero-Knowledge
+	Decision Trees},
+	booktitle    = {{PKC} 2024},
+	volume       = {14602},
+	pages        = {337--369},
+	year         = {2024}
+}
+
+
+
+@inproceedings{PKC:ZSG24,
+	author       = {Yuncong Zhang and
+	Shifeng Sun and
+	Dawu Gu},
+	title        = {Efficient KZG-Based Univariate Sum-Check and Lookup Argument},
+	booktitle    = {{PKC} 2024},
+	volume       = {14602},
+	pages        = {400--425},
+	year         = {2024}
+}
+
+@misc{Hab22,
+	author = {Ulrich Haböck},
+	title = {Multivariate lookups based on logarithmic derivatives},
+	howpublished = {Cryptology ePrint Archive, Paper 2022/1530},
+	year = {2022},
+	note = {\url{https://eprint.iacr.org/2022/1530}},
+	url = {https://eprint.iacr.org/2022/1530}
+}
+
+@misc{Eag22,
+	author = {Liam Eagen and Sanket Kanjalkar and Tim Ruffing and Jonas Nick},
+	title = {Bulletproofs++: Next Generation Confidential Transactions via Reciprocal Set Membership Arguments},
+	howpublished = {Cryptology ePrint Archive, Paper 2022/510},
+	year = {2022},
+	note = {\url{https://eprint.iacr.org/2022/510}},
+	url = {https://eprint.iacr.org/2022/510}
+}
+
+@misc{Halo2,
+	author = {Sean Bowe and Jack Grigg and Daira Hopwood},
+	title = {Halo2},
+	year = {2020},
+	note = {\url{https://github.com/zcash/halo2}},
+	url = {https://github.com/zcash/halo2}
+}
+
+@inproceedings{SCN:GOTV22,
+    author       = {Cyprien Delpech de Saint Guilhem and
+                  Emmanuela Orsini and
+                  Titouan Tanguy and
+                  Michiel Verbauwhede},
+
+    title        = {Efficient Proof of {RAM} Programs from Any Public-Coin Zero-Knowledge
+                  System},
+    booktitle    = {{SCN} 2022},
+    pages        = {615--638},
+    year         = {2022}
+}
+
+@article{EPRINT:PapHab23,
+	author       = {Shahar Papini and
+	Ulrich Hab{\"{o}}ck},
+	title        = {Improving logarithmic derivative lookups using {GKR}},
+	journal      = {{IACR} Cryptol. ePrint Arch.},
+	pages        = {1284},
+	year         = {2023},
+	url          = {https://eprint.iacr.org/2023/1284}
+}
+
+@article{full-ver,
+	author       = {Moumita Dutta and Chaya Ganesh and
+	Sikhar Patranabis and Shubh Prakash and Nitin Singh},
+	title        = {Batching-Efficient RAM using Updatable Lookup Arguments},
+	journal      = {{IACR} Cryptol. ePrint Arch.},
+	pages        = {840},
+	year         = {2024},
+	url          = {https://eprint.iacr.org/2024/840}
+}
