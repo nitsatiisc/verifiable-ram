@@ -159,7 +159,8 @@
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
 	\subsection{Abstract}
-	
+
+
 %	\emph{[Mandatory]}
 %	%
 %	\emph{Provide a short description of your artifacts.  What do they
@@ -167,7 +168,9 @@
 %		results to they produce?  How are your artifacts licensed?  Be brief;
 %		subsequent sections of this appendix can be used fill in the details.}
 
-	In this artifact appendix, we describe a repository(~\cite{}, packaged as a Zenodo record) that contains an implementation of \textit{lookup arguments from updatable tables} as detailed in our paper~\cite{full-ver}. This project contains a proof of concept implementation of the above paper and has not received any formal audit. It should not be used production. The repository is a fork of the original implementation of Caulk~\cite{} sub-vector lookup argument available at~\cite{}. We re-use many components such proof transcripts and algebraic algorithms from the Caulk implementation. 
+	In this artifact appendix, we describe a repository(~\cite{artifact-archive}, packaged as a Zenodo record) that contains an implementation of {\em lookup arguments from updatable tables}
+	as detailed in our paper~\cite{full-ver}. This project contains a proof of concept implementation of the above paper and has not received any formal audit. It should not be used production.
+	The repository is a fork of the original implementation of Caulk~\cite{CCS:ZBKMNS22} sub-vector lookup argument available at~\cite{caulk-implementation}. We re-use many components such proof transcripts and algebraic algorithms from the Caulk implementation.
 	
 	This artifact consists of Rust code, which when executed, reproduces benchmarks for updatable lookup arguments described in our paper. The remainder of the document gives a tutorial introduction to the code, and how to run and reproduce these benchmarks.
 	
@@ -183,18 +186,22 @@
 %		in this section benchmarks where those are part of, or simply have
 %		been used to produce results with, your artifacts.}
 
-	We begin by presenting a high-level overview of the artifact~\cite{}. As mentioned earlier, the artifact consists of a repository that is a fork of the original implementation of Caulk~\cite{} sub-vector lookup argument available at~\cite{}. Below, we provide of how the artifact is organized. Please see the readme.md in the Zenodo record for more details.
+	We begin by presenting a high-level overview of the artifact~\cite{artifact-archive}. As mentioned earlier, the artifact consists of a repository that is a fork of the original implementation
+	of Caulk~\cite{CCS:ZBKMNS22} sub-vector lookup argument available at~\cite{caulk-implementation}. Below, we provide of how the artifact is organized. Please see the \texttt{README.md} in the
+	Zenodo record for more details.
 	
 
-	\begin{itemize}
-		\item Several new algebraic algorithms for polynomial interpolation and evaluation are added to src/single/dft.rs on top of the existing algorithms from the Caulk repository.
-		
-		\item Several new algebraic algorithms for polynomial interpolation and evaluation are added to src/single/dft.rs on top of the existing algorithms from the Caulk repository.
-		
-		\item Implementation of CQ lookup protocol based on the paper CQ, with additional option of computing CQ lookup argument using pre-processed parameters for an "approximate" table. This code appears in the file src/ramlookup/cq.rs.
-		
-		\item A fast algorithm for computing scalar coefficients for computing the additive encoded quotient on top of the base CQ cached quotient. This appears in src/ramlookup/fastupdate.rs.
-		An implementation of polynomial protocol for memory consistency appears in src/ramlookup/mod.rs. Currently, the protocols for checking well formation of time ordered transcript and address ordered transcript are implemented. We hope to implement remaining protocols in the future, but they are not critical to overall benchmarks, as these are over much smaller tables.
+	\begin{itemize}[leftmargin=2em, label=-]
+		\item Several new algebraic algorithms for polynomial interpolation and evaluation are added to {\tt src/single/dft.rs} on top of the existing algorithms from the Caulk repository.
+		\item Implementation of CQ lookup protocol~\cite{EPRINT:EagFioGab22}. Additionally, we provide implementation of computing CQ lookup argument using pre-processed parameters for
+		a table different from the one involved in lookup. This code appears in the file {\tt src/ramlookup/cq.rs}. Specifically, the algorithm to computes the {\em delta}
+		that needs to be applied to the CQ cached quotient computed from the pre-processed table. This algorithm appears in the
+		paper~\cite{full-ver} in Section 7.
+		\item A fast algorithm for computing scalar coefficients required to compute the additive encoded quotient in the previous step. The algorithm
+		is described in the proof of Lemma 5 in our paper~\cite{full-ver} and is implemented in {\tt src/ramlookup/fastupdate.rs}.
+		\item An implementation of polynomial protocol for memory consistency appears in {\tt src/ramlookup/mod.rs}.
+		Currently, the protocols for checking well formation of time ordered transcript and address ordered transcript are implemented.
+		We hope to implement remaining protocols in the future, but they are not critical to overall benchmarks, as these are over much smaller tables.
 	\end{itemize}
 	
 
@@ -211,56 +218,62 @@
 	%%%%%
 	
 	\subsubsection{How to access}
-	
-	\emph{[Mandatory]}
+	Our artifacts are available in source code form via the Zenodo record~\cite{artifact-archive}
+	and at the public GitHub repository~\cite{github-archive}.
+	%\emph{[Mandatory]}
 	%
-	\emph{Describe how to access your artifacts.  If your artifacts have
-		received the \emph{Artifacts Available} badge, you must provide the
-		DOI(s) for the permanently and publicly available copies of your
-		artifacts.  Most likely, this is the version of your artifacts that
-		you deposited with Zenodo.}
+	%\emph{Describe .  If your artifacts have
+	%	received the \emph{Artifacts Available} badge, you must provide the
+%		DOI(s) for the permanently and publicly available copies of your%
+%		artifacts.  Most likely, this is the version of your artifacts that
+%		you deposited with Zenodo.}
 	
-	\emph{You may describe more than one way to access your artifacts.
-		For example, if the archived versions of your artifacts are available
-		at Zenodo, and you are also making maintained versions of your
-		artifacts available through GitHub, you can describe how to access
-		both versions of your artifacts.}
+%	\emph{You may describe more than one way to access your artifacts.
+%		For example, if the archived versions of your artifacts are available
+%		at Zenodo, and you are also making maintained versions of your
+%		artifacts available through GitHub, you can describe how to access
+%		both versions of your artifacts.}
 	
 	%%%%%
 	
 	\subsubsection{Hardware dependencies}
-	
-	\emph{[Mandatory]}
+	Running the benchmarks preferably requires 16GB main memory.
+	%\emph{[Mandatory]}
 	%
-	\emph{State any specific hardware features that are required to make
-		use of your artifacts: e.g., vendor, CPU/GPU/FPGA, number of
-		processors/cores, microarchitecture, interconnect, memory, hardware
-		counters, etc.  If your artifacts do not have significant hardware
-		dependencies, simply write ``None'' in this section.}
+	%\emph{State any specific hardware features that are required to make
+	%	use of your artifacts: e.g., vendor, CPU/GPU/FPGA, number of
+	%	processors/cores, microarchitecture, interconnect, memory, hardware
+	%	counters, etc.  If your artifacts do not have significant hardware
+	%	dependencies, simply write ``None'' in this section.}
 	
 	%%%%%
 	
 	\subsubsection{Software dependencies}
-	
-	\emph{[Mandatory]}
+	Running the artifact requires a working Rust and Cargo installation. In the {\tt README.md}
+	available in the archive, we provide instructions for installing Rust for Ubuntu Linux Distributions.
+	Installation instructions for Rust and Cargo for other platforms may be obtained from the official Rust Documentation~\cite{rust-doc}.
+
+	%\emph{[Mandatory]}
 	%
-	\emph{State any specific OS and software packages that are required to
-		make use of your artifacts.  This is particularly important if you
-		share your source code and it must be compiled, or if your artifacts
-		rely on proprietary software that is not included in your artifact
-		packages.  If your artifacts do not have significant software
-		dependencies, simply write ``None'' in this section.}
+	%\emph{State any specific OS and software packages that are required to
+	%	make use of your artifacts.  This is particularly important if you
+	%	share your source code and it must be compiled, or if your artifacts
+	%	rely on proprietary software that is not included in your artifact
+	%	packages.  If your artifacts do not have significant software
+	%	dependencies, simply write ``None'' in this section.}
 	
 	%%%%%
 	
 	\subsubsection{Benchmarks}
-	
-	\emph{[Mandatory]}
+	This artifact supports benchmarks for the online proof generation time for sub-vector lookup argument
+	used to obtain the plot in Figure 6 of the paper~\cite{full-ver}, and those for the offline pre-processing
+	reported in Table 2 of the paper.
+	%\emph{[Mandatory]}
 	%
-	\emph{Describe any data (e.g., datasets, models, workloads,
-		etc.)\ required by the experiments that are reported in your paper and
-		supported by your artifacts.  If this does not apply to your
-		artifacts, simply write ``None'' in this section.}
+	%emph{Describe any data (e.g., datasets, models, workloads,
+	%	etc.)\ required by the experiments that are reported in your paper and
+	%	supported by your artifacts.  If this does not apply to your
+	%	artifacts, simply write ``None'' in this section.}
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
@@ -412,7 +425,7 @@
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
-	\bibliographystyle{plain}
+	\bibliographystyle{alpha}
 	\bibliography{bib/abbrev3,bib/crypto,bib/other}
 	
 \end{document}
