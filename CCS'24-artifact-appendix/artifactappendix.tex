@@ -44,6 +44,8 @@
 \usepackage{colortbl}
 \usepackage{url}
 \usetikzlibrary{arrows,arrows.meta,shapes.arrows, calc, positioning,matrix}
+\usepackage{listings}
+\usepackage{paralist}
 
 
 
@@ -191,18 +193,18 @@
 	Zenodo record for more details.
 	
 
-	\begin{itemize}[leftmargin=2em, label=-]
+	\begin{compactitem}
 		\item Several new algebraic algorithms for polynomial interpolation and evaluation are added to {\tt src/single/dft.rs} on top of the existing algorithms from the Caulk repository.
 		\item Implementation of CQ lookup protocol~\cite{EPRINT:EagFioGab22}. Additionally, we provide implementation of computing CQ lookup argument using pre-processed parameters for
 		a table different from the one involved in lookup. This code appears in the file {\tt src/ramlookup/cq.rs}. Specifically, the algorithm to computes the {\em delta}
 		that needs to be applied to the CQ cached quotient computed from the pre-processed table. This algorithm appears in the
 		paper~\cite{full-ver} in Section 7.
 		\item A fast algorithm for computing scalar coefficients required to compute the additive encoded quotient in the previous step. The algorithm
-		is described in the proof of Lemma 5 in our paper~\cite{full-ver} and is implemented in {\tt src/ramlookup/fastupdate.rs}.
+		is described in the proof of Lemma 5 in our paper~\cite{full-ver} and is implemented in the source code file {\tt src/ramlookup/fastupdate.rs}.
 		\item An implementation of polynomial protocol for memory consistency appears in {\tt src/ramlookup/mod.rs}.
 		Currently, the protocols for checking well formation of time ordered transcript and address ordered transcript are implemented.
 		We hope to implement remaining protocols in the future, but they are not critical to overall benchmarks, as these are over much smaller tables.
-	\end{itemize}
+	\end{compactitem}
 	
 
 	
@@ -218,7 +220,7 @@
 	%%%%%
 	
 	\subsubsection{How to access}
-	Our artifacts are available in source code form via the Zenodo record~\cite{artifact-archive}
+	Our artifacts are available in the form of source code via the Zenodo record~\cite{artifact-archive}
 	and at the public GitHub repository~\cite{github-archive}.
 	%\emph{[Mandatory]}
 	%
@@ -237,7 +239,7 @@
 	%%%%%
 	
 	\subsubsection{Hardware dependencies}
-	Running the benchmarks preferably requires 16GB main memory.
+	We suggest running the benchmarks using at least 16GB main memory.
 	%\emph{[Mandatory]}
 	%
 	%\emph{State any specific hardware features that are required to make
@@ -267,7 +269,7 @@
 	\subsubsection{Benchmarks}
 	This artifact supports benchmarks for the online proof generation time for sub-vector lookup argument
 	used to obtain the plot in Figure 6 of the paper~\cite{full-ver}, and those for the offline pre-processing
-	reported in Table 2 of the paper.
+	reported in Table 3 of the paper.
 	%\emph{[Mandatory]}
 	%
 	%emph{Describe any data (e.g., datasets, models, workloads,
@@ -279,140 +281,175 @@
 	
 	\subsection{Set Up}
 	
-	\emph{This section should summarize the installation and configuration
-		steps that a person should follow to prepare an environment for making
-		use of your artifacts.  If the set-up steps are complicated, point the
-		reader to the places in your artifacts where detailed set-up
-		instructions can be found.}
+	This section summarizes the installation and configuration steps to be followed to prepare an environment for using our artifacts. We refer to the Zenodo record~\cite{artifact-archive} for detailed instructions wherever applicable. 
+	
+%	\emph{This section should summarize the installation and configuration
+%		steps that a person should follow to prepare an environment for making
+%		use of your artifacts.  If the set-up steps are complicated, point the
+%		reader to the places in your artifacts where detailed set-up
+%		instructions can be found.}
+%	The detailed instructions for istallation and 
 	
 	%%%%%
 	
-	\subsubsection{Installation}
+	\subsubsection{Installation}\label{sec:install}
 	
-	\emph{[Mandatory]}
-	%
-	\emph{Provide instructions for downloading and installing dependencies
-		as well as the main artifacts.  After following these steps, a user of
-		your artifacts should be able to run a simple functionality test.}
+	The preparation for running the artifact consists of the following steps: 
+	
+	\begin{compactitem}
+		\item \textbf{Working Rust and Cargo installation:} In the {\tt README.md} available in the archive~\cite{artifact-archive}~(also available at the public GitHub repository~\cite{github-archive}), we provide instructions for installing Rust for Ubuntu Linux Distributions. Installation instructions for Rust and Cargo for other platforms may be obtained from the official Rust Documentation~\cite{rust-doc}.
+		
+		\item \textbf{Unpacking the project archive.} In the {\tt README.md}, we also provide instructions for unpacking the project archive in a suitable directory.
+	\end{compactitem}
+	
+%	Please see the \texttt{README.md} in the
+%	Zenodo record for more details.
+	
+%	\emph{[Mandatory]}
+%	%
+%	\emph{Provide instructions for downloading and installing dependencies
+%		as well as the main artifacts.  After following these steps, a user of
+%		your artifacts should be able to run a simple functionality test.}
+
+%	The 
 	
 	%%%%%
 	
-	\subsubsection{Basic test}
+	\subsubsection{Basic test}\label{sec:basic}
 	
-	\emph{[Mandatory]}
-	%
-	\emph{Provide instructions for running a simple functionality test.
-		This test does not need to exercise all the features of your
-		artifacts, but ideally, it should allow a user to check that all of
-		the required software components are correctly installed and
-		functioning as intended.  Please include the expected successful
-		output and any required input parameters.}
+%	\emph{[Mandatory]}
+%	%
+%	\emph{Provide instructions for running a simple functionality test.
+%		This test does not need to exercise all the features of your
+%		artifacts, but ideally, it should allow a user to check that all of
+%		the required software components are correctly installed and
+%		functioning as intended.  Please include the expected successful
+%		output and any required input parameters.}
+
+	The basic test to ensure that all of the required software components are correctly installed and functioning as intended is to generate the SRS and CQ public parameters. This generates SRS and commitments to certain polynomials independent of the table. In the {\tt README.md}, we specify the command that needs to be executed from the project root directory. This generates the required parameters in the subdirectory \texttt{poly\_cq} for several table sizes~(this step can take approximately 30 minutes).
+
+	
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
 	\subsection{Evaluation Workflow}
 	
-	\emph{This section should include all the operational steps and
-		experiments that a person must be carry out to utilize in your
-		artifacts toward the goal of validating your paper's key results and
-		claims.  To that end, we ask you to use the two following subsections
-		and cross-reference the items therein as explained below.}
+	This section provides an overview of the experiments to be carried out using our artifacts, and how they validate our paper's key results and
+	claims.
+	
+%	\emph{This section should include all the operational steps and
+%		experiments that a person must be carry out to utilize in your
+%		artifacts toward the goal of validating your paper's key results and
+%		claims.  To that end, we ask you to use the two following subsections
+%		and cross-reference the items therein as explained below.}
 	
 	%%%%%
 	
-	\subsubsection{Major claims}
+	\subsubsection{Major claims} We enumerate below the major claims from our paper that this artifact aims to validate: 
 	
-	\emph{[Mandatory for \emph{Artifacts Evaluated--Functional},
-		\emph{Artifacts Evaluated--Reusable}, and \emph{Results Reproduced};
-		optional for \emph{Artifacts Available}]}
-	%
-	\emph{Enumerate here the major claims (Cx) made in your paper.  Follow
-		the examples below.}
-	\bigskip
+%	\emph{[Mandatory for \emph{Artifacts Evaluated--Functional},
+%		\emph{Artifacts Evaluated--Reusable}, and \emph{Results Reproduced};
+%		optional for \emph{Artifacts Available}]}
+%	%
+%	\emph{Enumerate here the major claims (Cx) made in your paper.  Follow
+%		the examples below.}
+%	\bigskip
 	
-	\begin{itemize}
-		\item[(C1):]
-		%
-		\emph{System\_name achieves the same accuracy as the
-			state-of-the-art systems for a task X while requiring Y\% less
-			storage.  This is proven by the experiment (E1) described in [refer
-			to your paper's sections], whose results are illustrated/reported
-			in [refer to your paper's plots, tables, sections, etc.].}
+	\begin{compactitem}
 		
-		\item[(C2):]
 		%
-		\emph{System\_name has been used to uncover new bugs in the X
-			software.  This is proven by experiments (E2) and (E3) in [refer to
-			your paper's sections].}
-	\end{itemize}
+%		\emph{System\_name achieves the same accuracy as the
+%			state-of-the-art systems for a task X while requiring Y\% less
+%			storage.  This is proven by the experiment (E1) described in [refer
+%			to your paper's sections], whose results are illustrated/reported
+%			in [refer to your paper's plots, tables, sections, etc.].}
+%		
+		\item[(C1)] \textbf{[Offline Phase]} This artifact supports benchmarks for the offline pre-processing, which was reported in Table 3~(Section 8) of our paper~\cite{full-ver}.
+		
+		\item[(C2)] \textbf{[Online Phase]} This artifact also supports benchmarks for the online proof generation time for sub-vector lookup argument
+		used to obtain the plot in Figure 6~(Section 8) of our paper~\cite{full-ver}.
+		%
+%		\emph{System\_name has been used to uncover new bugs in the X
+%			software.  This is proven by experiments (E2) and (E3) in [refer to
+%			your paper's sections].}
+	\end{compactitem}
 	
 	%%%%%
 	
-	\subsubsection{Experiments}
+	\subsubsection{Experiments} We now describe how to run the experiments using our artifacts to validate the above claims.  
 	
-	\emph{[Mandatory for \emph{Artifacts Evaluated--Functional},
-		\emph{Artifacts Evaluated--Reusable}, and \emph{Results Reproduced};
-		optional for \emph{Artifacts Available}]}
+%	\emph{[Mandatory for \emph{Artifacts Evaluated--Functional},
+%		\emph{Artifacts Evaluated--Reusable}, and \emph{Results Reproduced};
+%		optional for \emph{Artifacts Available}]}
 	%
-	\emph{Explicitly link the descriptions of your experiments to the
-		items you have provided in the previous subsection about major claims.
-		Please provide estimates of the person- and compute-time required for
-		each of the listed experiments (using the suggested hardware/software
-		configuration).  Follow the examples below.}
+%	\emph{Explicitly link the descriptions of your experiments to the
+%		items you have provided in the previous subsection about major claims.
+%		Please provide estimates of the person- and compute-time required for
+%		each of the listed experiments (using the suggested hardware/software
+%		configuration).  Follow the examples below.}
 	
-	\bigskip
-	\begin{itemize}
-		\item[(E1):]
-		%
-		\emph{[Optional Name] [30~person-minutes + 1~compute-hour + 5\,GB
-			disk]: Provide a short explanation of the experiment and expected
-			results.}
+%	\bigskip
+	\begin{compactitem}
+		\item[(E1)] \textbf{[Offline Phase]} This experiment benchmarks the offline pre-processing as a function of table size. 
 		
-		\emph{Provide the steps to perform the experiment and collect and
-			organize the results as expected from your paper.  We encourage you
-			to use the following structure with three main blocks for the
-			description of your experiment.  If the procedures are complicated,
-			point the reader to the places in your artifacts where the full
-			instructions can be found.}
+%		\emph{Provide the steps to perform the experiment and collect and
+%			organize the results as expected from your paper.  We encourage you
+%			to use the following structure with three main blocks for the
+%			description of your experiment.  If the procedures are complicated,
+%			point the reader to the places in your artifacts where the full
+%			instructions can be found.}
 		
-		\begin{description}
-			\item[Preparation:] \emph{Describe the steps required to prepare and
-				configure the environment for this experiment.}
+		\begin{asparadesc}
+			\item[Preparation:] There are no additional preparation steps required (beyond what was described in Sections~\ref{sec:basic} and~\ref{sec:install}).
 			
-			\item[Execution:] \emph{Describe the steps required to run this
-				experiment.}
+			\item[Execution:] To execute the benchmark, please follow the instructions in the {\tt README.md} available in the archive~\cite{artifact-archive}~(also available at the public GitHub repository~\cite{github-archive}) under the heading ``Benchmarking Offline Phase''.
 			
-			\item[Results:] \emph{Describe the steps required to collect and
-				interpret the results for this experiment.}
-		\end{description}
+			\item[Results:] Post-execution, the benchmark will report the execution times of the offline phase for table sizes specified by the user (see the {\tt README.md} for more details), and validates claim (C1) above~(i.e., the timings are expected to match those reported in Table 3 of the paper). \textcolor{red}{This step requires up to 3 hours for table sizes of 1 million, assuming 16GB RAM is available.}
+		\end{asparadesc}
 		
-		\item[(E2):] \emph{[Optional Name] [1~person-hour + 3~compute-hours]: \ldots}
+		\item[(E2)] \textbf{[Online Phase]} This experiment benchmarks the online proof generation time for sub-vector lookup argument as a function of the distance between the preprocessed table and the table involved in the lookup. 
 		
-		\item[(E3):] \emph{[Optional Name] [1~person-hour + 3~compute-hours]: \ldots}
-	\end{itemize}
+		%		\emph{Provide the steps to perform the experiment and collect and
+		%			organize the results as expected from your paper.  We encourage you
+		%			to use the following structure with three main blocks for the
+		%			description of your experiment.  If the procedures are complicated,
+		%			point the reader to the places in your artifacts where the full
+		%			instructions can be found.}
+		
+		\begin{asparadesc}
+			\item[Preparation:] There are no additional preparation steps required (beyond what was described in Sections~\ref{sec:basic} and~\ref{sec:install}).
+			
+			\item[Execution:] To execute the benchmark, please follow the instructions in the {\tt README.md} available in the archive~\cite{artifact-archive}~(also available at the public GitHub repository~\cite{github-archive}) under the heading ``Benchmarking Online Phase''.
+			
+			\item[Results:] Post-execution, the benchmark will report proving and verification times of the online phase for table sizes and Hamming distances specified by the user (see the {\tt README.md} for more details), and validates claim (C2) above~(i.e., the timings are expected to match those reported in Figure 6 of the paper). \textcolor{red}{This step requires up to 3 minutes for Hamming distance of up to $2^{19}$, assuming 16GB RAM is available.}
+		\end{asparadesc}
+	\end{compactitem}
 	\bigskip
 	
-	\emph{In all of the above blocks, please provide indications about the
-		expected outcome for each of the steps (given the suggested hardware
-		and software configuration).}
+%	\emph{In all of the above blocks, please provide indications about the
+%		expected outcome for each of the steps (given the suggested hardware
+%		and software configuration).}
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
 	\subsection{Notes on Reusability}
 	
-	\emph{[Optional]}
-	%
-	\emph{This section is meant to provide additional information about
-		how a person could utilize your artifacts beyond the research
-		presented in your paper.  A broad objective of artifact evaluation is
-		to encourage you to make your research artifacts reusable by others.}
+	Our implementation of the CQ protocol~\cite{EPRINT:EagFioGab22} is of independent interest, and can be reused by following the documentation provided in our artifact source code.  
 	
-	\emph{Include in this section any instructions, guidance, or advice
-		that you believe would help others reuse your artifacts.  For example,
-		you could describe how one might scale certain components of your
-		artifacts up or down; apply your artifacts to different kinds of
-		inputs or datasets; customize your artifacts' behavior by replacing
-		specific modules or algorithms; etc.}
+	
+%	\emph{[Optional]}
+%	%
+%	\emph{This section is meant to provide additional information about
+%		how a person could utilize your artifacts beyond the research
+%		presented in your paper.  A broad objective of artifact evaluation is
+%		to encourage you to make your research artifacts reusable by others.}
+%	
+%	\emph{Include in this section any instructions, guidance, or advice
+%		that you believe would help others reuse your artifacts.  For example,
+%		you could describe how one might scale certain components of your
+%		artifacts up or down; apply your artifacts to different kinds of
+%		inputs or datasets; customize your artifacts' behavior by replacing
+%		specific modules or algorithms; etc.}
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
@@ -425,7 +462,7 @@
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
-	\bibliographystyle{alpha}
+	\bibliographystyle{plain}
 	\bibliography{bib/abbrev3,bib/crypto,bib/other}
 	
 \end{document}
