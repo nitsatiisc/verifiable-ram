@@ -32,8 +32,7 @@ We denote by $Z_{\setN}$ the vanishing polynomial of $\setN$;  $Z_{\setN}(X)=X^N
 Let $\R$ be a NP-relation and $\L$ be the corresponding NP-language, where $\L=\{x : \exists$ $w$ such that $(x,w) \in \R\}$. 
 A \emph{succinct argument of knowledge} consists of a pair of PPT algorithms $(\prover,\verifier)$.
 Given a public instance $x$, the prover $\prover$, convinces the verifier $\verifier$, that $x\in \L$, where the prover additionally has as a witness $w$.
-We use the notation $b\gets \argoutput{\prover}{\verifier}{w}{x}$ to denote $\verifier$'s output in the interactive
-protocol involving $\prover$ and $\verifier$ with $w$ as $\prover$'s input and $x$ as the common input.
+We use the notation $b\gets \argoutput{\prover}{\verifier}{w}{x}$ to denote $\verifier$'s output in the interactive protocol involving $\prover$ and $\verifier$ with $w$ as $\prover$'s input and $x$ as the common input.
 The \emph{knowledge-soundness} property says that if the verifier is convinced, then an efficient extractor algorithm given oracle access to the prover outputs a witness $w$ such that $(x,w)\in \R$. An argument system is \emph{succinct} if the communication complexity and the complexity of $\verifier$ is polylogarithmic in the size of the witness. We provide formal definitions in Appendix~\ref{sec:aok}.
 
 \paragraph{\bf Fiat-Shamir.} An interactive protocol is \emph{public-coin} if the verifier's messages are uniformly random strings. Public-coin protocols can be transformed into non-interactive arguments in the Random Oracle Model (ROM) by using the Fiat-Shamir~\cite{C:FiaSha86} heuristic to derive the verifier's messages as the output of a Random Oracle. 
@@ -103,7 +102,7 @@ in the algebraic group model, while additionally featuring a universal and updat
 \end{definition}
 Note that both sides of the verification equation involve a fixed generator, and hence several proof verifications
 can be batched together to reduce the number of pairing computations.
-We also assume (w.l.o.g) analogues of $\KZGcommit$, $\KZGopen$ and \\
+We also assume (w.l.o.g) analogues of $\KZGcommit$, $\KZGopen$ and 
 $\KZGverify$ defined over the group $\Gtwo$.
 We shall use the (non-standard) notation $[p(X)]_i$ to denote $[p(\tau)]_i$ for $i\in \{1,2\}$.
 This allows us a convenient shorthand for referring to ``commitment of the polynomial $p(X)$'' in group $\G_i$.

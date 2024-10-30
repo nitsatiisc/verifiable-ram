@@ -71,8 +71,8 @@ D(X) &= \frac{(T(X)-T^*(X))\cdot Z_I(X)}{Z_\setN(X)} \nonumber \\
 \intertext{ Substituting $\Delta_i=T(\xi^i) - T^*(\xi^i)$, $\mu_i(X)=\vpolyN(X)/(\vpolyN'(\xi^i)(X-\xi^i))$, we get }
 D(X) &=\sum_{i\in I}\frac{\Delta_i}{Z_\setN'(\xi^i)}\left(\frac{Z_I(X)}{X-\xi^i}\right) = \sum_{i\in I}\frac{\Delta_i Z_I'(\xi^i)}{Z_\setN'(\xi^i)}\kappa_i(X)
 \end{align}
-In the above, the summation only runs over indices in $I$, as $\Delta i = 0$ for $i\not\in I$. In the final equality, we use
-$\kappa_i(X) = Z_I(X)/(Z_I'(\xi^i)(X-\xi^i))$ for $i\in I$ which we recognize as the lagrange basis polynomials for the set
+In the above, the summation only runs over indices in $I$, as $\Delta_i = 0$ for $i\not\in I$. In the final equality, we use
+$\kappa_i(X) = Z_I(X)/(Z_I'(\xi^i)(X-\xi^i))$ for $i\in I$ which we recognize as the Lagrange basis polynomials for the set
 $\{\xi^i: i\in I\}$. Thus, Equation \eqref{eq:poly-q} implies that $D(X)$ is at most degree $|I|-1$ polynomial, with
 $D(\xi^i)=\Delta_i Z_I'(\xi^i)/\vpolyN'(\xi^i)$ for $i\in I$.
 The prover can therefore interpolate $D(X)$ (in power basis)
@@ -221,7 +221,7 @@ We put the entire protocol together now. Let $\setind$ denote the set of indices
 denote the vector $(1,\ldots,N)$. We formally define the committed RAM relation for which we present an argument of
 knowledge in this section.
 \begin{definition}\label{defn:committed-ram}
-We define the {\em committed ram} relation
+We define the {\em committed RAM} relation
 $\CRAM$ to consist of tuples $((c_T, c_T', c_\op, c_a, c_w)$, $(\vecT, \vecT',\vec{\op},\vec{a},\vec{w}))$
 such that:
 \begin{itemize}[leftmargin=1em]
@@ -271,7 +271,7 @@ the AGM, under the $Q$-DLOG assumption for the bilinear group $(\F,\Gone,\Gtwo,\
 			\begin{itemize}[leftmargin=1em]
 				\item $W_2^i=\gtwo{\vpolyN(X)/(X-\xi^i)}$, $i\in [N]$
 			\end{itemize}
-			\item $\prover$ precomutes the following (with respect to $(\vecT, \vecT')$):
+			\item $\prover$ precomputes the following (with respect to $(\vecT, \vecT')$):
 			 \begin{itemize}[leftmargin=1em]
 				\item $W_1^i=\gtwo{(T(X)-T(\xi^i))/(X-\xi^i)}$, $i\in [N]$,
 				\item ${W_1^i}'=\gtwo{(T^*(X) - T^*(\xi^i))/(X-\xi^i)}$, $i\in [N]$.

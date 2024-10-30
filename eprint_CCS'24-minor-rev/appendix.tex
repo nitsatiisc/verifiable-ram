@@ -71,7 +71,7 @@ for $Z(X)=\prod_{i=1}^m (X-\omega^i)$ if and only if $\vec{v}=\vec{a}||\vec{b}||
 Next, we specify polynomial checks on the encoding of a transcript to ensure it satisfies address-ordering and load-store consistency.
 Let $N$ be an upper bound on the values of $\vec{A}$, i.e, the index set $\setind\subseteq [N]$.
 Let $\tr=(\vec{t},\vec{\op},\vec{A},\vec{V})$ be a transcript encoded as
-$\wt{\tr}=(t(X),\op(X),A(X),V(X))$. Recall that we need to check two conditions on $\tr$, viz, (i) {\em monotonicty}:
+$\wt{\tr}=(t(X),\op(X),A(X),V(X))$. Recall that we need to check two conditions on $\tr$, viz, (i) {\em monotonicity}:
 the transcript is sorted by address and timestamp respectively, i.e, $A_i\leq A_{i+1}$ for all $i < k$ and
 $t_i < t_{i+1}$ whenever $A_i=A_{i+1}$, (ii) {\em load-store consistency}: whenever $\op_{i+1}=0$ and $A_i=A_{i+1}$,
 we have $V_i=V_{i+1}$.
@@ -226,9 +226,9 @@ Protocols facilitating the checks mentioned in Lemma~\ref{lem:vec-concatenation}
 \end{figure}
 
 \section{Succinct Argument for Verifiable RAM}\label{sec:poly-proto-ram}
-The polynomial encodings in the previous section can be used to polynomial protocol for
+The polynomial encodings in the previous section can be used to construct a polynomial protocol for
 checking the membership in the language $\LRAM{I}{m}{m}$ for $m\in \N$. The polynomial protocol can be subsequently
-be compiled into a succinct argument using an extractable polynomial commitment scheme.
+compiled into a succinct argument using an extractable polynomial commitment scheme.
 In this section, we use $\kzg$ polynomial commitment scheme to obtain a succinct argument for checking membership in $\LRAM{I}{m}{m}$
 in the Algebraic Group Model (AGM).
 At a high level, to prove $(\vecT,\vec{o},\vecT')\in \LRAM{I}{m}{m}$, the prover
@@ -242,7 +242,7 @@ It then sends the polynomial encodings of $\vecT,\vec{o},\vecT',\tr$ and $\tr^\a
     \item The transcript $\tr^\ast$ is address ordered and satisfies load-store consistency. We describe the protocol
     to check this property of transcripts in Figure~\ref{fig:encoded-relations}.
 \end{enumerate}
-We check above conditions over commitments. Let $\srs$ denote a $\kzg$ setup over a bi-linear group, with
+We check above conditions over commitments. Let $\srs$ denote a $\kzg$ setup over a bilinear group, with
 prime order groups $\Gone, \Gtwo$ and $\GT$. We canonically commit to RAM, operation sequences and transcripts by committing to their
 polynomial encodings. Commitment of an encoding represented as tuple of polynomials is simply the tuple consisting of commitments of the component
 polynomials. We now define
@@ -492,7 +492,7 @@ $O(rlog^2 r + d\log d)$ group and field operations otherwise.
 
 \begin{fact}[\textsf{Lagrange Polynomials}]\label{fc:lagrange}
 Let $\mathbb{S}=\{\xi_1,\ldots,\xi_r\}$ be a set of $r$ distinct points and let $\tau_1(X),\ldots,\tau_r(X)$ be
-the corresponding lagrange polynomials of degree $r-1$ each. Let $Z_{\mathbb{S}}(X)=\prod_{i=1}^r (X-\xi_r)$ denote the vanishing polynomial
+the corresponding Lagrange polynomials of degree $r-1$ each. Let $Z_{\mathbb{S}}(X)=\prod_{i=1}^r (X-\xi_r)$ denote the vanishing polynomial
 for $\mathbb{S}$. Then we have:
 \begin{gather*}
     \sum_{i=1}^r \tau_i(X) = 1 \\
