@@ -10,7 +10,7 @@
 	        xlabel={},
 	        xtick=data,
 	        symbolic x coords= {A, B, C},
-	        xticklabels = {CFHKKO22~\cite{CCS:CFHKKO22}, OWWB20~\cite{USENIX:OWWB20}, MT-20},
+	        xticklabels = {\cite{CCS:CFHKKO22}, \cite{USENIX:OWWB20}, MT-20},
 	        yticklabels = {$10^4$, $10^5$, $10^6$, $10^7$, $10^8$},
 	        xlabel near ticks,
 	        ylabel near ticks,
@@ -194,12 +194,12 @@ comparison in Table~\ref{tbl:performance-comparison} which was considered in pri
 
 \begin{table}[htbp]
     \centering
-    \begin{tabularx}{0.9\textwidth}{@{}XXXX@{}}
+    \begin{tabularx}{0.7\textwidth}{@{}XXXX@{}}
         \toprule
         Scheme & $\prover$ (s) & $\verifier$ (ms) & $|\pi|$ (KB) \\ \midrule
         MT20 & $450$ & $7$  & $0.26$ \\
-        OWWB20~\cite{USENIX:OWWB20} & $550+43$ & $7$  & $0.26$ \\
-        CFHKKO22~\cite{CCS:CFHKKO22} & $226+43$ & $120$ & $1.3$ \\
+        \cite{USENIX:OWWB20} & $550+43$ & $7$  & $0.26$ \\
+        \cite{CCS:CFHKKO22} & $226+43$ & $120$ & $1.3$ \\
         Our Work & $94$ & $15$ & $4.4$ \\
         \bottomrule
     \end{tabularx}
